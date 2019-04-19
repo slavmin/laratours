@@ -25,7 +25,6 @@ error.log
 output.txt
 /.vscode
 .php_cs.cache
-.php_cs.dist
 coverage.xml
 /coverage
 .phpunit.result.cache
