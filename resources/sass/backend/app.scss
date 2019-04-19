@@ -1,0 +1,50 @@
+@import "../global";
+
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// Fix styles
+.navbar-toggler {
+    outline: none !important;
+}
+.nav-dropdown-items {
+    width: 100%;
+}
+
+.sidebar .nav-dropdown-toggle .badge{
+    position: absolute;
+    right: 18px;
+}
+.sidebar-minimized .sidebar .nav>.nav-dropdown>.nav-dropdown-items {
+    width: $sidebar-width;
+}
+.sidebar-minimized .sidebar .nav-dropdown-items .nav-item .nav-link {
+    padding-left: 10px;
+}
+.breadcrumb-menu .dropdown-menu {
+    min-width: 220px;
+}
+
+.breadcrumb-menu .dropdown-menu .dropdown-item {
+    padding: 10px 30px 10px 10px;
+}
+
+.dropdown-item {
+    font-size: 13px;
+}
+
+// Fix tables height
+.table-responsive {
+    min-height: 240px;
+}
+// Fix mobile footer
+.app-footer {
+    flex: 0 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    /*padding-top: map-get($spacers, 3);
+    padding-bottom: map-get($spacers, 3);*/
+}
