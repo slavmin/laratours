@@ -37,9 +37,17 @@ class UserRepository extends BaseRepository
      */
     public function getUnconfirmedCount() : int
     {
-        return $this->model
-            ->where('confirmed', false)
-            ->count();
+        if (config('access.users.requires_approval') && config('access.users.confirm_email')) {
+            return $this->model
+                ->where('active', false)
+                ->whereNull('last_login_at')
+                ->orWhere('confirmed', false)
+                ->count();
+        } elseif (config('access.users.requires_approval') && ! config('access.users.confirm_email')) {
+            return $this->model
+                ->where('confirmed', false)
+                ->count();
+        }
     }
 
     /**
@@ -49,8 +57,44 @@ class UserRepository extends BaseRepository
     {
         return $this->model
             ->where('active', false)
-            ->whereNull('last_login_at')
             ->count();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedCount() : int
+    {
+        return $this->model
+            ->onlyTrashed()
+            ->count();
+    }
+
+
+    /**
+     * @param int    $paged
+     * @param string $orderBy
+     * @param string $sort
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getUnconfirmedPaginated($paged = 25, $orderBy = 'created_at', $sort = 'desc') : LengthAwarePaginator
+    {
+        if (config('access.users.requires_approval') && config('access.users.confirm_email')) {
+            return $this->model
+                ->with('roles', 'permissions', 'providers')
+                ->where('active', false)
+                ->whereNull('last_login_at')
+                ->orWhere('confirmed', false)
+                ->orderBy($orderBy, $sort)
+                ->paginate($paged);
+        } elseif (config('access.users.requires_approval') && ! config('access.users.confirm_email')) {
+            return $this->model
+                ->with('roles', 'permissions', 'providers')
+                ->orWhere('confirmed', false)
+                ->orderBy($orderBy, $sort)
+                ->paginate($paged);
+        }
     }
 
     /**

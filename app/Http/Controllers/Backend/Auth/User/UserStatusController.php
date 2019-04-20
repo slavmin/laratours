@@ -42,6 +42,17 @@ class UserStatusController extends Controller
      *
      * @return mixed
      */
+    public function getPending(ManageUserRequest $request)
+    {
+        return view('backend.auth.user.deactivated')
+            ->withUsers($this->userRepository->getUnconfirmedPaginated(25));
+    }
+
+    /**
+     * @param ManageUserRequest $request
+     *
+     * @return mixed
+     */
     public function getDeleted(ManageUserRequest $request)
     {
         return view('backend.auth.user.deleted')
@@ -50,34 +61,34 @@ class UserStatusController extends Controller
 
     /**
      * @param ManageUserRequest $request
-     * @param User              $user
+     * @param User $user
      * @param                   $status
      *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
      */
     public function mark(ManageUserRequest $request, User $user, $status)
     {
-        $this->userRepository->mark($user, (int) $status);
+        $this->userRepository->mark($user, (int)$status);
 
-        if((int) $status === 1){
+        if ((int)$status === 1) {
             $user->notify(new UserAccountActive($user->confirmation_code));
         }
 
         return redirect()->route(
-            (int) $status === 1 ?
-            'admin.auth.user.index' :
-            'admin.auth.user.deactivated'
+            (int)$status === 1 ?
+                'admin.auth.user.index' :
+                'admin.auth.user.deactivated'
         )->withFlashSuccess(__('alerts.backend.users.updated'));
     }
 
     /**
      * @param ManageUserRequest $request
-     * @param User              $deletedUser
+     * @param User $deletedUser
      *
-     * @throws \App\Exceptions\GeneralException
-     * @throws \Throwable
      * @return mixed
+     * @throws \Throwable
+     * @throws \App\Exceptions\GeneralException
      */
     public function delete(ManageUserRequest $request, User $deletedUser)
     {
@@ -88,10 +99,10 @@ class UserStatusController extends Controller
 
     /**
      * @param ManageUserRequest $request
-     * @param User              $deletedUser
+     * @param User $deletedUser
      *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
      */
     public function restore(ManageUserRequest $request, User $deletedUser)
     {

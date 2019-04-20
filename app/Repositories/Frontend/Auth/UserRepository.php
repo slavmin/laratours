@@ -96,7 +96,7 @@ class UserRepository extends BaseRepository
                 'last_name' => $data['last_name'],
                 'email' => $data['email'],
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'active' => ! config('access.users.requires_activation'),
+                'active' => (config('access.users.requires_approval') && config('access.users.confirm_email')) ? false : true,
                 'password' => $data['password'],
                 // If users require approval or needs to confirm email
                 'confirmed' => ! (config('access.users.requires_approval') || config('access.users.confirm_email')),

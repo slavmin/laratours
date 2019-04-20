@@ -6,12 +6,7 @@
             <div class="dropdown-menu align-self-right" aria-labelledby="breadcrumb-dropdown-1">
                 <a class="dropdown-item" href="{{ route('admin.auth.user.index') }}">@lang('menus.backend.access.users.all')</a>
                 <a class="dropdown-item" href="{{ route('admin.auth.user.create') }}">@lang('menus.backend.access.users.create')</a>
-                <a class="dropdown-item" href="{{ route('admin.auth.user.deactivated') }}">
-                    @if ($pending_approval > 0)
-                        <span class="badge badge-danger">{{ $pending_approval }}</span>
-                    @endif
-                    @lang('menus.backend.access.users.deactivated')
-                </a>
+                <a class="dropdown-item" href="{{ route('admin.auth.user.deactivated') }}">@lang('menus.backend.access.users.deactivated')</a>
                 <a class="dropdown-item" href="{{ route('admin.auth.user.deleted') }}">@lang('menus.backend.access.users.deleted')</a>
             </div>
         </div><!--dropdown-->

@@ -5,6 +5,11 @@ Breadcrumbs::for('admin.auth.user.index', function ($trail) {
     $trail->push(__('labels.backend.access.users.management'), route('admin.auth.user.index'));
 });
 
+Breadcrumbs::for('admin.auth.user.pending', function ($trail) {
+    $trail->parent('admin.auth.user.index');
+    $trail->push(__('menus.backend.access.users.pending'), route('admin.auth.user.pending'));
+});
+
 Breadcrumbs::for('admin.auth.user.deactivated', function ($trail) {
     $trail->parent('admin.auth.user.index');
     $trail->push(__('menus.backend.access.users.deactivated'), route('admin.auth.user.deactivated'));

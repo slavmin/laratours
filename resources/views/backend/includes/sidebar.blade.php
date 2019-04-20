@@ -40,17 +40,21 @@
                                 @lang('labels.backend.access.users.management')
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{
-                                active_class(Active::checkUriPattern('admin/auth/user/deactivated*'))
-                            }}" href="{{ route('admin.auth.user.deactivated') }}">
-                                @lang('menus.backend.access.users.deactivated')
 
-                                @if ($pending_approval > 0)
-                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
-                                @endif
-                            </a>
-                        </li>
+                        @if (config('access.users.requires_approval') || config('access.users.confirm_email'))
+                            <li class="nav-item">
+                                <a class="nav-link {{
+                                active_class(Active::checkUriPattern('admin/auth/user/pending*'))
+                            }}" href="{{ route('admin.auth.user.pending') }}">
+                                    @lang('menus.backend.access.users.pending')
+
+                                    @if ($pending_approval > 0)
+                                        <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
+
                         <li class="nav-item">
                             <a class="nav-link {{
                                 active_class(Active::checkUriPattern('admin/auth/role*'))

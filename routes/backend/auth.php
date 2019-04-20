@@ -19,6 +19,7 @@ Route::group([
     // User Management
     Route::group(['namespace' => 'User'], function () {
         // User Status'
+        Route::get('user/pending', [UserStatusController::class, 'getPending'])->name('user.pending');
         Route::get('user/deactivated', [UserStatusController::class, 'getDeactivated'])->name('user.deactivated');
         Route::get('user/deleted', [UserStatusController::class, 'getDeleted'])->name('user.deleted');
 
