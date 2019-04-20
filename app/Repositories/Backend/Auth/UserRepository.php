@@ -293,6 +293,7 @@ class UserRepository extends BaseRepository
         }
 
         $user->confirmed = true;
+        $user->active = true;
         $confirmed = $user->save();
 
         if ($confirmed) {
