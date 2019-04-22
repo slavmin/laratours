@@ -117,6 +117,16 @@ trait UserAttribute
         return $this->getPicture();
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getAvatarAttribute()
+    {
+        return $this->getAvatar();
+    }
+
+
     /**
      * @return string
      */

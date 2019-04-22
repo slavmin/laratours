@@ -124,6 +124,7 @@ class UserRepository extends BaseRepository
         });
     }
 
+
     /**
      * @param       $id
      * @param array $input
@@ -142,6 +143,8 @@ class UserRepository extends BaseRepository
         // Upload profile image if necessary
         if ($image) {
             $user->avatar_location = $image->store('/avatars', 'public');
+            $media = $user->addMedia('storage/'.$user->avatar_location)->toMediaCollection('avatars', 'avatars');
+            $user->avatar_location = $media->getUrl();
         } else {
             // No image being passed
             if ($input['avatar_type'] === 'storage') {
@@ -152,7 +155,9 @@ class UserRepository extends BaseRepository
             } else {
                 // If there is a current image, and they are not using it anymore, get rid of it
                 if (auth()->user()->avatar_location !== '') {
-                    Storage::disk('public')->delete(auth()->user()->avatar_location);
+                    $media = $user->getMedia('avatars')->first();
+                    $user->deleteMedia($media->id);
+                    //Storage::disk('public')->delete(auth()->user()->avatar_location);
                 }
 
                 $user->avatar_location = null;

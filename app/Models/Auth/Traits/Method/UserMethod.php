@@ -40,7 +40,37 @@ trait UserMethod
                 return gravatar()->get($this->email, ['size' => $size]);
 
             case 'storage':
-                return url('storage/'.$this->avatar_location);
+                $media = $this->getMedia('avatars')->last();
+                return url($media->getUrl('profile'));
+                //return url('storage/'.$this->avatar_location);
+        }
+
+        $social_avatar = $this->providers()->where('provider', $this->avatar_type)->first();
+
+        if ($social_avatar && strlen($social_avatar->avatar)) {
+            return $social_avatar->avatar;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param bool $size
+     * @return bool|\Illuminate\Contracts\Routing\UrlGenerator|mixed|string
+     */
+    public function getAvatar($size = false)
+    {
+        switch ($this->avatar_type) {
+            case 'gravatar':
+                if (! $size) {
+                    $size = config('gravatar.default.size');
+                }
+
+                return gravatar()->get($this->email, ['size' => $size]);
+
+            case 'storage':
+                $media = $this->getMedia('avatars')->first();
+                return url($media->getUrl('avatar'));
         }
 
         $social_avatar = $this->providers()->where('provider', $this->avatar_type)->first();
