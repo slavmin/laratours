@@ -27,9 +27,8 @@ class GlobalComposer
      */
     public function compose(View $view)
     {
-        $view->with('logged_in_user', auth()->user());
-        if (config('access.users.requires_approval') || config('access.users.confirm_email')) {
-            $view->with('pending_approval', $this->userRepository->getUnconfirmedCount());
-        }
+        $view
+            ->with('logged_in_user', auth()->user())
+            ->with('pending_approval', $this->userRepository->getUnconfirmedCount());
     }
 }

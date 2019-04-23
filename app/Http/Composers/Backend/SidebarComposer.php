@@ -33,7 +33,7 @@ class SidebarComposer
     public function compose(View $view)
     {
 //        if (config('access.users.requires_approval')) {
-//            //$view->with('pending_approval', $this->userRepository->getUnconfirmedCount());
+//            //$view->with('', $this->userRepository->getUnconfirmedCount());
 //            $view->with('pending_approval', $this->userRepository->getInactiveCount());
 //        } else {
 //            $view->with('pending_approval', 0);
