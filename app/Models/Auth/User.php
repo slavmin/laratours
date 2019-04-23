@@ -36,13 +36,13 @@ class User extends BaseUser implements HasMedia
     public function registerMediaConversions(Media $media = null)
     {
         $this->addMediaConversion('avatar')
-            ->crop(Manipulations::CROP_TOP, 80, 80)
-            ->nonQueued();
+            ->crop(Manipulations::CROP_TOP, 80, 80);
+            //->nonQueued();
 
         $this->addMediaConversion('profile')
             ->fit(Manipulations::FIT_FILL, 480, 480)
-            ->background('ffffff')
-            ->nonQueued();
+            ->background('ffffff');
+            //->nonQueued();
     }
 
 }
