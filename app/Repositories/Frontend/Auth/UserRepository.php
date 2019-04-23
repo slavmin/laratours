@@ -156,7 +156,9 @@ class UserRepository extends BaseRepository
                 // If there is a current image, and they are not using it anymore, get rid of it
                 if (auth()->user()->avatar_location !== '') {
                     $media = $user->getMedia('avatars')->first();
-                    $user->deleteMedia($media->id);
+                    if($media){
+                        $user->deleteMedia($media->id);
+                    }
                     //Storage::disk('public')->delete(auth()->user()->avatar_location);
                 }
 
