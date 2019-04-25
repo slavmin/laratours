@@ -22,7 +22,7 @@ Breadcrumbs::for('admin.auth.team.deleted', function ($trail) {
 
 Breadcrumbs::for('admin.auth.team.show', function ($trail, $id) {
     $trail->parent('admin.auth.team.index');
-    $trail->push(__('menus.backend.access.view'), route('admin.auth.team.show', $id));
+    $trail->push(__('menus.backend.access.teams.view'), route('admin.auth.team.show', $id));
 });
 
 Breadcrumbs::for('admin.auth.team.edit', function ($trail, $id) {

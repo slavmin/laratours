@@ -264,7 +264,13 @@ trait UserAttribute
      */
     public function getDeletePermanentlyButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.delete-permanently', $this).'" name="confirm_item" class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.delete_permanently').'"></i></a> ';
+        return '<a href="'.route('admin.auth.user.delete-permanently', $this).'"
+             data-method="delete"
+             data-trans-button-cancel="' . __('buttons.general.cancel') . '"
+			 data-trans-button-confirm="' . __('buttons.general.crud.delete') . '"
+			 data-trans-title="' . __('strings.backend.general.are_you_sure') . '"
+             class="btn btn-danger"><i class="fas fa-trash"
+             data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.delete_permanently').'"></i></a> ';
     }
 
     /**
@@ -272,7 +278,12 @@ trait UserAttribute
      */
     public function getRestoreButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.restore', $this).'" name="confirm_item" class="btn btn-info"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.restore_user').'"></i></a> ';
+        return '<a href="'.route('admin.auth.user.restore', $this).'"
+             data-trans-button-cancel="' . __('buttons.general.cancel') . '"
+			 data-trans-button-confirm="' . __('buttons.general.crud.restore') . '"
+			 data-trans-title="' . __('strings.backend.general.are_you_sure') . '"
+             name="confirm_item" class="btn btn-info"><i class="fas fa-sync"
+             data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.restore_user').'"></i></a> ';
     }
 
     /**

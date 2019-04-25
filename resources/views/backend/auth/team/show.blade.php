@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 
-@section('title', __('labels.backend.access.users.management') . ' | ' . __('labels.backend.access.users.view'))
+@section('title', __('labels.backend.access.teams.management') . ' | ' . __('labels.backend.access.teams.view'))
 
 @section('content')
     <div class="card">

@@ -61,7 +61,7 @@ trait TeamAttribute
     {
         return '<a href="' . route('admin.auth.team.restore', $this) . '"
         	 data-trans-button-cancel="' . __('buttons.general.cancel') . '"
-			 data-trans-button-confirm="' . __('buttons.general.crud.update') . '"
+			 data-trans-button-confirm="' . __('buttons.general.crud.restore') . '"
 			 data-trans-title="' . __('strings.backend.general.are_you_sure') . '"
              name="confirm_item" class="btn btn-info"><i class="fas fa-sync"
              data-toggle="tooltip" data-placement="top" title="' . __('buttons.backend.access.teams.restore_team') . '"></i></a> ';
@@ -74,13 +74,13 @@ trait TeamAttribute
     {
         if ($this->trashed()) {
             return '
-				<div class="btn-group" role="group" aria-label="' . __('labels.backend.access.users.user_actions') . '">
+				<div class="btn-group" role="group" aria-label="' . __('labels.backend.access.teams.team_actions') . '">
 				  ' . $this->restore_button . '
 				  ' . $this->delete_permanently_button . '
 				</div>';
         }
 
-        return '<div class="btn-group btn-group-sm" role="group" aria-label="' . __('labels.backend.access.teams.user_actions') . '">
+        return '<div class="btn-group btn-group-sm" role="group" aria-label="' . __('labels.backend.access.teams.team_actions') . '">
               ' . $this->show_button . '
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '

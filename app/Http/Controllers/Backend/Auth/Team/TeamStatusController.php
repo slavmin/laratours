@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Auth\Team;
 
+use App\Models\Auth\User;
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
@@ -50,6 +51,7 @@ class TeamStatusController extends Controller
         }
 
         if ($team->restore()) {
+            //User::where('id', $team->owner_id)->update(['current_team_id' => $team->id]);
             //event(new TeamRestored($team));
             return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.restored'));
         }
@@ -70,6 +72,8 @@ class TeamStatusController extends Controller
         if ($team->deleted_at === null) {
             throw new GeneralException(__('exceptions.backend.access.teams.cant_restore'));
         }
+
+        User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
 
         $team->forceDelete();
 
