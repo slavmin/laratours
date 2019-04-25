@@ -1,9 +1,9 @@
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
-            <li class="nav-title">
-                @lang('menus.backend.sidebar.general')
-            </li>
+{{--            <li class="nav-title">--}}
+{{--                @lang('menus.backend.sidebar.general')--}}
+{{--            </li>--}}
             <li class="nav-item">
                 <a class="nav-link {{
                     active_class(Active::checkUriPattern('admin/dashboard'))
@@ -62,6 +62,15 @@
                                 @lang('labels.backend.access.roles.management')
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                                active_class(Active::checkUriPattern('admin/auth/team'))
+                            }}" href="{{ route('admin.auth.team.index') }}">
+                                @lang('labels.backend.access.teams.management')
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             @endif

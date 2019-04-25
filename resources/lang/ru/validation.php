@@ -164,6 +164,10 @@ return [
                     'name' => 'Название',
                     'sort' => 'Позиция',
                 ],
+                'teams' => [
+                    'name' => 'Название',
+                    'sort' => 'Позиция',
+                ],
                 'users' => [
                     'active' => 'Активный',
                     'associated_roles' => 'Роли',

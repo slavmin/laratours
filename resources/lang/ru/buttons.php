@@ -28,6 +28,12 @@ return [
                 'unconfirm' => 'Отменить',
                 'unlink' => 'Отключить',
             ],
+            'teams' => [
+                'activate' => 'Активировать',
+                'deactivate' => 'Деактивировать',
+                'delete_permanently' => 'Удалить навсегда',
+                'restore_team' => 'Восстановить учетную запись',
+            ],
         ],
     ],
     'emails' => [

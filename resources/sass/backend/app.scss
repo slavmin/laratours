@@ -14,6 +14,14 @@
     width: 100%;
 }
 
+.sidebar .nav-link.active {
+    box-shadow: inset 3px 0 0 0 #73818f;
+}
+
+.sidebar .nav-link.active:hover {
+    box-shadow: inset 3px 0 0 0 #20a8d8;
+}
+
 .sidebar .nav-dropdown-toggle .badge{
     position: absolute;
     right: 18px;
