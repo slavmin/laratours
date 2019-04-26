@@ -17,6 +17,12 @@ use App\Repositories\Backend\Auth\TeamRepository;
 class TeamStatusController extends Controller
 {
     /**
+     * @var TeamRepository
+     */
+    protected $teamRepository;
+
+
+    /**
      * TeamStatusController constructor.
      * @param TeamRepository $teamRepository
      */
@@ -51,8 +57,11 @@ class TeamStatusController extends Controller
         }
 
         if ($team->restore()) {
-            //User::where('id', $team->owner_id)->update(['current_team_id' => $team->id]);
+
+            User::whereIn('id', $team->users->pluck('id'))->update(['active' => true, 'current_team_id' => $team->id]);
+
             //event(new TeamRestored($team));
+
             return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.restored'));
         }
 
@@ -73,7 +82,7 @@ class TeamStatusController extends Controller
             throw new GeneralException(__('exceptions.backend.access.teams.cant_restore'));
         }
 
-        User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
+        //User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
 
         $team->forceDelete();
 

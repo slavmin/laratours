@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Backend\Auth\Team;
 
-use App\Models\Auth\User;
 use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Http\Requests\Backend\Auth\Team\StoreTeamRequest;
 use App\Http\Requests\Backend\Auth\Team\UpdateTeamRequest;
+use App\Models\Auth\User;
 use App\Repositories\Backend\Auth\TeamRepository;
 use Illuminate\Support\Str;
 
@@ -19,6 +19,15 @@ use Illuminate\Support\Str;
 class TeamController extends Controller
 {
 
+    /**
+     * @var TeamRepository
+     */
+    protected $teamRepository;
+
+    /**
+     * TeamController constructor.
+     * @param TeamRepository $teamRepository
+     */
     public function __construct(TeamRepository $teamRepository)
     {
         $this->teamRepository = $teamRepository;
@@ -111,6 +120,8 @@ class TeamController extends Controller
     public function destroy(ManageTeamRequest $request, Team $team)
     {
         $this->teamRepository->deleteById($team->id);
+
+        //User::where('current_team_id', $team->id)->update(['active' => false, 'current_team_id' => null]);
 
         //event(new TeamDeleted($team));
 

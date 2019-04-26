@@ -51,7 +51,6 @@ return [
 
         'attributes' => [
             'prefix' => 'admin/log-viewer',
-
             'middleware' => ['web', 'admin'],
         ],
     ],
