@@ -27,7 +27,7 @@ class RoleController extends Controller
     protected $permissionRepository;
 
     /**
-     * @param RoleRepository       $roleRepository
+     * @param RoleRepository $roleRepository
      * @param PermissionRepository $permissionRepository
      */
     public function __construct(RoleRepository $roleRepository, PermissionRepository $permissionRepository)
@@ -45,9 +45,9 @@ class RoleController extends Controller
     {
         return view('backend.auth.role.index')
             ->withRoles($this->roleRepository
-            ->with('users', 'permissions')
-            ->orderBy('id')
-            ->paginate());
+                ->with('users', 'permissions')
+                ->orderBy('id')
+                ->paginate());
     }
 
     /**
@@ -61,11 +61,12 @@ class RoleController extends Controller
             ->withPermissions($this->permissionRepository->get());
     }
 
+
     /**
      * @param StoreRoleRequest $request
-     *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
+     * @throws \Throwable
      */
     public function store(StoreRoleRequest $request)
     {
@@ -76,7 +77,7 @@ class RoleController extends Controller
 
     /**
      * @param ManageRoleRequest $request
-     * @param Role              $role
+     * @param Role $role
      *
      * @return mixed
      */
@@ -92,12 +93,13 @@ class RoleController extends Controller
             ->withPermissions($this->permissionRepository->get());
     }
 
+
     /**
      * @param UpdateRoleRequest $request
-     * @param Role              $role
-     *
-     * @throws \App\Exceptions\GeneralException
+     * @param Role $role
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
+     * @throws \Throwable
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
@@ -108,10 +110,10 @@ class RoleController extends Controller
 
     /**
      * @param ManageRoleRequest $request
-     * @param Role              $role
+     * @param Role $role
      *
-     * @throws \Exception
      * @return mixed
+     * @throws \Exception
      */
     public function destroy(ManageRoleRequest $request, Role $role)
     {

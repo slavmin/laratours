@@ -19,7 +19,7 @@ return [
                 'activate' => 'Активировать',
                 'change_password' => 'Изменить пароль',
                 'clear_session' => 'Очистить Сессию',
-                'confirm' => 'Подтвержден',
+                'confirm' => 'Подтвердить',
                 'deactivate' => 'Деактивировать',
                 'delete_permanently' => 'Удалить навсегда',
                 'login_as' => 'Войти как :user',
