@@ -44,7 +44,9 @@
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         @foreach($user->teams as $team)
-                                            <div class="mb-2">{{ $team->name }}</div>
+                                            <div class="mb-2">
+                                                <a href="{{route('admin.auth.team.show', $team->id)}}" class="btn btn-info btn-sm">{{$team->name}}</a>
+                                            </div>
                                         @endforeach
                                     </td>
                                     <td>{!! $user->confirmed_label !!}</td>
