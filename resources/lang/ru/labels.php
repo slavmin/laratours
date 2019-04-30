@@ -46,6 +46,38 @@ return [
                     'total' => 'ролей всего|всего ролей',
                 ],
             ],
+            'teams' => [
+                'create' => 'Создать новую компанию',
+                'edit' => 'Изменить компанию',
+                'management' => 'Компании',
+                'active' => 'Активные компании',
+                'deactivated' => 'Заблокированные компании',
+                'deleted' => 'Удаленные компании',
+                'table' => [
+                    'number_of_users' => 'Пользователей',
+                    'owner' => 'Админ компании',
+                    'team' => 'Имя',
+                    'sort' => 'Позиция',
+                    'total' => 'всего компаний|компаний всего',
+                ],
+                'tabs' => [
+                    'titles' => [
+                        'history' => 'История',
+                        'overview' => 'Обзор',
+                    ],
+                    'content' => [
+                        'overview' => [
+                            'members' => 'Участники',
+                            'created_at' => 'Создан',
+                            'deleted_at' => 'Удалён',
+                            'last_updated' => 'Обновлён',
+                            'name' => 'Компания',
+                            'status' => 'Статус',
+                        ],
+                    ],
+                ],
+                'view' => 'Просмотр компании',
+            ],
             'users' => [
                 'active' => 'Активные пользователи',
                 'all_permissions' => 'Полный доступ',
@@ -75,6 +107,7 @@ return [
                     'permissions' => 'Разрешения',
                     'roles' => 'Роль',
                     'social' => 'Социальный аккаунт',
+                    'team' => 'Компания',
                     'total' => 'пользователей всего|всего пользователей',
                 ],
                 'tabs' => [
@@ -88,6 +121,7 @@ return [
                             'confirmed' => 'Подтверждён',
                             'created_at' => 'Создан',
                             'deleted_at' => 'Удалён',
+                            'team' => 'Компания',
                             'email' => 'E-mail',
                             'last_login_at' => 'Last Login At',
                             'last_login_ip' => 'Last Login IP',

@@ -2,6 +2,10 @@
 
 namespace App\Listeners\Frontend\Auth;
 
+use App\Models\Auth\User;
+use App\Notifications\Frontend\Auth\NotifyOnUserRegistered;
+use Notification;
+
 /**
  * Class UserEventListener.
  */
@@ -32,7 +36,7 @@ class UserEventListener
 
         $event->user->save();
 
-        \Log::info('User Logged In: '.$event->user->full_name);
+        \Log::info('User Logged In: ' . $event->user->full_name);
     }
 
     /**
@@ -40,7 +44,7 @@ class UserEventListener
      */
     public function onLoggedOut($event)
     {
-        \Log::info('User Logged Out: '.$event->user->full_name);
+        \Log::info('User Logged Out: ' . $event->user->full_name);
     }
 
     /**
@@ -48,7 +52,22 @@ class UserEventListener
      */
     public function onRegistered($event)
     {
-        \Log::info('User Registered: '.$event->user->full_name);
+        $notification = new NotifyOnUserRegistered($event->user);
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('name', '=', 'administrator');
+        })->get();
+        Notification::send($admins, $notification);
+
+        \Log::info('User Registered: ' . $event->user->full_name);
+    }
+
+
+    /**
+     * @param $event
+     */
+    public function onInvitedRegistered($event)
+    {
+        \Log::info('Invited User Registered: ' . $event->user->full_name);
     }
 
     /**
@@ -56,7 +75,7 @@ class UserEventListener
      */
     public function onProviderRegistered($event)
     {
-        \Log::info('User Provider Registered: '.$event->user->full_name);
+        \Log::info('User Provider Registered: ' . $event->user->full_name);
     }
 
     /**
@@ -64,7 +83,7 @@ class UserEventListener
      */
     public function onConfirmed($event)
     {
-        \Log::info('User Confirmed: '.$event->user->full_name);
+        \Log::info('User Confirmed: ' . $event->user->full_name);
     }
 
     /**
@@ -87,6 +106,11 @@ class UserEventListener
         $events->listen(
             \App\Events\Frontend\Auth\UserRegistered::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onRegistered'
+        );
+
+        $events->listen(
+            \App\Events\Frontend\Auth\UserInvitedRegistered::class,
+            'App\Listeners\Frontend\Auth\UserEventListener@onInvitedRegistered'
         );
 
         $events->listen(

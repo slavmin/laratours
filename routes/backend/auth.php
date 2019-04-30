@@ -8,6 +8,8 @@ use App\Http\Controllers\Backend\Auth\User\UserStatusController;
 use App\Http\Controllers\Backend\Auth\User\UserSessionController;
 use App\Http\Controllers\Backend\Auth\User\UserPasswordController;
 use App\Http\Controllers\Backend\Auth\User\UserConfirmationController;
+use App\Http\Controllers\Backend\Auth\Team\TeamController;
+use App\Http\Controllers\Backend\Auth\Team\TeamStatusController;
 
 // All route names are prefixed with 'admin.auth'.
 Route::group([
@@ -60,7 +62,7 @@ Route::group([
             Route::get('clear-session', [UserSessionController::class, 'clearSession'])->name('user.clear-session');
 
             // Deleted
-            Route::get('delete', [UserStatusController::class, 'delete'])->name('user.delete-permanently');
+            Route::delete('delete', [UserStatusController::class, 'delete'])->name('user.delete-permanently');
             Route::get('restore', [UserStatusController::class, 'restore'])->name('user.restore');
         });
     });
@@ -75,6 +77,28 @@ Route::group([
             Route::get('edit', [RoleController::class, 'edit'])->name('role.edit');
             Route::patch('/', [RoleController::class, 'update'])->name('role.update');
             Route::delete('/', [RoleController::class, 'destroy'])->name('role.destroy');
+        });
+    });
+
+    // Team Management
+    Route::group(['namespace' => 'Team'], function() {
+        Route::get('team', [TeamController::class, 'index'])->name('team.index');
+        Route::get('team/create', [TeamController::class, 'create'])->name('team.create');
+        Route::post('team/store', [TeamController::class, 'store'])->name('team.store');
+
+        // Team Status
+        Route::get('team/deactivated', [TeamStatusController::class, 'getDeactivated'])->name('team.deactivated');
+        Route::get('team/deleted', [TeamStatusController::class, 'getDeleted'])->name('team.deleted');
+
+        Route::group(['prefix' => 'team/{team}'], function () {
+            Route::get('/', [TeamController::class, 'show'])->name('team.show');
+            Route::get('edit', [TeamController::class, 'edit'])->name('team.edit');
+            Route::patch('/', [TeamController::class, 'update'])->name('team.update');
+            Route::delete('/', [TeamController::class, 'destroy'])->name('team.destroy');
+
+            // Deleted
+            Route::delete('delete', [TeamStatusController::class, 'delete'])->name('team.delete-permanently');
+            Route::get('restore', [TeamStatusController::class, 'restore'])->name('team.restore');
         });
     });
 });

@@ -24,13 +24,11 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>@lang('labels.backend.access.users.table.last_name')</th>
-                            <th>@lang('labels.backend.access.users.table.first_name')</th>
-                            <th>@lang('labels.backend.access.users.table.email')</th>
+                            <th>@lang('labels.backend.access.users.table.first_name') \ @lang('labels.backend.access.users.table.email')</th>
+                            <th>@lang('labels.backend.access.users.table.team')</th>
                             <th>@lang('labels.backend.access.users.table.confirmed')</th>
-                            <th>@lang('labels.backend.access.users.table.roles')</th>
-                            <th>@lang('labels.backend.access.users.table.other_permissions')</th>
-                            <th>@lang('labels.backend.access.users.table.social')</th>
+                            <th>@lang('labels.backend.access.users.table.roles') \ @lang('labels.backend.access.users.table.permissions')</th>
+                            <!--<th>@lang('labels.backend.access.users.table.social')</th>-->
                             <th>@lang('labels.backend.access.users.table.last_updated')</th>
                             <th>@lang('labels.general.actions')</th>
                         </tr>
@@ -40,13 +38,28 @@
                         @if($users->count())
                             @foreach($users as $user)
                                 <tr>
-                                    <td>{{ $user->last_name }}</td>
-                                    <td>{{ $user->first_name }}</td>
-                                    <td>{{ $user->email }}</td>
+                                    <td>
+                                        <div class="mb-1">{{ $user->full_name }}</div>
+                                        <div class="mb-1">{{ $user->email }}</div>
+                                    </td>
+                                    <td>
+                                        @forelse($user->teams as $team)
+                                            <div class="mb-2">
+                                                <a href="{{route('admin.auth.team.show', $team->id)}}"
+                                                   class="btn btn-info btn-sm">{{$team->name}}</a>
+                                            </div>
+                                        @empty
+                                            <div class="mb-2">
+                                                N/A
+                                            </div>
+                                        @endforelse
+                                    </td>
                                     <td>{!! $user->confirmed_label !!}</td>
-                                    <td>{!! $user->roles_label !!}</td>
-                                    <td>{!! $user->permissions_label !!}</td>
-                                    <td>{!! $user->social_buttons !!}</td>
+                                    <td>
+                                        <div class="mb-1">{!! $user->roles_label !!}</div>
+                                        <div class="mb-1">{!! $user->permissions_label !!}</div>
+                                    </td>
+                                    <!--<td>{!! $user->social_buttons !!}</td>-->
                                     <td>{{ $user->updated_at->diffForHumans() }}</td>
                                     <td>{!! $user->action_buttons !!}</td>
                                 </tr>

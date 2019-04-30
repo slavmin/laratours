@@ -1,9 +1,9 @@
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
-            <li class="nav-title">
-                @lang('menus.backend.sidebar.general')
-            </li>
+            {{--            <li class="nav-title">--}}
+            {{--                @lang('menus.backend.sidebar.general')--}}
+            {{--            </li>--}}
             <li class="nav-item">
                 <a class="nav-link {{
                     active_class(Active::checkUriPattern('admin/dashboard'))
@@ -26,10 +26,6 @@
                     }}" href="#">
                         <i class="nav-icon far fa-user"></i>
                         @lang('menus.backend.access.title')
-
-                        @if ($pending_approval > 0)
-                            <span class="badge badge-danger">{{ $pending_approval }}</span>
-                        @endif
                     </a>
 
                     <ul class="nav-dropdown-items">
@@ -42,17 +38,16 @@
                         </li>
 
                         @if (config('access.users.requires_approval') || config('access.users.confirm_email'))
-                            <li class="nav-item">
-                                <a class="nav-link {{
+                            @if ($pending_approval > 0)
+                                <li class="nav-item">
+                                    <a class="nav-link {{
                                 active_class(Active::checkUriPattern('admin/auth/user/pending*'))
                             }}" href="{{ route('admin.auth.user.pending') }}">
-                                    @lang('menus.backend.access.users.pending')
-
-                                    @if ($pending_approval > 0)
+                                        @lang('menus.backend.access.users.pending')
                                         <span class="badge badge-danger">{{ $pending_approval }}</span>
-                                    @endif
-                                </a>
-                            </li>
+                                    </a>
+                                </li>
+                            @endif
                         @endif
 
                         <li class="nav-item">
@@ -62,6 +57,15 @@
                                 @lang('labels.backend.access.roles.management')
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                                active_class(Active::checkUriPattern('admin/auth/team'))
+                            }}" href="{{ route('admin.auth.team.index') }}">
+                                @lang('labels.backend.access.teams.management')
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             @endif
@@ -94,6 +98,9 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="divider"></li>
+
         </ul>
     </nav>
 

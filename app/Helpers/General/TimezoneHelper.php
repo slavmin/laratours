@@ -11,11 +11,11 @@ class TimezoneHelper
 {
     /**
      * @param Carbon $date
-     * @param string $format
+     * @param string $format //  $format = 'D M j G:i:s T Y'
      *
      * @return Carbon
      */
-    public function convertToLocal(Carbon $date, $format = 'D M j G:i:s T Y') : string
+    public function convertToLocal(Carbon $date, $format = 'd.m.Y H:i:s') : string
     {
         return $date->setTimezone(auth()->user()->timezone ?? config('app.timezone'))->format($format);
     }

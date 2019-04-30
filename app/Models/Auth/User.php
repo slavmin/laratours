@@ -7,6 +7,7 @@ use App\Models\Auth\Traits\Method\UserMethod;
 use App\Models\Auth\Traits\Attribute\UserAttribute;
 use App\Models\Auth\Traits\Relationship\UserRelationship;
 use Illuminate\Support\Collection;
+use Mpociot\Teamwork\Traits\UserHasTeams;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -21,7 +22,8 @@ class User extends BaseUser implements HasMedia
         UserMethod,
         UserRelationship,
         UserScope,
-        HasMediaTrait;
+        HasMediaTrait,
+        UserHasTeams;
 
 
     public function registerMediaCollections()
