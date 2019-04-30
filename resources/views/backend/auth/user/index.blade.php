@@ -28,10 +28,12 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>@lang('labels.backend.access.users.table.first_name') \ @lang('labels.backend.access.users.table.email')</th>
+                                <th>@lang('labels.backend.access.users.table.first_name')
+                                    \ @lang('labels.backend.access.users.table.email')</th>
                                 <th>@lang('labels.backend.access.users.table.team')</th>
                                 <th>@lang('labels.backend.access.users.table.confirmed')</th>
-                                <th>@lang('labels.backend.access.users.table.roles') \ @lang('labels.backend.access.users.table.permissions')</th>
+                                <th>@lang('labels.backend.access.users.table.roles')
+                                    \ @lang('labels.backend.access.users.table.permissions')</th>
                                 <th>@lang('labels.backend.access.users.table.activated')</th>
                             <!--<th>@lang('labels.backend.access.users.table.social')</th>-->
                                 <th>@lang('labels.backend.access.users.table.last_updated')</th>
@@ -46,11 +48,16 @@
                                         <div class="mb-1">{{ $user->email }}</div>
                                     </td>
                                     <td>
-                                        @foreach($user->teams as $team)
+                                        @forelse($user->teams as $team)
                                             <div class="mb-2">
-                                                <a href="{{route('admin.auth.team.show', $team->id)}}" class="btn btn-info btn-sm">{{$team->name}}</a>
+                                                <a href="{{route('admin.auth.team.show', $team->id)}}"
+                                                   class="btn btn-info btn-sm">{{$team->name}}</a>
                                             </div>
-                                        @endforeach
+                                        @empty
+                                            <div class="mb-2">
+                                                N/A
+                                            </div>
+                                        @endforelse
                                     </td>
                                     <td>{!! $user->confirmed_label !!}</td>
                                     <td>

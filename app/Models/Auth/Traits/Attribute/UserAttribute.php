@@ -140,8 +140,8 @@ trait UserAttribute
      */
     public function getTeamLabelAttribute()
     {
-        return '<a href="' . route('admin.auth.team.show', $this->currentTeam->id) . '"
-        class="btn btn-info btn-sm"><i class="fas fa-eye"></i> '.$this->currentTeam->name.'</a>';
+        return is_object($this->currentTeam) ? '<a href="' . route('admin.auth.team.show', $this->currentTeam->id) . '"
+        class="btn btn-info btn-sm"><i class="fas fa-eye"></i> '.$this->currentTeam->name.'</a>' : 'N/A';
     }
 
 
