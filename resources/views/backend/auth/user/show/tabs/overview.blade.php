@@ -17,6 +17,13 @@
             </tr>
 
             <tr>
+                <th>@lang('labels.backend.access.users.tabs.content.overview.team')</th>
+                <td>
+                    {!! $user->team_label !!}
+                </td>
+            </tr>
+
+            <tr>
                 <th>@lang('labels.backend.access.users.tabs.content.overview.status')</th>
                 <td>{!! $user->status_label !!}</td>
             </tr>

@@ -18,27 +18,30 @@
         </table>
     </div><!--table-responsive-->
     <div>
-        @foreach($team->users as $user)
-            <ul class="list-unstyled">
+        <ul class="list-unstyled">
+            @foreach($team->users as $user)
                 @if($user->isOwnerOfTeam($team))
                     <li class="media team-owner mb-2 p-2 border border-light">
                         <img src="{{ $user->avatar }}" class="mr-3" alt="...">
-                        <div class="media-body">
-                            <h5 class="mt-0">{{$user->name}}</h5>
-                            <div class="mb-2">{{$user->email}}</div>
+                        <div class="media-body position-relative">
+                            <h5 class="mt-0 user-name">{{$user->name}}</h5>
+                            <div class="mb-2 user-mail">{{$user->email}}</div>
                             <div><strong>@lang('labels.backend.access.teams.table.owner')</strong></div>
-                        </div>
-                    </li>
-                @else
-                    <li class="media team-member mb-2 p-2 border border-light">
-                        <img src="{{ $user->avatar }}" class="mr-3" alt="...">
-                        <div class="media-body">
-                            <h5 class="mt-0">{{$user->name}}</h5>
-                            <div class="mb-2">{{$user->email}}</div>
+                            <div class="user-button-group position-absolute" style="top: 0; right: 0">{!! $user->action_buttons !!}</div>
                         </div>
                     </li>
                 @endif
-            </ul>
-        @endforeach
+                @if(!$user->isOwnerOfTeam($team))
+                    <li class="media team-member mb-2 p-2 border border-light">
+                        <img src="{{ $user->avatar }}" class="mr-3" alt="...">
+                        <div class="media-body position-relative">
+                            <h5 class="mt-0 user-name">{{$user->name}}</h5>
+                            <div class="mb-2 user-mail">{{$user->email}}</div>
+                            <div class="user-button-group position-absolute" style="top: 0; right: 0">{!! $user->action_buttons !!}</div>
+                        </div>
+                    </li>
+                @endif
+            @endforeach
+        </ul>
     </div>
 </div><!--col-->

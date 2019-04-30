@@ -61,6 +61,15 @@ class UserEventListener
         \Log::info('User Registered: ' . $event->user->full_name);
     }
 
+
+    /**
+     * @param $event
+     */
+    public function onInvitedRegistered($event)
+    {
+        \Log::info('Invited User Registered: ' . $event->user->full_name);
+    }
+
     /**
      * @param $event
      */
@@ -97,6 +106,11 @@ class UserEventListener
         $events->listen(
             \App\Events\Frontend\Auth\UserRegistered::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onRegistered'
+        );
+
+        $events->listen(
+            \App\Events\Frontend\Auth\UserInvitedRegistered::class,
+            'App\Listeners\Frontend\Auth\UserEventListener@onInvitedRegistered'
         );
 
         $events->listen(

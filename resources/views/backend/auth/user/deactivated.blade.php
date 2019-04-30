@@ -24,12 +24,12 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>@lang('labels.backend.access.users.table.last_name')</th>
                             <th>@lang('labels.backend.access.users.table.first_name')</th>
                             <th>@lang('labels.backend.access.users.table.email')</th>
+                            <th>@lang('labels.backend.access.users.table.team')</th>
                             <th>@lang('labels.backend.access.users.table.confirmed')</th>
                             <th>@lang('labels.backend.access.users.table.roles')</th>
-                            <th>@lang('labels.backend.access.users.table.other_permissions')</th>
+                            <th>@lang('labels.backend.access.users.table.permissions')</th>
                             <th>@lang('labels.backend.access.users.table.activated')</th>
                             <!--<th>@lang('labels.backend.access.users.table.social')</th>-->
                             <th>@lang('labels.backend.access.users.table.last_updated')</th>
@@ -40,9 +40,13 @@
                         @if($users->count())
                             @foreach($users as $user)
                                 <tr>
-                                    <td>{{ $user->last_name }}</td>
-                                    <td>{{ $user->first_name }}</td>
+                                    <td>{{ $user->full_name }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>
+                                        @foreach($user->teams as $team)
+                                            <div class="mb-2">{{ $team->name }}</div>
+                                        @endforeach
+                                    </td>
                                     <td>{!! $user->confirmed_label !!}</td>
                                     <td>{!! $user->roles_label !!}</td>
                                     <td>{!! $user->permissions_label !!}</td>

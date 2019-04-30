@@ -107,6 +107,7 @@ return [
                     'permissions' => 'Разрешения',
                     'roles' => 'Роль',
                     'social' => 'Социальный аккаунт',
+                    'team' => 'Компания',
                     'total' => 'пользователей всего|всего пользователей',
                 ],
                 'tabs' => [
@@ -120,6 +121,7 @@ return [
                             'confirmed' => 'Подтверждён',
                             'created_at' => 'Создан',
                             'deleted_at' => 'Удалён',
+                            'team' => 'Компания',
                             'email' => 'E-mail',
                             'last_login_at' => 'Last Login At',
                             'last_login_ip' => 'Last Login IP',

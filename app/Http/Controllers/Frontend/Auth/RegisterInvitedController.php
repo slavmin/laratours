@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
-use App\Events\Frontend\Auth\InvitedUserRegistered;
+use App\Events\Frontend\Auth\UserInvitedRegistered;
+use App\Http\Requests\RegisterInvitedRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Repositories\Frontend\Auth\UserRepository;
+use Illuminate\Validation\Rule;
 use Mpociot\Teamwork\Facades\Teamwork;
-use Mpociot\Teamwork\TeamInvite;
+
 
 /**
  * Class RegisterInvitedController.
@@ -49,8 +50,10 @@ class RegisterInvitedController extends Controller
      */
     public function showRegistrationForm($token = null)
     {
+        abort_unless(config('access.registration'), 404);
+
         if (!is_null($token)) {
-            $invite = \Teamwork::getInviteFromAcceptToken($token);
+            $invite = Teamwork::getInviteFromAcceptToken($token);
         }
 
         abort_unless(isset($invite), 404);
@@ -62,18 +65,22 @@ class RegisterInvitedController extends Controller
 
 
     /**
-     * @param RegisterRequest $request
+     * @param RegisterInvitedRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Throwable
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterInvitedRequest $request)
     {
         abort_unless(config('access.registration'), 404);
 
         $token = session('invite_token');
-        $invite = \Teamwork::getInviteFromAcceptToken($token);
+        $invite = Teamwork::getInviteFromAcceptToken($token);
 
         $request->merge(['email' => $invite->email]);
+
+        $request->validate([
+            'email' => ['required', 'string', 'email', 'max:191', Rule::unique('users')],
+        ]);
 
         $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password'));
 
@@ -83,9 +90,9 @@ class RegisterInvitedController extends Controller
 
         auth()->login($user);
 
-        \Teamwork::acceptInvite($invite);
+        Teamwork::acceptInvite($invite);
 
-        //event(new InvitedUserRegistered($user));
+        event(new UserInvitedRegistered($user));
 
         return redirect($this->redirectPath());
     }
