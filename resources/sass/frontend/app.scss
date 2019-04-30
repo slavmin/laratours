@@ -1,7 +1,7 @@
 @import "../global";
 
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700');
 
 // Bootstrap Overrides
 @import 'variables';
@@ -11,3 +11,12 @@
 
 // Pages
 @import 'pages/dashboard';
+
+// Fix styles
+.dropdown-menu.show {
+  font-size: .875rem;
+}
+.dropdown-menu.show {
+  right: 0;
+  left: auto;
+}

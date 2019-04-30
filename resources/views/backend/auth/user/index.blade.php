@@ -51,7 +51,7 @@
                                         @forelse($user->teams as $team)
                                             <div class="mb-2">
                                                 <a href="{{route('admin.auth.team.show', $team->id)}}"
-                                                   class="btn btn-info btn-sm">{{$team->name}}</a>
+                                                   class="btn btn-outline-info btn-sm">{{$team->name}}</a>
                                             </div>
                                         @empty
                                             <div class="mb-2">
