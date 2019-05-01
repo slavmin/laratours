@@ -68,24 +68,14 @@ class RegisterController extends Controller
 
         // If the user must confirm their email or their account requires approval,
         // create the account but don't log them in.
-//        if (config('access.users.confirm_email') || config('access.users.requires_approval')) {
-//            event(new UserRegistered($user));
-//
-//            return redirect($this->redirectPath())->withFlashSuccess(
-//                config('access.users.requires_approval') ?
-//                    __('exceptions.frontend.auth.confirmation.created_pending') :
-//                    __('exceptions.frontend.auth.confirmation.created_confirm')
-//            );
-//        }
-
-        if (config('access.users.confirm_email')) {
+        if (config('access.users.confirm_email') || config('access.users.requires_approval')) {
             event(new UserRegistered($user));
-            return redirect($this->redirectPath())->withFlashSuccess(__('exceptions.frontend.auth.confirmation.created_confirm'));
-        }
 
-        if (config('access.users.requires_approval')) {
-            event(new UserRegistered($user));
-            return redirect($this->redirectPath())->withFlashSuccess(__('exceptions.frontend.auth.confirmation.created_pending'));
+            return redirect($this->redirectPath())->withFlashSuccess(
+                config('access.users.confirm_email') ?
+                    __('exceptions.frontend.auth.confirmation.created_confirm') :
+                    __('exceptions.frontend.auth.confirmation.created_pending')
+            );
         }
 
         auth()->login($user);

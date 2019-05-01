@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use App\Exceptions\GeneralException;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password;
@@ -30,6 +31,16 @@ class ResetPasswordController extends Controller
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        return 'frontend.auth.login';
     }
 
     /**
@@ -85,14 +96,37 @@ class ResetPasswordController extends Controller
             : $this->sendResetFailedResponse($request, $response);
     }
 
+
     /**
      * Reset the given user's password.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @param  string  $password
+     * @param $user
+     * @param $password
+     * @throws GeneralException
      */
     protected function resetPassword($user, $password)
     {
+        // Check to see if the users account is confirmed and active
+        if (! $user->isConfirmed()) {
+            auth()->logout();
+
+            // If the user is pending (account approval is on)
+            if ($user->isPending()) {
+                throw new GeneralException(__('exceptions.frontend.auth.confirmation.pending'));
+            }
+
+            // Otherwise see if they want to resent the confirmation e-mail
+
+            throw new GeneralException(__('exceptions.frontend.auth.confirmation.resend', ['url' => route('frontend.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]));
+        }
+
+        if (! $user->isActive()) {
+            auth()->logout();
+
+            throw new GeneralException(__('exceptions.frontend.auth.deactivated'));
+        }
+
+
         $user->password = $password;
 
         $user->password_changed_at = now();
@@ -103,7 +137,7 @@ class ResetPasswordController extends Controller
 
         event(new PasswordReset($user));
 
-        $this->guard()->login($user);
+        //$this->guard()->login($user);
     }
 
     /**
@@ -114,6 +148,6 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetResponse($response)
     {
-        return redirect()->route(home_route())->withFlashSuccess(e(trans($response)));
+        return redirect()->route($this->redirectPath())->withFlashSuccess(e(trans($response)));
     }
 }
