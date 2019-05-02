@@ -36,6 +36,10 @@
                             <a href="{{ route('admin.dashboard') }}" class="dropdown-item">@lang('navs.frontend.user.administration')</a>
                         @endcan
 
+                        @if($logged_in_user->isTeamOwner())
+                                <a href="{{ route('frontend.user.team') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.user.team')) }}">@lang('navs.frontend.user.team')</a>
+                        @endif
+
                         <a href="{{ route('frontend.user.account') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.user.account')) }}">@lang('navs.frontend.user.account')</a>
                         <a href="{{ route('frontend.auth.logout') }}" class="dropdown-item">@lang('navs.general.logout')</a>
                     </div>

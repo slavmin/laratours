@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
+use App\Http\Controllers\Frontend\User\TeamManageController;
 
 /*
  * Frontend Controllers
@@ -29,5 +30,12 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
         // User Profile Specific
         Route::patch('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+        // User Team Specific
+        Route::get('team', [TeamManageController::class, 'index'])->name('team');
+        Route::post('team/invite/{team_id}', [TeamManageController::class, 'invite'])->name('team.invite');
+        Route::get('team/resend/{invite_id}', [TeamManageController::class, 'resendInvite'])->name('team.resend_invite');
+        Route::get('team/invite/{invite_id}/delete', [TeamManageController::class, 'deleteInvite'])->name('team.delete_invite');
+        Route::delete('team/members/{user_id}/delete', [TeamManageController::class, 'destroy'])->name('team.members.destroy');
     });
 });

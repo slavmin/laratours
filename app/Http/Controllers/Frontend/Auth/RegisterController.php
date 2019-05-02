@@ -8,6 +8,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Events\Frontend\Auth\UserRegistered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Repositories\Frontend\Auth\UserRepository;
+use App\Models\Auth\Team;
+use Illuminate\Support\Str;
 
 /**
  * Class RegisterController.
@@ -64,7 +66,17 @@ class RegisterController extends Controller
     {
         abort_unless(config('access.registration'), 404);
 
+
         $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password'));
+
+        // Create team for company
+        $team = Team::create([
+            'name' => $request->get('company_name'),
+            'slug' => Str::slug($request->get('company_name')),
+            'owner_id' => $user->id
+        ]);
+        //$team->slug = Str::slug($request->get('company_name'));
+        $user->attachTeam($team);
 
         // If the user must confirm their email or their account requires approval,
         // create the account but don't log them in.

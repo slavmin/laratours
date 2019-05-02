@@ -25,11 +25,12 @@ return [
         'macros' => 'Макросы',
         'register' => 'Регистрация',
         'user' => [
-            'account' => 'Профиль, настройки',
+            'account' => 'Профиль',
             'administration' => 'Управление приложением',
             'change_password' => 'Изменить пароль',
             'my_information' => 'Моя информация',
             'profile' => 'Профиль',
+            'team' => 'Компания',
         ],
     ],
 ];

@@ -76,13 +76,13 @@ class RegisterInvitedController extends Controller
         $token = session('invite_token');
         $invite = Teamwork::getInviteFromAcceptToken($token);
 
-        $request->merge(['email' => $invite->email]);
+        $request->merge(['email' => $invite->email, 'no_need_confirm' => true]);
 
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:191', Rule::unique('users')],
         ]);
 
-        $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password'));
+        $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password', 'no_need_confirm'));
 
         $user->active = true;
         $user->confirmed = true;
@@ -94,6 +94,6 @@ class RegisterInvitedController extends Controller
 
         event(new UserInvitedRegistered($user));
 
-        return redirect($this->redirectPath());
+        return redirect($this->redirectPath())->withFlashSuccess(__('alerts.frontend.auth.registered'));
     }
 }

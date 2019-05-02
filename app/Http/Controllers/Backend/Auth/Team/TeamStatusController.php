@@ -82,7 +82,7 @@ class TeamStatusController extends Controller
             throw new GeneralException(__('exceptions.backend.access.teams.cant_restore'));
         }
 
-        //User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
+        User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
 
         $team->forceDelete();
 

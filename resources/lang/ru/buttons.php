@@ -41,6 +41,9 @@ return [
             'confirm_account' => 'Подтвердить почту',
             'reset_password' => 'Сбросить пароль',
         ],
+        'teams' => [
+            'accept_invite' => 'Принять приглашение',
+        ],
     ],
     'general' => [
         'cancel' => 'Отменa',
