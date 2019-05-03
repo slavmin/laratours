@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Http\Controllers\Frontend\User;
 
@@ -85,27 +85,57 @@ class TeamManageController extends Controller
     {
         $team = Team::findOrFail($team_id);
 
+        $quota = config('teamwork.team_members_quota');
+
+        $pending_invites = $team->invites->count();
+
+        $sended_invites = session('sended_invites');
+
+        if ($team->users->count() >= $quota) {
+            return redirect()->back()->withErrors([
+                'message' => __('alerts.frontend.teams.users.limit'),
+            ]);
+        }
+
+        if ($sended_invites >= $quota) {
+            return redirect()->back()->withErrors([
+                'message' => __('alerts.frontend.teams.invite.limit'),
+            ]);
+        }
+
+
+        if ($pending_invites >= $quota) {
+            return redirect()->back()->withErrors([
+                'message' => __('alerts.frontend.teams.invite.limit'),
+            ]);
+        }
+
+
         if (!Teamwork::hasPendingInvite($request->email, $team)) {
 
             $user_id = User::select('id')->where('email', $request->email)->first();
 
             if ($user_id) {
                 return redirect()->back()->withErrors([
-                    'email' => __('alerts.frontend.teams.invite.rejected'),
+                    'message' => __('alerts.frontend.teams.invite.rejected'),
                 ]);
             } else {
                 Teamwork::inviteToTeam($request->email, $team, function ($invite) {
                     Mail::send(new SendTeamInvite($invite));
                 });
+
+                // Store quontity sended invites
+                session(['sended_invites' => $sended_invites + 1]);
             }
 
         } else {
             return redirect()->back()->withErrors([
-                'email' => __('alerts.frontend.teams.invite.sent_already'),
+                'message' => __('alerts.frontend.teams.invite.sent_already'),
             ]);
         }
 
-        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.invite.sent'));
+
+        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.invite.sent') . $sended_invites);
     }
 
     /**
@@ -115,6 +145,16 @@ class TeamManageController extends Controller
     public function resendInvite($invite_id)
     {
         $invite = TeamInvite::findOrFail($invite_id);
+
+        $team = Team::findOrFail($invite->team_id);
+
+        $quota = config('teamwork.team_members_quota');
+
+        if ($team->users->count() < $quota) {
+            return redirect()->back()->withErrors([
+                'message' => __('alerts.frontend.teams.users.limit'),
+            ]);
+        }
 
         $user_id = User::select('id')->where('email', $invite->email)->first();
 
@@ -127,6 +167,7 @@ class TeamManageController extends Controller
         }
 
         return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.invite.sent'));
+
     }
 
 

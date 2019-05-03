@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Auth;
 use App\Http\Controllers\Controller;
 use App\Events\Frontend\Auth\UserInvitedRegistered;
 use App\Http\Requests\RegisterInvitedRequest;
+use App\Models\Auth\Team;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Repositories\Frontend\Auth\UserRepository;
 use Illuminate\Validation\Rule;
@@ -58,9 +59,22 @@ class RegisterInvitedController extends Controller
 
         abort_unless(isset($invite), 404);
 
-        session(['invite_token' => $token]);
+        $team = Team::findOrFail($invite->team_id);
 
-        return view('frontend.auth.register-invited')->withEmail($invite->email);
+        $quota = config('teamwork.team_members_quota');
+
+        if ($team->users->count() < $quota) {
+
+            session(['invite_token' => $token]);
+            return view('frontend.auth.register-invited')->withEmail($invite->email);
+
+        } else {
+
+            return redirect($this->redirectPath())->withErrors([
+                'message' => __('alerts.frontend.teams.users.limit').' '.$invite->team->name,
+            ]);
+
+        }
     }
 
 

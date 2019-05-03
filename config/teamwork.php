@@ -93,4 +93,16 @@ return [
     |
     */
     'team_invites_table' => 'team_invites',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team quotas
+    |--------------------------------------------------------------------------
+    |
+    | This is the team members and invites quotas used by Teamwork.
+    |
+    */
+    'team_members_quota' => 6,
+    'team_invites_quota' => 6,
 ];
