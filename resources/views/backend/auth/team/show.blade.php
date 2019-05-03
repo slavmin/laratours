@@ -1,7 +1,10 @@
 @extends('backend.layouts.app')
 
-
 @section('title', __('labels.backend.access.teams.management') . ' | ' . __('labels.backend.access.teams.view'))
+
+@section('breadcrumb-links')
+    @include('backend.auth.team.includes.breadcrumb-links')
+@endsection
 
 @section('content')
     <div class="card">

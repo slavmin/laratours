@@ -2,6 +2,10 @@
 
 @section('title', __('labels.backend.access.teams.management') . ' | ' . __('labels.backend.access.teams.edit'))
 
+@section('breadcrumb-links')
+    @include('backend.auth.team.includes.breadcrumb-links')
+@endsection
+
 @section('content')
     {{ html()->modelForm($team, 'PATCH', route('admin.auth.team.update', $team))->class('form-horizontal')->open() }}
     <div class="card">
