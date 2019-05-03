@@ -8,6 +8,7 @@ use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Repositories\Backend\Auth\TeamRepository;
+use Illuminate\Support\Facades\Auth;
 
 
 /**
@@ -29,6 +30,31 @@ class TeamStatusController extends Controller
     public function __construct(TeamRepository $teamRepository)
     {
         $this->teamRepository = $teamRepository;
+    }
+
+    public function makeTeamAdmin($user_id)
+    {
+        $new_team_owner = User::where('id', $user_id)->first();
+
+        $team_id = $new_team_owner->current_team_id;
+
+        $team = Team::find($team_id);
+
+//        $previous_team_owner = User::find($team->owner_id);
+//
+//        // Login out previous Team admin
+//        $user = \Auth::user();
+//        \Auth::setUser($previous_team_owner);
+//        \Auth::logout();
+//        \Auth::setUser($user);
+//        \Auth::login();
+
+        // Set new Team admin
+        $this->teamRepository->updateById($team->id, [
+            'owner_id' => $new_team_owner->id,
+        ]);
+
+        return redirect()->back()->withFlashSuccess(__('alerts.backend.teams.made_team_admin'));
     }
 
     /**

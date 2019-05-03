@@ -33,6 +33,7 @@ return [
                 'deactivate' => 'Деактивировать',
                 'delete_permanently' => 'Удалить навсегда',
                 'restore_team' => 'Восстановить компанию',
+                'make_team_admin' => 'Сделать админом',
             ],
         ],
     ],

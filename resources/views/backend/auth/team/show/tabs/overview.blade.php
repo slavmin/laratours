@@ -31,12 +31,15 @@
                         </div>
                     </li>
                 @endif
+            @endforeach
+            @foreach($team->users as $user)
                 @if(!$user->isOwnerOfTeam($team))
                     <li class="media team-member mb-2 p-2 border border-light">
                         <img src="{{ $user->avatar }}" class="mr-3" alt="...">
                         <div class="media-body position-relative">
                             <h5 class="mt-0 user-name">{{$user->name}}</h5>
                             <div class="mb-2 user-mail">{{$user->email}}</div>
+                            <div class="mb-0">{!! $user->make_admin_button !!}</div>
                             <div class="user-button-group position-absolute" style="top: 0; right: 0">{!! $user->action_buttons !!}</div>
                         </div>
                     </li>

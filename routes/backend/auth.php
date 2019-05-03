@@ -89,6 +89,7 @@ Route::group([
         // Team Status
         Route::get('team/deactivated', [TeamStatusController::class, 'getDeactivated'])->name('team.deactivated');
         Route::get('team/deleted', [TeamStatusController::class, 'getDeleted'])->name('team.deleted');
+        Route::get('team/make-admin/{user_id}', [TeamStatusController::class, 'makeTeamAdmin'])->name('team.make-admin');
 
         Route::group(['prefix' => 'team/{team}'], function () {
             Route::get('/', [TeamController::class, 'show'])->name('team.show');

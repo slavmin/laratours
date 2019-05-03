@@ -307,6 +307,19 @@ trait UserAttribute
     /**
      * @return string
      */
+    public function getMakeAdminButtonAttribute()
+    {
+        return '<a href="' . route('admin.auth.team.make-admin', $this) . '"
+            data-trans-button-cancel="' . __('buttons.general.cancel') . '"
+            data-trans-button-confirm="' . __('buttons.general.crud.update') . '"
+            data-trans-title="' . __('strings.backend.general.are_you_sure') . '" 
+            data-toggle="tooltip" data-placement="top" title="' . __('buttons.backend.access.users.confirm') . '"
+            name="confirm_item"><span class="badge badge-warning" style="cursor:pointer">' . __('buttons.backend.access.teams.make_team_admin') . '</span></a>';
+    }
+
+    /**
+     * @return string
+     */
     public function getActionButtonsAttribute()
     {
         if ($this->trashed()) {

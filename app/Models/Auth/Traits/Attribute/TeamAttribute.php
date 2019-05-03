@@ -59,13 +59,14 @@ trait TeamAttribute
      */
     public function getRestoreButtonAttribute()
     {
-        return '<a href="' . route('admin.auth.team.restore', $this) . '"
+        return '<a href="' . route('admin.auth.team.restore', [$this]) . '"
         	 data-trans-button-cancel="' . __('buttons.general.cancel') . '"
 			 data-trans-button-confirm="' . __('buttons.general.crud.restore') . '"
 			 data-trans-title="' . __('strings.backend.general.are_you_sure') . '"
              name="confirm_item" class="btn btn-info"><i class="fas fa-sync"
              data-toggle="tooltip" data-placement="top" title="' . __('buttons.backend.access.teams.restore_team') . '"></i></a> ';
     }
+
 
     /**
      * @return string
