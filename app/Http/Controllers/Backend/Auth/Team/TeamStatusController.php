@@ -8,7 +8,6 @@ use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Repositories\Backend\Auth\TeamRepository;
-use Illuminate\Support\Facades\Auth;
 
 
 /**
@@ -40,14 +39,9 @@ class TeamStatusController extends Controller
 
         $team = Team::find($team_id);
 
-//        $previous_team_owner = User::find($team->owner_id);
-//
-//        // Login out previous Team admin
-//        $user = \Auth::user();
-//        \Auth::setUser($previous_team_owner);
-//        \Auth::logout();
-//        \Auth::setUser($user);
-//        \Auth::login();
+        // Login out previous Team admin
+        $previous_team_owner = User::find($team->owner_id);
+        $previous_team_owner->update(['to_be_logged_out' => true]);
 
         // Set new Team admin
         $this->teamRepository->updateById($team->id, [
