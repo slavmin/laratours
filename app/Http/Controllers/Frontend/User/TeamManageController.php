@@ -113,7 +113,7 @@ class TeamManageController extends Controller
 
         if (!Teamwork::hasPendingInvite($request->email, $team)) {
 
-            $user_id = User::select('id')->where('email', $request->email)->first();
+            $user_id = User::select('id')->where('email', $request->email)->withTrashed()->first();
 
             if ($user_id) {
                 return redirect()->back()->withErrors([
