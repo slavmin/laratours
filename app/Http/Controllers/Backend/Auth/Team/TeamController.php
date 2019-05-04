@@ -121,7 +121,7 @@ class TeamController extends Controller
     {
         $this->teamRepository->deleteById($team->id);
 
-        //User::where('current_team_id', $team->id)->update(['active' => false, 'current_team_id' => null]);
+        User::where('current_team_id', $team->id)->update(['active' => false]);
 
         //event(new TeamDeleted($team));
 

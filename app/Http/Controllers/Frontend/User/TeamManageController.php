@@ -135,7 +135,7 @@ class TeamManageController extends Controller
         }
 
 
-        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.invite.sent') . $sended_invites);
+        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.invite.sent'));
     }
 
     /**
@@ -150,7 +150,7 @@ class TeamManageController extends Controller
 
         $quota = config('teamwork.team_members_quota');
 
-        if ($team->users->count() < $quota) {
+        if ($team->users->count() >= $quota) {
             return redirect()->back()->withErrors([
                 'message' => __('alerts.frontend.teams.users.limit'),
             ]);

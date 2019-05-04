@@ -6,11 +6,12 @@
             <div class="dropdown-menu align-self-right" aria-labelledby="breadcrumb-dropdown-1">
                 <a class="dropdown-item" href="{{ route('admin.auth.user.index') }}">@lang('menus.backend.access.users.all')</a>
                 <a class="dropdown-item" href="{{ route('admin.auth.user.create') }}">@lang('menus.backend.access.users.create')</a>
-                <a class="dropdown-item" href="{{ route('admin.auth.user.deactivated') }}">@lang('menus.backend.access.users.deactivated')</a>
-                <a class="dropdown-item" href="{{ route('admin.auth.user.deleted') }}">@lang('menus.backend.access.users.deleted')</a>
+                <a class="dropdown-item" href="{{ route('admin.auth.user.deactivated') }}">@lang('menus.backend.access.users.deactivated')
+                    @if ($count_inactive_users > 0)<span class="badge badge-info">{{ $count_inactive_users }}</span>@endif</a>
+                <a class="dropdown-item" href="{{ route('admin.auth.user.deleted') }}">@lang('menus.backend.access.users.deleted')
+                    @if ($count_deleted_users > 0)<span class="badge badge-info">{{ $count_deleted_users }}</span>@endif</a>
             </div>
         </div><!--dropdown-->
 
-        <!--<a class="btn" href="#">Static Link</a>-->
     </div><!--btn-group-->
 </li>

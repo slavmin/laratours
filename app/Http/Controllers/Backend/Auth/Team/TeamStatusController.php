@@ -78,7 +78,7 @@ class TeamStatusController extends Controller
 
         if ($team->restore()) {
 
-            User::whereIn('id', $team->users->pluck('id'))->update(['active' => true, 'current_team_id' => $team->id]);
+            User::whereIn('id', $team->users->pluck('id'))->update(['active' => true]);
 
             //event(new TeamRestored($team));
 

@@ -7,7 +7,8 @@
                 <a class="dropdown-item" href="{{ route('admin.auth.team.index') }}">@lang('menus.backend.access.teams.all')</a>
                 <a class="dropdown-item" href="{{ route('admin.auth.team.create') }}">@lang('menus.backend.access.teams.create')</a>
 {{--                <a class="dropdown-item" href="{{ route('admin.auth.team.deactivated') }}">@lang('menus.backend.access.teams.deactivated')</a>--}}
-                <a class="dropdown-item" href="{{ route('admin.auth.team.deleted') }}">@lang('menus.backend.access.teams.deleted')</a>
+                <a class="dropdown-item" href="{{ route('admin.auth.team.deleted') }}">@lang('menus.backend.access.teams.deleted')
+                    @if ($count_deleted_teams > 0)<span class="badge badge-info">{{ $count_deleted_teams }}</span>@endif</a>
             </div>
         </div><!--dropdown-->
 

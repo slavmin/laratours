@@ -45,7 +45,7 @@
                                 <tr>
                                     <td>
                                         <div class="mb-1">{{ $user->full_name }}</div>
-                                        <div class="mb-1">{{ $user->email }}</div>
+                                        <div class="mb-1 text-info">{{ $user->email }}</div>
                                     </td>
                                     <td>
                                         @forelse($user->teams as $team)
@@ -62,7 +62,7 @@
                                     <td>{!! $user->confirmed_label !!}</td>
                                     <td>
                                         <div class="mb-1">{!! $user->roles_label !!}</div>
-                                        <div class="mb-1">{!! $user->permissions_label !!}</div>
+                                        <div class="mb-1 text-secondary">{!! $user->permissions_label !!}</div>
                                     </td>
                                     <td>{!! $user->status_label !!}</td>
                                 <!--<td>{!! $user->social_buttons !!}</td>-->

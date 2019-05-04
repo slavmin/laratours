@@ -19,6 +19,17 @@ class TeamRepository extends BaseRepository
         return Team::class;
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedCount(): int
+    {
+        return $this->model
+            ->onlyTrashed()
+            ->count();
+    }
+
     /**
      * @param int $paged
      * @param string $orderBy

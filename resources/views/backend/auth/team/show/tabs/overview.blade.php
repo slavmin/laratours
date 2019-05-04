@@ -8,7 +8,7 @@
 
             <tr>
                 <th>@lang('labels.backend.access.teams.table.number_of_users')</th>
-                <td>{{ $team->users->count() }}</td>
+                <td>{{ $team->users->count() }} @lang('labels.frontend.teams.from') {{ config('teamwork.team_members_quota') }}</td>
             </tr>
 
             <tr>
