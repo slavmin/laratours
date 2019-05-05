@@ -29,13 +29,8 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required', 'string', 'min:2', 'max:191'],
-            'last_name' => ['required', 'string', 'min:2', 'max:191'],
-            'email' => ['required', 'string', 'email', 'max:191', Rule::unique('users')],
-            'password' => ['required', 'confirmed', new ChangePassword()],
-            'g-recaptcha-response' => ['required_if:captcha_status,true', 'captcha'],
-            //'profile.formal.*' => ['required', 'string', 'min:3', 'max:191'],
             'profile.formal' => ['required', 'array'],
+            'profile.formal.company_name' => ['required', 'string', 'min:2', 'max:191'],
             'profile.formal.company_phone' => ['required', 'regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/'],
             'profile.formal.company_email' => ['required', 'email', 'max:191'],
             'profile.formal.company_country' => ['required', 'string', 'min:3', 'max:191'],
@@ -43,6 +38,12 @@ class RegisterRequest extends FormRequest
             'profile.formal.company_address' => ['required', 'string', 'min:3', 'max:191'],
             'profile.formal.company_inn' => ['required', 'digits:10'],
             'profile.formal.company_kpp' => ['required', 'digits:10'],
+            //'profile.formal.*' => ['required', 'string', 'min:3', 'max:191'],
+            'first_name' => ['required', 'string', 'min:2', 'max:191'],
+            'last_name' => ['required', 'string', 'min:2', 'max:191'],
+            'email' => ['required', 'string', 'email', 'max:191', Rule::unique('users')],
+            'password' => ['required', 'confirmed', new ChangePassword()],
+            'g-recaptcha-response' => ['required_if:captcha_status,true', 'captcha'],
         ];
     }
 
@@ -58,6 +59,8 @@ class RegisterRequest extends FormRequest
             'last_name.required' => __('validation.required', ['attribute' => 'Фамилия']),
             'last_name.min' => __('validation.min', ['attribute' => 'Фамилия']),
             'password.confirmed' => __('validation.confirmed', ['attribute' => 'Пароль']),
+            'profile.formal.company_name.required' => __('validation.required', ['attribute' => 'Название организации']),
+            'profile.formal.company_name.min' => __('validation.min', ['attribute' => 'Название организации']),
             'profile.formal.company_phone.required' => __('validation.required', ['attribute' => 'Телефон']),
             'profile.formal.company_phone.regex' => __('validation.regex', ['attribute' => 'Телефон']),
             'profile.formal.company_email.required' =>__('validation.required', ['attribute' => 'E-mail']),
