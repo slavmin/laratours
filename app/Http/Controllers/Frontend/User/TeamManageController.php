@@ -34,7 +34,7 @@ class TeamManageController extends Controller
      */
     public function index()
     {
-        return view('frontend.user.team.show');
+        return view('frontend.user.team.index');
     }
 
 
