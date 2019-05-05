@@ -14,4 +14,10 @@ use Mpociot\Teamwork\TeamInvite;
 class Team extends TeamworkTeam
 {
     use TeamAttribute, TeamMethod, SoftDeletes;
+
+    protected $fillable = ['name', 'owner_id', 'slug', 'meta'];
+
+    protected $casts = [
+        'meta' => 'array'
+    ];
 }

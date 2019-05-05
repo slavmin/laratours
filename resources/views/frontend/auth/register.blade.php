@@ -20,8 +20,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.name'))->for('company_name') }}
 
-                                {{ html()->text('company_name')
+                                {{ html()->text('profile[formal][company_name]')
                                     ->class('form-control')
+                                    ->id('company_name')
                                     ->placeholder(__('validation.attributes.frontend.company.name'))
                                     ->attribute('maxlength', 191)
                                     ->required() }}
@@ -34,8 +35,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.phone'))->for('company_phone') }}
 
-                                {{ html()->text('company_phone')
+                                {{ html()->text('profile[formal][company_phone]')
                                     ->class('form-control')
+                                    ->id('company_phone')
                                     ->placeholder(__('validation.attributes.frontend.company.phone'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -45,8 +47,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.email'))->for('company_email') }}
 
-                                {{ html()->email('company_email')
+                                {{ html()->email('profile[formal][company_email]')
                                     ->class('form-control')
+                                    ->id('company_email')
                                     ->placeholder(__('validation.attributes.frontend.company.email'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -58,8 +61,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.country'))->for('company_country') }}
 
-                                {{ html()->text('company_country')
+                                {{ html()->text('profile[formal][company_country]')
                                     ->class('form-control')
+                                    ->id('company_country')
                                     ->placeholder(__('validation.attributes.frontend.company.country'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -69,8 +73,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.city'))->for('company_city') }}
 
-                                {{ html()->text('company_city')
+                                {{ html()->text('profile[formal][company_city]')
                                     ->class('form-control')
+                                    ->id('company_city')
                                     ->placeholder(__('validation.attributes.frontend.company.city'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -82,8 +87,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.address'))->for('company_address') }}
 
-                                {{ html()->text('company_address')
+                                {{ html()->text('profile[formal][company_address]')
                                     ->class('form-control')
+                                    ->id('company_address')
                                     ->placeholder(__('validation.attributes.frontend.company.address'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -95,8 +101,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.inn'))->for('company_inn') }}
 
-                                {{ html()->text('company_inn')
+                                {{ html()->text('profile[formal][company_inn]')
                                     ->class('form-control')
+                                    ->id('company_inn')
                                     ->placeholder(__('validation.attributes.frontend.company.inn'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->
@@ -106,8 +113,9 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.kpp'))->for('company_kpp') }}
 
-                                {{ html()->text('company_kpp')
+                                {{ html()->text('profile[formal][company_kpp]')
                                     ->class('form-control')
+                                    ->id('company_kpp')
                                     ->placeholder(__('validation.attributes.frontend.company.kpp'))
                                     ->attribute('maxlength', 191) }}
                             </div><!--form-group-->

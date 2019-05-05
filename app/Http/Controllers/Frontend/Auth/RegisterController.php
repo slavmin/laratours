@@ -66,16 +66,20 @@ class RegisterController extends Controller
     {
         abort_unless(config('access.registration'), 404);
 
+        $company['profile'] = $request->get('profile');
+
+        $company_name = $company['profile']['formal']['company_name'];
 
         $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password'));
 
         // Create team for company
         $team = Team::create([
-            'name' => $request->get('company_name'),
-            'slug' => Str::slug($request->get('company_name')),
-            'owner_id' => $user->id
+            'name' => $company_name,
+            'slug' => Str::slug($company_name),
+            'owner_id' => $user->id,
+            'meta' => $company
         ]);
-        //$team->slug = Str::slug($request->get('company_name'));
+
         $user->attachTeam($team);
 
         // If the user must confirm their email or their account requires approval,

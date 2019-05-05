@@ -24,15 +24,7 @@
                                     ->class('form-control')
                                     ->placeholder(__('validation.attributes.frontend.email'))
                                     ->attribute('maxlength', 191)
-                                    ->attribute('hidden', true)
-                                    ->value($email)
-                                    ->required() }}
-
-                                {{ html()->email('email_show')
-                                    ->class('form-control')
-                                    ->placeholder(__('validation.attributes.frontend.email'))
-                                    ->attribute('maxlength', 191)
-                                    ->attribute('disabled', true)
+                                    ->attribute('readonly', true)
                                     ->value($email)
                                     ->required() }}
                             </div><!--form-group-->
