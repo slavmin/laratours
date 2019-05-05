@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Frontend\User;
 
-use App\Mail\Team\SendTeamInvite;
-use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\Auth\Team;
+use App\Mail\Team\SendTeamInvite;
+use App\Events\Frontend\Team\TeamMemberDeleted;
 use App\Http\Requests\Frontend\Team\ManageTeamRequest;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
@@ -56,13 +57,15 @@ class TeamManageController extends Controller
      * @param $user_id
      * @return mixed
      */
-    public function destroy($user_id)
+    public function deleteMember($user_id)
     {
         $user = User::findOrFail($user_id);
 
         $user_team_id = $user->current_team_id;
 
         $team = Team::findOrFail($user_team_id);
+
+        event(new TeamMemberDeleted($user));
 
         $user->detachTeam($team);
 

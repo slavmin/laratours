@@ -50,7 +50,7 @@
                                             </div>
                                         @empty
                                             <div class="mb-2">
-                                                N/A
+                                               {{ $user->current_team_id }}
                                             </div>
                                         @endforelse
                                     </td>

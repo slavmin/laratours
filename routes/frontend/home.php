@@ -36,6 +36,6 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::post('team/invite/{team_id}', [TeamManageController::class, 'invite'])->name('team.invite');
         Route::get('team/resend/{invite_id}', [TeamManageController::class, 'resendInvite'])->name('team.resend_invite');
         Route::get('team/invite/{invite_id}/delete', [TeamManageController::class, 'deleteInvite'])->name('team.delete_invite');
-        Route::delete('team/members/{user_id}/delete', [TeamManageController::class, 'destroy'])->name('team.members.destroy');
+        Route::delete('team/members/{user_id}/delete', [TeamManageController::class, 'deleteMember'])->name('team.members.destroy');
     });
 });

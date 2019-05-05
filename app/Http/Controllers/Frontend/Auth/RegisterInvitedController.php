@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use App\Events\Frontend\Auth\UserLoggedIn;
+use App\Events\Frontend\Team\TeamMemberAdded;
 use App\Http\Controllers\Controller;
 use App\Events\Frontend\Auth\UserInvitedRegistered;
 use App\Http\Requests\RegisterInvitedRequest;
@@ -107,6 +109,10 @@ class RegisterInvitedController extends Controller
         Teamwork::acceptInvite($invite);
 
         event(new UserInvitedRegistered($user));
+
+        event(new UserLoggedIn($user));
+
+        event(new TeamMemberAdded($user));
 
         return redirect($this->redirectPath())->withFlashSuccess(__('alerts.frontend.auth.registered'));
     }
