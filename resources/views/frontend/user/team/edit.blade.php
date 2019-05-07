@@ -144,9 +144,11 @@
 
                     <div class="row">
                         <div class="col">
-                            <div class="form-group mb-0 clearfix">
-                                {{ form_submit(__('buttons.general.save')) }}
-                            </div><!--form-group-->
+                            {{ form_cancel(route('frontend.user.team'), __('buttons.general.cancel')) }}
+                        </div><!--col-->
+
+                        <div class="col text-right">
+                            {{ form_submit(__('buttons.general.save')) }}
                         </div><!--col-->
                     </div><!--row-->
                     {{ html()->form()->close() }}

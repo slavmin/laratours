@@ -13,7 +13,7 @@ class TeamEventListener
     public function onMemberAttached($event)
     {
         $team = Team::findOrFail($event->user->current_team_id);
-        \Log::info('Team : ' . $event->user->full_name . ' user attached to ' . $team->name);
+        \Log::info('Team : User ' . $event->user->full_name . ' attached to ' . $team->name);
     }
 
     /**
@@ -22,7 +22,7 @@ class TeamEventListener
     public function onMemberDetached($event)
     {
         $team = Team::findOrFail($event->user->current_team_id);
-        \Log::warning('Team : ' . $event->user->full_name . ' user detached from ' . $team->name);
+        \Log::warning('Team : User ' . $event->user->full_name . ' detached from ' . $team->name);
     }
 
     /**

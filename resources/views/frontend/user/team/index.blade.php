@@ -68,39 +68,39 @@
             </div><!--/card-->
 
 
-          @isset($profiles)
-            @foreach($profiles as $type => $profile)
-
-                <div class="list-group mb-4">
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.teams.profile')   {{ $type=='formal' ? 'юридические' : 'фактические' }}</h6>
-                            <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                <a href="{{ route('frontend.user.team.edit') }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
-                                    <i class="fas fa-edit"></i></a>
-                            </div><!--btn-toolbar-->
-                        </div>
+            <div class="list-group mb-4">
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.teams.profile')   @isset($type){{ $type=='formal' ? 'юридические' : 'фактические' }}@endisset</h6>
+                        <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
+                            <a href="{{ route('frontend.user.team.edit') }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
+                                <i class="fas fa-edit"></i></a>
+                        </div><!--btn-toolbar-->
                     </div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.name') :</span> {{ $profile['company_name']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.phone') :</span> {{ $profile['company_phone']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.email') :</span> {{ $profile['company_email']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.country') :</span> {{ $profile['company_country']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.city') :</span> {{ $profile['company_city']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.address') :</span> {{ $profile['company_address']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.inn') :</span> {{ $profile['company_inn']??'' }}</div>
-                    <div class="list-group-item">
-                        <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>
-                </div><!--/list-group-->
+                </div>
+                @isset($profiles)
+                    @foreach($profiles as $type => $profile)
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.name') :</span> {{ $profile['company_name']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.phone') :</span> {{ $profile['company_phone']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.email') :</span> {{ $profile['company_email']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.country') :</span> {{ $profile['company_country']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.city') :</span> {{ $profile['company_city']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.address') :</span> {{ $profile['company_address']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.inn') :</span> {{ $profile['company_inn']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>
 
-            @endforeach
-          @endisset
+                    @endforeach
+                @endisset
+            </div><!--/list-group-->
+
 
 
       </div><!--/col-lg-8-->
