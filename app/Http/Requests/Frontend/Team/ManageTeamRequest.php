@@ -40,7 +40,7 @@ class ManageTeamRequest extends FormRequest
                 'profile.formal.company_inn' => ['required', 'digits:10'],
                 'profile.formal.company_kpp' => ['required', 'digits:10'],
             ];
-        } else {
+        } elseif($this->input('profile_type') == 'real') {
             return [
                 //'profile.real' => ['required', 'array'],
                 'profile.real.company_name' => ['required', 'string', 'min:2', 'max:191', Rule::unique('teams', 'name')->ignore($team)],
@@ -52,7 +52,13 @@ class ManageTeamRequest extends FormRequest
                 'profile.real.company_inn' => ['required', 'digits:10'],
                 'profile.real.company_kpp' => ['required', 'digits:10'],
             ];
+
+        } else {
+            return [
+                'email' => ['required', 'string', 'email', 'max:191'],
+            ];
         }
+
     }
 
     /**

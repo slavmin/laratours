@@ -127,7 +127,7 @@ class TeamController extends Controller
         if ($profile_type == 'formal') {
             $team->update([
                 'name' => $company_name,
-                'slug' => Str::slug($company_name)
+                'slug' => \Str::slug($company_name)
             ]);
         }
 
