@@ -10,6 +10,7 @@ use App\Http\Requests\Backend\Auth\Team\UpdateTeamRequest;
 use App\Models\Auth\User;
 use App\Repositories\Backend\Auth\TeamRepository;
 use Illuminate\Support\Str;
+use App\Models\Extend;
 
 
 /**
@@ -51,7 +52,20 @@ class TeamController extends Controller
      */
     public function show(ManageTeamRequest $request, Team $team)
     {
+        $profiles = [];
+        $profile_raw = $team->extendedFields;
+        $profile_rows = $profile_raw->pluck('content');
+
+        if (!empty($profile_rows)) {
+            foreach ($profile_rows as $itemKey => $itemVal) {
+                if (!empty($itemVal)) {
+                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
+                }
+            }
+        }
+
         return view('backend.auth.team.show')
+            ->with('profiles', $profiles)
             ->withTeam($team);
     }
 
@@ -71,7 +85,21 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        return view('backend.auth.team.edit')->withTeam($team);
+        $profiles = ['formal' => ''];
+        $profile_raw = $team->extendedFields;
+        $profile_rows = $profile_raw->pluck('content');
+
+        if (!empty($profile_rows)) {
+            foreach ($profile_rows as $itemKey => $itemVal) {
+                if (!empty($itemVal)) {
+                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
+                }
+            }
+        }
+
+        return view('backend.auth.team.edit')
+            ->with('profiles', $profiles)
+            ->withTeam($team);
     }
 
 
@@ -82,13 +110,26 @@ class TeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
-        $team_name = $request->name;
-        $team_slug = Str::slug($request->name);
+        $company['profile'] = $request->get('profile');
+        $profile_type = $request->get('profile_type');
+        $company_name = $company['profile'][$profile_type]['company_name'];
 
-        $this->teamRepository->updateById($team->id, [
-            'name' => $team_name,
-            'slug' => Str::slug($team_slug)
+        // Update company profile
+        $extended_field = Extend::where('extendable_id', $team->id)
+            ->where('type', $profile_type)
+            ->where('name', 'profile')->first();
+
+        $extended_field->update([
+            'content' => $company['profile'][$profile_type]
         ]);
+
+        // Update team name
+        if ($profile_type == 'formal') {
+            $team->update([
+                'name' => $company_name,
+                'slug' => Str::slug($company_name)
+            ]);
+        }
 
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.updated'));
     }

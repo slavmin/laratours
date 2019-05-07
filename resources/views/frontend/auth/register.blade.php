@@ -39,7 +39,8 @@
                                     ->class('form-control')
                                     ->id('company_phone')
                                     ->placeholder(__('validation.attributes.frontend.company.phone'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
@@ -51,7 +52,8 @@
                                     ->class('form-control')
                                     ->id('company_email')
                                     ->placeholder(__('validation.attributes.frontend.company.email'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
@@ -65,7 +67,8 @@
                                     ->class('form-control')
                                     ->id('company_country')
                                     ->placeholder(__('validation.attributes.frontend.company.country'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
@@ -77,7 +80,8 @@
                                     ->class('form-control')
                                     ->id('company_city')
                                     ->placeholder(__('validation.attributes.frontend.company.city'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
@@ -91,7 +95,8 @@
                                     ->class('form-control')
                                     ->id('company_address')
                                     ->placeholder(__('validation.attributes.frontend.company.address'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
@@ -105,7 +110,8 @@
                                     ->class('form-control')
                                     ->id('company_inn')
                                     ->placeholder(__('validation.attributes.frontend.company.inn'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
@@ -117,7 +123,8 @@
                                     ->class('form-control')
                                     ->id('company_kpp')
                                     ->placeholder(__('validation.attributes.frontend.company.kpp'))
-                                    ->attribute('maxlength', 191) }}
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->

@@ -11,6 +11,7 @@ use App\Http\Requests\Frontend\Team\ManageTeamRequest;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
+use Illuminate\Support\Str;
 
 
 /**
@@ -34,11 +35,25 @@ class TeamManageController extends Controller
      */
     public function index()
     {
-        return view('frontend.user.team.index');
+        $team = Team::findOrFail(auth()->user()->current_team_id);
+
+        $profiles = [];
+        $profile_raw = $team->extendedFields;
+        $profile_rows = $profile_raw->pluck('content');
+
+        if (!empty($profile_rows)) {
+            foreach ($profile_rows as $itemKey => $itemVal) {
+                if (!empty($itemVal)) {
+                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
+                }
+            }
+        }
+
+        return view('frontend.user.team.index')->with('team', $team)->with('profiles', $profiles);
     }
 
 
-    public function show()
+    public function show($team_id)
     {
         return false;
     }
@@ -48,9 +63,60 @@ class TeamManageController extends Controller
         return false;
     }
 
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit()
     {
-        return false;
+        $team = Team::findOrFail(auth()->user()->current_team_id);
+
+        $profiles = ['formal' => ''];
+        $profile_raw = $team->extendedFields;
+        $profile_rows = $profile_raw->pluck('content');
+
+        if (!empty($profile_rows)) {
+            foreach ($profile_rows as $itemKey => $itemVal) {
+                if (!empty($itemVal)) {
+                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
+                }
+            }
+        }
+
+        return view('frontend.user.team.edit')->with('team', $team)->with('profiles', $profiles);
+    }
+
+    /**
+     * @param ManageTeamRequest $request
+     * @param $team_id
+     * @return mixed
+     */
+    public function update(ManageTeamRequest $request, $team_id)
+    {
+        $team = Team::findOrFail(auth()->user()->current_team_id);
+
+        $company['profile'] = $request->get('profile');
+        $profile_type = $request->get('profile_type');
+        $company_name = $company['profile'][$profile_type]['company_name'];
+
+        // Update company formal profile
+        $extended_field = \App\Models\Extend::where('extendable_id', $team->id)
+            ->where('type', $profile_type)
+            ->where('name', 'profile')->first();
+
+        $extended_field->update([
+            'content' => $company['profile'][$profile_type]
+        ]);
+
+        // Update team name
+        if ($profile_type == 'formal') {
+            $team->update([
+                'name' => $company_name,
+                'slug' => Str::slug($company_name)
+            ]);
+        }
+
+        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.updated'));
     }
 
     /**

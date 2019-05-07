@@ -9,12 +9,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between py-3 border-bottom border-info">
                         <h6 class="text-secondary">@lang('labels.frontend.teams.table.name')</h6>
-                        <div class="text-info"><strong>{{ $logged_in_user->currentTeam->name }}</strong></div>
+                        <div class="text-info"><strong>{{ $team->name }}</strong></div>
                     </div>
 
                     <div class="d-flex justify-content-between py-3 border-bottom border-info">
                         <h6 class="text-secondary">@lang('labels.frontend.teams.table.number_of_users')</h6>
-                        <div>{{ $logged_in_user->currentTeam->users->count() }} @lang('labels.frontend.teams.from') {{ config('teamwork.team_members_quota')  }}</div>
+                        <div>{{ $team->users->count() }} @lang('labels.frontend.teams.from') {{ config('teamwork.team_members_quota')  }}</div>
                     </div>
 
                     <div class="d-flex justify-content-between py-3">
@@ -23,8 +23,8 @@
 
                     <div>
                         <ul class="list-unstyled">
-                            @foreach($logged_in_user->currentTeam->users as $user)
-                                @if($user->isOwnerOfTeam($logged_in_user->currentTeam->id))
+                            @foreach($team->users as $user)
+                                @if($user->isOwnerOfTeam($team->id))
                                     <li class="media team-owner mb-2 p-2 border border-light">
                                         <img src="{{ $user->avatar }}" class="mr-3" alt="...">
                                         <div class="media-body position-relative">
@@ -35,8 +35,8 @@
                                     </li>
                                 @endif
                             @endforeach
-                            @foreach($logged_in_user->currentTeam->users as $user)
-                                @if(!$user->isOwnerOfTeam($logged_in_user->currentTeam->id))
+                            @foreach($team->users as $user)
+                                @if(!$user->isOwnerOfTeam($team->id))
                                     <li class="media team-member mb-2 p-2 border border-light">
                                         <img src="{{ $user->avatar }}" class="mr-3" alt="...">
                                         <div class="media-body position-relative">
@@ -68,21 +68,35 @@
             </div><!--/card-->
 
 
+          @isset($profiles)
+            @foreach($profiles as $type => $profile)
+
+                <div class="list-group mb-4">
+                    <h6 class="list-group-item text-info py-4">@lang('labels.frontend.teams.profile')   {{ $type=='formal' ? 'юридические' : 'фактические' }}</h6>
+                    @foreach($profile as $type => $field)
+                        <div class="list-group-item">{{ $type }} : {{ $field }}</div>
+                    @endforeach
+                </div><!--/list-group-->
+
+            @endforeach
+          @endisset
+
+
       </div><!--/col-lg-8-->
 
       <div class="col-lg-4">
 
-            @if($logged_in_user->currentTeam->users->count() < config('teamwork.team_members_quota'))
+            @if($team->users->count() < config('teamwork.team_members_quota'))
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h6 class="card-title text-info">Пригласить в "{{ $logged_in_user->currentTeam->name }}"</h6>
+                        <h6 class="card-title text-info mb-3 py-1">Пригласить в "{{ $team->name }}"</h6>
 
-                        {{ html()->form('POST', route('frontend.user.team.invite', $logged_in_user->currentTeam->id))->class('form-horizontal')->open() }}
+                        {{ html()->form('POST', route('frontend.user.team.invite', $team->id))->class('form-horizontal')->open() }}
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    {{ html()->label(__('validation.attributes.frontend.email'))->for('email') }}
+                                    {{--{{ html()->label(__('validation.attributes.frontend.email'))->for('email') }}--}}
 
                                     {{ html()->email('email')
                                         ->class('form-control')
@@ -111,32 +125,30 @@
             @endif
 
 
-            @if($logged_in_user->currentTeam->invites->count() > 0)
+            @if($team->invites->count() > 0)
 
-                <div class="card mb-5">
-                    <div class="card-body">
-                        <h6 class="card-title text-info">Отправленные приглашения</h6>
+                <div class="list-group mb-4">
+                    <h6 class="list-group-item text-info py-4">Отправленные приглашения</h6>
 
-                        @foreach($logged_in_user->currentTeam->invites as $invite)
-                            <div class="d-flex justify-content-between py-3 border-bottom border-light">
-                                <div class="email-send">{{ $invite->email }}</div>
+                    @foreach($team->invites as $invite)
+                        <div class="d-flex justify-content-between py-3 list-group-item">
+                            <div class="email-send">{{ $invite->email }}</div>
 
-                                <div class="btn-group btn-group-sm" role="group" aria-label="action buttons">
-                                    <a href="{{ route('frontend.user.team.resend_invite', $invite) }}"
-                                       class="btn btn-info" title="@lang('labels.general.buttons.send')">
-                                        <i class="fas fa-sync"></i> {{--@lang('labels.general.buttons.send')--}}
-                                    </a>
-                                    <a href="{{ route('frontend.user.team.delete_invite', $invite) }}"
-                                       class="btn btn-danger" title="@lang('labels.general.buttons.delete')">
-                                        <i class="far fa-trash-alt"></i> {{--@lang('labels.general.buttons.delete')--}}
-                                    </a>
-                                </div>
-
+                            <div class="btn-group btn-group-sm" role="group" aria-label="action buttons">
+                                <a href="{{ route('frontend.user.team.resend_invite', $invite) }}"
+                                   class="btn btn-info" title="@lang('labels.general.buttons.send')">
+                                    <i class="fas fa-sync"></i> {{--@lang('labels.general.buttons.send')--}}
+                                </a>
+                                <a href="{{ route('frontend.user.team.delete_invite', $invite) }}"
+                                   class="btn btn-danger" title="@lang('labels.general.buttons.delete')">
+                                    <i class="far fa-trash-alt"></i> {{--@lang('labels.general.buttons.delete')--}}
+                                </a>
                             </div>
-                        @endforeach
 
-                    </div><!--/card-body-->
-                </div><!--/card-->
+                        </div>
+                    @endforeach
+
+                </div><!--/list-group-->
 
             @endif
 

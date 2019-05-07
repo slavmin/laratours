@@ -80,7 +80,15 @@ class RegisterController extends Controller
             'meta' => $company
         ]);
 
+        // Attach user to team
         $user->attachTeam($team);
+
+        // Create and fill company profile
+        $team->extendedFields()->create([
+            'name'    => 'profile',
+            'type'    => 'formal',
+            'content' => $company['profile']['formal']
+        ]);
 
         // If the user must confirm their email or their account requires approval,
         // create the account but don't log them in.

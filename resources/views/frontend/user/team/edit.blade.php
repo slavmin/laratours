@@ -1,91 +1,21 @@
-@extends('backend.layouts.app')
-
-@section('title', __('labels.backend.access.teams.management') . ' | ' . __('labels.backend.access.teams.edit'))
-
-@section('breadcrumb-links')
-    @include('backend.auth.team.includes.breadcrumb-links')
-@endsection
+@extends('frontend.layouts.app')
 
 @section('content')
-{{--    {{ html()->modelForm($team, 'PATCH', route('admin.auth.team.update', $team))->class('form-horizontal')->open() }}
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-5">
-                    <h4 class="card-title mb-0">
-                        @lang('labels.backend.access.teams.management')
-                        <small class="text-muted">@lang('labels.backend.access.teams.edit')</small>
-                    </h4>
-                </div><!--col-->
-            </div><!--row-->
-            <!--row-->
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-sm-8 align-self-center">
 
-            <hr />
-
-            <div class="row mt-4">
-                <div class="col">
-                    <div class="form-group row">
-                        {{ html()->label(__('validation.attributes.backend.access.teams.name'))
-                            ->class('col-md-2 form-control-label')
-                            ->for('name') }}
-
-                        <div class="col-md-10">
-                            {{ html()->text('name')
-                                ->class('form-control')
-                                ->placeholder(__('validation.attributes.backend.access.teams.name'))
-                                ->attribute('maxlength', 100)
-                                ->required() }}
-                        </div><!--col-->
-
-                    </div><!--form-group-->
-                </div><!--col-->
-            </div><!--row-->
-        </div><!--card-body-->
-
-        <div class="card-footer">
-            <div class="row">
-                <div class="col">
-                    {{ form_cancel(route('admin.auth.team.index'), __('buttons.general.cancel')) }}
-                </div><!--col-->
-
-                <div class="col text-right">
-                    {{ form_submit(__('buttons.general.crud.update')) }}
-                </div><!--col-->
-            </div><!--row-->
-        </div><!--card-footer-->
-    </div><!--card-->
-    {{ html()->closeModelForm() }}--}}
-
-    <div class="card">
-        <div class="card-body">
-
-            <div class="row">
-                <div class="col-sm-5">
-                    <h4 class="card-title mb-0">
-                        @lang('labels.backend.access.teams.management')
-                        <small class="text-muted">@lang('labels.backend.access.teams.edit')</small>
-                    </h4>
-                </div><!--col-->
-            </div><!--row-->
-            <!--row-->
-
-        </div><!--/card-body-->
-    </div><!--/card-->
-
-    @if(count($profiles) > 0)
-        @foreach($profiles as $type => $profile)
+            @if(count($profiles) > 0)
+                @foreach($profiles as $type => $profile)
 
             <div class="card mb-4">
-
                 <div class="card-header">
                     <strong>
-                        @lang('labels.frontend.teams.profile')  {{ $type=='formal' ? 'юридические' : 'фактические' }}
+                        @lang('labels.frontend.teams.profile')
                     </strong>
                 </div><!--card-header-->
 
                 <div class="card-body">
-
-                    {{ html()->form('PATCH', route('admin.auth.team.update', $team->id))->open() }}
+                    {{ html()->form('PATCH', route('frontend.user.team.edit.post', $team->id))->open() }}
 
                     {{ html()->hidden('profile_type')
                         ->value($type) }}
@@ -212,25 +142,21 @@
                         </div><!--col-->
                     </div><!--row-->
 
-                </div><!-- card-body -->
-
-
-                <div class="card-footer">
                     <div class="row">
                         <div class="col">
-                            {{ form_cancel(route('admin.auth.team.index'), __('buttons.general.cancel')) }}
-                        </div><!--col-->
-
-                        <div class="col text-right">
-                            {{ form_submit(__('buttons.general.crud.update')) }}
+                            <div class="form-group mb-0 clearfix">
+                                {{ form_submit(__('buttons.general.save')) }}
+                            </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
-                </div><!--card-footer-->
-            </div><!--card-->
-            {{ html()->form()->close() }}
+                    {{ html()->form()->close() }}
 
-        @endforeach
-    @endif
+                </div><!-- card-body -->
+            </div><!-- card -->
 
+                @endforeach
+            @endif
 
+        </div><!-- col-md-8 -->
+    </div><!-- row -->
 @endsection

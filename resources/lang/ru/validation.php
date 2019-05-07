@@ -35,7 +35,7 @@ return [
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'Поле :attribute не соответствует формату :format.',
     'different' => 'Поля :attribute и :other должны различаться.',
-    'digits' => 'Длина цифрового поля :attribute должна быть :digits.',
+    'digits' => 'Длина цифрового поля :attribute должна равняться :digits.',
     'digits_between' => 'Длина цифрового поля :attribute должна быть между :min и :max.',
     'dimensions' => 'Поле :attribute имеет недопустимые размеры изображения.',
     'distinct' => 'Поле :attribute содержит повторяющееся значение.',

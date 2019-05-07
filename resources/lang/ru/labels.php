@@ -66,6 +66,7 @@ return [
                     'titles' => [
                         'history' => 'История',
                         'overview' => 'Обзор',
+                        'profile' => 'Реквизиты',
                     ],
                     'content' => [
                         'overview' => [
@@ -182,6 +183,7 @@ return [
         ],
         'teams' => [
             'from' => 'из',
+            'profile' => 'Реквизиты компании',
             'table' => [
                 'name' => 'Компания',
                 'members' => 'Участники',

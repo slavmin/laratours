@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
         // User Team Specific
         Route::get('team', [TeamManageController::class, 'index'])->name('team');
+        Route::get('team/edit', [TeamManageController::class, 'edit'])->name('team.edit');
+        Route::patch('team/edit/{team_id}', [TeamManageController::class, 'update'])->name('team.edit.post');
         Route::post('team/invite/{team_id}', [TeamManageController::class, 'invite'])->name('team.invite');
         Route::get('team/resend/{invite_id}', [TeamManageController::class, 'resendInvite'])->name('team.resend_invite');
         Route::get('team/invite/{invite_id}/delete', [TeamManageController::class, 'deleteInvite'])->name('team.delete_invite');

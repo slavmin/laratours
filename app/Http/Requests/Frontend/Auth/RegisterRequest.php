@@ -59,6 +59,7 @@ class RegisterRequest extends FormRequest
             'last_name.required' => __('validation.required', ['attribute' => 'Фамилия']),
             'last_name.min' => __('validation.min', ['attribute' => 'Фамилия']),
             'password.confirmed' => __('validation.confirmed', ['attribute' => 'Пароль']),
+            'profile.formal.company_name.unique' => __('validation.unique', ['attribute' => 'Название организации']),
             'profile.formal.company_name.required' => __('validation.required', ['attribute' => 'Название организации']),
             'profile.formal.company_name.min' => __('validation.min', ['attribute' => 'Название организации']),
             'profile.formal.company_phone.required' => __('validation.required', ['attribute' => 'Телефон']),

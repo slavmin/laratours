@@ -6,7 +6,8 @@ use App\Models\Auth\Traits\Attribute\TeamAttribute;
 use App\Models\Auth\Traits\Method\TeamMethod;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mpociot\Teamwork\TeamworkTeam;
-use Mpociot\Teamwork\TeamInvite;
+//use Mpociot\Teamwork\Facades\Teamwork;
+//use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class Team.
@@ -15,9 +16,29 @@ class Team extends TeamworkTeam
 {
     use TeamAttribute, TeamMethod, SoftDeletes;
 
-    protected $fillable = ['name', 'owner_id', 'slug', 'meta'];
+//    protected $with = ['extendedFields'];
 
-    protected $casts = [
-        'meta' => 'array'
-    ];
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function extendedFields()
+    {
+        return $this->morphMany('App\Models\Extend', 'extendable');
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormalProfileAttribute()
+    {
+        return $this->extendedFields()->where(['name'=>'profile', 'type'=>'formal'])->get()->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    public function getRealProfileAttribute()
+    {
+        return $this->extendedFields()->where(['name'=>'profile', 'type'=>'real'])->get()->toArray();
+    }
 }

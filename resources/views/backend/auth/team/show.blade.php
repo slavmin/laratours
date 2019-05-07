@@ -24,12 +24,22 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-expanded="true"><i class="fas fa-users"></i> @lang('labels.backend.access.teams.tabs.titles.overview')</a>
                         </li>
+                        @if(count($profiles) > 0)
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-expanded="false"><i class="fas fa-address-card"></i> @lang('labels.backend.access.teams.tabs.titles.profile')</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="overview" role="tabpanel" aria-expanded="true">
                             @include('backend.auth.team.show.tabs.overview')
                         </div><!--tab-->
+                        @if(count($profiles) > 0)
+                        <div class="tab-pane" id="profile" role="tabpanel" aria-expanded="false">
+                            @include('backend.auth.team.show.tabs.profile')
+                        </div><!--tab-->
+                        @endif
                     </div><!--tab-content-->
                 </div><!--col-->
             </div><!--row-->
