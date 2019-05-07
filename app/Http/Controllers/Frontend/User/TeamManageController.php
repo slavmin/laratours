@@ -116,7 +116,7 @@ class TeamManageController extends Controller
             ]);
         }
 
-        return redirect()->back()->withFlashSuccess(__('alerts.frontend.teams.updated'));
+        return redirect()->route('frontend.user.team')->withFlashSuccess(__('alerts.frontend.teams.updated'));
     }
 
     /**
