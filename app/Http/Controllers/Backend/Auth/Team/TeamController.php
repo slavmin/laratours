@@ -142,11 +142,11 @@ class TeamController extends Controller
     public function store(StoreTeamRequest $request)
     {
         $team_name = $request->name;
-        $team_slug = Str::slug($request->name);
+        $team_slug = \Str::slug($request->name);
 
         $this->teamRepository->create([
             'name' => $team_name,
-            'slug' => Str::slug($team_slug)
+            'slug' => \Str::slug($team_slug)
         ]);
 
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.created'));

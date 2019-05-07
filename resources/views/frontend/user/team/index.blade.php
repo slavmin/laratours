@@ -72,7 +72,15 @@
             @foreach($profiles as $type => $profile)
 
                 <div class="list-group mb-4">
-                    <h6 class="list-group-item text-info py-4">@lang('labels.frontend.teams.profile')   {{ $type=='formal' ? 'юридические' : 'фактические' }}</h6>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.teams.profile')   {{ $type=='formal' ? 'юридические' : 'фактические' }}</h6>
+                            <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
+                                <a href="{{ route('frontend.user.team.edit') }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
+                                    <i class="fas fa-edit"></i></a>
+                            </div><!--btn-toolbar-->
+                        </div>
+                    </div>
                     @foreach($profile as $type => $field)
                         <div class="list-group-item">{{ $type }} : {{ $field }}</div>
                     @endforeach

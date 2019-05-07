@@ -54,7 +54,7 @@ class UserEventListener
     {
         $notification = new NotifyOnUserRegistered($event->user);
         $admins = User::whereHas('roles', function ($query) {
-            $query->where('name', '=', 'administrator');
+            $query->where('name', '=', config('access.users.admin_role'));
         })->get();
         Notification::send($admins, $notification);
 

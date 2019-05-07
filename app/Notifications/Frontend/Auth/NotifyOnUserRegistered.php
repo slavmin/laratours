@@ -2,11 +2,16 @@
 
 namespace App\Notifications\Frontend\Auth;
 
+use App\Models\Auth\Team;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Class NotifyOnUserRegistered
+ * @package App\Notifications\Frontend\Auth
+ */
 class NotifyOnUserRegistered extends Notification
 {
     use Queueable;
@@ -17,13 +22,19 @@ class NotifyOnUserRegistered extends Notification
     protected $user;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * @var
+     */
+    protected $team;
+
+
+    /**
+     * NotifyOnUserRegistered constructor.
+     * @param $user
      */
     public function __construct($user)
     {
         $this->user = $user;
+        $this->team = Team::findOrFail($this->user->current_team_id);
     }
 
     /**
@@ -48,8 +59,9 @@ class NotifyOnUserRegistered extends Notification
         return (new MailMessage)
             ->subject(app_name().': '.__('strings.emails.admin.subject'))
             ->line(__('strings.emails.admin.email_body_title'))
-            ->line('User name: '.$this->user->full_name)
-            ->line('User mail: '.$this->user->email);
+            ->line('Компания: '.$this->team->name)
+            ->line('Пользователь: '.$this->user->full_name)
+            ->line('E-mail: '.$this->user->email);
     }
 
     /**
