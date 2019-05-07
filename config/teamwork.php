@@ -104,5 +104,16 @@ return [
     |
     */
     'team_members_quota' => 6,
-    'team_invites_quota' => 6,
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team extra fields names
+    |--------------------------------------------------------------------------
+    |
+    | This is the extra fields names and types used by Teamwork.
+    |
+    */
+    'extra_field_name' => 'profile',
 ];

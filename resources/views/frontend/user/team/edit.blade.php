@@ -25,7 +25,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.name'))->for('company_name') }}
 
-                                {{ html()->text('profile['.$type.'][company_name]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_name]')
                                     ->class('form-control')
                                     ->id('company_name')
                                     ->placeholder(__('validation.attributes.frontend.company.name'))
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.phone'))->for('company_phone') }}
 
-                                {{ html()->text('profile['.$type.'][company_phone]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_phone]')
                                     ->class('form-control')
                                     ->id('company_phone')
                                     ->placeholder(__('validation.attributes.frontend.company.phone'))
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.email'))->for('company_email') }}
 
-                                {{ html()->email('profile['.$type.'][company_email]')
+                                {{ html()->email(config('teamwork.extra_field_name').'['.$type.'][company_email]')
                                     ->class('form-control')
                                     ->id('company_email')
                                     ->placeholder(__('validation.attributes.frontend.company.email'))
@@ -71,7 +71,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.country'))->for('company_country') }}
 
-                                {{ html()->text('profile['.$type.'][company_country]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_country]')
                                     ->class('form-control')
                                     ->id('company_country')
                                     ->placeholder(__('validation.attributes.frontend.company.country'))
@@ -85,7 +85,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.city'))->for('company_city') }}
 
-                                {{ html()->text('profile['.$type.'][company_city]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_city]')
                                     ->class('form-control')
                                     ->id('company_city')
                                     ->placeholder(__('validation.attributes.frontend.company.city'))
@@ -101,7 +101,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.address'))->for('company_address') }}
 
-                                {{ html()->text('profile['.$type.'][company_address]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_address]')
                                     ->class('form-control')
                                     ->id('company_address')
                                     ->placeholder(__('validation.attributes.frontend.company.address'))
@@ -117,7 +117,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.inn'))->for('company_inn') }}
 
-                                {{ html()->text('profile['.$type.'][company_inn]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_inn]')
                                     ->class('form-control')
                                     ->id('company_inn')
                                     ->placeholder(__('validation.attributes.frontend.company.inn'))
@@ -131,7 +131,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.company.kpp'))->for('company_kpp') }}
 
-                                {{ html()->text('profile['.$type.'][company_kpp]')
+                                {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_kpp]')
                                     ->class('form-control')
                                     ->id('company_kpp')
                                     ->placeholder(__('validation.attributes.frontend.company.kpp'))

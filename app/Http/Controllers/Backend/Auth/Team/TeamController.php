@@ -110,17 +110,17 @@ class TeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
-        $company['profile'] = $request->get('profile');
+        $company[config('teamwork.extra_field_name')] = $request->get(config('teamwork.extra_field_name'));
         $profile_type = $request->get('profile_type');
-        $company_name = $company['profile'][$profile_type]['company_name'];
+        $company_name = $company[config('teamwork.extra_field_name')][$profile_type]['company_name'];
 
         // Update company profile
         $extended_field = Extend::where('extendable_id', $team->id)
             ->where('type', $profile_type)
-            ->where('name', 'profile')->first();
+            ->where('name', config('teamwork.extra_field_name'))->first();
 
         $extended_field->update([
-            'content' => $company['profile'][$profile_type]
+            'content' => $company[config('teamwork.extra_field_name')][$profile_type]
         ]);
 
         // Update team name

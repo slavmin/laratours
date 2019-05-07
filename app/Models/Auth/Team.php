@@ -31,7 +31,7 @@ class Team extends TeamworkTeam
      */
     public function getFormalProfileAttribute()
     {
-        return $this->extendedFields()->where(['name'=>'profile', 'type'=>'formal'])->get()->toArray();
+        return $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'formal'])->get()->toArray();
     }
 
     /**
@@ -39,6 +39,6 @@ class Team extends TeamworkTeam
      */
     public function getRealProfileAttribute()
     {
-        return $this->extendedFields()->where(['name'=>'profile', 'type'=>'real'])->get()->toArray();
+        return $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'real'])->get()->toArray();
     }
 }

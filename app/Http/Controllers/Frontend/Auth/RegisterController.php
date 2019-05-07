@@ -66,9 +66,9 @@ class RegisterController extends Controller
     {
         abort_unless(config('access.registration'), 404);
 
-        $company['profile'] = $request->get('profile');
+        $company[config('teamwork.extra_field_name')] = $request->get(config('teamwork.extra_field_name'));
 
-        $company_name = $company['profile']['formal']['company_name'];
+        $company_name = $company[config('teamwork.extra_field_name')]['formal']['company_name'];
 
         $user = $this->userRepository->create($request->only('first_name', 'last_name', 'email', 'password'));
 
@@ -85,9 +85,9 @@ class RegisterController extends Controller
 
         // Create and fill company profile
         $team->extendedFields()->create([
-            'name'    => 'profile',
+            'name'    => config('teamwork.extra_field_name'),
             'type'    => 'formal',
-            'content' => $company['profile']['formal']
+            'content' => $company[config('teamwork.extra_field_name')]['formal']
         ]);
 
         // If the user must confirm their email or their account requires approval,
