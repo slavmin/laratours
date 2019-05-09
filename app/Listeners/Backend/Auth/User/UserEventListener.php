@@ -85,7 +85,7 @@ class UserEventListener
      */
     public function onPermanentlyDeleted($event)
     {
-        \Log::info('User Permanently Deleted');
+        \Log::warning('User: '.$event->user->name.' Permanently Deleted');
     }
 
     /**
