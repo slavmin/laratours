@@ -41,4 +41,5 @@ class Team extends TeamworkTeam
     {
         return $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'real'])->get()->toArray();
     }
+
 }

@@ -41,7 +41,7 @@ class User extends BaseUser implements HasMedia
             ->crop(Manipulations::CROP_TOP, 80, 80);
             //->nonQueued();
 
-        $this->addMediaConversion('profile')
+        $this->addMediaConversion('portrait')
             ->fit(Manipulations::FIT_FILL, 480, 480)
             ->background('ffffff');
             //->nonQueued();

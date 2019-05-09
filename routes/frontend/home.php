@@ -6,6 +6,8 @@ use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\TeamManageController;
+use App\Http\Controllers\Frontend\Tour\CountryController;
+use App\Http\Controllers\Frontend\Tour\CityController;
 
 /*
  * Frontend Controllers
@@ -39,5 +41,31 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::get('team/resend/{invite_id}', [TeamManageController::class, 'resendInvite'])->name('team.resend_invite');
         Route::get('team/invite/{invite_id}/delete', [TeamManageController::class, 'deleteInvite'])->name('team.delete_invite');
         Route::delete('team/members/{user_id}/delete', [TeamManageController::class, 'deleteMember'])->name('team.members.destroy');
+    });
+
+    // Tours Management
+    Route::group(['namespace' => 'Tour', 'as' => 'tour.'], function () {
+        // Country Management
+        Route::get('tours/country', [CountryController::class, 'index'])->name('country.index');
+        Route::get('tours/country/create', [CountryController::class, 'create'])->name('country.create');
+        Route::post('tours/country', [CountryController::class, 'store'])->name('country.store');
+
+        Route::group(['prefix' => 'tours/country/{country}'], function () {
+            Route::get('edit', [CountryController::class, 'edit'])->name('country.edit');
+            Route::patch('/', [CountryController::class, 'update'])->name('country.update');
+            Route::delete('/', [CountryController::class, 'destroy'])->name('country.destroy');
+
+            // City Management
+            Route::get('city', [CityController::class, 'index'])->name('city.index');
+            Route::get('city/create', [CityController::class, 'create'])->name('city.create');
+            Route::post('city', [CityController::class, 'store'])->name('city.store');
+
+            Route::group(['prefix' => 'city/{city}'], function () {
+                Route::get('edit', [CityController::class, 'edit'])->name('city.edit');
+                Route::patch('/', [CityController::class, 'update'])->name('city.update');
+                Route::delete('/', [CityController::class, 'destroy'])->name('city.destroy');
+            });
+        });
+
     });
 });

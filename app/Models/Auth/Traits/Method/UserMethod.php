@@ -41,7 +41,7 @@ trait UserMethod
 
             case 'storage':
                 $media = $this->getMedia('avatars')->last();
-                return url($media->getUrl('profile'));
+                return url($media->getUrl('portrait'));
                 //return url('storage/'.$this->avatar_location);
         }
 

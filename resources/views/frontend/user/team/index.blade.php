@@ -47,7 +47,7 @@
                                                      style="top: 0; right: 0">
 
                                                     <form style="display: inline-block;"
-                                                          action="{{ route('frontend.user.team.members.destroy', [$user->id]) }}"
+                                                          action="{{ route('frontend.user.team.members.destroy', $user->id) }}"
                                                           method="post">
                                                         {!! csrf_field() !!}
                                                         <input type="hidden" name="_method" value="DELETE"/>

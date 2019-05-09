@@ -18,7 +18,7 @@ class CreateExtendsTable extends Migration
             $table->morphs('extendable');
             $table->string('name')->nullable();
             $table->string('type')->nullable();
-            $table->json('content');
+            $table->json('content')->nullable();
             $table->timestamps();
         });
     }
