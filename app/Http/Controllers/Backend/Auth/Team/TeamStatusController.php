@@ -8,6 +8,7 @@ use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Repositories\Backend\Auth\TeamRepository;
+use Illuminate\Support\Facades\DB;
 
 
 /**
@@ -31,6 +32,10 @@ class TeamStatusController extends Controller
         $this->teamRepository = $teamRepository;
     }
 
+    /**
+     * @param $user_id
+     * @return mixed
+     */
     public function makeTeamAdmin($user_id)
     {
         $new_team_owner = User::where('id', $user_id)->first();
@@ -104,7 +109,9 @@ class TeamStatusController extends Controller
 
         User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
 
-        $team->forceDelete();
+        \DB::transaction(function () use ($team) {
+            $team->forceDelete();
+        });
 
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted_permanently'));
     }
