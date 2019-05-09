@@ -6,6 +6,8 @@ use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\TeamManageController;
+// Tour controllers
+use App\Http\Controllers\Frontend\Tour\TypeController;
 use App\Http\Controllers\Frontend\Tour\CountryController;
 use App\Http\Controllers\Frontend\Tour\CityController;
 
@@ -45,6 +47,17 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
     // Tours Management
     Route::group(['namespace' => 'Tour', 'as' => 'tour.'], function () {
+        // Tour types Management
+        Route::get('tours/type', [TypeController::class, 'index'])->name('type.index');
+        Route::get('tours/type/create', [TypeController::class, 'create'])->name('type.create');
+        Route::post('tours/type', [TypeController::class, 'store'])->name('type.store');
+
+        Route::group(['prefix' => 'tours/type/{type}'], function () {
+            Route::get('edit', [TypeController::class, 'edit'])->name('type.edit');
+            Route::patch('/', [TypeController::class, 'update'])->name('type.update');
+            Route::delete('/', [TypeController::class, 'destroy'])->name('type.destroy');
+        });
+
         // Country Management
         Route::get('tours/country', [CountryController::class, 'index'])->name('country.index');
         Route::get('tours/country/create', [CountryController::class, 'create'])->name('country.create');

@@ -10,9 +10,6 @@ class CountryController extends Controller
 {
     protected $country;
 
-    public function __construct(TourCountry $country){
-        $this->country = $country;
-    }
 
     public function index()
     {
@@ -77,6 +74,6 @@ class CountryController extends Controller
         $country = TourCountry::findOrFail($id);
         $country->delete();
 
-        return redirect()->route('frontend.tour.country.index')->withFlashSuccess(__('alerts.frontend.tours.countries.deleted'));
+        return redirect()->route('frontend.tour.country.index')->withFlashWarning(__('alerts.frontend.tours.countries.deleted'));
     }
 }

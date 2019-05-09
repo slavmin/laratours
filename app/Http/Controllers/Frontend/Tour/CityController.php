@@ -9,13 +9,14 @@ use App\Models\Tour\TourCountry;
 
 class CityController extends Controller
 {
+    protected $city;
+
+    protected $country;
+
     protected $city_id;
 
     protected $country_id;
 
-    public function __construct(TourCity $city){
-        $this->city = $city;
-    }
 
     public function index($country_id)
     {
@@ -85,6 +86,6 @@ class CityController extends Controller
         $city = TourCity::findOrFail($city_id);
         $city->delete();
 
-        return redirect()->route('frontend.tour.city.index', $country_id)->withFlashSuccess(__('alerts.general.deleted'));
+        return redirect()->route('frontend.tour.city.index', $country_id)->withFlashWarning(__('alerts.general.deleted'));
     }
 }

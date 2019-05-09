@@ -6,7 +6,15 @@
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-info mb-0 mr-1">{{ $country->name }} / @lang('labels.frontend.tours.city.management')</h6>
+                        <h6 class="text-info mb-0 mr-1 flex-grow-1">
+                            <nav aria-label="breadcrumb">
+                                <ol class="list-unstyled d-inline">
+                                    <li class="breadcrumb-item d-inline"><a class="text-info text-decoration-none" href="{{ route('frontend.tour.country.index') }}">@lang('labels.frontend.tours.country.management')</a></li>
+                                    <li class="breadcrumb-item d-inline">{{ $country->name }}</li>
+                                    <li class="breadcrumb-item d-inline active" aria-current="page">@lang('labels.frontend.tours.city.management')</li>
+                                </ol>
+                            </nav>
+                        </h6>
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.city.create', $country->id) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
                                 <i class="fas fa-plus"></i></a>
