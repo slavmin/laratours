@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Auth\Team;
 use App\Models\Auth\User;
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
+use App\Events\Backend\Auth\Team\TeamDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Repositories\Backend\Auth\TeamRepository;
@@ -98,6 +99,7 @@ class TeamStatusController extends Controller
      * @param $id
      * @return mixed
      * @throws GeneralException
+     * @throws \Throwable
      */
     public function delete($id)
     {
@@ -109,9 +111,11 @@ class TeamStatusController extends Controller
 
         User::where('current_team_id', $team->id)->update(['current_team_id' => null]);
 
-        \DB::transaction(function () use ($team) {
+        DB::transaction(function () use ($team) {
             $team->forceDelete();
         });
+
+        event(new TeamDeleted($team));
 
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted_permanently'));
     }

@@ -38,7 +38,7 @@ class TeamEventListener
         );
 
         $events->listen(
-            \App\Events\Frontend\Team\TeamMemberDeleted::class,
+            \App\Events\Frontend\Team\TeamDeleted::class,
             'App\Listeners\Frontend\Team\TeamEventListener@onMemberDetached'
         );
     }

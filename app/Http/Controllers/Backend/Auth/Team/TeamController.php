@@ -164,8 +164,6 @@ class TeamController extends Controller
 
         User::where('current_team_id', $team->id)->update(['active' => false]);
 
-        //event(new TeamDeleted($team));
-
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted'));
     }
 

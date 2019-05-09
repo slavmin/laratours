@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\Auth\Team;
 use App\Mail\Team\SendTeamInvite;
-use App\Events\Frontend\Team\TeamMemberDeleted;
+use App\Events\Frontend\Team\TeamDeleted;
 use App\Http\Requests\Frontend\Team\ManageTeamRequest;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
@@ -131,7 +131,7 @@ class TeamManageController extends Controller
 
         $team = Team::findOrFail($user_team_id);
 
-        event(new TeamMemberDeleted($user));
+        event(new TeamDeleted($user));
 
         $user->detachTeam($team);
 
