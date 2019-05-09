@@ -28,6 +28,17 @@
                 @endif
             @else
                 <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuTour" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">@lang('labels.frontend.tours.management')</a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuTour">
+                        <a href="{{ route('frontend.tour.type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.type.index')) }}">
+                            @lang('labels.frontend.tours.type.management')</a>
+                        <a href="{{ route('frontend.tour.country.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.country.index')) }}">
+                            @lang('labels.frontend.tours.country.management')</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuUser" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">{{ $logged_in_user->name }}</a>
 

@@ -16,7 +16,7 @@ class TeamworkSetupTables extends Migration
     {
         Schema::table( \Config::get( 'teamwork.users_table' ), function ( Blueprint $table )
         {
-            $table->unsignedBigInteger( 'current_team_id' )->nullable();
+            $table->unsignedBigInteger( 'current_team_id' )->nullable()->after('remember_token');
         } );
 
 

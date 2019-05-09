@@ -46,6 +46,11 @@ return [
             'accept_invite' => 'Принять приглашение',
         ],
     ],
+    'tours' => [
+        'type_list' => 'Список типов тура',
+        'country_list' => 'Список стран',
+        'city_list' => 'Список городов',
+    ],
     'general' => [
         'cancel' => 'Отменa',
         'continue' => 'Далее',

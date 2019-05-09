@@ -39,7 +39,7 @@
                                     <td>{{$city->name}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.city.edit', [$country->id, $city->id]) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
+                                            <a href="{{ route('frontend.tour.city.edit', [$country->id, $city->id]) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
                                                 <i class="fas fa-edit"></i></a>
                                             <form style="display: inline-block;" action="{{ route('frontend.tour.city.destroy', [$country->id, $city->id]) }}" method="post">
                                                 {!! csrf_field() !!}

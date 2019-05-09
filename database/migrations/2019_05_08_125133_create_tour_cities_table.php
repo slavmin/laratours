@@ -19,8 +19,8 @@ class CreateTourCitiesTable extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('country_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->nullable()->index();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('team_id')
                 ->references('id')

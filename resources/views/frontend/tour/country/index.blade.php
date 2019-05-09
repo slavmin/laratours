@@ -31,7 +31,7 @@
                                     <td>{{$country->name}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.city.index', $country->id) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
+                                            <a href="{{ route('frontend.tour.city.index', $country->id) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('buttons.tours.city_list')">
                                                 <i class="fas fa-list-alt"></i></a>
                                             <a href="{{ route('frontend.tour.country.edit', $country->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
                                                 <i class="fas fa-edit"></i></a>
