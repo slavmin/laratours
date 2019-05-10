@@ -16,7 +16,7 @@ class MuseumController extends Controller
     {
         $items = TourMuseum::all();
         $cities = TourCity::all()->pluck('name','id')->toArray();
-        $cities_options = [0 => __('validation.attributes.frontend.general.select')];
+        $cities_options = [0 => ''];
         $cities_options = array_replace($cities_options, $cities);
 
         return view('frontend.tour.museum.index', compact('items','cities_options'));
