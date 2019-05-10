@@ -41,6 +41,23 @@
                     <div class="row mt-4">
                         <div class="col">
                             <div class="form-group row">
+                                {{ html()->label(__('labels.frontend.tours.city.name'))
+                                    ->class('col-md-2 form-control-label')
+                                    ->for('name') }}
+
+                                <div class="col-md-10">
+                                    {{ html()->select('city_id')
+                                    ->value($item->city_id)
+                                    ->options($cities_options)->class('form-control') }}
+                                </div><!--col-->
+                            </div><!--form-group-->
+
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="form-group row">
                                 {{ html()->label(__('validation.attributes.frontend.general.price'))
                                     ->class('col-md-2 form-control-label')
                                     ->for('price') }}

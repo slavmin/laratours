@@ -22,6 +22,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.frontend.tours.museum.table.name')</th>
+                                <th>@lang('labels.frontend.tours.tour.city')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
                             </thead>
@@ -29,6 +30,7 @@
                             @foreach($items as $item)
                                 <tr>
                                     <td>{{$item->name}}</td>
+                                    <td>{{$cities[$item->city_id]}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                             <a href="{{ route('frontend.tour.museum.edit', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">

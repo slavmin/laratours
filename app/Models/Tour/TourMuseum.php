@@ -9,7 +9,7 @@ class TourMuseum extends Model
 {
     use UsedByTeams;
 
-    protected $fillable = ['name', 'description', 'price'];
+    protected $fillable = ['name', 'city_id', 'description', 'price'];
 
     protected $casts = [
         'price' => 'float',

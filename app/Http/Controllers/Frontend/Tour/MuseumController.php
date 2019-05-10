@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Frontend\Tour;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
+use App\Models\Tour\TourCity;
 
 class MuseumController extends Controller
 {
-    protected $guide;
+    protected $museum;
 
 
     public function index()
     {
         $items = TourMuseum::all();
-        return view('frontend.tour.museum.index', compact('items'));
+        $cities = TourCity::all()->pluck('name','id')->toArray();
+
+        return view('frontend.tour.museum.index', compact('items','cities'));
     }
 
     public function show($id)
@@ -24,19 +27,24 @@ class MuseumController extends Controller
 
     public function create()
     {
-        return view('frontend.tour.museum.create');
+        $cities = TourCity::all()->pluck('name','id')->toArray();
+        $cities_options = [0 => __('validation.attributes.frontend.general.select')];
+        $cities_options = array_replace($cities_options, $cities);
+
+        return view('frontend.tour.museum.create', compact('cities_options'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
+            'city_id' => 'exists:tour_cities,id',
             //'description'=> '',
         ]);
 
-        $guide = new TourMuseum($request->only('name', 'description', 'price'));
+        $museum = new TourMuseum($request->only('name', 'city_id', 'description', 'price'));
 
-        $guide->save();
+        $museum->save();
 
         return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.created'));
     }
@@ -46,7 +54,11 @@ class MuseumController extends Controller
     {
         $item = TourMuseum::findOrFail($id);
 
-        return view('frontend.tour.museum.edit', compact('item'));
+        $cities = TourCity::all()->pluck('name','id')->toArray();
+        $cities_options = [0 => __('validation.attributes.frontend.general.select')];
+        $cities_options = array_replace($cities_options, $cities);
+
+        return view('frontend.tour.museum.edit', compact('item', 'cities_options'));
     }
 
 
@@ -54,12 +66,13 @@ class MuseumController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'city_id' => 'exists:tour_cities,id',
             //'description'=> '',
         ]);
 
-        $guide = TourMuseum::findOrFail($id);
+        $museum = TourMuseum::findOrFail($id);
 
-        $guide->update($request->only('name', 'description', 'price'));
+        $museum->update($request->only('name', 'city_id', 'description', 'price'));
 
         return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.updated'));
     }
@@ -67,8 +80,8 @@ class MuseumController extends Controller
 
     public function destroy($id)
     {
-        $guide = TourMuseum::findOrFail($id);
-        $guide->delete();
+        $museum = TourMuseum::findOrFail($id);
+        $museum->delete();
 
         return redirect()->route('frontend.tour.museum.index')->withFlashWarning(__('alerts.general.deleted'));
     }

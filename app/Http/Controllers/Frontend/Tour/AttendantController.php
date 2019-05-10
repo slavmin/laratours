@@ -8,7 +8,7 @@ use App\Models\Tour\TourAttendant;
 
 class AttendantController extends Controller
 {
-    protected $guide;
+    protected $attendant;
 
 
     public function index()
@@ -34,9 +34,9 @@ class AttendantController extends Controller
             //'description'=> '',
         ]);
 
-        $guide = new TourAttendant($request->only('name', 'description', 'price'));
+        $attendant = new TourAttendant($request->only('name', 'description', 'price'));
 
-        $guide->save();
+        $attendant->save();
 
         return redirect()->route('frontend.tour.attendant.index')->withFlashSuccess(__('alerts.general.created'));
     }
@@ -57,9 +57,9 @@ class AttendantController extends Controller
             //'description'=> '',
         ]);
 
-        $guide = TourAttendant::findOrFail($id);
+        $attendant = TourAttendant::findOrFail($id);
 
-        $guide->update($request->only('name', 'description', 'price'));
+        $attendant->update($request->only('name', 'description', 'price'));
 
         return redirect()->route('frontend.tour.attendant.index')->withFlashSuccess(__('alerts.general.updated'));
     }
@@ -67,8 +67,8 @@ class AttendantController extends Controller
 
     public function destroy($id)
     {
-        $guide = TourAttendant::findOrFail($id);
-        $guide->delete();
+        $attendant = TourAttendant::findOrFail($id);
+        $attendant->delete();
 
         return redirect()->route('frontend.tour.attendant.index')->withFlashWarning(__('alerts.general.deleted'));
     }
