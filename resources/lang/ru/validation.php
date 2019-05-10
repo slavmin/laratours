@@ -217,6 +217,7 @@ return [
             'general' => [
                 'name' => 'Название',
                 'description' => 'Описание',
+                'price' => 'Цена',
             ],
         ],
     ],

@@ -81,7 +81,7 @@ trait TeamAttribute
 				</div>';
         }
 
-        return '<div class="btn-group btn-group-sm" role="group" aria-label="' . __('labels.backend.access.teams.team_actions') . '">
+        return '<div class="btn-group" role="group" aria-label="' . __('labels.backend.access.teams.team_actions') . '">
               ' . $this->show_button . '
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '

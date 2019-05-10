@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Events\Backend\Auth\Team\TeamDeleted;
 use App\Models\Auth\Traits\Attribute\TeamAttribute;
 use App\Models\Auth\Traits\Method\TeamMethod;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +16,13 @@ use Mpociot\Teamwork\TeamworkTeam;
 class Team extends TeamworkTeam
 {
     use TeamAttribute, TeamMethod, SoftDeletes;
+
+    /**
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'forceDeleted' => TeamDeleted::class,
+    ];
 
 //    protected $with = ['extendedFields'];
 

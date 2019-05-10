@@ -5,13 +5,13 @@
         <div class="col col-sm-8 align-self-center">
 
 
-            {{ html()->form('POST', route('frontend.tour.type.store'))->class('form-horizontal')->open() }}
+            {{ html()->form('POST', route('frontend.tour.museum.store'))->class('form-horizontal')->open() }}
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-5">
                             <h5 class="card-title mb-0">
-                                @lang('labels.frontend.tours.type.create')
+                                @lang('labels.frontend.tours.museum.create')
                             </h5>
                         </div><!--col-->
                     </div><!--row-->
@@ -31,6 +31,27 @@
                                         ->placeholder(__('validation.attributes.frontend.general.name'))
                                         ->attribute('maxlength', 191)
                                         ->required()
+                                        ->autofocus() }}
+                                </div><!--col-->
+                            </div><!--form-group-->
+
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="form-group row">
+                                {{ html()->label(__('validation.attributes.frontend.general.price'))
+                                    ->class('col-md-2 form-control-label')
+                                    ->for('price') }}
+
+                                <div class="col-md-10">
+                                    {{ html()->input()
+                                        ->name('price')
+                                        ->type('number')
+                                        ->class('form-control')
+                                        ->placeholder(__('validation.attributes.frontend.general.price'))
+                                        ->attribute('maxlength', 191)
                                         ->autofocus() }}
                                 </div><!--col-->
                             </div><!--form-group-->
@@ -62,7 +83,7 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col">
-                            {{ form_cancel(route('frontend.tour.type.index'), __('buttons.general.cancel')) }}
+                            {{ form_cancel(route('frontend.tour.museum.index'), __('buttons.general.cancel')) }}
                         </div><!--col-->
 
                         <div class="col text-right">

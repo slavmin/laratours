@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend\Auth\Team;
 use App\Models\Auth\User;
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
-use App\Events\Backend\Auth\Team\TeamDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Repositories\Backend\Auth\TeamRepository;
@@ -113,9 +112,8 @@ class TeamStatusController extends Controller
 
         DB::transaction(function () use ($team) {
             $team->forceDelete();
+            $team->extendedFields()->forceDelete();
         });
-
-        event(new TeamDeleted($team));
 
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted_permanently'));
     }

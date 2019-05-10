@@ -34,9 +34,7 @@ class TypeController extends Controller
             //'description'=> '',
         ]);
 
-        $tour_type = new TourType([
-            'name' => $request->get('name'),
-        ]);
+        $tour_type = new TourType($request->only('name', 'description'));
 
         $tour_type->save();
 
@@ -61,9 +59,7 @@ class TypeController extends Controller
 
         $tour_type = TourType::findOrFail($id);
 
-        $tour_type->update([
-            'name' => $request->get('name'),
-        ]);
+        $tour_type->update($request->only('name', 'description'));
 
         return redirect()->route('frontend.tour.type.index')->withFlashSuccess(__('alerts.general.updated'));
     }

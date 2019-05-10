@@ -45,10 +45,7 @@ class CityController extends Controller
 
         $country = TourCountry::findOrFail($country_id);
 
-        $city = new TourCity([
-            'name' => $request->get('name'),
-            'description'=> '',
-        ]);
+        $city = new TourCity($request->only('name', 'description'));
 
         $country->cities()->save($city);
 
@@ -73,9 +70,7 @@ class CityController extends Controller
 
         $city = TourCity::findOrFail($city_id);
 
-        $city->update([
-            'name' => $request->get('name'),
-        ]);
+        $city->update($request->only('name', 'description'));
 
         return redirect()->route('frontend.tour.city.index', $country_id)->withFlashSuccess(__('alerts.general.updated'));
     }

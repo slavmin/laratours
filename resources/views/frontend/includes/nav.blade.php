@@ -36,6 +36,12 @@
                             @lang('labels.frontend.tours.type.management')</a>
                         <a href="{{ route('frontend.tour.country.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.country.index')) }}">
                             @lang('labels.frontend.tours.country.management')</a>
+                        <a href="{{ route('frontend.tour.guide.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.guide.index')) }}">
+                            @lang('labels.frontend.tours.guide.management')</a>
+                        <a href="{{ route('frontend.tour.attendant.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.attendant.index')) }}">
+                            @lang('labels.frontend.tours.attendant.management')</a>
+                        <a href="{{ route('frontend.tour.museum.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.museum.index')) }}">
+                            @lang('labels.frontend.tours.museum.management')</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

@@ -37,6 +37,27 @@
 
                         </div><!--col-->
                     </div><!--row-->
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="form-group row">
+                                {{ html()->label(__('validation.attributes.frontend.general.description'))
+                                    ->class('col-md-2 form-control-label')
+                                    ->for('description') }}
+
+                                <div class="col-md-10">
+                                    {{ html()->text('description')
+                                        ->class('form-control')
+                                        ->placeholder(__('validation.attributes.frontend.general.description'))
+                                        ->attribute('maxlength', 191)
+                                        ->value($city->description)
+                                        ->autofocus() }}
+                                </div><!--col-->
+                            </div><!--form-group-->
+
+                        </div><!--col-->
+                    </div><!--row-->
+
                 </div><!--card-body-->
 
                 <div class="card-footer">
