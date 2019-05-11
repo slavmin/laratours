@@ -16,7 +16,7 @@ use App\Models\Traits\HasExtendedFields;
  */
 class Team extends TeamworkTeam
 {
-    use TeamAttribute, TeamMethod, SoftDeletes, HasExtendedFields;
+    use TeamAttribute, TeamMethod, HasExtendedFields, SoftDeletes;
 
     /**
      * @var array

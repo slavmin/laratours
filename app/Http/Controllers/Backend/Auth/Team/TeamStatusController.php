@@ -112,7 +112,6 @@ class TeamStatusController extends Controller
 
         DB::transaction(function () use ($team) {
             $team->forceDelete();
-            $team->extendedFields()->forceDelete();
         });
 
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted_permanently'));
