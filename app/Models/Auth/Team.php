@@ -7,6 +7,7 @@ use App\Models\Auth\Traits\Attribute\TeamAttribute;
 use App\Models\Auth\Traits\Method\TeamMethod;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mpociot\Teamwork\TeamworkTeam;
+use App\Models\Traits\HasExtendedFields;
 //use Mpociot\Teamwork\Facades\Teamwork;
 //use Mpociot\Teamwork\TeamInvite;
 
@@ -15,7 +16,7 @@ use Mpociot\Teamwork\TeamworkTeam;
  */
 class Team extends TeamworkTeam
 {
-    use TeamAttribute, TeamMethod, SoftDeletes;
+    use TeamAttribute, TeamMethod, SoftDeletes, HasExtendedFields;
 
     /**
      * @var array
@@ -27,19 +28,15 @@ class Team extends TeamworkTeam
 //    protected $with = ['extendedFields'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function extendedFields()
-    {
-        return $this->morphMany('App\Models\Extend', 'extendable');
-    }
-
-    /**
      * @return array
      */
     public function getFormalProfileAttribute()
     {
-        return $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'formal'])->get()->toArray();
+        $raw = $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'formal'])->get()->pluck('content');
+        $raw_out = isset($raw[0]) ? $raw[0] : [];
+        $out['formal'] = $raw_out;
+
+        return $out;
     }
 
     /**
@@ -47,7 +44,11 @@ class Team extends TeamworkTeam
      */
     public function getRealProfileAttribute()
     {
-        return $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'real'])->get()->toArray();
+        $raw = $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'real'])->get()->pluck('content');
+        $raw_out = isset($raw[0]) ? $raw[0] : [];
+        $out['real'] = $raw_out;
+
+        return $out;
     }
 
 }

@@ -10,7 +10,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <strong>
-                        @lang('labels.frontend.teams.profile')
+                        @lang('labels.frontend.teams.profile') @isset($type){{ $type=='formal' ? 'юридические' : 'фактические' }}@endisset
                     </strong>
                 </div><!--card-header-->
 

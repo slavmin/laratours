@@ -67,6 +67,8 @@
                 </div><!--/card-body-->
             </div><!--/card-->
 
+      @isset($profiles)
+          @foreach($profiles as $type => $profile)
 
             <div class="list-group mb-4">
                 <div class="list-group-item">
@@ -78,8 +80,7 @@
                         </div><!--btn-toolbar-->
                     </div>
                 </div>
-                @isset($profiles)
-                    @foreach($profiles as $type => $profile)
+
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.name') :</span> {{ $profile['company_name']??'' }}</div>
                         <div class="list-group-item">
@@ -97,10 +98,10 @@
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>
 
-                    @endforeach
-                @endisset
             </div><!--/list-group-->
 
+          @endforeach
+      @endisset
 
 
       </div><!--/col-lg-8-->
