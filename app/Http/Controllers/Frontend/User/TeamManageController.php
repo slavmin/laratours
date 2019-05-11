@@ -37,17 +37,7 @@ class TeamManageController extends Controller
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
-        $profiles = [];
-        $profile_raw = $team->extendedFields;
-        $profile_rows = $profile_raw->pluck('content');
-
-        if (!empty($profile_rows)) {
-            foreach ($profile_rows as $itemKey => $itemVal) {
-                if (!empty($itemVal)) {
-                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
-                }
-            }
-        }
+        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
 
         return view('frontend.user.team.index')->with('team', $team)->with('profiles', $profiles);
     }
@@ -71,17 +61,7 @@ class TeamManageController extends Controller
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
-        $profiles = ['formal' => ''];
-        $profile_raw = $team->extendedFields;
-        $profile_rows = $profile_raw->pluck('content');
-
-        if (!empty($profile_rows)) {
-            foreach ($profile_rows as $itemKey => $itemVal) {
-                if (!empty($itemVal)) {
-                    $profiles[$profile_raw[$itemKey]['type']] = $itemVal;
-                }
-            }
-        }
+        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
 
         return view('frontend.user.team.edit')->with('team', $team)->with('profiles', $profiles);
     }
@@ -99,14 +79,18 @@ class TeamManageController extends Controller
         $profile_type = $request->get('profile_type');
         $company_name = $company[config('teamwork.extra_field_name')][$profile_type]['company_name'];
 
-        // Update company formal profile
-        $extended_field = \App\Models\Extend::where('extendable_id', $team->id)
-            ->where('type', $profile_type)
-            ->where('name', config('teamwork.extra_field_name'))->first();
-
-        $extended_field->update([
-            'content' => $company[config('teamwork.extra_field_name')][$profile_type]
-        ]);
+        // Update company profile
+        $team->extendedFields()->updateOrCreate(
+            [
+                'name' => config('teamwork.extra_field_name'),
+                'type' => $profile_type,
+            ],
+            [
+                'name' => config('teamwork.extra_field_name'),
+                'type' => $profile_type,
+                'content' => $company[config('teamwork.extra_field_name')][$profile_type]
+            ]
+        );
 
         // Update team name
         if ($profile_type == 'formal') {
