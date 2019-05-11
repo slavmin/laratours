@@ -37,7 +37,7 @@ class TeamManageController extends Controller
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
-        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
+        $profiles = $team->getProfilesAttribute();
 
         return view('frontend.user.team.index')->with('team', $team)->with('profiles', $profiles);
     }
@@ -61,7 +61,7 @@ class TeamManageController extends Controller
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
-        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
+        $profiles = $team->getProfilesAttribute();
 
         return view('frontend.user.team.edit')->with('team', $team)->with('profiles', $profiles);
     }

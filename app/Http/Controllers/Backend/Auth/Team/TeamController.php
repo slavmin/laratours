@@ -52,7 +52,7 @@ class TeamController extends Controller
      */
     public function show(ManageTeamRequest $request, Team $team)
     {
-        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
+        $profiles = $team->getProfilesAttribute();
 
         return view('backend.auth.team.show')
             ->with('profiles', $profiles)
@@ -75,7 +75,7 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        $profiles = array_merge($team->getFormalProfileAttribute(), $team->getRealProfileAttribute());
+        $profiles = $team->getProfilesAttribute();
 
         return view('backend.auth.team.edit')
             ->with('profiles', $profiles)

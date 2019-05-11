@@ -15,9 +15,8 @@ class MuseumController extends Controller
     public function index()
     {
         $items = TourMuseum::all();
-        $cities = TourCity::all()->pluck('name','id')->toArray();
-        $cities_options = [0 => ''];
-        $cities_options = array_replace($cities_options, $cities);
+
+        $cities_options = TourMuseum::getCitiesAttribute();
 
         return view('frontend.tour.museum.index', compact('items','cities_options'));
     }
@@ -29,9 +28,7 @@ class MuseumController extends Controller
 
     public function create()
     {
-        $cities = TourCity::all()->pluck('name','id')->toArray();
-        $cities_options = [0 => __('validation.attributes.frontend.general.select')];
-        $cities_options = array_replace($cities_options, $cities);
+        $cities_options = TourMuseum::getCitiesAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.museum.create', compact('cities_options'));
     }
@@ -56,9 +53,7 @@ class MuseumController extends Controller
     {
         $item = TourMuseum::findOrFail($id);
 
-        $cities = TourCity::all()->pluck('name','id')->toArray();
-        $cities_options = [0 => __('validation.attributes.frontend.general.select')];
-        $cities_options = array_replace($cities_options, $cities);
+        $cities_options = TourMuseum::getCitiesAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.museum.edit', compact('item', 'cities_options'));
     }

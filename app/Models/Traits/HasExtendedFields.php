@@ -3,9 +3,6 @@
 
 namespace App\Models\Traits;
 
-//use Exception;
-//use Illuminate\Database\Eloquent\Builder;
-//use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

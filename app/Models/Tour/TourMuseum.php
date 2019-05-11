@@ -2,9 +2,9 @@
 
 namespace App\Models\Tour;
 
+use App\Models\Tour\TourCity;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
-use App\Models\Tour\TourCity;
 
 class TourMuseum extends Model
 {
@@ -28,5 +28,14 @@ class TourMuseum extends Model
         }
 
         return 'N/A';
+    }
+
+    public static function getCitiesAttribute($text='')
+    {
+        $cities = TourCity::all()->pluck('name','id')->toArray();
+        $cities_options = [0 => $text];
+        $cities_options = array_replace($cities_options, $cities);
+
+        return $cities_options;
     }
 }
