@@ -28,7 +28,7 @@ class MuseumController extends Controller
 
     public function create()
     {
-        $cities_options = TourMuseum::getCitiesAttribute(__('validation.attributes.frontend.general.select'));
+        $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.museum.create', compact('cities_options'));
     }
@@ -53,7 +53,7 @@ class MuseumController extends Controller
     {
         $item = TourMuseum::findOrFail($id);
 
-        $cities_options = TourMuseum::getCitiesAttribute(__('validation.attributes.frontend.general.select'));
+        $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.museum.edit', compact('item', 'cities_options'));
     }

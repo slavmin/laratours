@@ -71,6 +71,9 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::get('edit', [CountryController::class, 'edit'])->name('country.edit');
             Route::patch('/', [CountryController::class, 'update'])->name('country.update');
             Route::delete('/', [CountryController::class, 'destroy'])->name('country.destroy');
+            // Deleted
+            Route::get('restore', [CountryController::class, 'restore'])->name('country.restore');
+            Route::delete('delete', [CountryController::class, 'delete'])->name('country.delete-permanently');
 
             // City Management
             Route::get('city', [CityController::class, 'index'])->name('city.index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Tour;
 
+use App\Exceptions\GeneralException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourCountry;
@@ -14,7 +15,10 @@ class CountryController extends Controller
     public function index()
     {
         $countries = TourCountry::all();
-        return view('frontend.tour.country.index', compact('countries'));
+        $deleted = TourCountry::onlyTrashed()->get();
+
+        //dd($deleted);
+        return view('frontend.tour.country.index', compact('countries', 'deleted'));
     }
 
     public function show($id)
@@ -30,7 +34,7 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required',
+            'name' => 'required',
             //'description'=> '',
         ]);
 
@@ -53,7 +57,7 @@ class CountryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required',
+            'name' => 'required',
             //'description'=> '',
         ]);
 
@@ -71,5 +75,33 @@ class CountryController extends Controller
         $country->delete();
 
         return redirect()->route('frontend.tour.country.index')->withFlashWarning(__('alerts.frontend.tours.countries.deleted'));
+    }
+
+    public function restore($id)
+    {
+        $country = TourCountry::withTrashed()->find($id);
+
+        if ($country->deleted_at === null) {
+            throw new GeneralException(__('exceptions.general.cant_restore'));
+        }
+
+        if ($country->restore()) {
+            return redirect()->route('frontend.tour.country.index')->withFlashSuccess(__('alerts.general.restored'));
+        }
+
+        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    }
+
+    public function delete($id)
+    {
+        $country = TourCountry::withTrashed()->find($id);
+
+        if ($country->deleted_at === null) {
+            throw new GeneralException(__('exceptions.general.cant_restore'));
+        }
+
+        $country->forceDelete();
+
+        return redirect()->route('frontend.tour.country.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
     }
 }

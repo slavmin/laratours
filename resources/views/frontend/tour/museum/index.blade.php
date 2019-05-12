@@ -30,7 +30,11 @@
                             @foreach($items as $item)
                                 <tr>
                                     <td>{{$item->name}}</td>
-                                    <td>{{$cities_options[$item->city_id]}}</td>
+                                    <td>
+                                        @if (array_key_exists($item->city_id, $cities_options))
+                                            <span class="text-secondary">{{$cities_options[$item->city_id]}}</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                             <a href="{{ route('frontend.tour.museum.edit', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
