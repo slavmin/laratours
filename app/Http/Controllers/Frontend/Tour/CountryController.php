@@ -19,7 +19,7 @@ class CountryController extends Controller
     {
 
         $countries = TourCountry::withCount(['cities' => function ($query) {
-            $query->where('deleted_at', null);
+            $query->whereNull('deleted_at');
         }])->get();
 
         $deleted = TourCountry::onlyTrashed()->withCount('cities')->get();

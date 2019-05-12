@@ -35,6 +35,8 @@ class TourCountry extends Model
                     $model->cities()->forceDelete();
                 } else {
                     if ($model->trashed()) {
+                        // Delete permanently trashed cities when country soft deleted?
+                        $model->cities()->whereNotNull('deleted_at')->forceDelete();
                         $model->cities()->delete();
                     }
                 }
