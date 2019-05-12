@@ -11,13 +11,14 @@ class CountryController extends Controller
 {
     protected $country;
 
+    protected $deleted;
+
 
     public function index()
     {
         $countries = TourCountry::all();
         $deleted = TourCountry::onlyTrashed()->get();
 
-        //dd($deleted);
         return view('frontend.tour.country.index', compact('countries', 'deleted'));
     }
 
@@ -82,7 +83,7 @@ class CountryController extends Controller
         $country = TourCountry::withTrashed()->find($id);
 
         if ($country->deleted_at === null) {
-            throw new GeneralException(__('exceptions.general.cant_restore'));
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
         }
 
         if ($country->restore()) {
@@ -97,7 +98,7 @@ class CountryController extends Controller
         $country = TourCountry::withTrashed()->find($id);
 
         if ($country->deleted_at === null) {
-            throw new GeneralException(__('exceptions.general.cant_restore'));
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
         }
 
         $country->forceDelete();

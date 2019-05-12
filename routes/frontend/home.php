@@ -60,6 +60,9 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::get('edit', [TypeController::class, 'edit'])->name('type.edit');
             Route::patch('/', [TypeController::class, 'update'])->name('type.update');
             Route::delete('/', [TypeController::class, 'destroy'])->name('type.destroy');
+            // Deleted
+            Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
+            Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
         });
 
         // Country Management
@@ -84,6 +87,9 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
                 Route::get('edit', [CityController::class, 'edit'])->name('city.edit');
                 Route::patch('/', [CityController::class, 'update'])->name('city.update');
                 Route::delete('/', [CityController::class, 'destroy'])->name('city.destroy');
+                // Deleted
+                Route::get('restore', [CityController::class, 'restore'])->name('city.restore');
+                Route::delete('delete', [CityController::class, 'delete'])->name('city.delete-permanently');
             });
         });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Tour;
 
+use App\Exceptions\GeneralException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourType;
@@ -10,11 +11,15 @@ class TypeController extends Controller
 {
     protected $tour_type;
 
+    protected $deleted;
+
 
     public function index()
     {
         $tour_types = TourType::all();
-        return view('frontend.tour.type.index', compact('tour_types'));
+        $deleted = TourType::onlyTrashed()->get();
+
+        return view('frontend.tour.type.index', compact('tour_types','deleted'));
     }
 
     public function show($id)
@@ -71,5 +76,33 @@ class TypeController extends Controller
         $tour_type->delete();
 
         return redirect()->route('frontend.tour.type.index')->withFlashWarning(__('alerts.general.deleted'));
+    }
+
+    public function restore($id)
+    {
+        $tour_type = TourType::withTrashed()->find($id);
+
+        if ($tour_type->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        if ($tour_type->restore()) {
+            return redirect()->route('frontend.tour.type.index')->withFlashSuccess(__('alerts.general.restored'));
+        }
+
+        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    }
+
+    public function delete($id)
+    {
+        $tour_type = TourType::withTrashed()->find($id);
+
+        if ($tour_type->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        $tour_type->forceDelete();
+
+        return redirect()->route('frontend.tour.type.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
     }
 }
