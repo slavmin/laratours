@@ -19,7 +19,7 @@ return [
         'no' => 'Нет',
         'copyright' => 'Copyright',
         'custom' => 'Выборочно',
-        'actions' => 'Действие',
+        'actions' => 'Действия',
         'active' => 'Активирован',
         'buttons' => [
             'save' => 'Сохранить',

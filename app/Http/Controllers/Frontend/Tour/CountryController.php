@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourCountry;
+use Illuminate\Support\Facades\DB;
 
 class CountryController extends Controller
 {
@@ -16,8 +17,12 @@ class CountryController extends Controller
 
     public function index()
     {
-        $countries = TourCountry::withCount('cities')->get();
-        $deleted = TourCountry::onlyTrashed()->get();
+
+        $countries = TourCountry::withCount(['cities' => function ($query) {
+            $query->where('deleted_at', null);
+        }])->get();
+
+        $deleted = TourCountry::onlyTrashed()->withCount('cities')->get();
 
         return view('frontend.tour.country.index', compact('countries', 'deleted'));
     }

@@ -25,7 +25,7 @@ class CityController extends Controller
     {
         $country = TourCountry::findOrFail($country_id);
         $cities = TourCity::where('country_id', $country_id)->get();
-        $deleted = TourCity::onlyTrashed()->get();
+        $deleted = TourCity::where('country_id', $country_id)->onlyTrashed()->get();
 
         return view('frontend.tour.city.index', compact('cities', 'deleted'))->with('country', $country);
     }
