@@ -22,6 +22,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.frontend.tours.country.table.name')</th>
+                                <th>@lang('labels.frontend.tours.country.table.cities_count')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
                             </thead>
@@ -29,6 +30,7 @@
                             @foreach($countries as $country)
                                 <tr>
                                     <td>{{$country->name}}</td>
+                                    <td>{{$country->cities_count}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                             <a href="{{ route('frontend.tour.city.index', $country->id) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('buttons.tours.city_list')">
@@ -75,6 +77,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.frontend.tours.country.table.name')</th>
+                                <th>@lang('labels.frontend.tours.country.table.cities_count')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
                             </thead>
@@ -82,6 +85,7 @@
                             @foreach($deleted as $item)
                                 <tr>
                                     <td>{{$item->name}}</td>
+                                    <td>{{$item->cities_count}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                             <a href="{{ route('frontend.tour.country.restore', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.restore')">

@@ -16,7 +16,7 @@ class CountryController extends Controller
 
     public function index()
     {
-        $countries = TourCountry::all();
+        $countries = TourCountry::withCount('cities')->get();
         $deleted = TourCountry::onlyTrashed()->get();
 
         return view('frontend.tour.country.index', compact('countries', 'deleted'));
