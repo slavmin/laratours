@@ -42,6 +42,8 @@
                             @lang('labels.frontend.tours.attendant.management')</a>
                         <a href="{{ route('frontend.tour.museum.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.museum.index')) }}">
                             @lang('labels.frontend.tours.museum.management')</a>
+                        <a href="{{ route('frontend.tour.meal.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.meal.index')) }}">
+                            @lang('labels.frontend.tours.meal.management')</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

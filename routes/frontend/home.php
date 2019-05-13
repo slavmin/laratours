@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\Tour\CityController;
 use App\Http\Controllers\Frontend\Tour\GuideController;
 use App\Http\Controllers\Frontend\Tour\AttendantController;
 use App\Http\Controllers\Frontend\Tour\MuseumController;
+use App\Http\Controllers\Frontend\Tour\MealController;
 
 /*
  * Frontend Controllers
@@ -49,14 +50,14 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     });
 
     // Tours Management
-    Route::group(['namespace' => 'Tour', 'as' => 'tour.'], function () {
+    Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
 
         // Tour types Management
-        Route::get('tours/type', [TypeController::class, 'index'])->name('type.index');
-        Route::get('tours/type/create', [TypeController::class, 'create'])->name('type.create');
-        Route::post('tours/type', [TypeController::class, 'store'])->name('type.store');
+        Route::get('type', [TypeController::class, 'index'])->name('type.index');
+        Route::get('type/create', [TypeController::class, 'create'])->name('type.create');
+        Route::post('type', [TypeController::class, 'store'])->name('type.store');
 
-        Route::group(['prefix' => 'tours/type/{type}'], function () {
+        Route::group(['prefix' => 'type/{type}'], function () {
             Route::get('edit', [TypeController::class, 'edit'])->name('type.edit');
             Route::patch('/', [TypeController::class, 'update'])->name('type.update');
             Route::delete('/', [TypeController::class, 'destroy'])->name('type.destroy');
@@ -66,11 +67,11 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         });
 
         // Country Management
-        Route::get('tours/country', [CountryController::class, 'index'])->name('country.index');
-        Route::get('tours/country/create', [CountryController::class, 'create'])->name('country.create');
-        Route::post('tours/country', [CountryController::class, 'store'])->name('country.store');
+        Route::get('country', [CountryController::class, 'index'])->name('country.index');
+        Route::get('country/create', [CountryController::class, 'create'])->name('country.create');
+        Route::post('country', [CountryController::class, 'store'])->name('country.store');
 
-        Route::group(['prefix' => 'tours/country/{country}'], function () {
+        Route::group(['prefix' => 'country/{country}'], function () {
             Route::get('edit', [CountryController::class, 'edit'])->name('country.edit');
             Route::patch('/', [CountryController::class, 'update'])->name('country.update');
             Route::delete('/', [CountryController::class, 'destroy'])->name('country.destroy');
@@ -94,36 +95,50 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         });
 
         // Tour Guides Management
-        Route::get('tours/guide', [GuideController::class, 'index'])->name('guide.index');
-        Route::get('tours/guide/create', [GuideController::class, 'create'])->name('guide.create');
-        Route::post('tours/guide', [GuideController::class, 'store'])->name('guide.store');
+        Route::get('guide', [GuideController::class, 'index'])->name('guide.index');
+        Route::get('guide/create', [GuideController::class, 'create'])->name('guide.create');
+        Route::post('guide', [GuideController::class, 'store'])->name('guide.store');
 
-        Route::group(['prefix' => 'tours/guide/{guide}'], function () {
+        Route::group(['prefix' => 'guide/{guide}'], function () {
             Route::get('edit', [GuideController::class, 'edit'])->name('guide.edit');
             Route::patch('/', [GuideController::class, 'update'])->name('guide.update');
             Route::delete('/', [GuideController::class, 'destroy'])->name('guide.destroy');
         });
 
         // Tour Attendants Management
-        Route::get('tours/attendant', [AttendantController::class, 'index'])->name('attendant.index');
-        Route::get('tours/attendant/create', [AttendantController::class, 'create'])->name('attendant.create');
-        Route::post('tours/attendant', [AttendantController::class, 'store'])->name('attendant.store');
+        Route::get('attendant', [AttendantController::class, 'index'])->name('attendant.index');
+        Route::get('attendant/create', [AttendantController::class, 'create'])->name('attendant.create');
+        Route::post('attendant', [AttendantController::class, 'store'])->name('attendant.store');
 
-        Route::group(['prefix' => 'tours/attendant/{attendant}'], function () {
+        Route::group(['prefix' => 'attendant/{attendant}'], function () {
             Route::get('edit', [AttendantController::class, 'edit'])->name('attendant.edit');
             Route::patch('/', [AttendantController::class, 'update'])->name('attendant.update');
             Route::delete('/', [AttendantController::class, 'destroy'])->name('attendant.destroy');
         });
 
         // Tour Museum Management
-        Route::get('tours/museum', [MuseumController::class, 'index'])->name('museum.index');
-        Route::get('tours/museum/create', [MuseumController::class, 'create'])->name('museum.create');
-        Route::post('tours/museum', [MuseumController::class, 'store'])->name('museum.store');
+        Route::get('museum', [MuseumController::class, 'index'])->name('museum.index');
+        Route::get('museum/create', [MuseumController::class, 'create'])->name('museum.create');
+        Route::post('museum', [MuseumController::class, 'store'])->name('museum.store');
 
-        Route::group(['prefix' => 'tours/museum/{museum}'], function () {
+        Route::group(['prefix' => 'museum/{museum}'], function () {
             Route::get('edit', [MuseumController::class, 'edit'])->name('museum.edit');
             Route::patch('/', [MuseumController::class, 'update'])->name('museum.update');
             Route::delete('/', [MuseumController::class, 'destroy'])->name('museum.destroy');
+        });
+
+        // Tour Meals Management
+        Route::get('meal', [MealController::class, 'index'])->name('meal.index');
+        Route::get('meal/create', [MealController::class, 'create'])->name('meal.create');
+        Route::post('meal', [MealController::class, 'store'])->name('meal.store');
+
+        Route::group(['prefix' => 'meal/{guide}'], function () {
+            Route::get('edit', [MealController::class, 'edit'])->name('meal.edit');
+            Route::patch('/', [MealController::class, 'update'])->name('meal.update');
+            Route::delete('/', [MealController::class, 'destroy'])->name('meal.destroy');
+            // Deleted
+            Route::get('restore', [MealController::class, 'restore'])->name('meal.restore');
+            Route::delete('delete', [MealController::class, 'delete'])->name('meal.delete-permanently');
         });
 
     });
