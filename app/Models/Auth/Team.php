@@ -25,7 +25,6 @@ class Team extends TeamworkTeam
         'forceDeleted' => TeamDeleted::class,
     ];
 
-//    protected $with = ['extendedFields'];
 
     /**
      * @return array

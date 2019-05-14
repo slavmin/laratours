@@ -125,6 +125,9 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::get('edit', [MuseumController::class, 'edit'])->name('museum.edit');
             Route::patch('/', [MuseumController::class, 'update'])->name('museum.update');
             Route::delete('/', [MuseumController::class, 'destroy'])->name('museum.destroy');
+            // Deleted
+            Route::get('restore', [MuseumController::class, 'restore'])->name('museum.restore');
+            Route::delete('delete', [MuseumController::class, 'delete'])->name('museum.delete-permanently');
         });
 
         // Tour Meals Management
@@ -132,7 +135,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::get('meal/create', [MealController::class, 'create'])->name('meal.create');
         Route::post('meal', [MealController::class, 'store'])->name('meal.store');
 
-        Route::group(['prefix' => 'meal/{guide}'], function () {
+        Route::group(['prefix' => 'meal/{meal}'], function () {
             Route::get('edit', [MealController::class, 'edit'])->name('meal.edit');
             Route::patch('/', [MealController::class, 'update'])->name('meal.update');
             Route::delete('/', [MealController::class, 'destroy'])->name('meal.destroy');

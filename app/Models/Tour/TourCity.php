@@ -16,4 +16,28 @@ class TourCity extends Model
     {
         return $this->belongsTo('App\Models\Tour\TourCountry')->withDefault();
     }
+
+    // Exposed relation
+    public function museums()
+    {
+        return $this->hasMany('App\Models\Tour\TourMuseum', 'city_id');
+    }
+
+    // Exposed relation
+    public function meals()
+    {
+        return $this->hasMany('App\Models\Tour\TourMeal', 'city_id');
+    }
+
+    // Exposed relation
+    public function hotels()
+    {
+        return $this->hasMany('App\Models\Tour\TourHotel', 'city_id');
+    }
+
+    // Exposed relation
+    public function transports()
+    {
+        return $this->hasMany('App\Models\Tour\TourTransport', 'city_id');
+    }
 }

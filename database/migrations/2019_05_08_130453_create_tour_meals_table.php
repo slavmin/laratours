@@ -17,7 +17,8 @@ class CreateTourMealsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable()->index();
             $table->text('description')->nullable();
-            $table->decimal('price');
+            $table->unsignedInteger('qnt')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();

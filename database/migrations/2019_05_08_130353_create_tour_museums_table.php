@@ -17,7 +17,8 @@ class CreateTourMuseumsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable()->index();
             $table->text('description')->nullable();
-            $table->decimal('price')->nullable();
+            $table->unsignedInteger('qnt')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable()->index();
             $table->unsignedBigInteger('team_id')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
@@ -36,6 +37,6 @@ class CreateTourMuseumsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('museums');
+        Schema::dropIfExists('tour_museums');
     }
 }

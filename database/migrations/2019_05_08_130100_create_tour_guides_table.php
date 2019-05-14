@@ -36,6 +36,6 @@ class CreateTourGuidesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('guides');
+        Schema::dropIfExists('tour_guides');
     }
 }

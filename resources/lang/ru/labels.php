@@ -199,6 +199,7 @@ return [
          ],
         'tours' => [
             'management' => 'Управление турами',
+            'all_cities' => 'Все города',
             'tour' => [
                 'management' => 'Типы туров',
                 'name' => 'Тип тура',
@@ -285,6 +286,9 @@ return [
                 'edit' => 'Изменить музей',
                 'management' => 'Музеи',
                 'deleted' => 'Музеи для удаления',
+                'attributes' => [
+                    'create' => 'Тип билета',
+                ],
                 'table' => [
                     'name' => 'Имя',
                     'description' => 'Описание',
