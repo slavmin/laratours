@@ -9,6 +9,7 @@ use App\Http\Controllers\Frontend\User\TeamManageController;
 // Tour controllers
 use App\Http\Controllers\Frontend\Tour\TypeController;
 use App\Http\Controllers\Frontend\Tour\CustomerTypeController;
+use App\Http\Controllers\Frontend\Tour\HotelCategoryController;
 use App\Http\Controllers\Frontend\Tour\CountryController;
 use App\Http\Controllers\Frontend\Tour\CityController;
 use App\Http\Controllers\Frontend\Tour\GuideController;
@@ -79,6 +80,20 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             // Deleted
             Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
             Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
+        });
+
+        // Tour hotels category Management
+        Route::get('hotel-category', [HotelCategoryController::class, 'index'])->name('hotel-category.index');
+        Route::get('hotel-category/create', [HotelCategoryController::class, 'create'])->name('hotel-category.create');
+        Route::post('hotel-category', [HotelCategoryController::class, 'store'])->name('hotel-category.store');
+
+        Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
+            Route::get('edit', [HotelCategoryController::class, 'edit'])->name('hotel-category.edit');
+            Route::patch('/', [HotelCategoryController::class, 'update'])->name('hotel-category.update');
+            Route::delete('/', [HotelCategoryController::class, 'destroy'])->name('hotel-category.destroy');
+            // Deleted
+            Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
+            Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
         });
 
         // Country Management
