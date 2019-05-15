@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Http\Request;
 
 
 /**
@@ -54,9 +55,7 @@ class TeamManageController extends Controller
     }
 
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function edit()
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);

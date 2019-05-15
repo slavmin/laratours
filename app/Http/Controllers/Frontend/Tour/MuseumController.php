@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
@@ -22,6 +23,8 @@ class MuseumController extends Controller
         $city_name = TourMuseum::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
         $city_param = !is_null($city_id) ? 'city_id=' . $city_id : '';
+
+        $items = [];
 
         if (!is_null($city_id)) {
 
@@ -49,7 +52,8 @@ class MuseumController extends Controller
         return view('frontend.tour.museum.index', compact('items', 'cities_names', 'cities_select','deleted'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
-            ->with('city_param', $city_param);
+            ->with('city_param', $city_param)
+            ->with('object', 'museum');
     }
 
     public function show($id)
@@ -91,7 +95,9 @@ class MuseumController extends Controller
 
         $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.museum.edit', compact('item', 'cities_options', 'attributes'));
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.museum.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'));
     }
 
 
@@ -101,6 +107,7 @@ class MuseumController extends Controller
             $request->validate([
                 'attribute.*.name' => 'required|min:3',
                 'attribute.*.price'=> 'required',
+                'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
             ]);
         } else {
             $request->validate([
@@ -115,7 +122,7 @@ class MuseumController extends Controller
 
         $museum->saveObjectAttributes($request->get('attribute'));
 
-        return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.updated'));
+        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
     }
 
 

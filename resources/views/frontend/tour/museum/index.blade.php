@@ -2,43 +2,7 @@
 
 @section('content')
 
-    <div class="card mb-4">
-        <div class="card-body py-3">
-
-            <div class="row">
-                <div class="col">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-info mb-0 mr-1">{{ $city_name }}</h6>
-                        <div class="float-right">
-                            {{ html()->form('GET', route('frontend.tour.museum.index'))->class('form-horizontal')->open() }}
-                            <div class="form-row align-items-center float-right">
-                                <div class="col-auto">
-                                    <div class="form-group mb-0">
-
-                                        {{ html()->select('city_id')
-                                        ->value($city_id)
-                                        ->options($cities_select)->class('form-control form-control-sm') }}
-
-                                    </div><!--form-group-->
-                                </div><!--col-->
-
-                                <div class="col-auto">
-                                    <div class="form-group mb-0">
-
-                                        {{ form_submit(__('buttons.general.crud.update')) }}
-
-                                    </div><!--form-group-->
-                                </div><!--col-->
-                            </div><!--form-row-->
-                            {{ html()->form()->close() }}
-                        </div><!--float-right-->
-                    </div>
-                </div><!--col-->
-            </div><!--row-->
-
-        </div><!--card-body-->
-    </div><!--card-->
-
+    @include('frontend.tour.includes.city-select-form')
 
     <div class="card mb-4">
         <div class="card-body">
@@ -62,6 +26,7 @@
                             <tr>
                                 <th>@lang('labels.frontend.tours.museum.table.name')</th>
                                 <th>@lang('labels.frontend.tours.tour.city')</th>
+                                <th>@lang('labels.frontend.tours.museum.table.qnt')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
                             </thead>
@@ -75,6 +40,7 @@
                                                 <span class="text-secondary">{{$cities_names[$item->city_id]}}</span>
                                             @endif
                                         </td>
+                                        <td>{{$item->qnt}}</td>
                                         <td>
                                             <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                                 <a href="{{ route('frontend.tour.museum.edit', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">

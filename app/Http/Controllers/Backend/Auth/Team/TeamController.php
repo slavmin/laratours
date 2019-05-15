@@ -103,7 +103,8 @@ class TeamController extends Controller
             [
                 'name' => config('teamwork.extra_field_name'),
                 'type' => $profile_type,
-                'content' => $company[config('teamwork.extra_field_name')][$profile_type]
+                'content' => $company[config('teamwork.extra_field_name')][$profile_type],
+                'team_id' => $team->id,
             ]
         );
 

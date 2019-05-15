@@ -38,7 +38,7 @@ class UpdateTeamRequest extends FormRequest
                 'profile.formal.company_city' => ['required', 'string', 'min:2', 'max:191'],
                 'profile.formal.company_address' => ['required', 'string', 'min:3', 'max:191'],
                 'profile.formal.company_inn' => ['required', 'digits:10'],
-                'profile.formal.company_kpp' => ['required', 'digits:10'],
+                'profile.formal.company_kpp' => ['required', 'digits:9'],
             ];
         } else {
             return [
@@ -50,7 +50,7 @@ class UpdateTeamRequest extends FormRequest
                 'profile.real.company_city' => ['required', 'string', 'min:2', 'max:191'],
                 'profile.real.company_address' => ['required', 'string', 'min:3', 'max:191'],
                 'profile.real.company_inn' => ['required', 'digits:10'],
-                'profile.real.company_kpp' => ['required', 'digits:10'],
+                'profile.real.company_kpp' => ['required', 'digits:9'],
             ];
         }
     }

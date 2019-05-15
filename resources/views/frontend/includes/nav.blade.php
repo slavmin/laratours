@@ -34,6 +34,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuTour">
                         <a href="{{ route('frontend.tour.type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.type.index')) }}">
                             @lang('labels.frontend.tours.type.management')</a>
+                        <a href="{{ route('frontend.tour.customer-type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.customer-type.index')) }}">
+                            @lang('labels.frontend.tours.customer.type.management')</a>
                         <a href="{{ route('frontend.tour.country.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.country.index')) }}">
                             @lang('labels.frontend.tours.country.management') / @lang('labels.frontend.tours.city.management')</a>
                         <a href="{{ route('frontend.tour.guide.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.guide.index')) }}">

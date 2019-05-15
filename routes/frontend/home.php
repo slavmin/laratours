@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\TeamManageController;
 // Tour controllers
 use App\Http\Controllers\Frontend\Tour\TypeController;
+use App\Http\Controllers\Frontend\Tour\CustomerTypeController;
 use App\Http\Controllers\Frontend\Tour\CountryController;
 use App\Http\Controllers\Frontend\Tour\CityController;
 use App\Http\Controllers\Frontend\Tour\GuideController;
@@ -64,6 +65,20 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             // Deleted
             Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
             Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
+        });
+
+        // Tour customer types Management
+        Route::get('customer-type', [CustomerTypeController::class, 'index'])->name('customer-type.index');
+        Route::get('customer-type/create', [CustomerTypeController::class, 'create'])->name('customer-type.create');
+        Route::post('customer-type', [CustomerTypeController::class, 'store'])->name('customer-type.store');
+
+        Route::group(['prefix' => 'customer-type/{customer_type}'], function () {
+            Route::get('edit', [CustomerTypeController::class, 'edit'])->name('customer-type.edit');
+            Route::patch('/', [CustomerTypeController::class, 'update'])->name('customer-type.update');
+            Route::delete('/', [CustomerTypeController::class, 'destroy'])->name('customer-type.destroy');
+            // Deleted
+            Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
+            Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
         });
 
         // Country Management

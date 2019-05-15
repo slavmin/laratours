@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Models\Tour\TourCity;
+use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMeal;
@@ -12,12 +14,43 @@ class MealController extends Controller
     protected $tour_meal;
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = TourMeal::all();
+        $city_id = $this->getCityId($request);
+
+        $city_name = TourMeal::getCityName($city_id, __('labels.frontend.tours.all_cities'));
+
+        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : '';
+
+        $items = [];
+
+        if (!is_null($city_id)) {
+
+            $city = TourCity::where('id', $city_id)->firstOrfail();
+            $items[] = $city->meals->sortBy('name');
+
+        } else {
+
+            $cities = TourCity::with(['meals' => function ($query) {
+                $query->orderBy('name', 'asc');
+            }])->orderBy('name', 'asc')->get()->flatten();
+
+            foreach ($cities as $city) {
+                $items[] = $city->meals;
+            }
+
+        }
         $deleted = TourMeal::onlyTrashed()->get();
 
-        return view('frontend.tour.meal.index', compact('items','deleted'));
+        $cities_names = TourMeal::getCitiesAttribute();
+
+        $cities_select = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.meal.index', compact('items','cities_names', 'cities_select','deleted'))
+            ->with('city_id', (int)$city_id)
+            ->with('city_name', $city_name)
+            ->with('city_param', $city_param)
+            ->with('object', 'meal');
     }
 
     public function show($id)
@@ -25,20 +58,22 @@ class MealController extends Controller
         //
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('frontend.tour.meal.create');
+        $city_id = $this->getCityId($request);
+        $cities_options = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.meal.create', compact('cities_options'))->with('city_id', (int)$city_id);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required',
-            //'description'=> '',
+            'city_id' => 'exists:tour_cities,id',
         ]);
 
-        $tour_meal = new TourMeal($request->only('name', 'description', 'price'));
+        $tour_meal = new TourMeal($request->only('name', 'city_id', 'description', 'qnt'));
 
         $tour_meal->save();
 
@@ -50,23 +85,40 @@ class MealController extends Controller
     {
         $item = TourMeal::findOrFail($id);
 
-        return view('frontend.tour.meal.edit', compact('item'));
+        $attributes = $item->objectables->toArray();
+
+        $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
+
+        $cities_options = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.meal.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'));
     }
 
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            //'description'=> '',
-        ]);
+        if($request->get('attribute')){
+            $request->validate([
+                'attribute.*.name' => 'required|min:3',
+                'attribute.*.price'=> 'required',
+                'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
+            ]);
+        } else {
+            $request->validate([
+                'name' => 'required',
+                'city_id' => 'exists:tour_cities,id',
+            ]);
+        }
 
         $tour_meal = TourMeal::findOrFail($id);
 
-        $tour_meal->update($request->only('name', 'description', 'price'));
+        $tour_meal->update($request->only('name', 'city_id', 'description', 'qnt'));
 
-        return redirect()->route('frontend.tour.meal.index')->withFlashSuccess(__('alerts.general.updated'));
+        $tour_meal->saveObjectAttributes($request->get('attribute'));
+
+        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
     }
 
 
@@ -105,5 +157,13 @@ class MealController extends Controller
         $tour_meal->forceDelete();
 
         return redirect()->route('frontend.tour.meal.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+    }
+
+
+    public function getCityId(Request $request)
+    {
+        $city_ids = TourMeal::getCityIds();
+        return $request->has('city_id') && $request->query('city_id') != 0
+        && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
 }

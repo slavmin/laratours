@@ -1,4 +1,4 @@
-{{ html()->form('PATCH', route('frontend.tour.museum.update', $item->id))->class('form-horizontal')->open() }}
+{{ html()->form('PATCH', route('frontend.tour.meal.update', $item->id))->class('form-horizontal')->open() }}
 
 {{ html()->hidden('attribute['.$attribute['id'].'][id]')
     ->value($attribute['id']??'') }}
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <h6 class="card-title mb-0">
-                    @lang('labels.frontend.tours.museum.attributes.create')
+                    @lang('labels.frontend.tours.meal.attributes.create')
                 </h6>
             </div><!--col-->
         </div><!--row-->

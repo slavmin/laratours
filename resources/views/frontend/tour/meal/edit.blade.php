@@ -41,18 +41,35 @@
                     <div class="row mt-4">
                         <div class="col">
                             <div class="form-group row">
-                                {{ html()->label(__('validation.attributes.frontend.general.price'))
+                                {{ html()->label(__('labels.frontend.tours.city.name'))
                                     ->class('col-md-2 form-control-label')
-                                    ->for('price') }}
+                                    ->for('name') }}
+
+                                <div class="col-md-10">
+                                    {{ html()->select('city_id')
+                                    ->value($item->city_id)
+                                    ->options($cities_options)->class('form-control') }}
+                                </div><!--col-->
+                            </div><!--form-group-->
+
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="form-group row">
+                                {{ html()->label(__('validation.attributes.frontend.general.qnt'))
+                                    ->class('col-md-2 form-control-label')
+                                    ->for('qnt') }}
 
                                 <div class="col-md-10">
                                     {{ html()->input()
-                                        ->name('price')
+                                        ->name('qnt')
                                         ->type('number')
                                         ->class('form-control')
-                                        ->placeholder(__('validation.attributes.frontend.general.price'))
+                                        ->placeholder(__('validation.attributes.frontend.general.qnt'))
                                         ->attribute('maxlength', 191)
-                                        ->value($item->price)
+                                        ->value($item->qnt)
                                         ->autofocus() }}
                                 </div><!--col-->
                             </div><!--form-group-->
@@ -98,4 +115,19 @@
 
         </div><!-- col-md-8 -->
     </div><!-- row -->
+
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-sm-8 align-self-center">
+
+            {{--@if($item_attributes)--}}
+            @foreach($attributes as $attribute)
+
+                @include('frontend.tour.meal.includes.extra-form')
+
+            @endforeach
+            {{--@endif--}}
+
+        </div><!-- col-md-8 -->
+    </div><!-- row -->
+
 @endsection
