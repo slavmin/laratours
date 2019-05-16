@@ -44,6 +44,8 @@
                             @lang('labels.frontend.tours.guide.management')</a>
                         <a href="{{ route('frontend.tour.attendant.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.attendant.index')) }}">
                             @lang('labels.frontend.tours.attendant.management')</a>
+                        <a href="{{ route('frontend.tour.hotel.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.hotel.index')) }}">
+                            @lang('labels.frontend.tours.hotel.management')</a>
                         <a href="{{ route('frontend.tour.museum.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.museum.index')) }}">
                             @lang('labels.frontend.tours.museum.management')</a>
                         <a href="{{ route('frontend.tour.meal.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.meal.index')) }}">

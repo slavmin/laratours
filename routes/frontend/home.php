@@ -14,6 +14,7 @@ use App\Http\Controllers\Frontend\Tour\CountryController;
 use App\Http\Controllers\Frontend\Tour\CityController;
 use App\Http\Controllers\Frontend\Tour\GuideController;
 use App\Http\Controllers\Frontend\Tour\AttendantController;
+use App\Http\Controllers\Frontend\Tour\HotelController;
 use App\Http\Controllers\Frontend\Tour\MuseumController;
 use App\Http\Controllers\Frontend\Tour\MealController;
 
@@ -55,124 +56,210 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
 
         // Tour types Management
-        Route::get('type', [TypeController::class, 'index'])->name('type.index');
-        Route::get('type/create', [TypeController::class, 'create'])->name('type.create');
-        Route::post('type', [TypeController::class, 'store'])->name('type.store');
-
+        Route::resource('type', \TypeController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'type/{type}'], function () {
-            Route::get('edit', [TypeController::class, 'edit'])->name('type.edit');
-            Route::patch('/', [TypeController::class, 'update'])->name('type.update');
-            Route::delete('/', [TypeController::class, 'destroy'])->name('type.destroy');
-            // Deleted
             Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
             Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
         });
 
         // Tour customer types Management
-        Route::get('customer-type', [CustomerTypeController::class, 'index'])->name('customer-type.index');
-        Route::get('customer-type/create', [CustomerTypeController::class, 'create'])->name('customer-type.create');
-        Route::post('customer-type', [CustomerTypeController::class, 'store'])->name('customer-type.store');
-
+        Route::resource('customer-type', \CustomerTypeController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'customer-type/{customer_type}'], function () {
-            Route::get('edit', [CustomerTypeController::class, 'edit'])->name('customer-type.edit');
-            Route::patch('/', [CustomerTypeController::class, 'update'])->name('customer-type.update');
-            Route::delete('/', [CustomerTypeController::class, 'destroy'])->name('customer-type.destroy');
-            // Deleted
             Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
             Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
         });
 
         // Tour hotels category Management
-        Route::get('hotel-category', [HotelCategoryController::class, 'index'])->name('hotel-category.index');
-        Route::get('hotel-category/create', [HotelCategoryController::class, 'create'])->name('hotel-category.create');
-        Route::post('hotel-category', [HotelCategoryController::class, 'store'])->name('hotel-category.store');
-
+        Route::resource('hotel-category', \HotelCategoryController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
-            Route::get('edit', [HotelCategoryController::class, 'edit'])->name('hotel-category.edit');
-            Route::patch('/', [HotelCategoryController::class, 'update'])->name('hotel-category.update');
-            Route::delete('/', [HotelCategoryController::class, 'destroy'])->name('hotel-category.destroy');
-            // Deleted
             Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
             Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
         });
 
         // Country Management
-        Route::get('country', [CountryController::class, 'index'])->name('country.index');
-        Route::get('country/create', [CountryController::class, 'create'])->name('country.create');
-        Route::post('country', [CountryController::class, 'store'])->name('country.store');
-
+        Route::resource('country', \CountryController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'country/{country}'], function () {
-            Route::get('edit', [CountryController::class, 'edit'])->name('country.edit');
-            Route::patch('/', [CountryController::class, 'update'])->name('country.update');
-            Route::delete('/', [CountryController::class, 'destroy'])->name('country.destroy');
-            // Deleted
             Route::get('restore', [CountryController::class, 'restore'])->name('country.restore');
             Route::delete('delete', [CountryController::class, 'delete'])->name('country.delete-permanently');
 
             // City Management
-            Route::get('city', [CityController::class, 'index'])->name('city.index');
-            Route::get('city/create', [CityController::class, 'create'])->name('city.create');
-            Route::post('city', [CityController::class, 'store'])->name('city.store');
-
+            Route::resource('city', \CityController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
             Route::group(['prefix' => 'city/{city}'], function () {
-                Route::get('edit', [CityController::class, 'edit'])->name('city.edit');
-                Route::patch('/', [CityController::class, 'update'])->name('city.update');
-                Route::delete('/', [CityController::class, 'destroy'])->name('city.destroy');
-                // Deleted
                 Route::get('restore', [CityController::class, 'restore'])->name('city.restore');
                 Route::delete('delete', [CityController::class, 'delete'])->name('city.delete-permanently');
             });
         });
 
-        // Tour Guides Management
-        Route::get('guide', [GuideController::class, 'index'])->name('guide.index');
-        Route::get('guide/create', [GuideController::class, 'create'])->name('guide.create');
-        Route::post('guide', [GuideController::class, 'store'])->name('guide.store');
-
-        Route::group(['prefix' => 'guide/{guide}'], function () {
-            Route::get('edit', [GuideController::class, 'edit'])->name('guide.edit');
-            Route::patch('/', [GuideController::class, 'update'])->name('guide.update');
-            Route::delete('/', [GuideController::class, 'destroy'])->name('guide.destroy');
-        });
-
-        // Tour Attendants Management
-        Route::get('attendant', [AttendantController::class, 'index'])->name('attendant.index');
-        Route::get('attendant/create', [AttendantController::class, 'create'])->name('attendant.create');
-        Route::post('attendant', [AttendantController::class, 'store'])->name('attendant.store');
-
-        Route::group(['prefix' => 'attendant/{attendant}'], function () {
-            Route::get('edit', [AttendantController::class, 'edit'])->name('attendant.edit');
-            Route::patch('/', [AttendantController::class, 'update'])->name('attendant.update');
-            Route::delete('/', [AttendantController::class, 'destroy'])->name('attendant.destroy');
-        });
-
         // Tour Museum Management
-        Route::get('museum', [MuseumController::class, 'index'])->name('museum.index');
-        Route::get('museum/create', [MuseumController::class, 'create'])->name('museum.create');
-        Route::post('museum', [MuseumController::class, 'store'])->name('museum.store');
-
+        Route::resource('museum', \MuseumController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'museum/{museum}'], function () {
-            Route::get('edit', [MuseumController::class, 'edit'])->name('museum.edit');
-            Route::patch('/', [MuseumController::class, 'update'])->name('museum.update');
-            Route::delete('/', [MuseumController::class, 'destroy'])->name('museum.destroy');
-            // Deleted
             Route::get('restore', [MuseumController::class, 'restore'])->name('museum.restore');
             Route::delete('delete', [MuseumController::class, 'delete'])->name('museum.delete-permanently');
         });
 
         // Tour Meals Management
-        Route::get('meal', [MealController::class, 'index'])->name('meal.index');
-        Route::get('meal/create', [MealController::class, 'create'])->name('meal.create');
-        Route::post('meal', [MealController::class, 'store'])->name('meal.store');
-
+        Route::resource('meal', \MealController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
         Route::group(['prefix' => 'meal/{meal}'], function () {
-            Route::get('edit', [MealController::class, 'edit'])->name('meal.edit');
-            Route::patch('/', [MealController::class, 'update'])->name('meal.update');
-            Route::delete('/', [MealController::class, 'destroy'])->name('meal.destroy');
-            // Deleted
             Route::get('restore', [MealController::class, 'restore'])->name('meal.restore');
             Route::delete('delete', [MealController::class, 'delete'])->name('meal.delete-permanently');
         });
+
+        // Tour Hotels Management
+        Route::resource('hotel', \HotelController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
+        Route::group(['prefix' => 'hotel/{hotel}'], function () {
+            Route::get('restore', [HotelController::class, 'restore'])->name('hotel.restore');
+            Route::delete('delete', [HotelController::class, 'delete'])->name('hotel.delete-permanently');
+        });
+
+        // Tour Guides Management
+        Route::resource('guide', \GuideController::class, ['except' => ['show']]);
+
+        // Tour Attendants Management
+        Route::resource('attendant', \AttendantController::class, ['except' => ['show']]);
+
+
+
+//        // Country Management
+//        Route::get('country', [CountryController::class, 'index'])->name('country.index');
+//        Route::get('country/create', [CountryController::class, 'create'])->name('country.create');
+//        Route::post('country', [CountryController::class, 'store'])->name('country.store');
+//
+//        Route::group(['prefix' => 'country/{country}'], function () {
+//            Route::get('edit', [CountryController::class, 'edit'])->name('country.edit');
+//            Route::patch('/', [CountryController::class, 'update'])->name('country.update');
+//            Route::delete('/', [CountryController::class, 'destroy'])->name('country.destroy');
+//            // Deleted
+//            Route::get('restore', [CountryController::class, 'restore'])->name('country.restore');
+//            Route::delete('delete', [CountryController::class, 'delete'])->name('country.delete-permanently');
+//
+//            // City Management
+//            Route::get('city', [CityController::class, 'index'])->name('city.index');
+//            Route::get('city/create', [CityController::class, 'create'])->name('city.create');
+//            Route::post('city', [CityController::class, 'store'])->name('city.store');
+//
+//            Route::group(['prefix' => 'city/{city}'], function () {
+//                Route::get('edit', [CityController::class, 'edit'])->name('city.edit');
+//                Route::patch('/', [CityController::class, 'update'])->name('city.update');
+//                Route::delete('/', [CityController::class, 'destroy'])->name('city.destroy');
+//                // Deleted
+//                Route::get('restore', [CityController::class, 'restore'])->name('city.restore');
+//                Route::delete('delete', [CityController::class, 'delete'])->name('city.delete-permanently');
+//            });
+//        });
+//
+//        // Tour types Management
+//        Route::get('type', [TypeController::class, 'index'])->name('type.index');
+//        Route::get('type/create', [TypeController::class, 'create'])->name('type.create');
+//        Route::post('type', [TypeController::class, 'store'])->name('type.store');
+//
+//        Route::group(['prefix' => 'type/{type}'], function () {
+//            Route::get('edit', [TypeController::class, 'edit'])->name('type.edit');
+//            Route::patch('/', [TypeController::class, 'update'])->name('type.update');
+//            Route::delete('/', [TypeController::class, 'destroy'])->name('type.destroy');
+//            // Deleted
+//            Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
+//            Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
+//        });
+//
+//        // Tour customer types Management
+//        Route::get('customer-type', [CustomerTypeController::class, 'index'])->name('customer-type.index');
+//        Route::get('customer-type/create', [CustomerTypeController::class, 'create'])->name('customer-type.create');
+//        Route::post('customer-type', [CustomerTypeController::class, 'store'])->name('customer-type.store');
+//
+//        Route::group(['prefix' => 'customer-type/{customer_type}'], function () {
+//            Route::get('edit', [CustomerTypeController::class, 'edit'])->name('customer-type.edit');
+//            Route::patch('/', [CustomerTypeController::class, 'update'])->name('customer-type.update');
+//            Route::delete('/', [CustomerTypeController::class, 'destroy'])->name('customer-type.destroy');
+//            // Deleted
+//            Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
+//            Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
+//        });
+//
+//        // Tour hotels category Management
+//        Route::get('hotel-category', [HotelCategoryController::class, 'index'])->name('hotel-category.index');
+//        Route::get('hotel-category/create', [HotelCategoryController::class, 'create'])->name('hotel-category.create');
+//        Route::post('hotel-category', [HotelCategoryController::class, 'store'])->name('hotel-category.store');
+//
+//        Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
+//            Route::get('edit', [HotelCategoryController::class, 'edit'])->name('hotel-category.edit');
+//            Route::patch('/', [HotelCategoryController::class, 'update'])->name('hotel-category.update');
+//            Route::delete('/', [HotelCategoryController::class, 'destroy'])->name('hotel-category.destroy');
+//            // Deleted
+//            Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
+//            Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
+//        });
+//
+//        // Tour Guides Management
+//        Route::get('guide', [GuideController::class, 'index'])->name('guide.index');
+//        Route::get('guide/create', [GuideController::class, 'create'])->name('guide.create');
+//        Route::post('guide', [GuideController::class, 'store'])->name('guide.store');
+//
+//        Route::group(['prefix' => 'guide/{guide}'], function () {
+//            Route::get('edit', [GuideController::class, 'edit'])->name('guide.edit');
+//            Route::patch('/', [GuideController::class, 'update'])->name('guide.update');
+//            Route::delete('/', [GuideController::class, 'destroy'])->name('guide.destroy');
+//        });
+//
+//        // Tour Attendants Management
+//        Route::get('attendant', [AttendantController::class, 'index'])->name('attendant.index');
+//        Route::get('attendant/create', [AttendantController::class, 'create'])->name('attendant.create');
+//        Route::post('attendant', [AttendantController::class, 'store'])->name('attendant.store');
+//
+//        Route::group(['prefix' => 'attendant/{attendant}'], function () {
+//            Route::get('edit', [AttendantController::class, 'edit'])->name('attendant.edit');
+//            Route::patch('/', [AttendantController::class, 'update'])->name('attendant.update');
+//            Route::delete('/', [AttendantController::class, 'destroy'])->name('attendant.destroy');
+//        });
+//
+//        // Tour Museum Management
+//        Route::get('museum', [MuseumController::class, 'index'])->name('museum.index');
+//        Route::get('museum/create', [MuseumController::class, 'create'])->name('museum.create');
+//        Route::post('museum', [MuseumController::class, 'store'])->name('museum.store');
+//
+//        Route::group(['prefix' => 'museum/{museum}'], function () {
+//            Route::get('edit', [MuseumController::class, 'edit'])->name('museum.edit');
+//            Route::patch('/', [MuseumController::class, 'update'])->name('museum.update');
+//            Route::delete('/', [MuseumController::class, 'destroy'])->name('museum.destroy');
+//            // Deleted
+//            Route::get('restore', [MuseumController::class, 'restore'])->name('museum.restore');
+//            Route::delete('delete', [MuseumController::class, 'delete'])->name('museum.delete-permanently');
+//        });
+//
+//        // Tour Meals Management
+//        Route::get('meal', [MealController::class, 'index'])->name('meal.index');
+//        Route::get('meal/create', [MealController::class, 'create'])->name('meal.create');
+//        Route::post('meal', [MealController::class, 'store'])->name('meal.store');
+//
+//        Route::group(['prefix' => 'meal/{meal}'], function () {
+//            Route::get('edit', [MealController::class, 'edit'])->name('meal.edit');
+//            Route::patch('/', [MealController::class, 'update'])->name('meal.update');
+//            Route::delete('/', [MealController::class, 'destroy'])->name('meal.destroy');
+//            // Deleted
+//            Route::get('restore', [MealController::class, 'restore'])->name('meal.restore');
+//            Route::delete('delete', [MealController::class, 'delete'])->name('meal.delete-permanently');
+//        });
+//
+//        // Tour Hotels Management
+//        Route::get('hotel', [HotelController::class, 'index'])->name('hotel.index');
+//        Route::get('hotel/create', [HotelController::class, 'create'])->name('hotel.create');
+//        Route::post('hotel', [HotelController::class, 'store'])->name('hotel.store');
+//
+//        Route::group(['prefix' => 'hotel/{hotel}'], function () {
+//            Route::get('edit', [HotelController::class, 'edit'])->name('hotel.edit');
+//            Route::patch('/', [HotelController::class, 'update'])->name('hotel.update');
+//            Route::delete('/', [HotelController::class, 'destroy'])->name('hotel.destroy');
+//            // Deleted
+//            Route::get('restore', [HotelController::class, 'restore'])->name('hotel.restore');
+//            Route::delete('delete', [HotelController::class, 'delete'])->name('hotel.delete-permanently');
+//        });
 
     });
 });

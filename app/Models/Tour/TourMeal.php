@@ -13,5 +13,4 @@ class TourMeal extends Model
     use SoftDeletes, UsedByTeams, UsedByCity, HasObjectAttributes;
 
     protected $fillable = ['name', 'city_id', 'description', 'qnt'];
-
 }
