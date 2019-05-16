@@ -90,20 +90,18 @@ class TeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
-        $company[config('teamwork.extra_field_name')] = $request->get(config('teamwork.extra_field_name'));
+        $profile = $request->get('profile');
         $profile_type = $request->get('profile_type');
-        $company_name = $company[config('teamwork.extra_field_name')][$profile_type]['company_name'];
+        $company_name = $profile[$profile_type]['company_name'];
 
         // Update company profile
-        $team->extendedFields()->updateOrCreate(
+        $team->profiles()->updateOrCreate(
             [
-                'name' => config('teamwork.extra_field_name'),
                 'type' => $profile_type,
             ],
             [
-                'name' => config('teamwork.extra_field_name'),
                 'type' => $profile_type,
-                'content' => $company[config('teamwork.extra_field_name')][$profile_type],
+                'content' => $profile[$profile_type],
                 'team_id' => $team->id,
             ]
         );
@@ -112,7 +110,6 @@ class TeamController extends Controller
         if ($profile_type == 'formal') {
             $team->update([
                 'name' => $company_name,
-                'slug' => \Str::slug($company_name)
             ]);
         }
 

@@ -9,7 +9,6 @@ use App\Events\Frontend\Auth\UserRegistered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Repositories\Frontend\Auth\UserRepository;
 use App\Models\Auth\Team;
-use Illuminate\Support\Str;
 
 /**
  * Class RegisterController.
@@ -75,19 +74,16 @@ class RegisterController extends Controller
         // Create team for company
         $team = Team::create([
             'name' => $company_name,
-            'slug' => Str::slug($company_name),
             'owner_id' => $user->id,
-            'meta' => $company
         ]);
 
         // Attach user to team
         $user->attachTeam($team);
 
         // Create and fill company profile
-        $team->extendedFields()->create([
-            'name'    => config('teamwork.extra_field_name'),
+        $team->profiles()->create([
             'type'    => 'formal',
-            'content' => $company[config('teamwork.extra_field_name')]['formal']
+            'content' => $company[config('teamwork.extra_field_name')]['formal'],
         ]);
 
         // If the user must confirm their email or their account requires approval,

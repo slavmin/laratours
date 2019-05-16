@@ -5,9 +5,10 @@ namespace App\Models\Auth;
 use App\Events\Backend\Auth\Team\TeamDeleted;
 use App\Models\Auth\Traits\Attribute\TeamAttribute;
 use App\Models\Auth\Traits\Method\TeamMethod;
+use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mpociot\Teamwork\TeamworkTeam;
-use App\Models\Traits\HasExtendedFields;
+use Cviebrock\EloquentSluggable\Sluggable;
 //use Mpociot\Teamwork\Facades\Teamwork;
 //use Mpociot\Teamwork\TeamInvite;
 
@@ -16,7 +17,7 @@ use App\Models\Traits\HasExtendedFields;
  */
 class Team extends TeamworkTeam
 {
-    use TeamAttribute, TeamMethod, HasExtendedFields, SoftDeletes;
+    use TeamAttribute, TeamMethod, HasProfile, Sluggable, SoftDeletes;
 
     /**
      * @var array
@@ -27,11 +28,26 @@ class Team extends TeamworkTeam
 
 
     /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source'   => 'name',
+                'onUpdate' => false,
+            ]
+        ];
+    }
+
+    /**
      * @return array
      */
     public function getFormalProfileAttribute()
     {
-        $raw = $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'formal'])->get()->pluck('content');
+        $raw = $this->profiles()->where(['type'=>'formal'])->get()->pluck('content');
         $raw_out = isset($raw[0]) ? $raw[0] : [];
         $out['formal'] = $raw_out;
 
@@ -43,7 +59,7 @@ class Team extends TeamworkTeam
      */
     public function getRealProfileAttribute()
     {
-        $raw = $this->extendedFields()->where(['name'=>config('teamwork.extra_field_name'), 'type'=>'real'])->get()->pluck('content');
+        $raw = $this->profiles()->where(['type'=>'real'])->get()->pluck('content');
         $raw_out = isset($raw[0]) ? $raw[0] : [];
         $out['real'] = $raw_out;
 
@@ -57,4 +73,5 @@ class Team extends TeamworkTeam
     {
         return array_merge($this->getFormalProfileAttribute(), $this->getRealProfileAttribute());
     }
+
 }
