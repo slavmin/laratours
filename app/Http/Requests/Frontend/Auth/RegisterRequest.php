@@ -30,14 +30,14 @@ class RegisterRequest extends FormRequest
     {
         return [
             'profile.formal' => ['required', 'array'],
-            'profile.formal.company_name' => ['required', 'string', 'min:2', 'max:191'],
+            'profile.formal.company_name' => ['required', 'string', 'min:2', 'max:191', Rule::unique('teams', 'name')],
             'profile.formal.company_phone' => ['required', 'regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/'],
             'profile.formal.company_email' => ['required', 'email', 'max:191'],
             'profile.formal.company_country' => ['required', 'string', 'min:3', 'max:191'],
             'profile.formal.company_city' => ['required', 'string', 'min:2', 'max:191'],
             'profile.formal.company_address' => ['required', 'string', 'min:3', 'max:191'],
             'profile.formal.company_inn' => ['required', 'digits:10'],
-            'profile.formal.company_kpp' => ['required', 'digits:10'],
+            'profile.formal.company_kpp' => ['required', 'digits:9'],
             //'profile.formal.*' => ['required', 'string', 'min:3', 'max:191'],
             'first_name' => ['required', 'string', 'min:2', 'max:191'],
             'last_name' => ['required', 'string', 'min:2', 'max:191'],
