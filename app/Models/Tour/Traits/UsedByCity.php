@@ -5,7 +5,6 @@ namespace App\Models\Tour\Traits;
 
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCountry;
-use Illuminate\Http\Request;
 
 /**
  * Class UsedByCity

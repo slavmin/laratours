@@ -12,6 +12,8 @@ class MealController extends Controller
 {
     protected $tour_meal;
 
+    protected $city_id;
+
 
     public function index(Request $request)
     {

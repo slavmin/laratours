@@ -13,6 +13,8 @@ class HotelController extends Controller
 {
     protected $tour_hotel;
 
+    protected $city_id;
+
 
     public function index(Request $request)
     {
