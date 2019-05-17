@@ -79,7 +79,7 @@ class HotelController extends Controller
 
         $tour_hotel->save();
 
-        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'))->with('object', 'hotel');
+        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
     }
 
 
@@ -97,7 +97,7 @@ class HotelController extends Controller
 
         $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'));
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))->with('object', 'hotel');
     }
 
 
