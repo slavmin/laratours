@@ -20,10 +20,8 @@ trait HasObjectAttributes
     }
 
 
-    protected static function boot()
+    protected static function bootHasObjectAttributes()
     {
-        parent::boot();
-
         static::deleted(function (Model $model) {
             DB::transaction(function () use ($model) {
                 // Force Delete objectables

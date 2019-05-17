@@ -19,9 +19,9 @@ trait HasExtendedFields
         return $this->morphMany('App\Models\Extend', 'extendable');
     }
 
-    protected static function boot()
+    protected static function bootHasExtendedFields()
     {
-        parent::boot();
+        //parent::boot();
 
         static::deleted(function (Model $model) {
             DB::transaction(function () use ($model) {

@@ -19,10 +19,8 @@ trait HasProfile
         return $this->morphMany('App\Models\Profile', 'profileable');
     }
 
-    protected static function boot()
+    protected static function bootHasProfile()
     {
-        parent::boot();
-
         static::deleted(function (Model $model) {
             DB::transaction(function () use ($model) {
                 // Force Delete profiles
