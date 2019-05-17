@@ -16,7 +16,10 @@ class CustomerTypeController extends Controller
 
     public function index()
     {
-        $items = TourCustomerType::all();
+        $orderBy = 'name';
+        $sort = 'asc';
+
+        $items = TourCustomerType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourCustomerType::onlyTrashed()->get();
 
         return view('frontend.tour.customer.type.index', compact('items','deleted'));

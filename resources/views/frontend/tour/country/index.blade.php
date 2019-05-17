@@ -27,17 +27,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($countries as $country)
+                            @foreach($items as $item)
                                 <tr>
-                                    <td>{{$country->name}}</td>
-                                    <td>{{$country->cities_count}}</td>
+                                    <td>{{$item->name}}</td>
+                                    <td>{{$item->cities_count}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.city.index', $country->id) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('buttons.tours.city_list')">
+                                            <a href="{{ route('frontend.tour.city.index', $item->id) }}" class="btn btn-outline-info ml-1" data-toggle="tooltip" title="@lang('buttons.tours.city_list')">
                                                 <i class="fas fa-list-alt"></i></a>
-                                            <a href="{{ route('frontend.tour.country.edit', $country->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
+                                            <a href="{{ route('frontend.tour.country.edit', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
                                                 <i class="fas fa-edit"></i></a>
-                                            <form style="display: inline-block;" action="{{ route('frontend.tour.country.destroy', $country->id) }}" method="post">
+                                            <form style="display: inline-block;" action="{{ route('frontend.tour.country.destroy', $item->id) }}" method="post">
                                                 {!! csrf_field() !!}
                                                 <input type="hidden" name="_method" value="DELETE"/>
                                                 <button class="btn btn-outline-danger" title="@lang('labels.general.buttons.delete')"><i
@@ -58,6 +58,19 @@
         </div><!--card-body-->
     </div><!--card-->
 
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="float-left">
+                {!! $items->links() !!}
+            </div>
+        </div><!--col-->
+        <div class="col-3">
+            <div class="float-right">
+                {!! $items->total() !!} {{ trans_choice('labels.general.table.total', $items->total()) }}
+            </div>
+        </div><!--col-->
+    </div><!--row-->
+
     @if($deleted->count() > 0)
 
     <div class="card mb-4">
@@ -65,7 +78,7 @@
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-danger mb-0 mr-1">@lang('labels.frontend.tours.country.deleted')</h6>
+                        <h6 class="text-danger mb-0 mr-1"><i class="far fa-trash-alt"></i> @lang('labels.general.deleted')</h6>
                     </div>
                 </div><!--col-->
             </div><!--row-->

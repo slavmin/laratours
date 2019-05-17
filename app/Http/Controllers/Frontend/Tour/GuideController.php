@@ -13,7 +13,10 @@ class GuideController extends Controller
 
     public function index()
     {
-        $items = TourGuide::all();
+        $orderBy = 'name';
+        $sort = 'asc';
+
+        $items = TourGuide::orderBy($orderBy, $sort)->paginate();
         return view('frontend.tour.guide.index', compact('items'));
     }
 

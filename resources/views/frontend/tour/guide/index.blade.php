@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-body">
             <div class="row">
                 <div class="col">
@@ -53,4 +53,17 @@
 
         </div><!--card-body-->
     </div><!--card-->
+
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="float-left">
+                {!! $items->links() !!}
+            </div>
+        </div><!--col-->
+        <div class="col-3">
+            <div class="float-right">
+                {!! $items->total() !!} {{ trans_choice('labels.general.table.total', $items->total()) }}
+            </div>
+        </div><!--col-->
+    </div><!--row-->
 @endsection

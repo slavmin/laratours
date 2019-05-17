@@ -16,10 +16,13 @@ class HotelCategoryController extends Controller
 
     public function index()
     {
-        $hotel_categories = TourHotelCategory::orderBy('name', 'asc')->get();
+        $orderBy = 'name';
+        $sort = 'asc';
+
+        $items = TourHotelCategory::orderBy($orderBy, $sort)->paginate();
         $deleted = TourHotelCategory::onlyTrashed()->orderBy('name', 'asc')->get();
 
-        return view('frontend.tour.hotel.category.index', compact('hotel_categories','deleted'));
+        return view('frontend.tour.hotel.category.index', compact('items','deleted'));
     }
 
     public function show($id)

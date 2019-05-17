@@ -13,7 +13,10 @@ class AttendantController extends Controller
 
     public function index()
     {
-        $items = TourAttendant::all();
+        $orderBy = 'name';
+        $sort = 'asc';
+
+        $items = TourAttendant::orderBy($orderBy, $sort)->paginate();
         return view('frontend.tour.attendant.index', compact('items'));
     }
 

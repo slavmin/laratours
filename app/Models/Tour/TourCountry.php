@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use App\Models\Traits\UsedByTeams;
+use App\Models\Traits\HasPagination;
 
 class TourCountry extends Model
 {
-    use SoftDeletes, UsedByTeams;
+    use SoftDeletes, UsedByTeams, HasPagination;
 
     protected $fillable = ['name', 'description'];
 

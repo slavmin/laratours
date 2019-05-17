@@ -22,24 +22,19 @@ class MealController extends Controller
 
         $city_param = !is_null($city_id) ? 'city_id=' . $city_id : '';
 
-        $items = [];
+        $orderBy = 'name';
+        $sort = 'asc';
 
         if (!is_null($city_id)) {
 
-            $city = TourCity::where('id', $city_id)->firstOrfail();
-            $items[] = $city->meals->sortBy('name');
+            $items = TourMeal::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
 
         } else {
 
-            $cities = TourCity::with(['meals' => function ($query) {
-                $query->orderBy('name', 'asc');
-            }])->orderBy('name', 'asc')->get()->flatten();
-
-            foreach ($cities as $city) {
-                $items[] = $city->meals;
-            }
+            $items = TourMeal::orderBy($orderBy, $sort)->paginate();
 
         }
+
         $deleted = TourMeal::onlyTrashed()->get();
 
         $cities_names = TourMeal::getCitiesAttribute();

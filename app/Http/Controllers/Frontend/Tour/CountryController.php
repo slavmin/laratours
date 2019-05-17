@@ -17,14 +17,16 @@ class CountryController extends Controller
 
     public function index()
     {
+        $orderBy = 'name';
+        $sort = 'asc';
 
-        $countries = TourCountry::withCount(['cities' => function ($query) {
+        $items = TourCountry::withCount(['cities' => function ($query) {
             $query->whereNull('deleted_at');
-        }])->get();
+        }])->orderBy($orderBy, $sort)->paginate();
 
         $deleted = TourCountry::onlyTrashed()->withCount('cities')->get();
 
-        return view('frontend.tour.country.index', compact('countries', 'deleted'));
+        return view('frontend.tour.country.index', compact('items', 'deleted'));
     }
 
     public function show($id)

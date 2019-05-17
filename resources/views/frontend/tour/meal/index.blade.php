@@ -31,8 +31,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($items as $sub_items)
-                                @foreach($sub_items as $item)
+                            @foreach($items as $item)
                                 <tr>
                                     <td>{{$item->name}}</td>
                                     <td>
@@ -56,7 +55,6 @@
                                         </div><!--btn-toolbar-->
                                     </td>
                                 </tr>
-                                @endforeach
                             @endforeach
                             </tbody>
                         </table>
@@ -67,6 +65,19 @@
         </div><!--card-body-->
     </div><!--card-->
 
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="float-left">
+                {!! $items->links() !!}
+            </div>
+        </div><!--col-->
+        <div class="col-3">
+            <div class="float-right">
+                {!! $items->total() !!} {{ trans_choice('labels.general.table.total', $items->total()) }}
+            </div>
+        </div><!--col-->
+    </div><!--row-->
+
     @if($deleted->count() > 0)
 
         <div class="card mb-4">
@@ -74,7 +85,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="text-danger mb-0 mr-1">@lang('labels.frontend.tours.meal.deleted')</h6>
+                            <h6 class="text-danger mb-0 mr-1"><i class="far fa-trash-alt"></i> @lang('labels.general.deleted')</h6>
                         </div>
                     </div><!--col-->
                 </div><!--row-->

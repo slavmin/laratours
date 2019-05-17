@@ -9,8 +9,6 @@ use App\Http\Requests\Backend\Auth\Team\StoreTeamRequest;
 use App\Http\Requests\Backend\Auth\Team\UpdateTeamRequest;
 use App\Models\Auth\User;
 use App\Repositories\Backend\Auth\TeamRepository;
-use Illuminate\Support\Str;
-use App\Models\Extend;
 
 
 /**
@@ -102,7 +100,6 @@ class TeamController extends Controller
             [
                 'type' => $profile_type,
                 'content' => $profile[$profile_type],
-                'team_id' => $team->id,
             ]
         );
 
@@ -124,11 +121,9 @@ class TeamController extends Controller
     public function store(StoreTeamRequest $request)
     {
         $team_name = $request->name;
-        $team_slug = \Str::slug($request->name);
 
         $this->teamRepository->create([
             'name' => $team_name,
-            'slug' => \Str::slug($team_slug)
         ]);
 
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.created'));

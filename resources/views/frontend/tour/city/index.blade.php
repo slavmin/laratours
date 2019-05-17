@@ -34,14 +34,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($cities as $city)
+                            @foreach($items as $item)
                                 <tr>
-                                    <td>{{$city->name}}</td>
+                                    <td>{{$item->name}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.city.edit', [$country->id, $city->id]) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
+                                            <a href="{{ route('frontend.tour.city.edit', [$country->id, $item->id]) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
                                                 <i class="fas fa-edit"></i></a>
-                                            <form style="display: inline-block;" action="{{ route('frontend.tour.city.destroy', [$country->id, $city->id]) }}" method="post">
+                                            <form style="display: inline-block;" action="{{ route('frontend.tour.city.destroy', [$country->id, $item->id]) }}" method="post">
                                                 {!! csrf_field() !!}
                                                 <input type="hidden" name="_method" value="DELETE"/>
                                                 <button class="btn btn-outline-danger" title="@lang('labels.general.buttons.delete')"><i
@@ -62,6 +62,19 @@
         </div><!--card-body-->
     </div><!--card-->
 
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="float-left">
+                {!! $items->links() !!}
+            </div>
+        </div><!--col-->
+        <div class="col-3">
+            <div class="float-right">
+                {!! $items->total() !!} {{ trans_choice('labels.general.table.total', $items->total()) }}
+            </div>
+        </div><!--col-->
+    </div><!--row-->
+
     @if($deleted->count() > 0)
 
         <div class="card mb-4">
@@ -69,7 +82,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="text-danger mb-0 mr-1">@lang('labels.frontend.tours.city.deleted')</h6>
+                            <h6 class="text-danger mb-0 mr-1"><i class="far fa-trash-alt"></i> @lang('labels.general.deleted')</h6>
                         </div>
                     </div><!--col-->
                 </div><!--row-->

@@ -16,10 +16,13 @@ class TypeController extends Controller
 
     public function index()
     {
-        $tour_types = TourType::all();
+        $orderBy = 'name';
+        $sort = 'asc';
+
+        $items = TourType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourType::onlyTrashed()->get();
 
-        return view('frontend.tour.type.index', compact('tour_types','deleted'));
+        return view('frontend.tour.type.index', compact('items','deleted'));
     }
 
     public function show($id)
