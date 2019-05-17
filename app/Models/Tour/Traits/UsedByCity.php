@@ -5,6 +5,7 @@ namespace App\Models\Tour\Traits;
 
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCountry;
+use Illuminate\Http\Request;
 
 /**
  * Class UsedByCity
@@ -67,4 +68,16 @@ trait UsedByCity
             }
         }
     }
+
+//    public function getCityAttribute()
+//    {
+//        $cities = TourCity::all()->pluck('name', 'id')->toArray();
+//
+//        if (in_array($this->city_id, array_keys($cities))) {
+//            return ucwords($cities[$this->city_id]);
+//        }
+//
+//        return 'N/A';
+//    }
+
 }

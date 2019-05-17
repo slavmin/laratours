@@ -7,7 +7,6 @@ use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
-use App\Models\Tour\TourCity;
 
 class MuseumController extends Controller
 {
@@ -43,7 +42,7 @@ class MuseumController extends Controller
 
         $cities_select = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.museum.index', compact('items', 'cities_names', 'cities_select','deleted'))
+        return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select','deleted'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
@@ -61,7 +60,9 @@ class MuseumController extends Controller
 
         $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.museum.create', compact('cities_options'))->with('city_id', (int)$city_id);
+        return view('frontend.tour.object.create', compact('cities_options'))
+            ->with('city_id', (int)$city_id)
+            ->with('object', 'museum');
     }
 
     public function store(Request $request)
@@ -71,7 +72,7 @@ class MuseumController extends Controller
             'city_id' => 'exists:tour_cities,id',
         ]);
 
-        $museum = new TourMuseum($request->only('name', 'city_id', 'description', 'qnt'));
+        $museum = new TourMuseum($request->all());
 
         $museum->save();
 
@@ -91,7 +92,7 @@ class MuseumController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.museum.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'));
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))->with('object', 'museum');
     }
 
 
@@ -112,7 +113,7 @@ class MuseumController extends Controller
 
         $museum = TourMuseum::findOrFail($id);
 
-        $museum->update($request->only('name', 'city_id', 'description', 'qnt'));
+        $museum->update($request->all());
 
         $museum->saveObjectAttributes($request->get('attribute'));
 
@@ -159,11 +160,10 @@ class MuseumController extends Controller
     }
 
 
-    public function getCityId(Request $request)
+    public static function getCityId(Request $request)
     {
         $city_ids = TourMuseum::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
         && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
-
 }

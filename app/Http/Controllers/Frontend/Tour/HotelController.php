@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
-use App\Models\Tour\TourCity;
 use App\Models\Tour\TourHotelCategory;
 use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
@@ -42,7 +41,7 @@ class HotelController extends Controller
 
         $cities_select = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.hotel.index', compact('items','cities_names', 'cities_select','deleted'))
+        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
@@ -61,7 +60,9 @@ class HotelController extends Controller
 
         $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.hotel.create', compact('cities_options', 'hotel_categories'))->with('city_id', (int)$city_id);
+        return view('frontend.tour.object.create', compact('cities_options', 'hotel_categories'))
+            ->with('city_id', (int)$city_id)
+            ->with('object', 'hotel');
     }
 
     public function store(Request $request)
@@ -76,7 +77,7 @@ class HotelController extends Controller
 
         $tour_hotel->save();
 
-        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
+        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'))->with('object', 'hotel');
     }
 
 
@@ -94,7 +95,7 @@ class HotelController extends Controller
 
         $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.hotel.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'));
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'));
     }
 
 
@@ -162,7 +163,7 @@ class HotelController extends Controller
     }
 
 
-    public function getCityId(Request $request)
+    public static function getCityId(Request $request)
     {
         $city_ids = TourHotel::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
-use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,7 +40,7 @@ class MealController extends Controller
 
         $cities_select = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.meal.index', compact('items','cities_names', 'cities_select','deleted'))
+        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
@@ -58,7 +57,9 @@ class MealController extends Controller
         $city_id = $this->getCityId($request);
         $cities_options = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.meal.create', compact('cities_options'))->with('city_id', (int)$city_id);
+        return view('frontend.tour.object.create', compact('cities_options'))
+            ->with('city_id', (int)$city_id)
+            ->with('object', 'meal');
     }
 
     public function store(Request $request)
@@ -68,7 +69,7 @@ class MealController extends Controller
             'city_id' => 'exists:tour_cities,id',
         ]);
 
-        $tour_meal = new TourMeal($request->only('name', 'city_id', 'description', 'qnt'));
+        $tour_meal = new TourMeal($request->all());
 
         $tour_meal->save();
 
@@ -88,7 +89,7 @@ class MealController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.meal.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'));
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))->with('object', 'meal');
     }
 
 
@@ -109,7 +110,7 @@ class MealController extends Controller
 
         $tour_meal = TourMeal::findOrFail($id);
 
-        $tour_meal->update($request->only('name', 'city_id', 'description', 'qnt'));
+        $tour_meal->update($request->all());
 
         $tour_meal->saveObjectAttributes($request->get('attribute'));
 
@@ -155,7 +156,7 @@ class MealController extends Controller
     }
 
 
-    public function getCityId(Request $request)
+    public static function getCityId(Request $request)
     {
         $city_ids = TourMeal::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
