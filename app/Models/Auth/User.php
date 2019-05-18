@@ -12,6 +12,7 @@ use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Image\Manipulations;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User.
@@ -23,7 +24,8 @@ class User extends BaseUser implements HasMedia
         UserRelationship,
         UserScope,
         HasMediaTrait,
-        UserHasTeams;
+        UserHasTeams,
+        HasApiTokens;
 
 
     public function registerMediaCollections()

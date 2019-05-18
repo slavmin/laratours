@@ -375,7 +375,7 @@ return [
                 'management' => 'Транспорт',
                 'deleted' => 'Транспорт для удаления',
                 'attributes' => [
-                    'create' => 'Тип билета',
+                    'create' => 'Тип транспорта',
                 ],
                 'table' => [
                     'name' => 'Имя',
