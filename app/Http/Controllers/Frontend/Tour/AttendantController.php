@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Tour;
 
+use App\Exceptions\GeneralException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourAttendant;
@@ -17,7 +18,9 @@ class AttendantController extends Controller
         $sort = 'asc';
 
         $items = TourAttendant::orderBy($orderBy, $sort)->paginate();
-        return view('frontend.tour.attendant.index', compact('items'));
+        $deleted = TourAttendant::onlyTrashed()->get();
+
+        return view('frontend.tour.attendant.index', compact('items', 'deleted'));
     }
 
     public function show($id)
@@ -74,5 +77,33 @@ class AttendantController extends Controller
         $attendant->delete();
 
         return redirect()->route('frontend.tour.attendant.index')->withFlashWarning(__('alerts.general.deleted'));
+    }
+
+    public function restore($id)
+    {
+        $attendant = TourAttendant::withTrashed()->find($id);
+
+        if ($attendant->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        if ($attendant->restore()) {
+            return redirect()->route('frontend.tour.attendant.index')->withFlashSuccess(__('alerts.general.restored'));
+        }
+
+        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    }
+
+    public function delete($id)
+    {
+        $attendant = TourAttendant::withTrashed()->find($id);
+
+        if ($attendant->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        $attendant->forceDelete();
+
+        return redirect()->route('frontend.tour.attendant.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
     }
 }

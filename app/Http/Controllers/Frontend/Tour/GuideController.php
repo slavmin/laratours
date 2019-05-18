@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Tour;
 
+use App\Exceptions\GeneralException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourGuide;
@@ -17,7 +18,9 @@ class GuideController extends Controller
         $sort = 'asc';
 
         $items = TourGuide::orderBy($orderBy, $sort)->paginate();
-        return view('frontend.tour.guide.index', compact('items'));
+        $deleted = TourGuide::onlyTrashed()->get();
+
+        return view('frontend.tour.guide.index', compact('items', 'deleted'));
     }
 
     public function show($id)
@@ -74,5 +77,33 @@ class GuideController extends Controller
         $guide->delete();
 
         return redirect()->route('frontend.tour.guide.index')->withFlashWarning(__('alerts.general.deleted'));
+    }
+
+    public function restore($id)
+    {
+        $guide = TourGuide::withTrashed()->find($id);
+
+        if ($guide->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        if ($guide->restore()) {
+            return redirect()->route('frontend.tour.guide.index')->withFlashSuccess(__('alerts.general.restored'));
+        }
+
+        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    }
+
+    public function delete($id)
+    {
+        $guide = TourGuide::withTrashed()->find($id);
+
+        if ($guide->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        $guide->forceDelete();
+
+        return redirect()->route('frontend.tour.guide.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
     }
 }

@@ -130,9 +130,19 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
         // Tour Guides Management
         Route::resource('guide', \GuideController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
+        Route::group(['prefix' => 'guide/{guide}'], function () {
+            Route::get('restore', [GuideController::class, 'restore'])->name('guide.restore');
+            Route::delete('delete', [GuideController::class, 'delete'])->name('guide.delete-permanently');
+        });
 
         // Tour Attendants Management
         Route::resource('attendant', \AttendantController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
+        Route::group(['prefix' => 'attendant/{attendant}'], function () {
+            Route::get('restore', [AttendantController::class, 'restore'])->name('attendant.restore');
+            Route::delete('delete', [AttendantController::class, 'delete'])->name('attendant.delete-permanently');
+        });
 
     });
 });
