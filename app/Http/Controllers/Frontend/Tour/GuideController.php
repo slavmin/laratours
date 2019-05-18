@@ -20,7 +20,8 @@ class GuideController extends Controller
         $items = TourGuide::orderBy($orderBy, $sort)->paginate();
         $deleted = TourGuide::onlyTrashed()->get();
 
-        return view('frontend.tour.guide.index', compact('items', 'deleted'));
+        return view('frontend.tour.guide.index', compact('items', 'deleted'))
+            ->with('object', 'guide');
     }
 
     public function show($id)

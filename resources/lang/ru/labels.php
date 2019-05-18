@@ -32,6 +32,8 @@ return [
             'delete-permanently' => 'Удалить навсегда',
         ],
         'table' => [
+            'name' => 'Имя',
+            'description' => 'Описание',
             'sort' => 'Позиция',
             'total' => 'всего|всего',
         ],

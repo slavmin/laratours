@@ -20,7 +20,8 @@ class AttendantController extends Controller
         $items = TourAttendant::orderBy($orderBy, $sort)->paginate();
         $deleted = TourAttendant::onlyTrashed()->get();
 
-        return view('frontend.tour.attendant.index', compact('items', 'deleted'));
+        return view('frontend.tour.attendant.index', compact('items', 'deleted'))
+            ->with('object', 'attendant');
     }
 
     public function show($id)

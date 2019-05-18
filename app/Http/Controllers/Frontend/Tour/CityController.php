@@ -30,7 +30,9 @@ class CityController extends Controller
         $items = TourCity::where('country_id', $country_id)->orderBy($orderBy, $sort)->paginate();
         $deleted = TourCity::where('country_id', $country_id)->onlyTrashed()->get();
 
-        return view('frontend.tour.city.index', compact('items', 'deleted'))->with('country', $country);
+        return view('frontend.tour.city.index', compact('items', 'deleted'))
+            ->with('country', $country)
+            ->with('object', 'city');
     }
 
     public function show()

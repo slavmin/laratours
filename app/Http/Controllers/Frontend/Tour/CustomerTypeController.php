@@ -22,7 +22,8 @@ class CustomerTypeController extends Controller
         $items = TourCustomerType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourCustomerType::onlyTrashed()->get();
 
-        return view('frontend.tour.customer.type.index', compact('items','deleted'));
+        return view('frontend.tour.customer.type.index', compact('items','deleted'))
+            ->with('object', 'customer-type');
     }
 
     public function show($id)

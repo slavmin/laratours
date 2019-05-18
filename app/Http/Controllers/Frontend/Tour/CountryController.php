@@ -26,7 +26,8 @@ class CountryController extends Controller
 
         $deleted = TourCountry::onlyTrashed()->withCount('cities')->get();
 
-        return view('frontend.tour.country.index', compact('items', 'deleted'));
+        return view('frontend.tour.country.index', compact('items', 'deleted'))
+            ->with('object', 'country');
     }
 
     public function show($id)

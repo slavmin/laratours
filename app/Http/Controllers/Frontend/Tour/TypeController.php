@@ -22,7 +22,8 @@ class TypeController extends Controller
         $items = TourType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourType::onlyTrashed()->get();
 
-        return view('frontend.tour.type.index', compact('items','deleted'));
+        return view('frontend.tour.type.index', compact('items','deleted'))
+            ->with('object', 'type');
     }
 
     public function show($id)

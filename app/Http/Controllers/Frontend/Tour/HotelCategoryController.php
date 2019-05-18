@@ -22,7 +22,8 @@ class HotelCategoryController extends Controller
         $items = TourHotelCategory::orderBy($orderBy, $sort)->paginate();
         $deleted = TourHotelCategory::onlyTrashed()->orderBy('name', 'asc')->get();
 
-        return view('frontend.tour.hotel.category.index', compact('items','deleted'));
+        return view('frontend.tour.hotel.category.index', compact('items','deleted'))
+            ->with('object', 'hotel-category');
     }
 
     public function show($id)
