@@ -26,13 +26,15 @@ class CityController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourCity::getModelAliasAttribute();
+
         $country = TourCountry::findOrFail($country_id);
         $items = TourCity::where('country_id', $country_id)->orderBy($orderBy, $sort)->paginate();
         $deleted = TourCity::where('country_id', $country_id)->onlyTrashed()->get();
 
         return view('frontend.tour.city.index', compact('items', 'deleted'))
             ->with('country', $country)
-            ->with('object', 'city');
+            ->with('object', $model_alias);
     }
 
     public function show()

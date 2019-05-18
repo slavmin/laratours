@@ -27,6 +27,8 @@ class HotelController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourHotel::getModelAliasAttribute();
+
         if (!is_null($city_id)) {
 
             $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -47,7 +49,7 @@ class HotelController extends Controller
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('object', 'hotel');
+            ->with('object', $model_alias);
     }
 
     public function show($id)
@@ -57,6 +59,8 @@ class HotelController extends Controller
 
     public function create(Request $request)
     {
+        $model_alias = TourHotel::getModelAliasAttribute();
+
         $city_id = $this->getCityId($request);
         $cities_options = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
@@ -64,7 +68,7 @@ class HotelController extends Controller
 
         return view('frontend.tour.object.create', compact('cities_options', 'hotel_categories'))
             ->with('city_id', (int)$city_id)
-            ->with('object', 'hotel');
+            ->with('object', $model_alias);
     }
 
     public function store(Request $request)
@@ -85,6 +89,8 @@ class HotelController extends Controller
 
     public function edit($id)
     {
+        $model_alias = TourHotel::getModelAliasAttribute();
+
         $item = TourHotel::findOrFail($id);
 
         $attributes = $item->objectables->toArray();
@@ -97,7 +103,8 @@ class HotelController extends Controller
 
         $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))->with('object', 'hotel');
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))
+            ->with('object', $model_alias);
     }
 
 

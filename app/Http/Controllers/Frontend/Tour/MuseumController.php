@@ -26,6 +26,8 @@ class MuseumController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourMuseum::getModelAliasAttribute();
+
         if (!is_null($city_id)) {
 
             $items = TourMuseum::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -46,7 +48,7 @@ class MuseumController extends Controller
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('object', 'museum');
+            ->with('object', $model_alias);
     }
 
     public function show($id)
@@ -56,13 +58,15 @@ class MuseumController extends Controller
 
     public function create(Request $request)
     {
+        $model_alias = TourMuseum::getModelAliasAttribute();
+
         $city_id = $this->getCityId($request);
 
         $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.create', compact('cities_options'))
             ->with('city_id', (int)$city_id)
-            ->with('object', 'museum');
+            ->with('object', $model_alias);
     }
 
     public function store(Request $request)
@@ -82,6 +86,8 @@ class MuseumController extends Controller
 
     public function edit($id)
     {
+        $model_alias = TourMuseum::getModelAliasAttribute();
+
         $item = TourMuseum::findOrFail($id);
 
         $attributes = $item->objectables->toArray();
@@ -92,7 +98,8 @@ class MuseumController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))->with('object', 'museum');
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+            ->with('object', $model_alias);
     }
 
 

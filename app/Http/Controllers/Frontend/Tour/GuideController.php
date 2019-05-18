@@ -17,11 +17,13 @@ class GuideController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourGuide::getModelAliasAttribute();
+
         $items = TourGuide::orderBy($orderBy, $sort)->paginate();
         $deleted = TourGuide::onlyTrashed()->get();
 
         return view('frontend.tour.guide.index', compact('items', 'deleted'))
-            ->with('object', 'guide');
+            ->with('object', $model_alias);
     }
 
     public function show($id)

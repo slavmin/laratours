@@ -17,11 +17,13 @@ class AttendantController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourAttendant::getModelAliasAttribute();
+
         $items = TourAttendant::orderBy($orderBy, $sort)->paginate();
         $deleted = TourAttendant::onlyTrashed()->get();
 
         return view('frontend.tour.attendant.index', compact('items', 'deleted'))
-            ->with('object', 'attendant');
+            ->with('object', $model_alias);
     }
 
     public function show($id)

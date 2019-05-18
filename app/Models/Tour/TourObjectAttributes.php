@@ -18,6 +18,13 @@ class TourObjectAttributes extends Model
         'extra' => 'array'
     ];
 
+    protected $appends = ['model_alias'];
+
+    public static function getModelAliasAttribute()
+    {
+        return 'object-attributes';
+    }
+
     public function objectable()
     {
         return $this->morphTo();

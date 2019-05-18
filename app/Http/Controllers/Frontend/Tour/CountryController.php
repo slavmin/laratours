@@ -20,6 +20,8 @@ class CountryController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourCountry::getModelAliasAttribute();
+
         $items = TourCountry::withCount(['cities' => function ($query) {
             $query->whereNull('deleted_at');
         }])->orderBy($orderBy, $sort)->paginate();
@@ -27,7 +29,7 @@ class CountryController extends Controller
         $deleted = TourCountry::onlyTrashed()->withCount('cities')->get();
 
         return view('frontend.tour.country.index', compact('items', 'deleted'))
-            ->with('object', 'country');
+            ->with('object', $model_alias);
     }
 
     public function show($id)

@@ -32,6 +32,8 @@ class TransportController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourTransport::getModelAliasAttribute();
+
         if (!is_null($city_id)) {
 
             $items = TourTransport::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -52,7 +54,7 @@ class TransportController extends Controller
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('object', 'transport');
+            ->with('object', $model_alias);
     }
 
     /**
@@ -63,13 +65,15 @@ class TransportController extends Controller
      */
     public function create(Request $request)
     {
+        $model_alias = TourTransport::getModelAliasAttribute();
+
         $city_id = $this->getCityId($request);
 
         $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.create', compact('cities_options'))
             ->with('city_id', (int)$city_id)
-            ->with('object', 'transport');
+            ->with('object', $model_alias);
     }
 
     /**
@@ -111,6 +115,8 @@ class TransportController extends Controller
      */
     public function edit($id)
     {
+        $model_alias = TourTransport::getModelAliasAttribute();
+
         $item = TourTransport::findOrFail($id);
 
         $attributes = $item->objectables->toArray();
@@ -121,7 +127,8 @@ class TransportController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))->with('object', 'transport');
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+            ->with('object', $model_alias);
     }
 
     /**

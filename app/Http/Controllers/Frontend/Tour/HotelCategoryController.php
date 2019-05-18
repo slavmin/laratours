@@ -19,11 +19,13 @@ class HotelCategoryController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourHotelCategory::getModelAliasAttribute();
+
         $items = TourHotelCategory::orderBy($orderBy, $sort)->paginate();
         $deleted = TourHotelCategory::onlyTrashed()->orderBy('name', 'asc')->get();
 
         return view('frontend.tour.hotel.category.index', compact('items','deleted'))
-            ->with('object', 'hotel-category');
+            ->with('object', $model_alias);
     }
 
     public function show($id)

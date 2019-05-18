@@ -26,17 +26,8 @@
                                     <td>{{$item->name}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.'.$object.'.restore', [$item->id]) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.restore')">
-                                                <i class="fas fa-sync"></i></a>
-                                            <form style="display: inline-block;" action="{{ route('frontend.tour.'.$object.'.delete-permanently', [$item->id]) }}" method="post">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" name="_method" value="DELETE"/>
-                                                <button class="btn btn-outline-danger" title="@lang('labels.general.buttons.delete-permanently')"><i
-                                                            class="far fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-
-                                        </div><!--btn-toolbar-->
+                                            {!! $item->action_buttons !!}
+                                        </div><!--float-right-->
                                     </td>
                                 </tr>
                             @endforeach

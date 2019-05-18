@@ -19,11 +19,13 @@ class TypeController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourType::getModelAliasAttribute();
+
         $items = TourType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourType::onlyTrashed()->get();
 
         return view('frontend.tour.type.index', compact('items','deleted'))
-            ->with('object', 'type');
+            ->with('object', $model_alias);
     }
 
     public function show($id)

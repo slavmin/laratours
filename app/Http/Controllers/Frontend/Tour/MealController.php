@@ -26,6 +26,8 @@ class MealController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourMeal::getModelAliasAttribute();
+
         if (!is_null($city_id)) {
 
             $items = TourMeal::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -46,7 +48,7 @@ class MealController extends Controller
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('object', 'meal');
+            ->with('object', $model_alias);
     }
 
     public function show($id)
@@ -56,12 +58,14 @@ class MealController extends Controller
 
     public function create(Request $request)
     {
+        $model_alias = TourMeal::getModelAliasAttribute();
+
         $city_id = $this->getCityId($request);
         $cities_options = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.create', compact('cities_options'))
             ->with('city_id', (int)$city_id)
-            ->with('object', 'meal');
+            ->with('object', $model_alias);
     }
 
     public function store(Request $request)
@@ -81,6 +85,8 @@ class MealController extends Controller
 
     public function edit($id)
     {
+        $model_alias = TourMeal::getModelAliasAttribute();
+
         $item = TourMeal::findOrFail($id);
 
         $attributes = $item->objectables->toArray();
@@ -91,7 +97,8 @@ class MealController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))->with('object', 'meal');
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+            ->with('object', $model_alias);
     }
 
 

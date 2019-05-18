@@ -31,17 +31,8 @@
                                     <td>{{$item->name}}</td>
                                     <td>
                                         <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            <a href="{{ route('frontend.tour.type.edit', $item->id) }}" class="btn btn-outline-success ml-1" data-toggle="tooltip" title="@lang('labels.general.buttons.update')">
-                                                <i class="fas fa-edit"></i></a>
-                                            <form style="display: inline-block;" action="{{ route('frontend.tour.type.destroy', $item->id) }}" method="post">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" name="_method" value="DELETE"/>
-                                                <button class="btn btn-outline-danger" title="@lang('labels.general.buttons.delete')"><i
-                                                            class="far fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-
-                                        </div><!--btn-toolbar-->
+                                            {!! $item->action_buttons !!}
+                                        </div><!--float-right-->
                                     </td>
                                 </tr>
                             @endforeach
@@ -54,18 +45,7 @@
         </div><!--card-body-->
     </div><!--card-->
 
-    <div class="row mb-4">
-        <div class="col-9">
-            <div class="float-left">
-                {!! $items->links() !!}
-            </div>
-        </div><!--col-->
-        <div class="col-3">
-            <div class="float-right">
-                {!! $items->total() !!} {{ trans_choice('labels.general.table.total', $items->total()) }}
-            </div>
-        </div><!--col-->
-    </div><!--row-->
+    @include('frontend.tour.includes.pagination-row')
 
     @include('frontend.tour.includes.trash-bin')
 

@@ -19,11 +19,13 @@ class CustomerTypeController extends Controller
         $orderBy = 'name';
         $sort = 'asc';
 
+        $model_alias = TourCustomerType::getModelAliasAttribute();
+
         $items = TourCustomerType::orderBy($orderBy, $sort)->paginate();
         $deleted = TourCustomerType::onlyTrashed()->get();
 
         return view('frontend.tour.customer.type.index', compact('items','deleted'))
-            ->with('object', 'customer-type');
+            ->with('object', $model_alias);
     }
 
     public function show($id)
