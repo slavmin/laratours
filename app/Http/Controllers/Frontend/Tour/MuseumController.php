@@ -21,7 +21,7 @@ class MuseumController extends Controller
 
         $city_name = TourMuseum::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : '';
+        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
         $orderBy = 'name';
         $sort = 'asc';

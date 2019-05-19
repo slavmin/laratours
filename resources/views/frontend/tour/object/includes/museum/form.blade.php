@@ -29,7 +29,7 @@
 
             <div class="col-md-10">
                 {{ html()->select('city_id')
-                ->value($item->city_id??'')
+                ->value($item->city_id??$city_id)
                 ->options($cities_options)->class('form-control') }}
             </div><!--col-->
         </div><!--form-group-->
