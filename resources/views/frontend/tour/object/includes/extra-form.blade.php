@@ -1,4 +1,4 @@
-{{ html()->form('PATCH', route('frontend.tour.'.$object.'.update', $item->id))->class('form-horizontal')->open() }}
+{{ html()->form($method, $route)->class('form-horizontal')->open() }}
 
 {{ html()->hidden('attribute['.$attribute['id'].'][id]')
     ->value($attribute['id']??'') }}
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <h6 class="card-title mb-0">
-                    @lang('labels.frontend.tours.'.$object.'.attributes.create')
+                    @lang('labels.frontend.tours.'.$model_alias.'.attributes.create')
                 </h6>
             </div><!--col-->
         </div><!--row-->
@@ -40,11 +40,10 @@
                         ->for('name') }}
 
                     <div class="col-md-10">
-                        {{ html()->text('attribute['.$attribute['id'].'][name]')
+                        {{ html()->text('attribute['.$attribute['id'].'][name]', $attribute['name']??'')
                             ->class('form-control')
                             ->placeholder(__('validation.attributes.frontend.general.name'))
                             ->attribute('maxlength', 191)
-                            ->value($attribute['name']??'')
                             ->required()
                             ->autofocus() }}
                     </div><!--col-->
@@ -61,13 +60,10 @@
                         ->for('price') }}
 
                     <div class="col-md-10">
-                        {{ html()->input()
-                            ->name('attribute['.$attribute['id'].'][price]')
-                            ->type('number')
+                        {{ html()->input('number', 'attribute['.$attribute['id'].'][price]', $attribute['price']??'')
                             ->class('form-control')
                             ->placeholder(__('validation.attributes.frontend.general.price'))
                             ->attribute('maxlength', 191)
-                            ->value($attribute['price']??'')
                             ->autofocus() }}
                     </div><!--col-->
                 </div><!--form-group-->
@@ -83,13 +79,10 @@
                         ->for('qnt') }}
 
                     <div class="col-md-10">
-                        {{ html()->input()
-                            ->name('attribute['.$attribute['id'].'][qnt]')
-                            ->type('number')
+                        {{ html()->input('number', 'attribute['.$attribute['id'].'][qnt]', $attribute['qnt']??'')
                             ->class('form-control')
                             ->placeholder(__('validation.attributes.frontend.general.qnt'))
                             ->attribute('maxlength', 191)
-                            ->value($attribute['qnt']??'')
                             ->autofocus() }}
                     </div><!--col-->
                 </div><!--form-group-->
@@ -105,11 +98,10 @@
                         ->for('description') }}
 
                     <div class="col-md-10">
-                        {{ html()->text('attribute['.$attribute['id'].'][description]')
+                        {{ html()->text('attribute['.$attribute['id'].'][description]', $attribute['description']??'')
                             ->class('form-control')
                             ->placeholder(__('validation.attributes.frontend.general.description'))
                             ->attribute('maxlength', 191)
-                            ->value($attribute['description']??'')
                             ->autofocus() }}
                     </div><!--col-->
                 </div><!--form-group-->
@@ -122,7 +114,7 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                {{ form_cancel(route('frontend.tour.'.$object.'.index'), __('buttons.general.cancel')) }}
+                {{ form_cancel($cancel_route, __('buttons.general.cancel')) }}
             </div><!--col-->
 
             <div class="col text-right">

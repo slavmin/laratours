@@ -54,7 +54,7 @@ class TransportController extends Controller
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('object', $model_alias);
+            ->with('model_alias', $model_alias);
     }
 
     /**
@@ -72,8 +72,13 @@ class TransportController extends Controller
         $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.create', compact('cities_options'))
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('item', [])
             ->with('city_id', (int)$city_id)
-            ->with('object', $model_alias);
+            ->with('model_alias', $model_alias);
     }
 
     /**
@@ -128,7 +133,11 @@ class TransportController extends Controller
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
-            ->with('object', $model_alias);
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('model_alias', $model_alias);
     }
 
     /**

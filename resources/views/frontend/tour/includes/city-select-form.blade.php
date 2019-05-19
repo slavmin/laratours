@@ -6,7 +6,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="text-info mb-0 mr-1">{{ $city_name }}</h6>
                     <div class="float-right">
-                        {{ html()->form('GET', route('frontend.tour.'.$object.'.index'))->class('form-horizontal')->open() }}
+                        {{ html()->form('GET', route('frontend.tour.'.$model_alias.'.index'))->class('form-horizontal')->open() }}
                         <div class="form-row align-items-center float-right">
                             <div class="col-auto">
                                 <div class="form-group mb-0">
