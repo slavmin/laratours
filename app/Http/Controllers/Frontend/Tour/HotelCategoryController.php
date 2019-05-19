@@ -35,7 +35,15 @@ class HotelCategoryController extends Controller
 
     public function create()
     {
-        return view('frontend.tour.hotel.category.create');
+        $model_alias = TourHotelCategory::getModelAliasAttribute();
+
+        return view('frontend.tour.hotel.category.create')
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('item', [])
+            ->with('model_alias', $model_alias);
     }
 
     public function store(Request $request)
@@ -55,9 +63,16 @@ class HotelCategoryController extends Controller
 
     public function edit($id)
     {
-        $hotel_category = TourHotelCategory::findOrFail($id);
+        $model_alias = TourHotelCategory::getModelAliasAttribute();
 
-        return view('frontend.tour.hotel.category.edit', compact('hotel_category'));
+        $item = TourHotelCategory::findOrFail($id);
+
+        return view('frontend.tour.hotel.category.edit', compact('hotel_category'), compact('item'))
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('model_alias', $model_alias);
     }
 
 

@@ -44,7 +44,16 @@ class CityController extends Controller
 
     public function create($country_id)
     {
-        return view('frontend.tour.city.create')->with('country_id', $country_id);
+        $model_alias = TourCity::getModelAliasAttribute();
+
+        return view('frontend.tour.city.create')->with('country_id', $country_id)
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.'.$model_alias.'.store', $country_id))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index', $country_id))
+            ->with('item', [])
+            ->with('model_alias', $model_alias);
+
     }
 
     public function store(Request $request, $country_id)
@@ -66,9 +75,17 @@ class CityController extends Controller
 
     public function edit($country_id, $city_id)
     {
-        $city = TourCity::findOrFail($city_id);
+        $model_alias = TourCity::getModelAliasAttribute();
 
-        return view('frontend.tour.city.edit', compact('city'))->with('country_id', $country_id);
+        $item = TourCity::findOrFail($city_id);
+
+        return view('frontend.tour.city.edit', compact('item'))
+            ->with('country_id', $country_id)
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$country_id, $item->id]))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index', [$country_id]))
+            ->with('model_alias', $model_alias);
     }
 
 

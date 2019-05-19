@@ -33,7 +33,15 @@ class AttendantController extends Controller
 
     public function create()
     {
-        return view('frontend.tour.attendant.create');
+        $model_alias = TourAttendant::getModelAliasAttribute();
+
+        return view('frontend.tour.attendant.create')
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('item', [])
+            ->with('model_alias', $model_alias);
     }
 
     public function store(Request $request)
@@ -53,9 +61,16 @@ class AttendantController extends Controller
 
     public function edit($id)
     {
+        $model_alias = TourAttendant::getModelAliasAttribute();
+
         $item = TourAttendant::findOrFail($id);
 
-        return view('frontend.tour.attendant.edit', compact('item'));
+        return view('frontend.tour.attendant.edit', compact('item'))
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('model_alias', $model_alias);
     }
 
 

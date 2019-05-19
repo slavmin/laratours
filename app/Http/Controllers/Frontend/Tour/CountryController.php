@@ -39,7 +39,15 @@ class CountryController extends Controller
 
     public function create()
     {
-        return view('frontend.tour.country.create');
+        $model_alias = TourCountry::getModelAliasAttribute();
+
+        return view('frontend.tour.country.create')
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('item', [])
+            ->with('model_alias', $model_alias);
     }
 
     public function store(Request $request)
@@ -59,9 +67,16 @@ class CountryController extends Controller
 
     public function edit($id)
     {
-        $country = TourCountry::findOrFail($id);
+        $model_alias = TourCountry::getModelAliasAttribute();
 
-        return view('frontend.tour.country.edit', compact('country'));
+        $item = TourCountry::findOrFail($id);
+
+        return view('frontend.tour.country.edit', compact('item'))
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('model_alias', $model_alias);
     }
 
 

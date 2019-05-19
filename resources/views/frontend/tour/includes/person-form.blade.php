@@ -23,32 +23,16 @@
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
-            {{ html()->label(__('labels.frontend.tours.city.name'))
+            {{ html()->label(__('validation.attributes.frontend.general.price'))
                 ->class('col-md-2 form-control-label')
-                ->for('name') }}
+                ->for('price') }}
 
             <div class="col-md-10">
-                {{ html()->select('city_id')
-                ->value($item->city_id??'')
-                ->options($cities_options)->class('form-control') }}
-            </div><!--col-->
-        </div><!--form-group-->
-
-    </div><!--col-->
-</div><!--row-->
-
-<div class="row mt-4">
-    <div class="col">
-        <div class="form-group row">
-            {{ html()->label(__('validation.attributes.frontend.general.qnt'))
-                ->class('col-md-2 form-control-label')
-                ->for('qnt') }}
-
-            <div class="col-md-10">
-                {{ html()->input('number', 'qnt', $item->qnt??'')
+                {{ html()->input('number', 'price', $item->price??'')
                     ->class('form-control')
-                    ->placeholder(__('validation.attributes.frontend.general.qnt'))
-                    ->attribute('maxlength', 191) }}
+                    ->placeholder(__('validation.attributes.frontend.general.price'))
+                    ->attribute('maxlength', 191)
+                    ->autofocus() }}
             </div><!--col-->
         </div><!--form-group-->
 

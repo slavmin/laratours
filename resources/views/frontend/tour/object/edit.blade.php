@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col">
                             <h5 class="card-title mb-0">
                                 @lang('labels.frontend.tours.'.$model_alias.'.edit')
                             </h5>
