@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('frontend.tour.includes.city-select-form')
+    @include('frontend.tour.includes.city-type-select-form')
 
     <div class="card mb-4">
         <div class="card-body">
@@ -11,7 +11,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                            <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
+                            <a href="{{ route('frontend.tour.'.$model_alias.'.create') }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
                                 <i class="fas fa-plus"></i></a>
                         </div><!--btn-toolbar-->
                     </div>
@@ -26,8 +26,9 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.frontend.tours.'.$model_alias.'.table.name')</th>
+                                <th>@lang('labels.frontend.tours.'.$model_alias.'.table.type')</th>
                                 <th>@lang('labels.frontend.tours.tour.city')</th>
-                                <th>@lang('labels.frontend.tours.'.$model_alias.'.table.qnt')</th>
+                                <th>@lang('labels.frontend.tours.'.$model_alias.'.table.duration')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
                             </thead>
@@ -36,11 +37,16 @@
                                     <tr>
                                         <td>{{$item->name}}</td>
                                         <td>
+                                            @if (array_key_exists($item->tour_type_id, $tour_types))
+                                                <span class="text-secondary">{{$tour_types[$item->tour_type_id]}}</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if (array_key_exists($item->city_id, $cities_names))
                                                 <span class="text-secondary">{{$cities_names[$item->city_id]}}</span>
                                             @endif
                                         </td>
-                                        <td>{{$item->qnt}}</td>
+                                        <td>{{$item->duration}}</td>
                                         <td>
                                             <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                                                 {!! $item->action_buttons !!}

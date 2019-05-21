@@ -217,6 +217,7 @@ return [
             'general' => [
                 'name' => 'Название',
                 'description' => 'Описание',
+                'duration' => 'Дней',
                 'price' => 'Цена',
                 'qnt' => 'Кол-во',
                 'select' => 'Выбрать',

@@ -15,6 +15,7 @@
                 </div><!--col-->
             </div><!--row-->
 
+            @if(count($items)>0)
             <div class="row mt-4">
                 <div class="col">
                     <div class="table-responsive">
@@ -43,6 +44,7 @@
                     </div>
                 </div><!--col-->
             </div><!--row-->
+            @endif
 
         </div><!--card-body-->
     </div><!--card-->

@@ -53,6 +53,7 @@ return [
     ],
     'general' => [
         'cancel' => 'Отменa',
+        'reset' => 'Сброс',
         'continue' => 'Далее',
         'crud' => [
             'create' => 'Создать',

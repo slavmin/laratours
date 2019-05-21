@@ -23,4 +23,9 @@ class TourHotel extends Model
     {
         return 'hotel';
     }
+
+    public function tours()
+    {
+        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+    }
 }

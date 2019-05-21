@@ -25,4 +25,9 @@ class TourAttendant extends Model
     {
         return 'attendant';
     }
+
+    public function tours()
+    {
+        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+    }
 }

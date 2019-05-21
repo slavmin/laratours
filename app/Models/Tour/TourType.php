@@ -20,4 +20,14 @@ class TourType extends Model
     {
         return 'type';
     }
+
+
+    public static function getTourTypesAttribute($text = '')
+    {
+        $types = self::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+        $types_options = ['' => $text];
+        $types_options = array_replace($types_options, $types);
+
+        return $types_options;
+    }
 }

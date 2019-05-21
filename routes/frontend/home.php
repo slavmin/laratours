@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\TeamManageController;
 // Tour controllers
+use App\Http\Controllers\Frontend\Tour\TourController;
 use App\Http\Controllers\Frontend\Tour\TypeController;
 use App\Http\Controllers\Frontend\Tour\CustomerTypeController;
 use App\Http\Controllers\Frontend\Tour\HotelCategoryController;
@@ -55,6 +56,14 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
     // Tours Management
     Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
+
+        // Tours Management
+        Route::resource('tour', \TourController::class, ['except' => ['show']]);
+        // Handle Soft Deleted
+        Route::group(['prefix' => 'tour/{tour}'], function () {
+            Route::get('restore', [TourController::class, 'restore'])->name('tour.restore');
+            Route::delete('delete', [TourController::class, 'delete'])->name('tour.delete-permanently');
+        });
 
         // Tour types Management
         Route::resource('type', \TypeController::class, ['except' => ['show']]);

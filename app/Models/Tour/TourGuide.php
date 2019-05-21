@@ -17,12 +17,18 @@ class TourGuide extends Model
 
     protected $appends = ['model_alias'];
 
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     public static function getModelAliasAttribute()
     {
         return 'guide';
     }
 
-    protected $casts = [
-        'price' => 'float',
-    ];
+    public function tours()
+    {
+        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+    }
+
 }

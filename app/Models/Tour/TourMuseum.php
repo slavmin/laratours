@@ -23,4 +23,9 @@ class TourMuseum extends Model
     {
         return 'museum';
     }
+
+    public function tours()
+    {
+        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+    }
 }

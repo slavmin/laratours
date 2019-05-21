@@ -32,6 +32,8 @@
                        aria-haspopup="true" aria-expanded="false">@lang('labels.frontend.tours.management')</a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuTour">
+                        <a href="{{ route('frontend.tour.tour.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.tour.index')) }}">
+                            @lang('labels.frontend.tours.tour.management')</a>
                         <a href="{{ route('frontend.tour.type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.type.index')) }}">
                             @lang('labels.frontend.tours.type.management')</a>
                         <a href="{{ route('frontend.tour.customer-type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.customer-type.index')) }}">
