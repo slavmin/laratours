@@ -28,6 +28,13 @@ class Tour extends Model
         return 'tour';
     }
 
+    public static function findByUuid($uuid)
+    {
+        return self::uuid($uuid)->firstOrFail();
+    }
+    
+
+    // Tour model relations
 
     public function hotels()
     {
