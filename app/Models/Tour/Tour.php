@@ -32,7 +32,7 @@ class Tour extends Model
     {
         return self::uuid($uuid)->firstOrFail();
     }
-    
+
 
     // Tour model relations
 

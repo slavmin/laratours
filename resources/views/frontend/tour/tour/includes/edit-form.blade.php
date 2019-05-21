@@ -42,7 +42,7 @@
         <div class="form-group row">
             {{ html()->label(__('labels.frontend.tours.city.name'))
                 ->class('col-md-2 form-control-label')
-                ->for('name') }}
+                ->for('city_id') }}
 
             <div class="col-md-10">
                 {{ html()->select('city_id')
@@ -107,6 +107,7 @@
     </div><!--col-->
 </div><!--row-->--}}
 
+@if(count($hotel_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -125,7 +126,8 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
+@if(count($museum_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -144,7 +146,8 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
+@if(count($meal_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -163,7 +166,8 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
+@if(count($transport_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -182,7 +186,8 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
+@if(count($guide_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -201,7 +206,8 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
+@if(count($attendant_options)>0)
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -222,7 +228,7 @@
 
     </div><!--col-->
 </div><!--row-->
-
+@endif
 <hr>
 
 <div class="row mt-4">
