@@ -90,12 +90,7 @@ class TourController extends Controller
             ->with('model_alias', $model_alias);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -104,9 +99,12 @@ class TourController extends Controller
             'tour_type_id' => 'exists:tour_types,id',
         ]);
 
-        $tour = new Tour($request->all());
+        DB::transaction(function () use ($request) {
 
-        $tour->save();
+            $tour = new Tour($request->all());
+
+            $tour->save();
+        });
 
         return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.created'));
     }
