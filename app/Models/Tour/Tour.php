@@ -4,6 +4,7 @@ namespace App\Models\Tour;
 
 use App\Models\Tour\Traits\Attribute\ActionButtonsAttribute;
 use App\Models\Traits\Uuid;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 use App\Models\Traits\HasPagination;
@@ -68,12 +69,13 @@ class Tour extends Model
         return $this->morphedByMany('App\Models\Tour\TourGuide', 'tourable')->withTimestamps();
     }
 
-//    public function orders()
-//    {
-//        return $this->hasMany('App\Models\Tour\TourOrder', 'tour_id')->withTrashed();
-//    }
+    public function dates()
+    {
+        return $this->hasMany('App\Models\Tour\TourDate', 'tour_id');
+    }
 
 
+    // Get Tour attributes
     public static function getTourTypeIds()
     {
         return TourType::pluck('id')->all();
@@ -164,12 +166,4 @@ class Tour extends Model
             });
         });
     }
-
-//    public static function getOwnName()
-//    {
-//        $class_name = (new \ReflectionClass(get_called_class()))->getShortName();
-//        $arr = preg_split('/(?=[A-Z])/', $class_name, -1, PREG_SPLIT_NO_EMPTY);
-//        $out = str_replace('tour-', '', strtolower(implode('-', $arr)));
-//        return  $out;
-//    }
 }

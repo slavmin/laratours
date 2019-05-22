@@ -37,6 +37,44 @@
     </div><!--col-->
 </div><!--row-->
 
+<div class="row mt-4">
+    <div class="col">
+        <div class="form-group row">
+            {{ html()->label(__('validation.attributes.frontend.general.date'))
+                ->class('col-md-2 form-control-label')
+                ->for('dates[]') }}
+
+            <div class="col-md-10">
+                {{ html()->text('dates[]', $tour_dates[0]??'')
+                    ->class('form-control')
+                    ->placeholder(__('validation.attributes.frontend.general.date'))
+                    ->attribute('maxlength', 191)
+                    ->required() }}
+            </div><!--col-->
+        </div><!--form-group-->
+
+    </div><!--col-->
+</div><!--row-->
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="form-group row">
+            {{ html()->label(__('validation.attributes.frontend.general.date'))
+                ->class('col-md-2 form-control-label')
+                ->for('dates[]') }}
+
+            <div class="col-md-10">
+                {{ html()->text('dates[]', $tour_dates[1]??'')
+                    ->class('form-control')
+                    ->placeholder(__('validation.attributes.frontend.general.date'))
+                    ->attribute('maxlength', 191)
+                    ->required() }}
+            </div><!--col-->
+        </div><!--form-group-->
+
+    </div><!--col-->
+</div><!--row-->
+
 {{--<div class="row mt-4">
     <div class="col">
         <div class="form-group row">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Models\Tour\TourDate;
 use App\Models\Tour\TourType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -132,6 +133,7 @@ class TourController extends Controller
 
         $item = Tour::findOrFail($id);
 
+        $tour_dates = $item->dates->pluck('date');
 
         $cities_options = Tour::getAllCities();
 
@@ -152,7 +154,7 @@ class TourController extends Controller
         $attendant_options = Tour::getAttendantsOption();
 
 
-        return view('frontend.tour.tour.edit', compact('item', 'cities_options', 'tour_type_options', 'attributes', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
+        return view('frontend.tour.tour.edit', compact('item', 'tour_dates', 'attributes', 'cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
@@ -180,6 +182,16 @@ class TourController extends Controller
         }
 
         DB::transaction(function () use ($tour, $request) {
+
+            if(is_array($request->get('dates'))) {
+                $tour_dates = [];
+                foreach ($request->get('dates') as $date) {
+                    $tour_dates[] = ['date' => $date];
+                }
+                $tour->dates()->delete();
+                $tour->dates()->createMany($tour_dates);
+            }
+
             foreach ($tour->getAllAttributes() as $k => $v){
                 $input = !empty($request->get(substr($k, 0, -1).'_id')) ? $request->get(substr($k, 0, -1).'_id') : [];
                 $output = [];
