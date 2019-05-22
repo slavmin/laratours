@@ -37,7 +37,7 @@
     </div><!--col-->
 </div><!--row-->
 
-<div class="row mt-4">
+{{--<div class="row mt-4">
     <div class="col">
         <div class="form-group row">
             {{ html()->label(__('labels.frontend.tours.city.name'))
@@ -52,7 +52,28 @@
         </div><!--form-group-->
 
     </div><!--col-->
-</div><!--row-->
+</div><!--row-->--}}
+
+@if(count($cities_options)>0)
+    <div class="row mt-4">
+        <div class="col">
+            <div class="form-group row">
+                {{ html()->label(__('labels.frontend.tours.city.name'))
+                    ->class('col-md-2 form-control-label') }}
+
+                <div class="col-md-10">
+                    @foreach ($cities_options as $city_id => $city_name)
+                        <div class="custom-control custom-checkbox">
+                            {{ html()->checkbox('cities_list[]', in_array($city_id, $item->cities_list??[]), $city_id)->class('custom-control-input')->id('city_chk_' . $city_id) }}
+                            {{ html()->label($city_name)->class('custom-control-label')->for('city_chk_' . $city_id) }}
+                        </div>
+                    @endforeach
+                </div><!--col-->
+            </div><!--form-group-->
+
+        </div><!--col-->
+    </div><!--row-->
+@endif
 
 <div class="row mt-4">
     <div class="col">

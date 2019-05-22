@@ -42,8 +42,14 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if (array_key_exists($item->city_id, $cities_names))
-                                                <span class="text-secondary">{{$cities_names[$item->city_id]}}</span>
+                                            @if(!is_null($item->cities_list))
+                                                @foreach($item->cities_list as $city)
+                                                    @if (array_key_exists($city, $cities_names))
+                                                        <span class="text-secondary">{{$cities_names[$city]}}</span>
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                <span class="text-secondary">N/A</span>
                                             @endif
                                         </td>
                                         <td>{{$item->duration}}</td>

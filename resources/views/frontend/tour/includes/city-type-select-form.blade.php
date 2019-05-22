@@ -18,7 +18,7 @@
                                 </div><!--form-group-->
                             </div><!--col-->
 
-                            <div class="col-auto">
+                            {{--<div class="col-auto">
                                 <div class="form-group mb-0">
 
                                     {{ html()->select('city_id')
@@ -26,7 +26,7 @@
                                     ->options($cities_select)->class('form-control form-control-sm') }}
 
                                 </div><!--form-group-->
-                            </div><!--col-->
+                            </div><!--col-->--}}
 
                             <div class="col-auto">
                                 <div class="form-group mb-0">

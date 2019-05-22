@@ -11,14 +11,16 @@ use App\Models\Tour\Traits\UsedByCity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
+
 class Tour extends Model
 {
     use Uuid, SoftDeletes, UsedByTeams, HasPagination, UsedByCity, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'city_id', 'tour_type_id', 'description', 'duration'];
+    protected $fillable = ['name', 'cities_list', 'city_id', 'tour_type_id', 'description', 'duration'];
 
     protected $casts = [
-        'extra' => 'array'
+        'extra' => 'array',
+        'cities_list' => 'array'
     ];
 
     protected $appends = ['model_alias'];
@@ -104,24 +106,40 @@ class Tour extends Model
         return TourAttendant::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
     }
 
-    public static function getTransportsOption()
+    public static function getTransportsOption($sort = 'no')
     {
-        return self::sortByCity(TourTransport::orderBy('name', 'asc')->get()->toArray());
+        if($sort == 'city') {
+            return self::sortByCity(TourTransport::orderBy('name', 'asc')->get()->toArray());
+        } else {
+            return TourTransport::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
     }
 
-    public static function getHotelsOption()
+    public static function getHotelsOption($sort = 'no')
     {
-        return self::sortByCity(TourHotel::orderBy('name', 'asc')->get()->toArray());
+        if($sort == 'city') {
+            return self::sortByCity(TourHotel::orderBy('name', 'asc')->get()->toArray());
+        } else {
+            return TourHotel::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
     }
 
-    public static function getMuseumsOption()
+    public static function getMuseumsOption($sort = 'no')
     {
-        return self::sortByCity(TourMuseum::orderBy('name', 'asc')->get()->toArray());
+        if($sort == 'city') {
+            return self::sortByCity(TourMuseum::orderBy('name', 'asc')->get()->toArray());
+        } else {
+            return TourMuseum::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
     }
 
-    public static function getMealsOption()
+    public static function getMealsOption($sort = 'no')
     {
-        return self::sortByCity(TourMeal::orderBy('name', 'asc')->get()->toArray());
+        if($sort == 'city') {
+            return self::sortByCity(TourMeal::orderBy('name', 'asc')->get()->toArray());
+        } else {
+            return TourMeal::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
     }
 
     public static function sortByCity($in_arr = [], $out_arr = [])

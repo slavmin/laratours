@@ -37,6 +37,11 @@ trait UsedByCity
         return $cities_options;
     }
 
+    public static function getAllCities()
+    {
+        return TourCity::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+    }
+
     public static function getCitiesOptgroupAttribute($text = '')
     {
         $out_arr = [0 => $text];

@@ -76,7 +76,8 @@ class TourController extends Controller
 
         $city_id = $this->getCityId($request);
 
-        $cities_options = Tour::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+        //$cities_options = Tour::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+        $cities_options = Tour::getAllCities();
 
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
@@ -96,13 +97,12 @@ class TourController extends Controller
         $request->validate([
             'name' => 'required',
             'city_id' => 'exists:tour_cities,id',
-            'tour_type_id' => 'exists:tour_types,id',
+            'tour_type_id' => 'required|exists:tour_types,id',
+            'cities_list' => 'array|required|min:1',
         ]);
 
         DB::transaction(function () use ($request) {
-
             $tour = new Tour($request->all());
-
             $tour->save();
         });
 
@@ -132,9 +132,8 @@ class TourController extends Controller
 
         $item = Tour::findOrFail($id);
 
-        $city_id = !is_null($item->city_id) ? $item->city_id : $this->getCityId($request);
 
-        $cities_options = Tour::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+        $cities_options = Tour::getAllCities();
 
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
@@ -153,19 +152,6 @@ class TourController extends Controller
         $attendant_options = Tour::getAttendantsOption();
 
 
-        if(!is_null($city_id)) {
-
-            $hotel_options = in_array($city_id, array_keys($hotel_options)) ? $hotel_options[$city_id] : [];
-
-            $museum_options = in_array($city_id, array_keys($museum_options)) ? $museum_options[$city_id] : [];
-
-            $meal_options = in_array($city_id, array_keys($meal_options)) ? $meal_options[$city_id] : [];
-
-            $transport_options = in_array($city_id, array_keys($transport_options)) ? $transport_options[$city_id] : [];
-
-        }
-
-
         return view('frontend.tour.tour.edit', compact('item', 'cities_options', 'tour_type_options', 'attributes', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
@@ -177,23 +163,21 @@ class TourController extends Controller
 
     public function update(Request $request, $id)
     {
-        if($request->get('attribute')){
-            $request->validate([
-                'attribute.*.name' => 'required|min:3',
-                'attribute.*.price'=> 'required',
-                'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
-            ]);
-        } else {
-            $request->validate([
-                'name' => 'required',
-                'city_id' => 'exists:tour_cities,id',
-                'tour_type_id' => 'exists:tour_types,id',
-            ]);
-        }
+        $request->validate([
+            'name' => 'required',
+            'city_id' => 'exists:tour_cities,id',
+            'tour_type_id' => 'required|exists:tour_types,id',
+            'cities_list' => 'array|required|min:1',
+        ]);
 
         $tour = Tour::findOrFail($id);
 
-        $tour->update($request->all());
+        // MySql empty Json fix
+        if(!$request->get('cities_list')){
+            $tour->update(array_merge($request->all(), ['cities_list' => null]));
+        } else {
+            $tour->update($request->all());
+        }
 
         DB::transaction(function () use ($tour, $request) {
             foreach ($tour->getAllAttributes() as $k => $v){
