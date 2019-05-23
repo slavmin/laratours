@@ -131,15 +131,17 @@ class TourController extends Controller
     {
         $model_alias = Tour::getModelAliasAttribute();
 
+        //$item = Tour::whereId($id)->withAll()->first();
+
         $item = Tour::findOrFail($id);
 
-        $tour_dates = $item->dates->pluck('date');
+        $attributes = $item->getAllAttributes();
+
+        $tour_dates = $item->tour_dates;
 
         $cities_options = Tour::getAllCities();
 
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
-
-        $attributes = $item->getAllAttributes();
 
         $hotel_options = Tour::getHotelsOption();
 

@@ -24,7 +24,11 @@ class Tour extends Model
         'cities_list' => 'array'
     ];
 
-    protected $appends = ['model_alias'];
+    protected $supportedRelations = ['dates', 'hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];
+
+    protected $morphedRelations = ['hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];
+
+    protected $appends = ['model_alias', 'tour_dates'];
 
     public static function getModelAliasAttribute()
     {
@@ -34,6 +38,16 @@ class Tour extends Model
     public static function findByUuid($uuid)
     {
         return self::uuid($uuid)->firstOrFail();
+    }
+
+    public function scopeWithAll($query)
+    {
+        return $query->with($this->supportedRelations);
+    }
+
+    public function getTourDatesAttribute()
+    {
+        return $this->dates()->pluck('date');
     }
 
 
@@ -83,14 +97,14 @@ class Tour extends Model
 
     public function getAllRelations()
     {
-        $this->load('hotels', 'meals', 'museums', 'transports', 'guides', 'attendants');
+        $this->load($this->morphedRelations);
         return $this->getRelations();
     }
 
     public function getAllAttributes($out_arr = [])
     {
         $relations = $this->getAllRelations();
-        foreach ($relations as $k => $v){
+        foreach ($relations as $k => $v) {
             $out_arr[$k] = $v->pluck('id')->toArray();
         }
         return $out_arr;
@@ -100,17 +114,17 @@ class Tour extends Model
     // Get Tour Options
     public static function getGuidesOption()
     {
-        return TourGuide::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+        return TourGuide::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
     public static function getAttendantsOption()
     {
-        return TourAttendant::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+        return TourAttendant::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
     public static function getTransportsOption($sort = 'no')
     {
-        if($sort == 'city') {
+        if ($sort == 'city') {
             return self::sortByCity(TourTransport::orderBy('name', 'asc')->get()->toArray());
         } else {
             return TourTransport::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
@@ -119,7 +133,7 @@ class Tour extends Model
 
     public static function getHotelsOption($sort = 'no')
     {
-        if($sort == 'city') {
+        if ($sort == 'city') {
             return self::sortByCity(TourHotel::orderBy('name', 'asc')->get()->toArray());
         } else {
             return TourHotel::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
@@ -128,7 +142,7 @@ class Tour extends Model
 
     public static function getMuseumsOption($sort = 'no')
     {
-        if($sort == 'city') {
+        if ($sort == 'city') {
             return self::sortByCity(TourMuseum::orderBy('name', 'asc')->get()->toArray());
         } else {
             return TourMuseum::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
@@ -137,7 +151,7 @@ class Tour extends Model
 
     public static function getMealsOption($sort = 'no')
     {
-        if($sort == 'city') {
+        if ($sort == 'city') {
             return self::sortByCity(TourMeal::orderBy('name', 'asc')->get()->toArray());
         } else {
             return TourMeal::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
@@ -146,7 +160,7 @@ class Tour extends Model
 
     public static function sortByCity($in_arr = [], $out_arr = [])
     {
-        foreach ($in_arr as $item){
+        foreach ($in_arr as $item) {
             $out_arr[$item['city_id']][$item['id']] = $item['name'];
         }
         return $out_arr;
@@ -159,7 +173,8 @@ class Tour extends Model
         static::deleting(function (Model $model) {
             DB::transaction(function () use ($model) {
                 if ($model->isForceDeleting()) {
-                    foreach ($model->getAllRelations() as $k => $v){
+                    $model->dates()->delete();
+                    foreach ($model->getAllRelations() as $k => $v) {
                         $model->$k()->sync([]);
                     }
                 }

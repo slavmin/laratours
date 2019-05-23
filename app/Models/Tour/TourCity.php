@@ -14,6 +14,8 @@ class TourCity extends Model
 
     protected $fillable = ['name', 'description'];
 
+    protected $supportedRelations = ['museums', 'meals', 'hotels', 'transports'];
+
     protected $appends = ['model_alias'];
 
 
@@ -21,6 +23,13 @@ class TourCity extends Model
     {
         return 'city';
     }
+
+    public function scopeWithAll($query)
+    {
+        return $query->with($this->supportedRelations);
+    }
+
+
 
     public function country()
     {
@@ -30,24 +39,24 @@ class TourCity extends Model
     // Exposed relation
     public function museums()
     {
-        return $this->hasMany('App\Models\Tour\TourMuseum', 'city_id');
+        return $this->hasMany('App\Models\Tour\TourMuseum', 'city_id')->withDefault([]);
     }
 
     // Exposed relation
     public function meals()
     {
-        return $this->hasMany('App\Models\Tour\TourMeal', 'city_id');
+        return $this->hasMany('App\Models\Tour\TourMeal', 'city_id')->withDefault([]);
     }
 
     // Exposed relation
     public function hotels()
     {
-        return $this->hasMany('App\Models\Tour\TourHotel', 'city_id');
+        return $this->hasMany('App\Models\Tour\TourHotel', 'city_id')->withDefault([]);
     }
 
     // Exposed relation
     public function transports()
     {
-        return $this->hasMany('App\Models\Tour\TourTransport', 'city_id');
+        return $this->hasMany('App\Models\Tour\TourTransport', 'city_id')->withDefault([]);
     }
 }
