@@ -21,7 +21,7 @@
                             <div class="col-auto">
                                 <div class="form-group mb-0">
 
-                                    {{ form_submit(__('buttons.general.crud.update')) }}
+                                    {{ html()->submit(__('buttons.general.crud.update'))->class('btn btn-success btn-sm') }}
 
                                 </div><!--form-group-->
                             </div><!--col-->

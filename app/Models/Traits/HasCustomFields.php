@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class HasExtendedFields
+ * Class HasCustomFields
  */
-trait HasExtendedFields
+trait HasCustomFields
 {
     /**
      * @return mixed
      */
-    public function extendedFields()
+    public function customFields()
     {
-        return $this->morphMany('App\Models\Extend', 'extendable');
+        return $this->morphMany('App\Models\CustomField', 'fieldable');
     }
 
-    protected static function bootHasExtendedFields()
+    protected static function bootHasCustomFields()
     {
         //parent::boot();
 
@@ -27,11 +27,11 @@ trait HasExtendedFields
             DB::transaction(function () use ($model) {
                 // Force Delete extended fields
                 if ($model->isForceDeleting()) {
-                    $model->extendedFields()->forceDelete();
+                    $model->customFields()->forceDelete();
                 } else {
                     // Delete extended fields
                     if(!$model->trashed()){
-                        $model->extendedFields()->delete();
+                        $model->customFields()->delete();
                     }
                 }
             });

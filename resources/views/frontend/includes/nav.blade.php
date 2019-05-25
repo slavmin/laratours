@@ -27,11 +27,16 @@
                     <li class="nav-item"><a href="{{route('frontend.auth.register')}}" class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">@lang('navs.frontend.register')</a></li>
                 @endif
             @else
+                    @can('tour-manage')
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuTour" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">@lang('labels.frontend.tours.management')</a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuTour">
+                        @can('order-manage')
+                        <a href="{{ route('frontend.tour.order.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.order.index')) }}">
+                            @lang('labels.frontend.tours.order.management')</a>
+                        @endcan
                         <a href="{{ route('frontend.tour.tour.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.tour.index')) }}">
                             @lang('labels.frontend.tours.tour.management')</a>
                         <a href="{{ route('frontend.tour.type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.type.index')) }}">
@@ -42,10 +47,6 @@
                             @lang('labels.frontend.tours.hotel.category.management')</a>
                         <a href="{{ route('frontend.tour.country.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.country.index')) }}">
                             @lang('labels.frontend.tours.country.management') / @lang('labels.frontend.tours.city.management')</a>
-                        <a href="{{ route('frontend.tour.guide.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.guide.index')) }}">
-                            @lang('labels.frontend.tours.guide.management')</a>
-                        <a href="{{ route('frontend.tour.attendant.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.attendant.index')) }}">
-                            @lang('labels.frontend.tours.attendant.management')</a>
                         <a href="{{ route('frontend.tour.hotel.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.hotel.index')) }}">
                             @lang('labels.frontend.tours.hotel.management')</a>
                         <a href="{{ route('frontend.tour.museum.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.museum.index')) }}">
@@ -54,8 +55,13 @@
                             @lang('labels.frontend.tours.meal.management')</a>
                         <a href="{{ route('frontend.tour.transport.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.transport.index')) }}">
                             @lang('labels.frontend.tours.transport.management')</a>
+                        <a href="{{ route('frontend.tour.guide.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.guide.index')) }}">
+                            @lang('labels.frontend.tours.guide.management')</a>
+                        <a href="{{ route('frontend.tour.attendant.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.attendant.index')) }}">
+                            @lang('labels.frontend.tours.attendant.management')</a>
                     </div>
                 </li>
+                    @endcan
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuUser" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">{{ $logged_in_user->name }}</a>

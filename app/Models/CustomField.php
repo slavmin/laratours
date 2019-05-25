@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 
-class Extend extends Model
+class CustomField extends Model
 {
     use UsedByTeams;
+
+    protected $table = 'custom_fields';
 
     protected $fillable = ['name', 'type', 'content', 'team_id'];
 
@@ -15,7 +17,7 @@ class Extend extends Model
         'content' => 'array'
     ];
 
-    public function extendable()
+    public function fieldable()
     {
         return $this->morphTo();
     }

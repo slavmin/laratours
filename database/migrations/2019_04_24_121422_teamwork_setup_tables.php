@@ -35,6 +35,8 @@ class TeamworkSetupTables extends Migration
             $table->unsignedBigInteger('team_id');
             $table->timestamps();
 
+            $table->primary(['user_id', 'team_id']);
+
             $table->foreign( 'user_id' )
                 ->references( \Config::get( 'teamwork.user_foreign_key' ) )
                 ->on( \Config::get( 'teamwork.users_table' ) )

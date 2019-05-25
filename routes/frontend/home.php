@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\TourOrderController;
+// Auth controllers
 use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\Frontend\Tour\HotelController;
 use App\Http\Controllers\Frontend\Tour\MuseumController;
 use App\Http\Controllers\Frontend\Tour\MealController;
 use App\Http\Controllers\Frontend\Tour\TransportController;
+use App\Http\Controllers\Frontend\Tour\OrderController;
 
 /*
  * Frontend Controllers
@@ -27,6 +30,14 @@ use App\Http\Controllers\Frontend\Tour\TransportController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
+// Public Tour Order
+Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'public'], function () {
+
+    // Route::get is public order form for testing only! Remove on production site.
+    Route::get('order', [TourOrderController::class, 'index'])->name('order');
+
+    Route::post('order/store', [TourOrderController::class, 'store'])->name('public.order.store');
+});
 
 /*
  * These frontend controllers require the user to be logged in
@@ -55,102 +66,112 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     });
 
     // Tours Management
-    Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
+    Route::group(['middleware' => ['role:operator']], function () {
+        Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
 
-        // Tours Management
-        Route::resource('tour', \TourController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'tour/{tour}'], function () {
-            Route::get('restore', [TourController::class, 'restore'])->name('tour.restore');
-            Route::delete('delete', [TourController::class, 'delete'])->name('tour.delete-permanently');
-        });
-
-        // Tour types Management
-        Route::resource('type', \TypeController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'type/{type}'], function () {
-            Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
-            Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
-        });
-
-        // Tour customer types Management
-        Route::resource('customer-type', \CustomerTypeController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'customer-type/{customer_type}'], function () {
-            Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
-            Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
-        });
-
-        // Tour hotels category Management
-        Route::resource('hotel-category', \HotelCategoryController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
-            Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
-            Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
-        });
-
-        // Country Management
-        Route::resource('country', \CountryController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'country/{country}'], function () {
-            Route::get('restore', [CountryController::class, 'restore'])->name('country.restore');
-            Route::delete('delete', [CountryController::class, 'delete'])->name('country.delete-permanently');
-
-            // City Management
-            Route::resource('city', \CityController::class, ['except' => ['show']]);
+            // Tours Management
+            Route::resource('tour', \TourController::class, ['except' => ['show']]);
             // Handle Soft Deleted
-            Route::group(['prefix' => 'city/{city}'], function () {
-                Route::get('restore', [CityController::class, 'restore'])->name('city.restore');
-                Route::delete('delete', [CityController::class, 'delete'])->name('city.delete-permanently');
+            Route::group(['prefix' => 'tour/{tour}'], function () {
+                Route::get('restore', [TourController::class, 'restore'])->name('tour.restore');
+                Route::delete('delete', [TourController::class, 'delete'])->name('tour.delete-permanently');
             });
-        });
 
-        // Tour Museum Management
-        Route::resource('museum', \MuseumController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'museum/{museum}'], function () {
-            Route::get('restore', [MuseumController::class, 'restore'])->name('museum.restore');
-            Route::delete('delete', [MuseumController::class, 'delete'])->name('museum.delete-permanently');
-        });
+            // Tour types Management
+            Route::resource('type', \TypeController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'type/{type}'], function () {
+                Route::get('restore', [TypeController::class, 'restore'])->name('type.restore');
+                Route::delete('delete', [TypeController::class, 'delete'])->name('type.delete-permanently');
+            });
 
-        // Tour Meals Management
-        Route::resource('meal', \MealController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'meal/{meal}'], function () {
-            Route::get('restore', [MealController::class, 'restore'])->name('meal.restore');
-            Route::delete('delete', [MealController::class, 'delete'])->name('meal.delete-permanently');
-        });
+            // Tour customer types Management
+            Route::resource('customer-type', \CustomerTypeController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'customer-type/{customer_type}'], function () {
+                Route::get('restore', [CustomerTypeController::class, 'restore'])->name('customer-type.restore');
+                Route::delete('delete', [CustomerTypeController::class, 'delete'])->name('customer-type.delete-permanently');
+            });
 
-        // Tour Hotels Management
-        Route::resource('hotel', \HotelController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'hotel/{hotel}'], function () {
-            Route::get('restore', [HotelController::class, 'restore'])->name('hotel.restore');
-            Route::delete('delete', [HotelController::class, 'delete'])->name('hotel.delete-permanently');
-        });
+            // Tour hotels category Management
+            Route::resource('hotel-category', \HotelCategoryController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
+                Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
+                Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
+            });
 
-        // Tour Transport Management
-        Route::resource('transport', \TransportController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'transport/{transport}'], function () {
-            Route::get('restore', [TransportController::class, 'restore'])->name('transport.restore');
-            Route::delete('delete', [TransportController::class, 'delete'])->name('transport.delete-permanently');
-        });
+            // Country Management
+            Route::resource('country', \CountryController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'country/{country}'], function () {
+                Route::get('restore', [CountryController::class, 'restore'])->name('country.restore');
+                Route::delete('delete', [CountryController::class, 'delete'])->name('country.delete-permanently');
 
-        // Tour Guides Management
-        Route::resource('guide', \GuideController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'guide/{guide}'], function () {
-            Route::get('restore', [GuideController::class, 'restore'])->name('guide.restore');
-            Route::delete('delete', [GuideController::class, 'delete'])->name('guide.delete-permanently');
-        });
+                // City Management
+                Route::resource('city', \CityController::class, ['except' => ['show']]);
+                // Handle Soft Deleted
+                Route::group(['prefix' => 'city/{city}'], function () {
+                    Route::get('restore', [CityController::class, 'restore'])->name('city.restore');
+                    Route::delete('delete', [CityController::class, 'delete'])->name('city.delete-permanently');
+                });
+            });
 
-        // Tour Attendants Management
-        Route::resource('attendant', \AttendantController::class, ['except' => ['show']]);
-        // Handle Soft Deleted
-        Route::group(['prefix' => 'attendant/{attendant}'], function () {
-            Route::get('restore', [AttendantController::class, 'restore'])->name('attendant.restore');
-            Route::delete('delete', [AttendantController::class, 'delete'])->name('attendant.delete-permanently');
+            // Tour Museum Management
+            Route::resource('museum', \MuseumController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'museum/{museum}'], function () {
+                Route::get('restore', [MuseumController::class, 'restore'])->name('museum.restore');
+                Route::delete('delete', [MuseumController::class, 'delete'])->name('museum.delete-permanently');
+            });
+
+            // Tour Meals Management
+            Route::resource('meal', \MealController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'meal/{meal}'], function () {
+                Route::get('restore', [MealController::class, 'restore'])->name('meal.restore');
+                Route::delete('delete', [MealController::class, 'delete'])->name('meal.delete-permanently');
+            });
+
+            // Tour Hotels Management
+            Route::resource('hotel', \HotelController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'hotel/{hotel}'], function () {
+                Route::get('restore', [HotelController::class, 'restore'])->name('hotel.restore');
+                Route::delete('delete', [HotelController::class, 'delete'])->name('hotel.delete-permanently');
+            });
+
+            // Tour Transport Management
+            Route::resource('transport', \TransportController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'transport/{transport}'], function () {
+                Route::get('restore', [TransportController::class, 'restore'])->name('transport.restore');
+                Route::delete('delete', [TransportController::class, 'delete'])->name('transport.delete-permanently');
+            });
+
+            // Tour Guides Management
+            Route::resource('guide', \GuideController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'guide/{guide}'], function () {
+                Route::get('restore', [GuideController::class, 'restore'])->name('guide.restore');
+                Route::delete('delete', [GuideController::class, 'delete'])->name('guide.delete-permanently');
+            });
+
+            // Tour Attendants Management
+            Route::resource('attendant', \AttendantController::class, ['except' => ['show']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'attendant/{attendant}'], function () {
+                Route::get('restore', [AttendantController::class, 'restore'])->name('attendant.restore');
+                Route::delete('delete', [AttendantController::class, 'delete'])->name('attendant.delete-permanently');
+            });
+
+            // Tour Orders Management
+            Route::resource('order', \OrderController::class, ['except' => ['show', 'create', 'store']]);
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'order/{order}'], function () {
+                Route::get('restore', [OrderController::class, 'restore'])->name('order.restore');
+                Route::delete('delete', [OrderController::class, 'delete'])->name('order.delete-permanently');
+            });
         });
 
     });

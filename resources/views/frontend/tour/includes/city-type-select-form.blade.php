@@ -31,9 +31,9 @@
                             <div class="col-auto">
                                 <div class="form-group mb-0">
 
-                                    <a href="{{ $cancel_route }}" class="btn btn-sm btn-secondary">@lang('buttons.general.reset')</a>
+                                    {{ html()->a($cancel_route, __('buttons.general.cancel'))->class('btn btn-sm btn-secondary') }}
 
-                                    {{ form_submit(__('buttons.general.crud.update')) }}
+                                    {{ html()->submit(__('buttons.general.crud.update'))->class('btn btn-success btn-sm') }}
 
 
                                 </div><!--form-group-->

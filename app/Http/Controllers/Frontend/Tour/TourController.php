@@ -188,7 +188,7 @@ class TourController extends Controller
             if(is_array($request->get('dates'))) {
                 $tour_dates = [];
                 foreach ($request->get('dates') as $date) {
-                    $tour_dates[] = ['date' => $date];
+                    !empty($date) ? $tour_dates[] = ['date' => $date] : null;
                 }
                 $tour->dates()->delete();
                 $tour->dates()->createMany($tour_dates);

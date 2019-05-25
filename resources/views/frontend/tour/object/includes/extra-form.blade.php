@@ -114,11 +114,11 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                {{ form_cancel($cancel_route, __('buttons.general.cancel')) }}
+                {{ html()->a($cancel_route, __('buttons.general.cancel'))->class('btn btn-outline-info btn-sm') }}
             </div><!--col-->
 
             <div class="col text-right">
-                {{ form_submit(__('buttons.general.crud.update')) }}
+                {{ html()->submit(__('buttons.general.crud.update'))->class('btn btn-success btn-sm') }}
             </div><!--col-->
         </div><!--row-->
     </div><!--card-footer-->

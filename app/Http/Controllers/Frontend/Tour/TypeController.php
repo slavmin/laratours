@@ -25,7 +25,7 @@ class TypeController extends Controller
         $deleted = TourType::onlyTrashed()->get();
 
         return view('frontend.tour.type.index', compact('items','deleted'))
-            ->with('object', $model_alias);
+            ->with('model_alias', $model_alias);
     }
 
     public function show($id)
@@ -53,7 +53,7 @@ class TypeController extends Controller
             //'description'=> '',
         ]);
 
-        $tour_type = new TourType($request->only('name', 'description'));
+        $tour_type = new TourType($request->all());
 
         $tour_type->save();
 
@@ -85,7 +85,7 @@ class TypeController extends Controller
 
         $tour_type = TourType::findOrFail($id);
 
-        $tour_type->update($request->only('name', 'description'));
+        $tour_type->update($request->all());
 
         return redirect()->route('frontend.tour.type.index')->withFlashSuccess(__('alerts.general.updated'));
     }
