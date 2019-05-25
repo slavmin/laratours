@@ -19,7 +19,7 @@
                                 <div class="form-group">
                                     {{ html()->label(__('labels.frontend.tours.order.table.tour_id'))->for('name') }}
 
-                                    {{ html()->text('tour_id', optional(auth()->user())->name)
+                                    {{ html()->text('tour_id')
                                         ->class('form-control')
                                         ->placeholder(__('labels.frontend.tours.order.table.tour_id'))
                                         ->attribute('maxlength', 191)

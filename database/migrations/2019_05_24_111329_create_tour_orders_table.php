@@ -16,6 +16,8 @@ class CreateTourOrdersTable extends Migration
         Schema::create('tour_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tour_id')->nullable()->index();
+            $table->unsignedBigInteger('agent_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->tinyInteger('status')->unsigned()->default(0)->index();
             $table->decimal('total_price')->nullable();
             $table->decimal('commission')->nullable();

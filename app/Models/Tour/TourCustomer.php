@@ -11,7 +11,9 @@ class TourCustomer extends Model
 
     public function setCustomerIdAttribute()
     {
-        $this->attributes['customer_id'] = auth()->user()->id ?? null;
+        if ($this->wasRecentlyCreated === true) {
+            $this->attributes['customer_id'] = auth()->user()->id ?? null;
+        }
     }
 
     public function getCustomerIdAttribute()

@@ -18,7 +18,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                {{--<th>@lang('labels.frontend.tours.order.table.tour_id')</th>--}}
+                                <th></th>
                                 <th>@lang('labels.frontend.tours.order.table.status')</th>
                                 <th>@lang('labels.frontend.tours.order.table.tour_name')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
@@ -27,7 +27,17 @@
                             <tbody>
                             @foreach($items as $item)
                                 <tr>
-                                    {{--<td><span class="text-secondary">{{$item->tour_id}}</span></td>--}}
+                                    <td>
+                                        @if($item->by_agent)
+                                            <span class="text-success"><i class="fas fa-user-check"></i></span>
+                                        @else
+                                            @if($item->by_user)
+                                                <span class="text-secondary"><i class="fas fa-user"></i></span>
+                                            @else
+                                                <span class="text-secondary"><i class="fas fa-user-slash"></i></span>
+                                            @endif
+                                        @endif
+                                    </td>
                                     <td>
                                         @if (array_key_exists($item->status, $statuses))
                                             <span class="{{ $statuses[$item->status] }}">@lang('labels.frontend.tours.order.statuses.'.$item->status)</span>
@@ -75,7 +85,7 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    {{--<th>@lang('labels.frontend.tours.order.table.tour_id')</th>--}}
+                                    <th></th>
                                     <th>@lang('labels.frontend.tours.order.table.status')</th>
                                     <th>@lang('labels.frontend.tours.order.table.tour_name')</th>
                                     <th><div class="float-right">@lang('labels.general.actions')</div></th>
@@ -84,7 +94,17 @@
                                 <tbody>
                                 @foreach($deleted as $item)
                                     <tr>
-                                        {{--<td>{{$item->tour_id}}</td>--}}
+                                        <td>
+                                            @if($item->by_agent)
+                                                <span class="text-success"><i class="fas fa-user-check"></i></span>
+                                            @else
+                                                @if($item->by_user)
+                                                    <span class="text-secondary"><i class="fas fa-user"></i></span>
+                                                @else
+                                                    <span class="text-secondary"><i class="fas fa-user-slash"></i></span>
+                                                @endif
+                                            @endif
+                                        </td>
                                         <td>
                                             @if (array_key_exists($item->status, $statuses))
                                                 <span class="text-secondary {{ $statuses[$item->status] }}">@lang('labels.frontend.tours.order.statuses.'.$item->status)</span>

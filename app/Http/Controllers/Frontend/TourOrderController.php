@@ -23,30 +23,30 @@ class TourOrderController extends Controller
         $item = Tour::whereId($request->get('tour_id'))->AllTeams()->first();
 
         $request->validate([
-            //'name' => 'required',
             'tour_id' => 'required|exists:tours,id',
         ]);
 
-        $order_id = DB::table('tour_orders')->insertGetId(
-            [
-                'tour_id' => $item->id,
-                'team_id' => $item->team_id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
+        if($item) {
 
-        if($order_id)
-        {
-            DB::table('tour_customers')->insert(
+            if(!auth()->guest()){
+                $customer_id = auth()->user()->id;
+                $agent_id = auth()->user()->hasRole('agent') ? auth()->user()->id : null;
+            } else {
+                $customer_id = null;
+                $agent_id = null;
+            }
+
+            $order_id = DB::table('tour_orders')->insertGetId(
                 [
-                    'order_id' => $order_id,
-                    'customer_id' => auth()->user()->id ?? null,
+                    'tour_id' => $item->id,
                     'team_id' => $item->team_id,
+                    'customer_id' => $customer_id,
+                    'agent_id' => $agent_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
             );
+
         }
 
         return redirect()->back()->withFlashSuccess(__('alerts.frontend.contact.sent'));
