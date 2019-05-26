@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Tour\Tour;
+//use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -20,11 +21,18 @@ class TourOrderController extends Controller
 
     public function store(Request $request)
     {
-        $item = Tour::whereId($request->get('tour_id'))->AllTeams()->first();
+//        TourOrder::whereId($request->get('tour_id'))->AllTeams()->update(['discount' => '7.00']);
+//
+//        $tour_order = TourOrder::whereId($request->get('tour_id'))->AllTeams()->first();
+//
+//        return $tour_order;
 
         $request->validate([
             'tour_id' => 'required|exists:tours,id',
         ]);
+
+        $item = Tour::whereId($request->get('tour_id'))->AllTeams()->first();
+
 
         if($item) {
 
@@ -35,6 +43,7 @@ class TourOrderController extends Controller
                 $customer_id = null;
                 $agent_id = null;
             }
+
 
             $order_id = DB::table('tour_orders')->insertGetId(
                 [

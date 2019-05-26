@@ -28,6 +28,12 @@ return [
         // The name of the super administrator role
         'admin_role' => 'administrator',
 
+        // The name of the tour operator role
+        'operator_role' => 'operator',
+
+        // The name of the tour agent role
+        'agent_role' => 'agent',
+
         // The default role all new registered users get added to
         'default_role' => 'user',
 

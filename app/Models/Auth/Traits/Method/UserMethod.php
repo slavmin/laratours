@@ -107,6 +107,22 @@ trait UserMethod
     }
 
     /**
+     * @return mixed
+     */
+    public function isOperator()
+    {
+        return $this->hasRole(config('access.users.operator_role'));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isAgent()
+    {
+        return $this->hasRole(config('access.users.agent_role'));
+    }
+
+    /**
      * @return bool
      */
     public function isActive()
