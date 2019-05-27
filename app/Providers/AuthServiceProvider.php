@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Auth\Team;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -39,6 +40,20 @@ class AuthServiceProvider extends ServiceProvider
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         Gate::before(function ($user, $ability) {
             return $user->hasRole(config('access.users.admin_role')) ? true : null;
+        });
+
+        // Implicitly grant team "Operator" role permissions to administer tours
+        Gate::define(config('access.teams.operator_permission'), function ($user) {
+            $team = Team::whereId($user->current_team_id)->first();
+            if(!$team){return null;}
+            return $team->hasRole(config('access.teams.operator_role')) ? true : null;
+        });
+
+        // Implicitly grant team "Agent" role permissions to administer orders
+        Gate::define(config('access.teams.agent_permission'), function ($user) {
+            $team = Team::whereId($user->current_team_id)->first();
+            if(!$team){return null;}
+            return $team->hasRole(config('access.teams.agent_role')) ? true : null;
         });
     }
 }

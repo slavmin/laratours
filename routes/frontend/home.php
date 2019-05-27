@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     });
 
     // Tours Management
-    Route::group(['middleware' => ['role:operator']], function () {
+    Route::group(['middleware' => ['permission:administer-tours']], function () {
         Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
 
             // Tours Management

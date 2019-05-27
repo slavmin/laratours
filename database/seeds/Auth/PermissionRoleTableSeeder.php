@@ -21,12 +21,12 @@ class PermissionRoleTableSeeder extends Seeder
         // Create Roles
         $admin = Role::create(['name' => config('access.users.admin_role')]);
         $executive = Role::create(['name' => 'executive']);
-        $operator = Role::create(['name' => config('access.users.operator_role')]);
-        $agent = Role::create(['name' => config('access.users.agent_role')]);
         $user = Role::create(['name' => config('access.users.default_role')]);
+        $operator = Role::create(['name' => config('access.teams.operator_role')]);
+        $agent = Role::create(['name' => config('access.teams.agent_role')]);
 
         // Create Permissions
-        $permissions = ['view backend', 'clear-trashed', 'tour-manage', 'order-manage',
+        $permissions = ['view backend', 'clear-trashed', 'order-manage',
             'tour-view',
             'tour-create',
             'tour-edit',
@@ -47,8 +47,8 @@ class PermissionRoleTableSeeder extends Seeder
 
         // Assign Permissions to other Roles
         $executive->givePermissionTo('view backend');
-        $operator->givePermissionTo('tour-manage', 'order-manage');
-        $agent->givePermissionTo('order-create', 'order-view', 'order-edit', 'order-cancel');
+        $operator->givePermissionTo(config('access.teams.operator_permission'));
+        $agent->givePermissionTo(config('access.teams.agent_permission'));
         $user->givePermissionTo('order-view');
 
         $this->enableForeignKeys();

@@ -38,6 +38,31 @@
                         </div><!--col-->
                     </div><!--form-group-->
 
+                    <hr>
+
+                    <div class="form-group row">
+                        @if($roles->count())
+                            @foreach($roles as $role)
+                                <div class="col-2">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="checkbox d-flex align-items-center">
+                                                {{ html()->label(
+                                                        html()->radio('roles[]', in_array($role->name, $teamRoles), $role->name)
+                                                                ->class('switch-input')
+                                                                ->id('role-'.$role->id)
+                                                        . '<span class="switch-slider" data-checked="on" data-unchecked="off"></span>')
+                                                    ->class('switch switch-label switch-pill switch-primary mr-2')
+                                                    ->for('role-'.$role->id) }}
+                                                {{ html()->label(ucwords($role->name))->for('role-'.$role->id) }}
+                                            </div>
+                                        </div>
+                                    </div><!--card-->
+                                </div>
+                            @endforeach
+                        @endif
+                    </div><!--form-group-->
+
                 </div><!--col-->
             </div><!--row-->
         </div><!--card-body-->

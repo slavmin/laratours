@@ -23,7 +23,11 @@ trait UsedByTeams
             static::teamGuard();
 
             if (!auth()->user()->isAdmin()) {
-                $builder->where($builder->getQuery()->from . '.team_id', auth()->user()->currentTeam->getKey());
+                if (auth()->user()->can(config('access.teams.operator_permission')) && $builder->getQuery()->from == 'tour_orders') {
+                    $builder->where($builder->getQuery()->from . '.operator_id', auth()->user()->currentTeam->getKey());
+                } else {
+                    $builder->where($builder->getQuery()->from . '.team_id', auth()->user()->currentTeam->getKey());
+                }
             }
         });
 

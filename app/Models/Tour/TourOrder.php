@@ -42,7 +42,8 @@ class TourOrder extends Model
      */
     public function getByAgentAttribute()
     {
-        return $this->attributes['by_agent'] = !is_null($this->attributes['agent_id']) ? true : false;
+        return $this->attributes['by_agent'] = !is_null($this->attributes['operator_id']) && $this->attributes['operator_id'] != $this->attributes['team_id']
+            ? true : false;
     }
 
     /**
@@ -70,17 +71,4 @@ class TourOrder extends Model
         return Tour::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function (Model $model) {
-            DB::transaction(function () use ($model) {
-                if ($model->isForceDeleting()) {
-                    $model->customer()->delete();
-                }
-            });
-        });
-    }
 }

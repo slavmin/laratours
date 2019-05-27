@@ -40,7 +40,7 @@ class UpdateTeamRequest extends FormRequest
                 'profile.formal.company_inn' => ['required', 'digits:10'],
                 'profile.formal.company_kpp' => ['required', 'digits:9'],
             ];
-        } else {
+        } else if($this->input('profile_type') == 'real') {
             return [
                 //'profile.real' => ['required', 'array'],
                 'profile.real.company_name' => ['required', 'string', 'min:2', 'max:191', Rule::unique('teams', 'name')->ignore($this->team)],
@@ -51,6 +51,10 @@ class UpdateTeamRequest extends FormRequest
                 'profile.real.company_address' => ['required', 'string', 'min:3', 'max:191'],
                 'profile.real.company_inn' => ['required', 'digits:10'],
                 'profile.real.company_kpp' => ['required', 'digits:9'],
+            ];
+        } else {
+            return [
+                'roles' => ['required', 'array'],
             ];
         }
     }

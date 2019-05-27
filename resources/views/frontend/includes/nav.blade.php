@@ -27,16 +27,16 @@
                     <li class="nav-item"><a href="{{route('frontend.auth.register')}}" class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">@lang('navs.frontend.register')</a></li>
                 @endif
             @else
-                    @can('tour-manage')
+                    @can('administer-tours')
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuTour" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">@lang('labels.frontend.tours.management')</a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuTour">
-                        @can('order-manage')
+                        {{--@can('order-manage')--}}
                         <a href="{{ route('frontend.tour.order.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.order.index')) }}">
                             @lang('labels.frontend.tours.order.management')</a>
-                        @endcan
+                        {{--@endcan--}}
                         <a href="{{ route('frontend.tour.tour.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.tour.index')) }}">
                             @lang('labels.frontend.tours.tour.management')</a>
                         <a href="{{ route('frontend.tour.type.index') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.tour.type.index')) }}">

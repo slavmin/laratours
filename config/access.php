@@ -17,6 +17,21 @@ return [
         'users' => 'users',
     ],
 
+    // Configurations for the team
+    'teams' => [
+        // The name of the tour operator role
+        'operator_role' => 'operator',
+
+        // The global tour operator role permission
+        'operator_permission' => 'administer-tours',
+
+        // The name of the tour agent role
+        'agent_role' => 'agent',
+
+        // The global tour agent role permission
+        'agent_permission' => 'administer-orders',
+    ],
+
     // Configurations for the user
     'users' => [
         // Whether or not the user has to confirm their email when signing up
@@ -27,12 +42,6 @@ return [
 
         // The name of the super administrator role
         'admin_role' => 'administrator',
-
-        // The name of the tour operator role
-        'operator_role' => 'operator',
-
-        // The name of the tour agent role
-        'agent_role' => 'agent',
 
         // The default role all new registered users get added to
         'default_role' => 'user',

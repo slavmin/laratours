@@ -8,6 +8,7 @@ use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
 use App\Http\Requests\Backend\Auth\Team\StoreTeamRequest;
 use App\Http\Requests\Backend\Auth\Team\UpdateTeamRequest;
 use App\Models\Auth\User;
+use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\TeamRepository;
 
 
@@ -58,26 +59,31 @@ class TeamController extends Controller
     }
 
     /**
+     * @param RoleRepository $roleRepository
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(RoleRepository $roleRepository)
     {
-        return view('backend.auth.team.create');
+        return view('backend.auth.team.create')
+            ->withRoles($roleRepository->whereIn('name', [config('access.teams.operator_role'), config('access.teams.agent_role')])->get())
+            ->withTeamRoles([]);
     }
 
 
     /**
-     * @param StoreTeamRequest $request
      * @param Team $team
+     * @param RoleRepository $roleRepository
      * @return mixed
      */
-    public function edit(Team $team)
+    public function edit(Team $team, RoleRepository $roleRepository)
     {
         $profiles = $team->getProfilesAttribute();
 
         return view('backend.auth.team.edit')
             ->with('profiles', $profiles)
-            ->withTeam($team);
+            ->withTeam($team)
+            ->withRoles($roleRepository->whereIn('name', [config('access.teams.operator_role'), config('access.teams.agent_role')])->get())
+            ->withTeamRoles($team->roles->pluck('name')->all());
     }
 
 
@@ -110,6 +116,10 @@ class TeamController extends Controller
             ]);
         }
 
+        // Add selected roles/permissions
+        $team->syncRoles($request->get('roles'));
+        $team->syncPermissions($request->get('permissions'));
+
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.updated'));
     }
 
@@ -122,9 +132,13 @@ class TeamController extends Controller
     {
         $team_name = $request->name;
 
-        $this->teamRepository->create([
+        $team = $this->teamRepository->create([
             'name' => $team_name,
         ]);
+
+        // Add selected roles/permissions
+        $team->syncRoles($request->get('roles'));
+        $team->syncPermissions($request->get('permissions'));
 
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.created'));
     }

@@ -9,6 +9,8 @@ use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mpociot\Teamwork\TeamworkTeam;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Spatie\Permission\Traits\HasRoles;
+
 //use Mpociot\Teamwork\Facades\Teamwork;
 //use Mpociot\Teamwork\TeamInvite;
 
@@ -17,7 +19,12 @@ use Cviebrock\EloquentSluggable\Sluggable;
  */
 class Team extends TeamworkTeam
 {
-    use TeamAttribute, TeamMethod, HasProfile, Sluggable, SoftDeletes;
+    use HasRoles, TeamAttribute, TeamMethod, HasProfile, Sluggable, SoftDeletes;
+
+    /**
+     * @var string
+     */
+    protected $guard_name = 'web';
 
     /**
      * @var array
