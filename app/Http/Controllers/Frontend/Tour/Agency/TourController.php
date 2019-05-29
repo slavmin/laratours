@@ -56,8 +56,9 @@ class TourController extends Controller
             $items = Tour::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->paginate();
         }
 
-        // Form filters
+
         $cities_names = TourCity::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->get()->pluck('name','id')->toArray();
+        // Form filters
         // Tour types by operator
         $tour_types = TourType::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->get()->pluck('name','id')->toArray();
         $types_options = [0 => __('validation.attributes.frontend.general.select')];

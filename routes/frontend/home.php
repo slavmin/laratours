@@ -34,12 +34,13 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
 // Public Tour Order
-Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'public'], function () {
+//Route::group(['prefix' => 'guest'], function () {
 
-    // Route::get is public order form for testing only! Remove on production site.
-    Route::get('order', [TourOrderController::class, 'index'])->name('order');
-    Route::post('order/store', [TourOrderController::class, 'store'])->name('public.order.store');
-});
+    // Route::get is public order form for testing only
+    Route::get('order', [TourOrderController::class, 'index'])->name('guest.order');
+    Route::post('order/store', [TourOrderController::class, 'store'])->name('guest.order.store');
+
+//});
 
 /*
  * These frontend controllers require the user to be logged in

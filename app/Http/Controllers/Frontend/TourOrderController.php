@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
+use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,6 @@ class TourOrderController extends Controller
      */
     public function index()
     {
-        //dd(TourOrder::where('customer_id', auth()->user()->id)->AllTeams()->get());
         return view('frontend.tour.order.public.form');
     }
 
@@ -24,7 +24,14 @@ class TourOrderController extends Controller
     {
         $request->validate([
             'tour_id' => 'required|exists:tours,id',
+            //'operator_id' => 'required|exists:teams,id',
+            'customer.*.first_name' => 'required|min:3|max:191',
+            'customer.*.last_name'=> 'required|min:3|max:191',
+            'customer.*.email'=> 'required|email|max:191',
+            'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
+
+        $profile = $request->get('customer');
 
         $item = Tour::whereId($request->get('tour_id'))->AllTeams()->first();
 
@@ -41,7 +48,7 @@ class TourOrderController extends Controller
                 }
             }
 
-            $order_id = DB::table('tour_orders')->insertGetId(
+            $tour_order_id = DB::table('tour_orders')->insertGetId(
                 [
                     'tour_id' => $item->id,
                     'team_id' => $team_id,
@@ -51,6 +58,13 @@ class TourOrderController extends Controller
                     'updated_at' => now(),
                 ]
             );
+
+            $tour_order = TourOrder::whereId($tour_order_id)->AllTeams()->first();
+
+            // Update or Create customer profile
+            $tour_order->profiles()->updateOrCreate(
+                ['type' => 'customer'],
+                ['type' => 'customer', 'content' => $profile]);
 
         }
 
