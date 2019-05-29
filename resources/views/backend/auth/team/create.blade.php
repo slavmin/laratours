@@ -41,6 +41,9 @@
                     <hr>
 
                     <div class="form-group row">
+                        <div class="col-sm-12">
+                            <h5 class="text-muted mb-4">@lang('labels.backend.access.teams.roles')</h5>
+                        </div><!--col-->
                         @if($roles->count())
                             @foreach($roles as $role)
                                 <div class="col-2">

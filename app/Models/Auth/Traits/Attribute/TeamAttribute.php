@@ -10,6 +10,23 @@ trait TeamAttribute
     /**
      * @return string
      */
+    public function getRolesLabelAttribute()
+    {
+        $roles = $this->getRoleNames()->toArray();
+
+        if (\count($roles)) {
+            return implode(', ', array_map(function ($item) {
+                return $item == config('access.teams.operator_role') ? '<span class="text-success">'.ucwords($item).'</span>'
+                    : '<span class="text-muted">'.ucwords($item).'</span>';
+            }, $roles));
+        }
+
+        return 'N/A';
+    }
+
+    /**
+     * @return string
+     */
     public function getShowButtonAttribute()
     {
         return '<a href="' . route('admin.auth.team.show', $this) . '"

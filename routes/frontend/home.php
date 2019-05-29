@@ -8,7 +8,7 @@ use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\TeamManageController;
-// Tour controllers
+// Tour Operator controllers
 use App\Http\Controllers\Frontend\Tour\TourController;
 use App\Http\Controllers\Frontend\Tour\TypeController;
 use App\Http\Controllers\Frontend\Tour\CustomerTypeController;
@@ -22,6 +22,9 @@ use App\Http\Controllers\Frontend\Tour\MuseumController;
 use App\Http\Controllers\Frontend\Tour\MealController;
 use App\Http\Controllers\Frontend\Tour\TransportController;
 use App\Http\Controllers\Frontend\Tour\OrderController;
+// Agency controllers
+use App\Http\Controllers\Frontend\Tour\Agency\TourController as AgencyTourController;
+use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderController;
 
 /*
  * Frontend Controllers
@@ -35,7 +38,6 @@ Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'public'], fun
 
     // Route::get is public order form for testing only! Remove on production site.
     Route::get('order', [TourOrderController::class, 'index'])->name('order');
-
     Route::post('order/store', [TourOrderController::class, 'store'])->name('public.order.store');
 });
 
@@ -63,11 +65,14 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::get('team/resend/{invite_id}', [TeamManageController::class, 'resendInvite'])->name('team.resend_invite');
         Route::get('team/invite/{invite_id}/delete', [TeamManageController::class, 'deleteInvite'])->name('team.delete_invite');
         Route::delete('team/members/{user_id}/delete', [TeamManageController::class, 'deleteMember'])->name('team.members.destroy');
+        // Agency to Operator teams subscriptions
+        //Route::get('team/{team_id}/subscribe', [TeamManageController::class, 'subscribe'])->name('team.subscribe');
+        //Route::get('team/{team_id}/unsubscribe', [TeamManageController::class, 'unsubscribe'])->name('team.unsubscribe');
     });
 
-    // Tours Management
+    // Tours Management by Tour Operator
     Route::group(['middleware' => ['permission:administer-tours']], function () {
-        Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'tours'], function () {
+        Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'operator'], function () {
 
             // Tours Management
             Route::resource('tour', \TourController::class, ['except' => ['show']]);
@@ -166,7 +171,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             });
 
             // Tour Orders Management
-            Route::resource('order', \OrderController::class, ['except' => ['show', 'create', 'store']]);
+            Route::resource('order', \OrderController::class, ['except' => ['create', 'store']]);
             // Handle Soft Deleted
             Route::group(['prefix' => 'order/{order}'], function () {
                 Route::get('restore', [OrderController::class, 'restore'])->name('order.restore');
@@ -175,4 +180,26 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         });
 
     });
+
+
+    // Tours Management by Tour Agency
+    Route::group(['middleware' => ['permission:administer-orders']], function () {
+        Route::group(['namespace' => 'Tour\Agency', 'as' => 'agency.', 'prefix' => 'agency'], function () {
+
+            // Tours listed by Agency
+            Route::get('tours', [AgencyTourController::class, 'index'])->name('tour-list');
+
+            // Tour Orders Management
+            Route::resource('order', 'OrderController')->except(['create', 'show', 'store']);
+            Route::get('order/create/{tour_id}', [AgencyOrderController::class, 'create'])->name('order.create');
+            Route::post('order/store', [AgencyOrderController::class, 'store'])->name('order.store');
+            // Handle Soft Deleted
+            Route::group(['prefix' => 'order/{order}'], function () {
+                Route::get('restore', [AgencyOrderController::class, 'restore'])->name('order.restore');
+                Route::delete('delete', [AgencyOrderController::class, 'delete'])->name('order.delete-permanently');
+
+            });
+        });
+    });
+
 });

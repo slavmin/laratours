@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Models\Auth\Team;
 use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+
 class OrderController extends Controller
 {
+    protected $tour;
     protected $tour_order;
 
     /**
@@ -16,6 +19,14 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $agencies = [];
+
+        $team = Team::whereId(auth()->user()->current_team_id)->first();
+
+        if($team && $team->hasRole(config('access.teams.operator_role'))){
+            $agencies = $team->subscribers->pluck('name','id')->toArray();
+        }
+
         $orderBy = 'id';
         $sort = 'desc';
 
@@ -25,9 +36,9 @@ class OrderController extends Controller
         $tour_names = TourOrder::getTourNames();
 
         $items = TourOrder::orderBy($orderBy, $sort)->paginate();
-        $deleted = TourOrder::onlyTrashed()->get();
+        $deleted = TourOrder::where('team_id', auth()->user()->current_team_id)->onlyTrashed()->get();
 
-        return view('frontend.tour.order.private.index', compact('items', 'deleted', 'tour_names'))
+        return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names'))
             ->with('statuses', $statuses)
             ->with('model_alias', $model_alias);
     }
@@ -38,7 +49,7 @@ class OrderController extends Controller
         //
     }
 
-    public function create()
+    public function create(Request $request, $tour_id)
     {
         //
     }
@@ -55,7 +66,9 @@ class OrderController extends Controller
 
         $item = TourOrder::findOrFail($id);
 
-        return view('frontend.tour.order.private.edit', compact('item'))
+        $profiles = $item->profiles()->get()->pluck('content')->first();
+
+        return view('frontend.tour.order.private.edit', compact('item', 'profiles'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
@@ -67,13 +80,22 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            //'name'=>'required',
-            //'description'=> '',
+            'customer.*.first_name' => 'required|min:3|max:191',
+            'customer.*.last_name'=> 'required|min:3|max:191',
+            'customer.*.email'=> 'required|email|max:191',
+            'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
+
+        $profile = $request->get('customer');
 
         $tour_order = TourOrder::findOrFail($id);
 
         $tour_order->update($request->all());
+
+        // Update or Create customer profile
+        $tour_order->profiles()->updateOrCreate(
+            ['type' => 'customer'],
+            ['type' => 'customer', 'content' => $profile]);
 
         return redirect()->route('frontend.tour.order.index')->withFlashSuccess(__('alerts.general.updated'));
     }

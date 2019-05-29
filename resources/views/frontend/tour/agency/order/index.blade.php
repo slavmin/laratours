@@ -19,7 +19,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.frontend.tours.order.table.status')</th>
-                                <th>@lang('labels.frontend.tours.order.table.agent')</th>
+                                <th>@lang('labels.frontend.tours.order.table.operator')</th>
                                 <th>@lang('labels.frontend.tours.order.table.tour_name')</th>
                                 <th><div class="float-right">@lang('labels.general.actions')</div></th>
                             </tr>
@@ -33,19 +33,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->by_agent)
-                                            @if (array_key_exists($item->team_id, $agencies))
-                                                <span class="text-success mr-2"><i class="fas fa-user-check"></i></span>
-                                                <span class="text-secondary">{{ $agencies[$item->team_id] }}</span>
-                                            @endif
-                                        @else
-                                            @if($item->by_user)
-                                                <span class="text-info mr-2"><i class="fas fa-user"></i></span>
-                                                <span class="text-secondary">{{ $item->customer->full_name }}</span>
-                                            @else
-                                                <span class="text-muted mr-2"><i class="fas fa-user-slash"></i></span>
-                                                <span class="text-secondary">@lang('labels.frontend.tours.order.table.guest')</span>
-                                            @endif
+                                        @if (array_key_exists($item->operator_id, $operators))
+                                            <span class="text-secondary">{{ $operators[$item->operator_id] }}</span>
                                         @endif
                                     </td>
                                     <td>
@@ -91,7 +80,7 @@
                                 <thead>
                                 <tr>
                                     <th>@lang('labels.frontend.tours.order.table.status')</th>
-                                    <th>@lang('labels.frontend.tours.order.table.agent')</th>
+                                    <th>@lang('labels.frontend.tours.order.table.operator')</th>
                                     <th>@lang('labels.frontend.tours.order.table.tour_name')</th>
                                     <th><div class="float-right">@lang('labels.general.actions')</div></th>
                                 </tr>
@@ -105,19 +94,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($item->by_agent)
-                                                @if (array_key_exists($item->team_id, $agencies))
-                                                    <span class="text-success mr-2"><i class="fas fa-user-check"></i></span>
-                                                    <span class="text-secondary">{{ $agencies[$item->team_id] }}</span>
-                                                @endif
-                                            @else
-                                                @if($item->by_user)
-                                                    <span class="text-info mr-2"><i class="fas fa-user"></i></span>
-                                                    <span class="text-secondary">{{ $item->customer->full_name }}</span>
-                                                @else
-                                                    <span class="text-muted mr-2"><i class="fas fa-user-slash"></i></span>
-                                                    <span class="text-secondary">@lang('labels.frontend.tours.order.table.guest')</span>
-                                                @endif
+                                            @if (array_key_exists($item->operator_id, $operators))
+                                                <span class="text-secondary">{{ $operators[$item->operator_id] }}</span>
                                             @endif
                                         </td>
                                         <td>

@@ -29,6 +29,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('labels.backend.access.teams.table.team')</th>
+                                <th>@lang('labels.backend.access.teams.table.role')</th>
                                 <th>@lang('labels.backend.access.teams.table.owner')</th>
                                 <th>@lang('labels.backend.access.teams.table.number_of_users')</th>
                                 <th>@lang('labels.general.actions')</th>
@@ -38,6 +39,7 @@
                             @foreach($teams as $team)
                                 <tr>
                                     <td>{{$team->name}}</td>
+                                    <td><strong>{!! $team->roles_label !!}</strong></td>
                                     <td>
                                         @foreach($team->users as $user)
                                             @if($user->isOwnerOfTeam($team))

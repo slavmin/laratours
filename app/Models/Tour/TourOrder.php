@@ -2,16 +2,18 @@
 
 namespace App\Models\Tour;
 
+use App\Models\Auth\User;
 use App\Models\Tour\Traits\Attribute\OrderButtonsAttribute;
+use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 use App\Models\Traits\HasPagination;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
+
 
 class TourOrder extends Model
 {
-    use UsedByTeams, HasPagination, SoftDeletes, OrderButtonsAttribute;
+    use UsedByTeams, HasPagination, HasProfile, SoftDeletes, OrderButtonsAttribute;
 
     protected $fillable = ['status'];
 
@@ -26,7 +28,7 @@ class TourOrder extends Model
      */
     public static function getModelAliasAttribute()
     {
-        return 'order';
+        return 'order'; //return get_model_alias(class_basename(self::class));
     }
 
     /**
@@ -62,6 +64,10 @@ class TourOrder extends Model
         return $this->hasOne('App\Models\Tour\Tour')->withDefault();
     }
 
+    public function customer()
+    {
+        return $this->hasOne(User::class, 'id', 'customer_id');
+    }
 
     /**
      * @return mixed

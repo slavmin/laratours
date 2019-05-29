@@ -38,7 +38,7 @@
                                 {{ html()->text('profile[formal][company_phone]')
                                     ->class('form-control')
                                     ->id('company_phone')
-                                    ->placeholder(__('validation.attributes.frontend.company.phone'))
+                                    ->placeholder(__('validation.custom.phone_format'))
                                     ->attribute('maxlength', 191)
                                     ->required()}}
                             </div><!--form-group-->

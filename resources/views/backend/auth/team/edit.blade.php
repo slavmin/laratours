@@ -23,30 +23,63 @@
 
             {{ html()->modelForm($team, 'PATCH', route('admin.auth.team.update', $team))->class('form-horizontal')->open() }}
 
-                <hr />
+            <hr />
 
-                <div class="form-group row">
-                    @if($roles->count())
-                        @foreach($roles as $role)
-                            <div class="col-2">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="checkbox d-flex align-items-center">
-                                            {{ html()->label(
-                                                    html()->radio('roles[]', in_array($role->name, $teamRoles), $role->name)
-                                                            ->class('switch-input')
-                                                            ->id('role-'.$role->id)
-                                                    . '<span class="switch-slider" data-checked="on" data-unchecked="off"></span>')
-                                                ->class('switch switch-label switch-pill switch-primary mr-2')
-                                                ->for('role-'.$role->id) }}
-                                            {{ html()->label(ucwords($role->name))->for('role-'.$role->id) }}
-                                        </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <h5 class="text-muted mb-4">@lang('labels.backend.access.teams.roles')</h5>
+                </div><!--col-->
+                @if($roles->count())
+                    @foreach($roles as $role)
+                        <div class="col-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="checkbox d-flex align-items-center">
+                                        {{ html()->label(
+                                                html()->radio('roles[]', in_array($role->name, $teamRoles), $role->name)
+                                                        ->class('switch-input')
+                                                        ->id('role-'.$role->id)
+                                                . '<span class="switch-slider" data-checked="on" data-unchecked="off"></span>')
+                                            ->class('switch switch-label switch-pill switch-primary mr-2')
+                                            ->for('role-'.$role->id) }}
+                                        {{ html()->label(ucwords($role->name))->for('role-'.$role->id) }}
                                     </div>
-                                </div><!--card-->
-                            </div>
-                        @endforeach
-                    @endif
-                </div><!--form-group-->
+                                </div>
+                            </div><!--card-->
+                        </div><!--col-->
+                    @endforeach
+                @endif
+            </div><!--form-group-->
+
+            @if($operators->count())
+            <hr />
+
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <h5 class="text-muted mb-4">@lang('labels.backend.access.teams.subscriptions')</h5>
+                </div><!--col-->
+
+                    @foreach($operators as $operator)
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="checkbox d-flex align-items-center">
+                                        {{ html()->label(
+                                                html()->checkbox('subscriptions[]', in_array($operator->id, $teamSubscriptions), $operator->id)
+                                                        ->class('switch-input')
+                                                        ->id('subscription-'.$operator->id)
+                                                . '<span class="switch-slider" data-checked="on" data-unchecked="off"></span>')
+                                            ->class('switch switch-label switch-pill switch-primary mr-2')
+                                            ->for('subscription-'.$operator->id) }}
+                                        {{ html()->label(ucwords($operator->name))->for('subscription-'.$operator->id) }}
+                                    </div>
+                                </div>
+                            </div><!--card-->
+                        </div><!--col-->
+                    @endforeach
+            </div><!--form-group-->
+            @endif
+
             </div><!--/card-body-->
 
             <div class="card-footer">

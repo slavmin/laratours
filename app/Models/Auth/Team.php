@@ -50,6 +50,22 @@ class Team extends TeamworkTeam
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subscribers()
+    {
+        return $this->belongsToMany(self::class, 'team_subscriptions', 'subscribed_id', 'subscriber_id')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function subscriptions()
+    {
+        return $this->belongsToMany(self::class, 'team_subscriptions', 'subscriber_id', 'subscribed_id')->withTimestamps();
+    }
+
+    /**
      * @return array
      */
     public function getFormalProfileAttribute()

@@ -31,11 +31,13 @@ class PermissionRoleTableSeeder extends Seeder
             'tour-create',
             'tour-edit',
             'tour-delete',
+            'tour-restore',
             'order-view',
             'order-cancel',
             'order-create',
             'order-edit',
-            'order-delete'
+            'order-delete',
+            'order-restore'
         ];
 
         foreach ($permissions as $permission) {

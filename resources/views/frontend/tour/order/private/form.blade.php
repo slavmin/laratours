@@ -1,5 +1,6 @@
 {{ html()->form($method, $route)->class('form-horizontal')->open() }}
 
+@can('administer-tours')
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">
@@ -15,8 +16,15 @@
 
     </div><!--col-->
 </div><!--row-->
-
 <hr>
+@endcan
+
+@if(count($profiles) > 0)
+    @foreach($profiles as $i => $profile)
+        @include('frontend.tour.order.private.profile-form')
+        <hr />
+    @endforeach
+@endif
 
 <div class="row mt-4">
     <div class="col">

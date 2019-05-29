@@ -12,6 +12,12 @@ trait ActionButtonsAttribute
                                                 <i class="fas fa-list-alt"></i></a>';
     }
 
+    public function getCreateOrderButtonAttribute()
+    {
+        return '<a href="' . route('frontend.agency.order.create', $this) . '"
+        class="btn btn-success ml-1"><i class="fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.reserve') . '"></i></a>';
+    }
+
     public function getCreateButtonAttribute()
     {
         if($this->model_alias == 'city')
@@ -106,27 +112,37 @@ trait ActionButtonsAttribute
      */
     public function getActionButtonsAttribute()
     {
-        if ($this->trashed()) {
-            return '
+        if(auth()->user()->can(config('access.teams.operator_permission')))
+        {
+            if ($this->trashed()) {
+                return '
 				<div class="ml-1">
 				  ' . $this->restore_button . '
 				  ' . $this->delete_permanently_button . '
 				</div>';
-        }
+            }
 
-        if ($this->model_alias == 'country') {
-            return '
+            if ($this->model_alias == 'country') {
+                return '
             <div class="ml-1">
               ' . $this->city_list_button . '
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '
 			</div>';
-        }
+            }
 
-        return '
+            return '
             <div class="ml-1">
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '
 			</div>';
+
+        } elseif (auth()->user()->can(config('access.teams.agent_permission')))
+        {
+            return '
+            <div class="ml-1">
+              ' . $this->create_order_button . '
+			</div>';
+        }
     }
 }

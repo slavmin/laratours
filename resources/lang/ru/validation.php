@@ -127,9 +127,7 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'сообщение',
-        ],
+        'phone_format' => '+7 (999) 999-99-99',
     ],
 
     /*
@@ -213,6 +211,15 @@ return [
                 'bik' => 'БИК',
                 'okpo' => 'ОКПО',
                 'ogrn' => 'ОГРН',
+            ],
+            'customer' => [
+                'first_name' => 'Имя',
+                'last_name' => 'Фамилия',
+                'email' => 'E-mail',
+                'phone' => 'Телефон',
+                'country' => 'Страна',
+                'city' => 'Город',
+                'address' => 'Адрес',
             ],
             'general' => [
                 'name' => 'Название',

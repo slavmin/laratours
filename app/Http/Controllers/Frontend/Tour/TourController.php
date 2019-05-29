@@ -105,6 +105,15 @@ class TourController extends Controller
         DB::transaction(function () use ($request) {
             $tour = new Tour($request->all());
             $tour->save();
+
+            // Add tour dates
+            if(is_array($request->get('dates'))) {
+                $tour_dates = [];
+                foreach ($request->get('dates') as $date) {
+                    !empty($date) ? $tour_dates[] = ['date' => $date] : null;
+                }
+                $tour->dates()->createMany($tour_dates);
+            }
         });
 
         return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.created'));

@@ -40,7 +40,9 @@ class TeamManageController extends Controller
 
         $profiles = $team->getProfilesAttribute();
 
-        return view('frontend.user.team.index')->with('team', $team)->with('profiles', $profiles);
+        return view('frontend.user.team.index')
+            ->with('team', $team)
+            ->with('profiles', $profiles);
     }
 
 
@@ -125,7 +127,7 @@ class TeamManageController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ManageTeamRequest $request
      * @param $team_id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception

@@ -10,6 +10,7 @@ use App\Http\Requests\Backend\Auth\Team\UpdateTeamRequest;
 use App\Models\Auth\User;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\TeamRepository;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -79,11 +80,21 @@ class TeamController extends Controller
     {
         $profiles = $team->getProfilesAttribute();
 
+        $operators = new Collection();
+
+        if($team->hasRole(config('access.teams.agent_role'))) {
+            $operators = Team::whereHas("roles", function ($q) {
+                $q->where('name', config('access.teams.operator_role'));
+            })->get();
+        }
+
         return view('backend.auth.team.edit')
+            ->with('operators', $operators)
             ->with('profiles', $profiles)
             ->withTeam($team)
             ->withRoles($roleRepository->whereIn('name', [config('access.teams.operator_role'), config('access.teams.agent_role')])->get())
-            ->withTeamRoles($team->roles->pluck('name')->all());
+            ->withTeamRoles($team->roles->pluck('name')->all())
+            ->withTeamSubscriptions($team->subscriptions->pluck('id')->toArray());
     }
 
 
@@ -99,15 +110,13 @@ class TeamController extends Controller
         $company_name = $profile[$profile_type]['company_name'];
 
         // Update company profile
-        $team->profiles()->updateOrCreate(
-            [
+        $team->profiles()->updateOrCreate([
                 'type' => $profile_type,
             ],
             [
                 'type' => $profile_type,
                 'content' => $profile[$profile_type],
-            ]
-        );
+            ]);
 
         // Update team name
         if ($profile_type == 'formal') {
@@ -119,6 +128,9 @@ class TeamController extends Controller
         // Add selected roles/permissions
         $team->syncRoles($request->get('roles'));
         $team->syncPermissions($request->get('permissions'));
+
+        // Add selected subscriptions
+        $team->subscriptions()->sync($request->get('subscriptions'));
 
         return redirect()->route('admin.auth.team.index')->withFlashSuccess(__('alerts.backend.teams.updated'));
     }

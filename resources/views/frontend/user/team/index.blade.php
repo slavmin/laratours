@@ -112,7 +112,7 @@
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h6 class="card-title text-info mb-3 py-1">Пригласить в "{{ $team->name }}"</h6>
+                        <h6 class="card-title text-info mb-3 py-1">@lang('labels.frontend.teams.invite_member')</h6>
 
                         {{ html()->form('POST', route('frontend.user.team.invite', $team->id))->class('form-horizontal')->open() }}
                         <div class="row">
@@ -147,10 +147,10 @@
             @endif
 
 
-            @if($team->invites->count() > 0)
+            @if($team->invites->count())
 
                 <div class="list-group mb-4">
-                    <h6 class="list-group-item text-info py-4">Отправленные приглашения</h6>
+                    <h6 class="list-group-item text-info py-4">@lang('labels.frontend.teams.invites_send')</h6>
 
                     @foreach($team->invites as $invite)
                         <div class="d-flex justify-content-between py-3 list-group-item">
@@ -159,14 +159,44 @@
                             <div class="btn-group btn-group-sm" role="group" aria-label="action buttons">
                                 <a href="{{ route('frontend.user.team.resend_invite', $invite) }}"
                                    class="btn btn-info" title="@lang('labels.general.buttons.send')">
-                                    <i class="fas fa-sync"></i> {{--@lang('labels.general.buttons.send')--}}
+                                    <i class="fas fa-sync"></i>
                                 </a>
                                 <a href="{{ route('frontend.user.team.delete_invite', $invite) }}"
                                    class="btn btn-danger" title="@lang('labels.general.buttons.delete')">
-                                    <i class="far fa-trash-alt"></i> {{--@lang('labels.general.buttons.delete')--}}
+                                    <i class="far fa-trash-alt"></i>
                                 </a>
                             </div>
 
+                        </div>
+                    @endforeach
+
+                </div><!--/list-group-->
+
+            @endif
+
+            @if($team->subscribers->count())
+
+                <div class="list-group mb-4">
+                    <h6 class="list-group-item text-info py-3">@lang('labels.frontend.teams.subscribers')</h6>
+
+                    @foreach($team->subscribers as $subscriber)
+                        <div class="d-flex justify-content-between py-3 list-group-item">
+                            <div class="email-send">{{ $subscriber->name }}</div>
+                        </div>
+                    @endforeach
+
+                </div><!--/list-group-->
+
+            @endif
+
+            @if($team->subscriptions->count())
+
+                <div class="list-group mb-4">
+                    <h6 class="list-group-item text-info py-3">@lang('labels.frontend.teams.subscriptions')</h6>
+
+                    @foreach($team->subscriptions as $subscription)
+                        <div class="d-flex justify-content-between py-3 list-group-item">
+                            <div class="email-send">{{ $subscription->name }}</div>
                         </div>
                     @endforeach
 

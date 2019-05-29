@@ -35,7 +35,7 @@
                                 <th>@lang('labels.backend.access.users.table.roles')
                                     \ @lang('labels.backend.access.users.table.permissions')</th>
                                 <th>@lang('labels.backend.access.users.table.activated')</th>
-                            <!--<th>@lang('labels.backend.access.users.table.social')</th>-->
+                                {{--<th>@lang('labels.backend.access.users.table.social')</th>--}}
                                 <th>@lang('labels.backend.access.users.table.last_updated')</th>
                                 <th>@lang('labels.general.actions')</th>
                             </tr>
@@ -65,7 +65,7 @@
                                         <div class="mb-1 text-secondary">{!! $user->permissions_label !!}</div>
                                     </td>
                                     <td>{!! $user->status_label !!}</td>
-                                <!--<td>{!! $user->social_buttons !!}</td>-->
+                                    {{--<td>{!! $user->social_buttons !!}</td>--}}
                                     <td>{{ $user->updated_at->diffForHumans() }}</td>
                                     <td>{!! $user->action_buttons !!}</td>
                                 </tr>
