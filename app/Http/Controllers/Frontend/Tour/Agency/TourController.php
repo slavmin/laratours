@@ -40,14 +40,16 @@ class TourController extends Controller
 
         $model_alias = Tour::getModelAliasAttribute();
 
+        if (!is_null($city_id) && !is_null($type_id)) {
 
-        if (!is_null($operator_id) && !is_null($type_id)) {
+            $items = Tour::whereIn('team_id', [$operator_id])->where('city_id', $city_id)
+                ->where('tour_type_id', $type_id)
+                ->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
-            $items = Tour::whereIn('team_id', [$operator_id])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->AllTeams()->paginate();
+        } elseif (!is_null($type_id)) {
 
-        } elseif (!is_null($operator_id)) {
-
-            $items = Tour::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->paginate();
+            $items = Tour::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)
+                ->where('tour_type_id', $type_id)->AllTeams()->paginate();
 
         } else {
 
@@ -56,8 +58,8 @@ class TourController extends Controller
 
         // Form filters
         $cities_names = TourCity::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->get()->pluck('name','id')->toArray();
-
-        $tour_types = TourType::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->get()->pluck('name','id')->toArray();
+        // Tour types by operator
+        $tour_types = TourType::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->get()->pluck('name','id')->toArray();
         $types_options = [0 => __('validation.attributes.frontend.general.select')];
         $tour_types = array_replace($types_options, $tour_types);
 

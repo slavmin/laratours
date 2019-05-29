@@ -121,6 +121,10 @@ class OrderController extends Controller
 
         $profiles = $item->profiles()->get()->pluck('content')->first();
 
+        if(!is_array($profiles)){
+            $profiles = [0 => []];
+        }
+
         return view('frontend.tour.order.private.edit', compact('item', 'profiles'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
