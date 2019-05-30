@@ -53,7 +53,7 @@ class UserController extends Controller
     public function create(ManageUserRequest $request, RoleRepository $roleRepository, PermissionRepository $permissionRepository)
     {
         return view('backend.auth.user.create')
-            ->withRoles($roleRepository->with('permissions')->get(['id', 'name']))
+            ->withRoles($roleRepository->whereNotIn('name', [config('access.teams.operator_role'), config('access.teams.agent_role')])->with('permissions')->get(['id', 'name']))
             ->withPermissions($permissionRepository->get(['id', 'name']));
     }
 
@@ -104,7 +104,7 @@ class UserController extends Controller
     {
         return view('backend.auth.user.edit')
             ->withUser($user)
-            ->withRoles($roleRepository->get())
+            ->withRoles($roleRepository->whereNotIn('name', [config('access.teams.operator_role'), config('access.teams.agent_role')])->get())
             ->withUserRoles($user->roles->pluck('name')->all())
             ->withPermissions($permissionRepository->get(['id', 'name']))
             ->withUserPermissions($user->permissions->pluck('name')->all());
