@@ -2,6 +2,8 @@
 
 namespace App\Notifications\Frontend\Order;
 
+use App\Models\Auth\Team;
+use App\Models\Tour\Tour;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,6 +18,21 @@ class NotifyOnOrderCreated extends Notification
      */
     protected $order;
 
+    /**
+     * @var
+     */
+    protected $tour;
+
+    /**
+     * @var
+     */
+    protected $customers;
+
+    /**
+     * @var
+     */
+    protected $team;
+
 
     /**
      * NotifyOnOrderCreated constructor.
@@ -24,6 +41,9 @@ class NotifyOnOrderCreated extends Notification
     public function __construct($order)
     {
         $this->order = $order;
+        $this->tour = Tour::whereId($this->order->tour_id)->AllTeams()->first();
+        $this->customers = $this->order->profiles()->where('type', 'customer')->get()->pluck('content')->first();
+        $this->team = Team::findOrFail($this->order->team_id);
     }
 
     /**
@@ -45,11 +65,29 @@ class NotifyOnOrderCreated extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->greeting('Hello!')
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        if($this->order->by_agent){
+            return (new MailMessage)
+                ->subject(__('strings.emails.order.subject') . ' ' . app_name())
+                ->greeting(__('strings.emails.auth.greeting'))
+                ->line(__('strings.emails.order.created', ['tour_name' => $this->tour->name, 'tour_id' => $this->tour->id]))
+                ->line(__('strings.emails.order.agent', ['name' => $this->team->name]))
+                ->action(__('labels.frontend.auth.login_button'), route('frontend.auth.login'))
+                ->line(__('strings.emails.auth.thank_you_for_using_app'))
+                ->line(__('strings.emails.auth.regards'))
+                ->line(app_name());
+
+        } else {
+            return (new MailMessage)
+                ->subject(__('strings.emails.order.subject') . ' ' . app_name())
+                ->greeting(__('strings.emails.auth.greeting'))
+                ->line(__('strings.emails.order.created', ['tour_name' => $this->tour->name, 'tour_id' => $this->tour->id]))
+                ->line(__('strings.emails.order.contacts'))
+                ->line(__('strings.emails.order.customer', ['name' => $this->customers[0]['first_name'], 'phone' => $this->customers[0]['phone'], 'email' => $this->customers[0]['email']]))
+                ->action(__('labels.frontend.auth.login_button'), route('frontend.auth.login'))
+                ->line(__('strings.emails.auth.thank_you_for_using_app'))
+                ->line(__('strings.emails.auth.regards'))
+                ->line(app_name());
+        }
     }
 
     /**

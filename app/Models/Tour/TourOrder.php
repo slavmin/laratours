@@ -2,6 +2,7 @@
 
 namespace App\Models\Tour;
 
+use App\Events\Frontend\Order\OrderStatusChanged;
 use App\Models\Auth\User;
 use App\Models\Tour\Traits\Attribute\OrderButtonsAttribute;
 use App\Models\Traits\HasProfile;
@@ -75,6 +76,17 @@ class TourOrder extends Model
     public static function getTourNames()
     {
         return Tour::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function (TourOrder $model) {
+            if($model->getOriginal('status') != $model->status){
+                event(new OrderStatusChanged($model));
+            }
+        });
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Frontend\Order;
 
+use App\Models\Tour\Tour;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,6 +17,11 @@ class ReplyOnOrderCreated extends Notification
      */
     protected $order;
 
+    /**
+     * @var
+     */
+    protected $tour;
+
 
     /**
      * NotifyOnOrderCreated constructor.
@@ -24,6 +30,7 @@ class ReplyOnOrderCreated extends Notification
     public function __construct($order)
     {
         $this->order = $order;
+        $this->tour = Tour::whereId($this->order->tour_id)->AllTeams()->first();
     }
 
     /**
@@ -46,10 +53,13 @@ class ReplyOnOrderCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello!')
-                    ->line('This is reply to customer placed order.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject(__('strings.emails.order.subject') . ' ' . app_name())
+            ->greeting(__('strings.emails.auth.greeting'))
+            ->line(__('strings.emails.order.reply.created', ['tour_name' => $this->tour->name]))
+            ->line(__('strings.emails.order.reply.wait'))
+            ->line(__('strings.emails.auth.thank_you_for_using_app'))
+            ->line(__('strings.emails.auth.regards'))
+            ->line(app_name());
     }
 
     /**
