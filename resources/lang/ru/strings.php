@@ -97,7 +97,7 @@ return [
         ],
         'order' => [
             'subject' => 'Заказ тура',
-            'created' => 'Совершен заказ тура (ID: :tour_id) - :tour_name.',
+            'created' => 'Совершен заказ тура (ID :tour_id) - :tour_name.',
             'agent' => 'Заказчик, агентство: :name',
             'contacts' => 'Контакты заказчика:',
             'customer' => 'Имя: :name, Телефон: :phone, Email: :email',

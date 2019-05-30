@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Auth\Team;
 
+use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\Team\ManageTeamRequest;
@@ -102,12 +103,18 @@ class TeamController extends Controller
      * @param UpdateTeamRequest $request
      * @param Team $team
      * @return mixed
+     * @throws GeneralException
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
         $profile = $request->get('profile');
         $profile_type = $request->get('profile_type');
         $company_name = $profile[$profile_type]['company_name'];
+
+        // Team must have at least one role
+        if (!is_array($request->get('roles'))) {
+            throw new GeneralException(__('exceptions.backend.access.users.role_needed_create'));
+        }
 
         // Update company profile
         $team->profiles()->updateOrCreate([
@@ -139,10 +146,16 @@ class TeamController extends Controller
     /**
      * @param StoreTeamRequest $request
      * @return mixed
+     * @throws GeneralException
      */
     public function store(StoreTeamRequest $request)
     {
         $team_name = $request->name;
+
+        // Team must have at least one role
+        if (!is_array($request->get('roles'))) {
+            throw new GeneralException(__('exceptions.backend.access.users.role_needed_create'));
+        }
 
         $team = $this->teamRepository->create([
             'name' => $team_name,
