@@ -31,6 +31,11 @@ class NotifyOnOrderCreated extends Notification
     /**
      * @var
      */
+    protected $customer;
+
+    /**
+     * @var
+     */
     protected $team;
 
 
@@ -43,6 +48,7 @@ class NotifyOnOrderCreated extends Notification
         $this->order = $order;
         $this->tour = Tour::whereId($this->order->tour_id)->AllTeams()->first();
         $this->customers = $this->order->profiles()->where('type', 'customer')->get()->pluck('content')->first();
+        $this->customer = collect($this->customers)->first();
         $this->team = Team::findOrFail($this->order->team_id);
     }
 
@@ -82,7 +88,7 @@ class NotifyOnOrderCreated extends Notification
                 ->greeting(__('strings.emails.auth.greeting'))
                 ->line(__('strings.emails.order.created', ['tour_name' => $this->tour->name, 'tour_id' => $this->tour->id]))
                 ->line(__('strings.emails.order.contacts'))
-                ->line(__('strings.emails.order.customer', ['name' => $this->customers[0]['first_name'], 'phone' => $this->customers[0]['phone'], 'email' => $this->customers[0]['email']]))
+                ->line(__('strings.emails.order.customer', ['name' => $this->customer['first_name'], 'phone' => $this->customer['phone'], 'email' => $this->customer['email']]))
                 ->action(__('labels.frontend.auth.login_button'), route('frontend.auth.login'))
                 ->line(__('strings.emails.auth.thank_you_for_using_app'))
                 ->line(__('strings.emails.auth.regards'))

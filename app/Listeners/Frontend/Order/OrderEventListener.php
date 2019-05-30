@@ -25,14 +25,15 @@ class OrderEventListener
 
         // Send reply to customer
         $customers = $event->order->profiles()->where('type', 'customer')->get()->pluck('content')->first();
-        Notification::route('mail', $customers[0]['email'])->notify(new ReplyOnOrderCreated($event->order));
+        $customer = collect($customers)->first();
+        Notification::route('mail', $customer['email'])->notify(new ReplyOnOrderCreated($event->order));
 
         \Log::info('Tour:' . $event->order->id . ' ordered from company:' . $team->name);
     }
 
     public function onOrderStatusChanged($event) {
 
-        \Log::info('Status changed from:' . $event->order->getOriginal('status') . ' on :' . $event->order->status);
+        \Log::info('Order ID:' . $event->order->id . ' status changed from: ' . $event->order->getOriginal('status') . ' to: ' . $event->order->status);
     }
 
     public function subscribe($events)
