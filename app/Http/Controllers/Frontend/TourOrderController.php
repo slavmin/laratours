@@ -8,6 +8,7 @@ use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Events\Frontend\Order\OrderCreated;
 
 class TourOrderController extends Controller
 {
@@ -66,6 +67,7 @@ class TourOrderController extends Controller
                 ['type' => 'customer'],
                 ['type' => 'customer', 'content' => $profile]);
 
+            event(new OrderCreated($tour_order));
         }
 
         return redirect()->back()->withFlashSuccess(__('alerts.frontend.contact.sent'));

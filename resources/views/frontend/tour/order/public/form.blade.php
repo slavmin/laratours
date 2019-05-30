@@ -33,12 +33,61 @@
                         </div><!--col-->
                     </div><!--row-->
 
+                    <hr />
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.name'))->for('name') }}
+
+                                {{ html()->text('name', $logged_in_user->name ?? '')
+                                    ->class('form-control')
+                                    ->id('name')
+                                    ->placeholder(__('validation.attributes.frontend.name'))
+                                    ->attribute('maxlength', 191)
+                                    ->required() }}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row">
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.customer.email'))->for('email') }}
+
+                                {{ html()->email('email', $logged_in_user->email ?? '')
+                                    ->class('form-control')
+                                    ->id('email')
+                                    ->placeholder(__('validation.attributes.frontend.customer.email'))
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
+                            </div><!--form-group-->
+                        </div><!--col-->
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.customer.phone'))->for('phone') }}
+
+                                {{ html()->text('phone', $logged_in_user->phone ?? '')
+                                    ->class('form-control')
+                                    ->id('phone')
+                                    ->placeholder(__('validation.custom.phone_format'))
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
+                            </div><!--form-group-->
+                        </div><!--col-->
+
+                    </div><!--row-->
+
+                    <hr />
+
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.customer.first_name'))->for('first_name') }}
 
-                                {{ html()->text('customer[0][first_name]')
+                                {{ html()->text('customer[0][first_name]', $logged_in_user->first_name ?? '')
                                     ->class('form-control')
                                     ->id('first_name')
                                     ->placeholder(__('validation.attributes.frontend.customer.first_name'))
@@ -53,7 +102,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.customer.last_name'))->for('last_name') }}
 
-                                {{ html()->text('customer[0][last_name]')
+                                {{ html()->text('customer[0][last_name]', $logged_in_user->last_name ?? '')
                                     ->class('form-control')
                                     ->id('last_name')
                                     ->placeholder(__('validation.attributes.frontend.customer.last_name'))
@@ -68,7 +117,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.customer.phone'))->for('phone') }}
 
-                                {{ html()->text('customer[0][phone]')
+                                {{ html()->text('customer[0][phone]', $logged_in_user->phone ?? '')
                                     ->class('form-control')
                                     ->id('phone')
                                     ->placeholder(__('validation.custom.phone_format'))
@@ -81,7 +130,7 @@
                             <div class="form-group">
                                 {{ html()->label(__('validation.attributes.frontend.customer.email'))->for('email') }}
 
-                                {{ html()->email('customer[0][email]')
+                                {{ html()->email('customer[0][email]', $logged_in_user->email ?? '')
                                     ->class('form-control')
                                     ->id('email')
                                     ->placeholder(__('validation.attributes.frontend.customer.email'))

@@ -18,6 +18,10 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="#orders" class="nav-link" aria-controls="orders" role="tab" data-toggle="tab">@lang('navs.frontend.user.orders')</a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="#edit" class="nav-link" aria-controls="edit" role="tab" data-toggle="tab">@lang('labels.frontend.user.profile.update_information')</a>
                             </li>
 
@@ -31,6 +35,10 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane fade show active pt-3" id="profile" aria-labelledby="profile-tab">
                                 @include('frontend.user.account.tabs.profile')
+                            </div><!--tab panel profile-->
+
+                            <div role="tabpanel" class="tab-pane fade show pt-3" id="orders" aria-labelledby="orders-tab">
+                                @include('frontend.user.account.tabs.orders')
                             </div><!--tab panel profile-->
 
                             <div role="tabpanel" class="tab-pane fade show pt-3" id="edit" aria-labelledby="edit-tab">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Tour\Agency;
 
+use App\Events\Frontend\Order\OrderCreated;
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
@@ -108,6 +109,8 @@ class OrderController extends Controller
         $tour_order->profiles()->updateOrCreate(
             ['type' => 'customer'],
             ['type' => 'customer', 'content' => $profile]);
+
+        event(new OrderCreated($tour_order));
 
         return redirect()->route('frontend.agency.order.index')->withFlashSuccess(__('alerts.general.created'));
     }
