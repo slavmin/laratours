@@ -29,6 +29,7 @@ class StoreTeamRequest extends FormRequest
     {
         return [
             'name' => ['required', 'unique:teams', 'min:3', 'max:191'],
+            'roles' => ['required', 'array'],
         ];
     }
 }
