@@ -39,7 +39,10 @@ class AuthServiceProvider extends ServiceProvider
         // Implicitly grant "Super Admin" role all permissions
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         Gate::before(function ($user, $ability) {
-            return $user->hasRole(config('access.users.admin_role')) ? true : null;
+            if($ability != config('access.teams.operator_permission') &&
+                $ability != config('access.teams.agent_permission')) {
+                return $user->hasRole(config('access.users.admin_role')) ? true : null;
+            }
         });
 
         // Implicitly grant team "Operator" role permissions to administer tours
