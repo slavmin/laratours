@@ -22,12 +22,10 @@ trait UsedByTeams
         static::addGlobalScope('team', function (Builder $builder) {
             static::teamGuard();
 
-            if (!auth()->user()->isAdmin()) {
-                if (auth()->user()->can(config('access.teams.operator_permission')) && $builder->getQuery()->from == 'tour_orders') {
-                    $builder->where($builder->getQuery()->from . '.operator_id', auth()->user()->currentTeam->getKey());
-                } else {
-                    $builder->where($builder->getQuery()->from . '.team_id', auth()->user()->currentTeam->getKey());
-                }
+            if (auth()->user()->can(config('access.teams.operator_permission')) && $builder->getQuery()->from == 'tour_orders') {
+                $builder->where($builder->getQuery()->from . '.operator_id', auth()->user()->currentTeam->getKey());
+            } else {
+                $builder->where($builder->getQuery()->from . '.team_id', auth()->user()->currentTeam->getKey());
             }
         });
 
@@ -62,10 +60,8 @@ trait UsedByTeams
      */
     protected static function teamGuard()
     {
-        if (!auth()->user()->isAdmin()) {
-            if (auth()->guest() || !auth()->user()->currentTeam) {
-                throw new Exception('No authenticated user with selected team present.');
-            }
+        if (auth()->guest() || !auth()->user()->currentTeam) {
+            throw new Exception('No authenticated user with selected team present.');
         }
     }
 }

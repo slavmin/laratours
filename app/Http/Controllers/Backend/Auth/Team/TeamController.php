@@ -112,7 +112,7 @@ class TeamController extends Controller
         $company_name = $profile[$profile_type]['company_name'];
 
         // Team must have at least one role
-        if (!is_array($request->get('roles'))) {
+        if (!isset($profile_type) && !is_array($request->get('roles'))) {
             throw new GeneralException(__('exceptions.backend.access.users.role_needed_create'));
         }
 
@@ -132,9 +132,11 @@ class TeamController extends Controller
             ]);
         }
 
-        // Add selected roles/permissions
-        $team->syncRoles($request->get('roles'));
-        $team->syncPermissions($request->get('permissions'));
+        if (is_array($request->get('roles'))) {
+            // Add selected roles/permissions
+            $team->syncRoles($request->get('roles'));
+            $team->syncPermissions($request->get('permissions'));
+        }
 
         // Add selected subscriptions
         $team->subscriptions()->sync($request->get('subscriptions'));
