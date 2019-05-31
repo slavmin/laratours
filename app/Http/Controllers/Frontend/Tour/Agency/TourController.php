@@ -21,15 +21,8 @@ class TourController extends Controller
      */
     public function index(Request $request)
     {
-        $subscriptions = [];
-        $operators = [];
-
-        $team = Team::whereId(auth()->user()->current_team_id)->first();
-
-        if($team && $team->hasRole(config('access.teams.agent_role'))){
-            $subscriptions = $team->subscriptions->pluck('id')->toArray();
-            $operators = $team->subscriptions->pluck('name','id')->toArray();
-        }
+        $operators = Team::getTeamSubscriptions();
+        $subscriptions = array_keys($operators);
 
         $operator_id = $this->getOperatorId($request, $subscriptions);
         $city_id = $this->getCityId($request, $subscriptions);

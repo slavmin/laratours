@@ -21,15 +21,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $subscriptions = [];
-        $operators = [];
-
-        $team = Team::whereId(auth()->user()->current_team_id)->first();
-
-        if ($team && $team->hasRole(config('access.teams.agent_role'))) {
-            $subscriptions = $team->subscriptions->pluck('id')->toArray();
-            $operators = $team->subscriptions->pluck('name', 'id')->toArray();
-        }
+        $operators = Team::getTeamSubscriptions();
+        $subscriptions = array_keys($operators);
 
         $orderBy = 'id';
         $sort = 'desc';
@@ -57,13 +50,8 @@ class OrderController extends Controller
     {
         $model_alias = TourOrder::getModelAliasAttribute();
 
-        $subscriptions = [];
-
-        $team = Team::whereId(auth()->user()->current_team_id)->first();
-
-        if ($team && $team->hasRole(config('access.teams.agent_role'))) {
-            $subscriptions = $team->subscriptions->pluck('id')->toArray();
-        }
+        $operators = Team::getTeamSubscriptions();
+        $subscriptions = array_keys($operators);
 
         $tour = Tour::whereId($tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
 
