@@ -19,13 +19,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $agencies = [];
-
-        $team = Team::whereId(auth()->user()->current_team_id)->first();
-
-        if($team && $team->hasRole(config('access.teams.operator_role'))){
-            $agencies = $team->subscribers->pluck('name','id')->toArray();
-        }
+        $agencies = Team::getTeamSubscriptions();
+        $subscribers = array_keys($agencies);
 
         $orderBy = 'id';
         $sort = 'desc';
