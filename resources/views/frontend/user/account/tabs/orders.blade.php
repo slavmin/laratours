@@ -3,7 +3,7 @@
 
         <div class="list-group list-group-flush mb-4">
 
-            @foreach($logged_in_user->orders as $order)
+            @foreach($logged_in_user->orders->sortByDesc('created_at') as $order)
                 <div class="list-group-item">
                     <div class="d-flex justify-content-between">
                         <div class="w-25 p-2"><span class="text-secondary">{{ timezone()->convertToLocal($order->created_at, 'd.m.Y') }}</span></div>

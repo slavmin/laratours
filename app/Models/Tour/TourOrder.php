@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 use App\Models\Traits\HasPagination;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableInterface;
 
 
-class TourOrder extends Model
+class TourOrder extends Model implements AuditableInterface
 {
-    use UsedByTeams, HasPagination, HasProfile, SoftDeletes, OrderButtonsAttribute;
+    use UsedByTeams, HasPagination, HasProfile, SoftDeletes, OrderButtonsAttribute, Auditable;
 
     protected $fillable = ['status'];
 
@@ -23,6 +25,10 @@ class TourOrder extends Model
     ];
 
     protected $appends = ['model_alias', 'statuses', 'by_agent', 'by_user'];
+
+    protected $auditInclude  = [
+        'status',
+    ];
 
     /**
      * @return string
