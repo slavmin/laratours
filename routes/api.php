@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Frontend\ApiAuthController;
+use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Http\Request;
 
 /*
@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-//Route::post('/login', [ApiAuthController::class, 'login'])->name('api-login');
-//Route::group(['middleware' => ['auth:api']], function () {
-//    Route::post('/logout', [ApiAuthController::class, 'logout'])->name('api_logout');
-//});
+Route::post('/login', [AuthController::class, 'login'])->name('api-login');
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('api_logout');
+});
