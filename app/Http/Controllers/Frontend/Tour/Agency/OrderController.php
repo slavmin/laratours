@@ -116,7 +116,11 @@ class OrderController extends Controller
             $profiles = [0 => []];
         }
 
-        return view('frontend.tour.order.private.edit', compact('item', 'profiles'))
+        $statuses = TourOrder::getStatusesAttribute();
+
+        $audits = $item->audits->sortByDesc('created_at');
+
+        return view('frontend.tour.order.private.edit', compact('item', 'profiles', 'statuses', 'audits'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.agency.' . $model_alias . '.update', [$item->id]))
