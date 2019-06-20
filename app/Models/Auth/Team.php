@@ -70,11 +70,11 @@ class Team extends TeamworkTeam
      */
     public static function getTeamSubscriptions()
     {
-        $team = Team::whereId(auth()->user()->current_team_id)->first();
+        $team = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
 
-        if($team && $team->hasRole(config('access.teams.agent_role'))){
+        if($team && $team->roles->contains('name', config('access.teams.agent_role'))){
             return $team->subscriptions->pluck('name','id')->toArray();
-        } elseif($team && $team->hasRole(config('access.teams.operator_role'))){
+        } elseif($team && $team->roles->contains('name', config('access.teams.operator_role'))){
             return $team->subscribers->pluck('name','id')->toArray();
         }
     }

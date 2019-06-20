@@ -47,16 +47,16 @@ class AuthServiceProvider extends ServiceProvider
 
         // Implicitly grant team "Operator" role permissions to administer tours
         Gate::define(config('access.teams.operator_permission'), function ($user) {
-            $team = Team::whereId($user->current_team_id)->first();
+            $team = Team::whereId($user->current_team_id)->with('roles')->first();
             if(!$team){return null;}
-            return $team->hasRole(config('access.teams.operator_role')) ? true : null;
+            return $team->roles->contains('name', config('access.teams.operator_role')) ? true : null;
         });
 
         // Implicitly grant team "Agent" role permissions to administer orders
         Gate::define(config('access.teams.agent_permission'), function ($user) {
-            $team = Team::whereId($user->current_team_id)->first();
+            $team = Team::whereId($user->current_team_id)->with('roles')->first();
             if(!$team){return null;}
-            return $team->hasRole(config('access.teams.agent_role')) ? true : null;
+            return $team->roles->contains('name', config('access.teams.agent_role')) ? true : null;
         });
     }
 }
