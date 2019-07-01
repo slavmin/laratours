@@ -38,8 +38,6 @@ class PermissionRoleTableSeeder extends Seeder
             'order-edit',
             'order-delete',
             'order-restore',
-            config('access.teams.operator_permission'),
-            config('access.teams.agent_permission')
         ];
 
         foreach ($permissions as $permission) {
@@ -51,8 +49,6 @@ class PermissionRoleTableSeeder extends Seeder
 
         // Assign Permissions to other Roles
         $executive->givePermissionTo('view backend');
-        $operator->givePermissionTo(config('access.teams.operator_permission'));
-        $agent->givePermissionTo(config('access.teams.agent_permission'));
         $user->givePermissionTo('order-view');
 
         $this->enableForeignKeys();
