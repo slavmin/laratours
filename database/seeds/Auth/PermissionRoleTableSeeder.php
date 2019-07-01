@@ -37,7 +37,9 @@ class PermissionRoleTableSeeder extends Seeder
             'order-create',
             'order-edit',
             'order-delete',
-            'order-restore'
+            'order-restore',
+            config('access.teams.operator_permission'),
+            config('access.teams.agent_permission')
         ];
 
         foreach ($permissions as $permission) {

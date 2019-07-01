@@ -22,14 +22,14 @@ class AddTeamIdFieldToTourObjectAndExtendsTables extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('extends', function (Blueprint $table) {
-            $table->unsignedBigInteger('team_id')->nullable()->index()->after('content');
-
-            $table->foreign('team_id')
-                ->references('id')
-                ->on(\Config::get( 'teamwork.teams_table' ))
-                ->onDelete('cascade');
-        });
+//        Schema::table('extends', function (Blueprint $table) {
+//            $table->unsignedBigInteger('team_id')->nullable()->index()->after('content');
+//
+//            $table->foreign('team_id')
+//                ->references('id')
+//                ->on(\Config::get( 'teamwork.teams_table' ))
+//                ->onDelete('cascade');
+//        });
     }
 
     /**
@@ -44,10 +44,10 @@ class AddTeamIdFieldToTourObjectAndExtendsTables extends Migration
             $table->dropColumn('team_id');
         });
 
-        Schema::table('extends', function (Blueprint $table) {
-            $table->dropForeign('extends_team_id_foreign');
-            $table->dropColumn('team_id');
-        });
+//        Schema::table('extends', function (Blueprint $table) {
+//            $table->dropForeign('extends_team_id_foreign');
+//            $table->dropColumn('team_id');
+//        });
     }
 
 }
