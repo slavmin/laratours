@@ -59,11 +59,11 @@
                                 <div class="col">
                                     <div class="card mb-4">
                                         <div class="card-header">
-                                            Item
+                                            Для удобства:
                                         </div><!--card-header-->
 
                                         <div class="card-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non qui facilis deleniti expedita fuga ipsum numquam aperiam itaque cum maxime.
+                                            <a href="/operator/transport" type="button" class="btn btn-primary">Транспорт</a>
                                         </div><!--card-body-->
                                     </div><!--card-->
                                 </div><!--col-md-6-->

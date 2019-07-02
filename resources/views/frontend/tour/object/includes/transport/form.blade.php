@@ -1,5 +1,4 @@
 {{ html()->form($method, $route)->class('form-horizontal')->open() }}
-<example-component></example-component>
 <div class="row mt-4">
     <div class="col">
         <div class="form-group row">

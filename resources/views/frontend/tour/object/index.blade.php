@@ -10,9 +10,25 @@
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
+                        <!-- Modal Vue component. Пока только "Транспорт" -->
+                        <?php $scities = json_encode($cities_select); ?>
+                        <add-object-component 
+                            type="@lang('labels.frontend.tours.'.$model_alias.'.management')"
+                            field-name="@lang('validation.attributes.frontend.general.name')"
+                            :fields="{
+                                name: 'Название',
+                                city: 'Город',
+                                quantity: 'Количество',
+                                description: 'Описание'
+                            }"
+                            :cities-select="{{ $scities }}"
+                            token="{{ csrf_token() }}"
+                        ></add-object-component>
+                        <!-- /Modal Vue component. Пока только "Транспорт" -->
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
-                                <i class="fas fa-plus"></i></a>
+                                <i class="fas fa-plus"></i>
+                            </a>   
                         </div><!--btn-toolbar-->
                     </div>
                 </div><!--col-->
@@ -37,7 +53,9 @@
                                         <td>{{$item->name}}</td>
                                         <td>
                                             @if (array_key_exists($item->city_id, $cities_names))
-                                                <span class="text-secondary">{{$cities_names[$item->city_id]}}</span>
+                                                <span class="text-secondary">{{$cities_names[$item->city_id]}}
+                                                <!-- {{$item}} -->
+                                                </span>
                                             @endif
                                         </td>
                                         <td>{{$item->qnt}}</td>
