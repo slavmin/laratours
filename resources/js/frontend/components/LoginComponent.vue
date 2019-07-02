@@ -5,7 +5,7 @@
             class="row justify-content-center align-items-center"
             v-if="showLoginForm"
         >
-    		<form method="POST" action="http://127.0.0.1:8000/login">
+    		<form method="POST" action="/login">
                 <input type="hidden" name="_token" :value="token">
                 <div class="form-group">
                     <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
@@ -28,7 +28,7 @@
             class="row justify-content-center align-items-center" 
             v-if="showForgottenPasswordForm"
         >
-            <form method="POST" action="http://127.0.0.1:8000/password/email">
+            <form method="POST" action="/password/email">
                 <input type="hidden" name="_token" :value="token">
                 <div class="form-group">
                     <div class="row justify-content-center">
