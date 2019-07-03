@@ -33,8 +33,16 @@
                     </div>
                 </div><!--col-->
             </div><!--row-->
-
-            @if(count($items)>0)
+            
+            @if(count($items)>0)   
+            <?php $sitems = json_encode($items); ?>
+            <object-table-component
+                type="transport"
+                :table-items="{{ $sitems }}"
+                token="{{ csrf_token() }}"
+                :cities="{{ $scities }}"
+            > 
+            </object-table-component>
             <div class="row mt-4">
                 <div class="col">
                     <div class="table-responsive">

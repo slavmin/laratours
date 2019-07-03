@@ -1,0 +1,150 @@
+<template>
+	<div>
+		<!-- <h5>hi from table!</h5> -->
+        <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
+        <table class="table table-hover mt-2">
+            <!-- Table header -->
+            <thead>
+                <th>Название</th>
+                <th class="text-center">Город</th>
+                <th class="text-center">Количество</th>
+                <th>Описание</th>
+                <th class="text-right">Действия</th>
+            </thead>
+            <!-- /Table header -->
+            <!-- Table body -->
+            <tbody>
+                <tr 
+                    v-for="item in tableItems.data"
+                    :key="item.id"
+                >
+                    <!-- Object name and price -->
+                    <td>
+                        <div>{{ item.name }}</div>
+                        <table class="price-table ml-5">
+                            <thead>
+                                <th></th>
+                                <th class="text-right"><a href="#" class="price-table__link">Цены</a>:</th>
+                            </thead>
+                            <tbody>
+                                <tr 
+                                    v-for="price in examplePrice"
+                                    :key="price.id"
+                                >
+                                    <td>{{ price.name }}</td>
+                                    <td class="text-right">{{ price.price }}₽</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <!-- /Object name and price -->
+                    <!-- City -->
+                    <td class="align-middle text-center">
+                        {{ getCityName(item.city_id) }}
+                    </td>
+                    <!-- /City -->
+                    <!-- Quantity -->
+                    <td class="align-middle text-center">
+                        <div>{{ item.qnt }}</div>
+                        <div>
+                            <a href="#">Схема салона</a>
+                        </div>
+                    </td>
+                    <!-- /Quantity -->
+                    <!-- Description -->
+                    <td class="align-middle">{{ item.description }}</td>
+                    <!-- /Description -->
+                    <!-- Actions -->
+                    <td class="align-middle">
+                        <!-- Edit button -->
+                        <div role="toolbar" aria-label="Toolbar with button groups" class="float-right">
+                            <div class="ml-1">
+                                <!-- Edit button -->
+                                <a 
+                                    :href="getEditLink(item)"
+                                     class="btn btn-outline-success"
+                                >
+                                    <i 
+                                        data-toggle="tooltip" 
+                                        data-placement="top" 
+                                        title="Редактировать" 
+                                        class="fas fa-edit"
+                                    >    
+                                    </i>
+                                </a>
+                                <!-- /Edit button -->
+                                <!-- Delete button -->
+                                <form :action="getDeleteLink(item)" method="post" style="display: inline-block;">
+                                    <input type="hidden" name="_token" :value="token">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button title="Удалить" class="btn btn-outline-danger">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                                <!-- /Delete button -->
+                            </div>
+                        </div>
+                    </td>
+                    <!-- /Actions -->
+                </tr>
+            </tbody>
+            <!-- /Table body -->
+        </table>
+	</div>
+</template>
+
+<script>
+export default {
+
+    name: 'TableComponent',
+    props: ['type', 'tableItems', 'token', 'cities'],
+    data() {
+        return {
+            objectRootLink: 'http://127.0.0.1:8000/operator/',
+            examplePrice: [
+                { name: '1 час', price: '1000'},
+                { name: '2 часа', price: '1900'},
+                { name: '3 часа', price: '2500'},
+                { name: '8 часов', price: '6000'},
+                { name: '24 часа', price: ''}
+            ]
+        };
+    },
+    created() {
+        // console.log(this.tableItems)
+        // this.objects.push(this.tableItems)
+    },
+    methods: {
+        showMe() {
+            console.log(this.cities.Россия)    
+        },
+        getEditLink(item) {
+            return this.type + '/' + item.id + '/edit'
+        },
+        getDeleteLink(item) {
+            return this.objectRootLink + this.type + '/' +item.id
+        },
+        getCityName(cityId) {
+            return this.cities.Россия[cityId]
+        }
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+.price-table {
+    th {
+        border: none;
+        padding: 6px;
+    }
+    td {
+        padding: 6px;
+        font-size: 12px;
+        color: #515151;
+    }
+}
+.price-table__link {
+    text-decoration: underline;
+    font-weight: initial;
+}
+</style>

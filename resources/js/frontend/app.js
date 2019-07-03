@@ -27,6 +27,7 @@ Vue.component('login-component', require('./components/LoginComponent.vue').defa
 Vue.component('add-object-component', require('./components/AddObjectComponent.vue').default);
 Vue.component('object-prices-component', require('./components/ObjectPricesComponent.vue').default);
 Vue.component('bus-scheme-component', require('./components/BusSchemeComponent.vue').default);
+Vue.component('object-table-component', require('./tour/object/ObjectTableComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
