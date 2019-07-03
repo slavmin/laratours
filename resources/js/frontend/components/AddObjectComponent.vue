@@ -80,7 +80,7 @@
 							</div>
 							<div class="row container mb-4">
 								<!-- <object-prices-component></object-prices-component>	 -->
-								<bus-scheme-component></bus-scheme-component>		
+								<!-- <bus-scheme-component></bus-scheme-component>		 -->
 								<button type="button" class="btn btn-outline-primary" v-on:click="showPrices = !showPrices">
 									Цены
 								</button>					
@@ -141,7 +141,6 @@ export default {
   	selectCountry:function(event) {
   		this.selectedCountry = event.target.value
   		console.log(this.citiesSelect)
-  		// console.log(this.citiesSelect.map(this.selectedCountry))
   	}
   }
 };

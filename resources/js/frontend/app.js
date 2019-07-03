@@ -28,6 +28,7 @@ Vue.component('add-object-component', require('./components/AddObjectComponent.v
 Vue.component('object-prices-component', require('./components/ObjectPricesComponent.vue').default);
 Vue.component('bus-scheme-component', require('./components/BusSchemeComponent.vue').default);
 Vue.component('object-table-component', require('./tour/object/ObjectTableComponent.vue').default);
+Vue.component('transport-price-component', require('./tour/object/transport/TransportPriceComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

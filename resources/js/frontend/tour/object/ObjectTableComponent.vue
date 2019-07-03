@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- <h5>hi from table!</h5> -->
-        <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
+        <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button>
         <table class="table table-hover mt-2">
             <!-- Table header -->
             <thead>
@@ -24,7 +24,9 @@
                         <table class="price-table ml-5">
                             <thead>
                                 <th></th>
-                                <th class="text-right"><a href="#" class="price-table__link">Цены</a>:</th>
+                                <th>
+                                    <transport-price-component></transport-price-component>
+                                </th>
                             </thead>
                             <tbody>
                                 <tr 
@@ -47,7 +49,8 @@
                     <td class="align-middle text-center">
                         <div>{{ item.qnt }}</div>
                         <div>
-                            <a href="#">Схема салона</a>
+                            <!-- <a href="#">Схема салона</a> -->
+                            <bus-scheme-component></bus-scheme-component>
                         </div>
                     </td>
                     <!-- /Quantity -->
@@ -100,7 +103,7 @@ export default {
     props: ['type', 'tableItems', 'token', 'cities'],
     data() {
         return {
-            objectRootLink: 'http://127.0.0.1:8000/operator/',
+            path: this.tableItems.path,
             examplePrice: [
                 { name: '1 час', price: '1000'},
                 { name: '2 часа', price: '1900'},
@@ -116,13 +119,13 @@ export default {
     },
     methods: {
         showMe() {
-            console.log(this.cities.Россия)    
+            console.log(this.tableItems)    
         },
         getEditLink(item) {
             return this.type + '/' + item.id + '/edit'
         },
         getDeleteLink(item) {
-            return this.objectRootLink + this.type + '/' +item.id
+            return this.path + '/' +item.id
         },
         getCityName(cityId) {
             return this.cities.Россия[cityId]
@@ -136,6 +139,7 @@ export default {
     th {
         border: none;
         padding: 6px;
+        font-weight: initial;
     }
     td {
         padding: 6px;
@@ -146,5 +150,6 @@ export default {
 .price-table__link {
     text-decoration: underline;
     font-weight: initial;
+    cursor: pointer;
 }
 </style>
