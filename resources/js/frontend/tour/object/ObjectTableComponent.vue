@@ -1,7 +1,8 @@
 <template>
 	<div>
 		<!-- <h5>hi from table!</h5> -->
-        <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button>
+        <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
+        <bus-scheme-component></bus-scheme-component>
         <table class="table table-hover mt-2">
             <!-- Table header -->
             <thead>
@@ -49,8 +50,8 @@
                     <td class="align-middle text-center">
                         <div>{{ item.qnt }}</div>
                         <div>
-                            <!-- <a href="#">Схема салона</a> -->
-                            <bus-scheme-component></bus-scheme-component>
+                            <a href="#">Схема салона</a>
+                            <!-- <bus-scheme-component></bus-scheme-component> -->
                         </div>
                     </td>
                     <!-- /Quantity -->

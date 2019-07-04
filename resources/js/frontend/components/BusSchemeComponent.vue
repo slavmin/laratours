@@ -1,31 +1,190 @@
 <template>
 	<div>
-		<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+		<!-- Button -->
+		<button 
+			type="button" 
+			class="btn btn-outline-primary" 
+			data-toggle="modal" 
+			data-target="#busScheme"
+		>
 			Схема салона
 		</button>
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable" role="document">
+		<!-- /Button -->
+		<!-- Modal wrap -->
+		<div class="modal fade" id="busScheme" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
 				<div class="modal-content">
+					<!-- Modal header -->
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Схема рассадки (Ещё не реализовано)</h5>
+						<h5 class="modal-title" id="exampleModalLabel">Схема салона</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<div class="modal-body">
-						<img src="/img/frontend/bus-scheme.png" alt="">Это картинка
-						<br>Продажа туров может происходит с привязкой к свободным местам в автобусе или другом транспорте. 
-						<br>Схемы транспорта прикрепляются к Расписанию тура на каждую дату и время. 
-						<br>Схемы автотранспорта создаются  индивидуально для каждой транспортной единицы. 
-						<br>У каждого поставщика  собственный набор схем автотранспорта.  
+					<!-- /Modal header -->
+					<!-- Modal body -->
+					<div class="modal-body d-flex flex-row justify-content-between">
+						<!-- Bus scheme -->
+						<div class="bus">
+							<div
+								v-for="row, r in bus.rows"
+								v-bind:key="r" 
+								class="d-flex flex-row mb-1"
+							>
+								<div 
+									v-for="col, c in bus.cols"
+									v-bind:key="c"
+								>
+									<div 
+										class="seat"
+										:id="[row + '-' + col]"
+										@click="chooseSeat(row + '-' + col)"
+									>
+										|__|
+									</div>								
+								</div>		
+							</div>
+						</div>
+						<!-- /Bus scheme -->
+						<!-- Controls -->
+						<div class="controls d-flex flex-column">
+							<!-- Add/remove rows -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<!-- Add button -->
+								<button 
+									class="btn btn-primary rounded mr-2"
+									@click="addRow"
+								>
+									<i class="fas fa-plus"></i>
+								</button>
+								<!-- /Add button -->
+								<p class="mb-0">Рядов: {{ bus.rows }}</p> <!-- Show rows count -->
+								<!-- Remove button -->
+								<button 
+									class="btn btn-primary rounded ml-2"
+									@click="removeRow"
+								>
+									<i class="fas fa-minus"></i>
+								</button>
+								<!-- /Remove button -->
+							</div>
+							<!-- /Add/remove rows -->
+							<!-- Add/remove cols -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<!-- Add button -->
+								<button 
+									class="btn btn-primary rounded mr-2"
+									@click="addCol"
+								>
+									<i class="fas fa-plus"></i>
+								</button>
+								<!-- /Add button -->
+								<p class="mb-0">Мест: {{ bus.cols }} </p> <!-- Show rows count -->
+								<!-- Remove button -->
+								<button 
+									class="btn btn-primary rounded ml-2"
+									@click="removeCol"
+								>
+									<i class="fas fa-minus"></i>
+								</button>
+								<!-- /Remove button -->
+							</div>
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 12px;">
+								<p class="mb-0 text-align-right" style="font-size: 10px;">Мест в ряду, включая проходы.</p>
+							</div>
+							<!-- /Add/remove cols -->
+							<!-- Selected seats -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<p class="mb-0">Выделено мест: {{ choosenSeats.length }}</p>
+							</div>
+							<!-- /Selected seats -->
+							<!-- Set driver seats button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<button
+									class="btn btn-primary pass control"
+									@click="setPass"
+								>
+									Проход
+								</button>
+							</div>
+							<!-- /Set driver seats button -->
+							<!-- Set doors button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<button
+									class="btn btn-primary door control"
+									@click="setDoors"
+								>
+									Двери
+								</button>
+							</div>
+							<!-- /Set doors button -->
+							<!-- Set guide seats button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<button
+									class="btn btn-primary guide-seat control"
+									@click="setGuideSeats"
+								>
+									Место гида
+								</button>
+							</div>
+							<!-- /Set guide seats button -->
+							<!-- Set driver seats button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<button
+									class="btn btn-primary driver-seat control"
+									@click="setDriverSeats"
+								>
+									Место водителя
+								</button>
+							</div>
+							<!-- /Set driver seats button -->
+							<!-- Set unavailable seats button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<button
+									class="btn btn-primary unavailable-seat control"
+									@click="setUnavailableSeats"
+								>
+									Недоступно
+								</button>
+							</div>
+							<!-- /Set unavailable seats button -->
+							<!-- Passengers seats count -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mb-1" style="height: 38px;">
+								<p class="mb-0">Пассажирских мест: {{ bus.totalPassengersCount }}</p>
+							</div>
+							<!-- /Passengers seats count -->
+							<!-- Reset button -->
+							<div class="container-fluid d-flex justify-content-between align-items-center mt-4" style="height: 38px;">
+								<button
+									class="btn btn-primary reset-btn control"
+									@click="reset"
+								>
+									Сбросить
+								</button>
+							</div>
+							<!-- /Reset button -->
+						</div>
+						<!-- /Controls -->
 					</div>
+					<!-- /Modal body -->
+					<!-- Modal footer -->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-						<button type="button" class="btn btn-primary">Сохранить</button>
+						<button 
+							type="button" 
+							class="btn btn-secondary" 
+							data-dismiss="modal"
+						>
+							Закрыть
+						</button>
+						<button type="button" class="btn btn-primary" @click="exportBusScheme">
+							Сохранить
+						</button>
 					</div>
+					<!-- /Modal footer -->
 				</div>
 			</div>
 		</div>
+		<!-- /Modal wrap -->
 	</div>
 </template>
 
@@ -36,11 +195,225 @@ export default {
 
   data() {
     return {
-
+    	bus: {
+    		rows: 10,
+    		cols: 4,
+    		driver: ['1-1', '1-2'],
+    		doors: ['1-4'],
+    		guide: ['2-4'],
+    		pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
+    		unavailable: [],
+    		totalPassengersCount: 0
+    	},
+    	defaultClasses: 'seat btn mr-1 ',
+    	commonSeatClass: 'common-seat',
+    	driverSeatClass: 'driver-seat',
+    	guideSeatClass: 'guide-seat',
+    	passClass: 'pass',
+    	doorClass: 'door',
+    	choosenSeatClass: 'choosen-seat',
+    	choosenSeats: [],
+    	unavailableSeatClass: 'unavailable-seat'
     };
   },
+  mounted() {
+  	this.drawScheme()
+  	this.setTotalPassengersCount()
+  },
+  updated() {
+  	this.drawScheme()
+  	this.setTotalPassengersCount()
+  },
+  methods: {
+  	addRow() {
+  		this.bus.rows++
+  	},
+  	removeRow() {
+  		this.bus.rows--
+  	},
+  	addCol() {
+  		this.bus.cols++
+  	},
+  	removeCol() {
+  		this.bus.cols--
+  	},
+  	reset() {
+  		this.bus.driver = []
+  		this.bus.doors = []
+  		this.bus.service = []
+  		this.bus.pass = []
+  		this.bus.guide = []
+  		this.bus.unavailable = []
+  		this.choosenSeats = []
+  		this.drawScheme()
+  	},
+  	setAllSeatsCommon() {
+  		let seats = document.getElementsByClassName('seat')
+  		Array.from(seats).forEach(seat => {
+  			seat.className = this.defaultClasses + this.commonSeatClass
+  		})
+  	},
+  	setSeatClass(seatId, className) {
+  		let seat = document.getElementById(seatId)
+  		seat.className = this.defaultClasses + className
+  	},
+  	drawScheme() {
+  		this.setAllSeatsCommon()
+  		// Driver seats
+  		this.bus.driver.forEach(driverSeatId => {
+  			this.setSeatClass(driverSeatId, this.driverSeatClass)
+  		})
+  		// Guide seats
+  		this.bus.guide.forEach(guideSeatId => {
+  			this.setSeatClass(guideSeatId, this.guideSeatClass)
+  		})
+  		// Pass
+  		this.bus.pass.forEach(passId => {
+  			this.setSeatClass(passId, this.passClass)
+  		})
+  		// Doors
+  		this.bus.doors.forEach(doorId => {
+  			this.setSeatClass(doorId, this.doorClass)
+  		})
+  		// Unavailable seats
+  		this.bus.unavailable.forEach(unavailableSeatId => {
+  			this.setSeatClass(unavailableSeatId, this.unavailableSeatClass)
+  		})
+  		// Choosen
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.choosenSeatClass)
+  		})
+  	},
+  	chooseSeat(seatId) {
+  		if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
+			this.choosenSeats.push(seatId)
+  		}
+  	},
+  	setDriverSeats() {
+  		// Change previous driver seats to common seats
+  		this.bus.driver.forEach(driverSeatId => {
+  			this.setSeatClass(driverSeatId, this.commonSeatClass)
+  		})
+  		// Set new driver seats
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.driverSeatClass)
+  		})
+  		this.bus.driver = this.choosenSeats
+  		this.choosenSeats = []
+  	},
+  	setGuideSeats() {
+  		// Change previous guide seats to common seats
+  		this.bus.guide.forEach(guideSeatId => {
+  			this.setSeatClass(guideSeatId, this.commonSeatClass)
+  		})
+  		// Set new guide seats
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.guideSeatClass)
+  		})
+  		this.bus.guide = this.choosenSeats
+  		this.choosenSeats = []
+  	},
+  	setPass() {
+  		// Change previous pass to common seats
+  		this.bus.pass.forEach(passId => {
+  			this.setSeatClass(passId, this.commonSeatClass)
+  		})
+  		// Set new pass
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.passClass)
+  		})
+  		this.bus.pass = this.choosenSeats
+  		this.choosenSeats = []
+  	},
+  	setDoors() {
+  		// Change previous doors to common seats
+  		this.bus.doors.forEach(doorId => {
+  			this.setSeatClass(doorId, this.commonSeatClass)
+  		})
+  		// Set new doors
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.doorClass)
+  		})
+  		this.bus.doors = this.choosenSeats
+  		this.choosenSeats = []
+  	},
+  	setUnavailableSeats() {
+  		// Change previous unavailable seats to common seats
+  		this.bus.unavailable.forEach(unavailableSeatId => {
+  			this.setSeatClass(unavailableSeatId, this.commonSeatClass)
+  		})
+  		// Set new unavailable seats
+  		this.choosenSeats.forEach(choosenSeatId => {
+  			this.setSeatClass(choosenSeatId, this.unavailableSeatClass)
+  		})
+  		this.bus.unavailable = this.choosenSeats
+  		this.choosenSeats = []
+  	},
+  	exportBusScheme() {
+  		alert('Объект выведен в консоль')
+  		console.log('bus object: ', this.bus)
+  	},
+  	setTotalPassengersCount() {
+  		let commonSeats = document.getElementsByClassName('common-seat')
+  		this.bus.totalPassengersCount = commonSeats.length
+  	}
+  }
 };
 </script>
 
 <style lang="css" scoped>
+.bus {
+	/*border: 1px solid black;*/
+	padding: 6px;
+}
+.seat {
+	cursor: pointer;
+	color: white;
+	padding: 3px !important;
+	padding-bottom: 0px !important;
+}
+.common-seat,
+.reset-btn {
+	background-color: green;
+	border-color: green;
+}
+.driver-seat {
+	background-color: gray;
+	border-color: gray;
+}
+.pass {
+	background-color: #F3F3F3;
+	border-color: #F3F3F3;
+	color: #F3F3F3;
+}
+.pass.control {
+	color: gray;
+}
+.door {
+	background-color: white;
+	border-color: white;
+}
+.door.control {
+	border-color: black;
+	color: gray;
+}
+.choosen-seat {
+	background-color: #ffc107;
+	border-color: #ffc107;
+}
+.guide-seat {
+	background-color: #A1A1A1;
+	border-color: #A1A1A1;
+}
+.unavailable-seat {
+	background-color: #212121;
+	border-color: #212121;
+	color: #212121;
+}
+.unavailable-seat.control {
+	color: white;
+}
+.control {
+	width: 100%;
+}
 </style>
