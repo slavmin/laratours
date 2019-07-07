@@ -3,6 +3,7 @@
 		<!-- <h5>hi from table!</h5> -->
         <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
         <bus-scheme-component></bus-scheme-component>
+        <!-- <example-component></example-component> -->
         <table class="table table-hover mt-2">
             <!-- Table header -->
             <thead>

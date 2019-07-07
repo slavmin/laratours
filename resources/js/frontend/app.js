@@ -31,11 +31,19 @@ Vue.component('object-table-component', require('./tour/object/ObjectTableCompon
 Vue.component('transport-price-component', require('./tour/object/transport/TransportPriceComponent.vue').default);
 
 /**
+ * Vuex store
+ *
+ * shoom1337
+ */
+import store from './store'
+
+/**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store
 });
