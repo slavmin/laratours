@@ -87,7 +87,7 @@
             >
               <div class="ml-1">
                 <!-- Edit button -->
-                <a 
+                <!-- <a 
                   :href="getEditLink(item)"
                   class="btn btn-outline-success"
                 >
@@ -97,10 +97,10 @@
                     title="Редактировать" 
                     class="fas fa-edit"
                   />    
-                </a>
+                </a> -->
                 <!-- /Edit button -->
                 <!-- Delete button -->
-                <form 
+                <!-- <form 
                   :action="getDeleteLink(item)" 
                   method="post" 
                   style="display: inline-block;"
@@ -121,7 +121,7 @@
                   >
                     <i class="far fa-trash-alt" />
                   </button>
-                </form>
+                </form> -->
                 <!-- /Delete button -->
               </div>
             </div>

@@ -8,7 +8,10 @@ export default{
     },
     assignNewScheme(state, data) {
       state.transports.find((item) => {
-        if (item.id === data.id) item.scheme = data.scheme
+        if (item.id === data.id) {
+          item.scheme = data.scheme
+          console.log(item)
+        }
       })
     }
   },
