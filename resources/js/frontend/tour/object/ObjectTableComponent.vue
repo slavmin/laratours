@@ -2,7 +2,7 @@
   <div>
     <!-- <h5>hi from table!</h5> -->
     <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
-    <bus-scheme-component />
+    <!-- <bus-scheme-component /> -->
     <!-- <example-component></example-component> -->
     <table class="table table-hover mt-2">
       <!-- Table header -->
@@ -25,7 +25,7 @@
       <!-- Table body -->
       <tbody>
         <tr 
-          v-for="item in tableItems.data"
+          v-for="item in allTransports"
           :key="item.id"
         >
           <!-- Object name and price -->
@@ -58,15 +58,18 @@
           <!-- /Object name and price -->
           <!-- City -->
           <td class="align-middle text-center">
-            {{ getCityName(item.city_id) }}
+            {{ getCityName(item.cityId) }}
           </td>
           <!-- /City -->
           <!-- Quantity -->
           <td class="align-middle text-center">
             <div>{{ item.qnt }}</div>
             <div>
-              <a href="#">Схема салона</a>
-              <!-- <bus-scheme-component></bus-scheme-component> -->
+              <!-- <a href="#">Схема салона</a> -->
+              <bus-scheme-component 
+                :id="item.id" 
+                :scheme="item.scheme" 
+              />
             </div>
           </td>
           <!-- /Quantity -->
@@ -132,6 +135,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 
   name: 'TableComponent',
@@ -173,6 +177,7 @@ export default {
       ]
     };
   },
+  computed: mapGetters(['allTransports']),
   created() {
       // console.log(this.tableItems)
       // this.objects.push(this.tableItems)

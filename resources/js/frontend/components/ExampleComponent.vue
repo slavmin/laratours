@@ -22,7 +22,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: mapGetters(['allPosts', 'postsCount']),
   async mounted() {
-    his.fetchPosts()
+    this.fetchPosts()
   },
   methods: mapActions(['fetchPosts'])
 }

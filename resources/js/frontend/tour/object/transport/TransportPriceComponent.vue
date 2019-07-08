@@ -86,7 +86,6 @@
                 type="text" 
                 class="form-control" 
                 placeholder="Введите цену" 
-                :value="i"
               >
               <div class="input-group-append">  
                 <span class="input-group-text">₽</span>

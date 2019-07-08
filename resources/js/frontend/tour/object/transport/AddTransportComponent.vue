@@ -6,6 +6,7 @@
       class="btn btn-primary" 
       data-toggle="modal" 
       data-target="#addObjectModal"
+      data-backdrop="static"
     >
       Добавить {{ type.toLowerCase() }}
     </button>
@@ -38,19 +39,103 @@
             </button>
           </div>
           <div class="modal-body">
-            <form 
-              method="POST" 
-              action="http://127.0.0.1:8000/operator/transport"
+            <!-- Choose tranpost company -->
+            <div 
+              v-if="showForm.chooseTransportCompany"
             >
+              <h5>Выберите транспортную компанию</h5>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label 
+                    for="transportCompanySelect" 
+                    class="input-group-text"
+                  >
+                    Транспортная компания:
+                  </label>
+                </div>
+                <select 
+                  id="transportCompanySelect" 
+                  v-model="selectedTransportCompany"
+                  class="custom-select"
+                >
+                  <option selected>
+                    Выберите...
+                  </option>
+                  <option
+                    v-for="company in allTransportCompanies"
+                    :key="company.id"
+                    :value="company.id"
+                  >
+                    {{ company.name }}
+                  </option>
+                </select>
+              </div>
+              <button 
+                type="submit"
+                class="btn btn-primary"
+                @click="showAddTransportCompanyForm"
+              >
+                Добавить новую
+              </button>
+              <button 
+                type="submit"
+                class="btn btn-primary"
+                @click="showAddTransportForm"
+              >
+                Выбрать
+              </button>
+            </div>
+            <!-- /Choose tranpost company -->
+            <!-- Add transport company from -->
+            <div v-if="showForm.addTransportCompany">
+              <h5>Добавьте новую транспортную компанию</h5>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label 
+                    for="transportCompanyName" 
+                    class="input-group-text"
+                  >
+                    Название:
+                  </label>
+                </div>
+                <input
+                  id="transportCompanyName" 
+                  v-model="newTransportCompanyName"
+                  type="text"
+                  class="form-control"
+                  placeholder="ООО Автопарк"
+                >
+              </div>
+              <button
+                class="btn btn-primary"
+                @click="returnToChooseTransportCompanyForm"
+              >
+                Вернуться
+              </button>
+              <button
+                class="btn btn-primary"
+                @click="addTransportCompanySubmit"
+              >
+                Добавить
+              </button>
+            </div>
+            <!-- /Add transport company from -->
+            <!-- Add transport form -->
+            <div 
+              v-if="showForm.add"  
+            >
+              <!-- method="POST"  -->
+              <!-- action="http://127.0.0.1:8000/operator/transport" -->
               <input 
                 type="hidden" 
                 name="_token" 
                 :value="token"
               >
               <div class="form-group">
-                <label for="name">Название</label>
+                <label for="name">Название транспорта</label>
                 <input 
                   id="name" 
+                  v-model="name"
                   type="text" 
                   class="form-control" 
                   name="name" 
@@ -67,21 +152,16 @@
                   </div>
                   <select 
                     id="country"
-                    v-model="key" 
                     name="country" 
                     class="form-control"
-                    @change="selectCountry($event)"
                   >
-                    <option
-                      v-for="country in citiesSelect"
-                      :key="country"
-                      :value="country" 
-                    >
-                      {{ i }}
+                    <option value="1">
+                      Россия
                     </option>
                   </select>
                   <select 
                     id="city_id" 
+                    v-model="cityId"
                     name="city_id" 
                     class="form-control"
                   >
@@ -99,6 +179,7 @@
                 <label for="qnt">Вместимость</label>
                 <input 
                   id="qnt"
+                  v-model="qnt"
                   type="text" 
                   class="form-control" 
                   name="qnt" 
@@ -108,6 +189,7 @@
                 <label for="description">Описание</label>
                 <input  
                   id="description"
+                  v-model="description"
                   type="text" 
                   class="form-control" 
                   name="description"
@@ -117,6 +199,7 @@
                 <label for="grade">Класс обслуживания</label>
                 <select 
                   id="grade"
+                  v-model="grade"
                   class="custom-select" 
                   name="grade" 
                   multiple
@@ -162,7 +245,7 @@
                 </button>         
               </div>  
               <div 
-                v-if="showPrices"
+                v-if="showForm.price"
                 class="row container mb-4" 
               >
                 Стоимость аренды, период действия цены, класс обслуживания 
@@ -174,12 +257,24 @@
               <button 
                 type="submit" 
                 class="btn btn-primary"
+                @click="createTransport"
               >
                 Создать
               </button>        
-            </form>
+            </div>
+            <!-- /Add transport form -->
+            <!-- Success form -->
+            <div 
+              v-if="showForm.success"
+              class="alert alert-success mt-3" 
+              role="alert"
+            >
+              Транспорт добавлен!
+            </div>
+            <!-- /Success form -->
           </div>
         </div>
+        <!-- /Modal content -->
       </div>
     </div>
     <!-- /Modal -->
@@ -187,6 +282,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
 
   name: 'AddObjectComponent',
@@ -213,7 +309,11 @@ export default {
 
   data() {
     return {
-      name: 'Add Object',
+      name: '',
+      qnt: '',
+      grade: [],
+      cityId: '',
+      description: '',
       selectedCountry: 'Россия',
       key: '',
       cities: this.citiesSelect,
@@ -227,23 +327,88 @@ export default {
           '3': 'Прага'
         }
       },
-      showPrices: false
+      showForm: {
+        add: false,
+        price: false,
+        chooseTransportCompany: true,
+        addTransportCompany: false,
+        success: false
+      },
+      selectedTransportCompany: '',
+      newTransportCompanyName: '',
+      result: {
+        name: '',
+        qnt: '',
+        grade: [],
+        transportCompanyId: '',
+        cityId: '',
+        description: '',
+      }
     }
   },
+  computed: mapGetters(['allTransportCompanies']),
   created() {
-    // console.log(this.testObject)
-    // this.createCitiesObject()
   },
   updated() {
-    // console.log(this.selectedCountry)
+  },
+  mounted() {
   },
   methods: {
-    createCitiesObject() {
-      // console.log(this.citiesSelect)
+    ...mapMutations(['addTransportCompany', 'addTransport']),
+    showAddTransportCompanyForm() {
+      this.showForm.chooseTransportCompany = false
+      this.showForm.addTransportCompany = true
     },
-    selectCountry:function(event) {
-      this.selectedCountry = event.target.value
-      console.log(this.citiesSelect)
+    returnToChooseTransportCompanyForm() {
+      this.showForm.addTransportCompany = false
+      this.showForm.chooseTransportCompany = true
+    },
+    addTransportCompanySubmit() {
+      this.addTransportCompany({
+        name: this.newTransportCompanyName,
+        id: this.allTransportCompanies.length + 1
+      })
+      this.returnToChooseTransportCompanyForm()
+    },
+    showAddTransportForm() {
+      this.result.transportCompanyId = this.selectedTransportCompany
+      this.showForm.chooseTransportCompany = false
+      this.showForm.add = true
+    },
+    createTransport() {
+      this.result.name = this.name
+      this.result.qnt = this.qnt
+      this.result.grade = this.grade
+      this.result.cityId = this.cityId
+      this.result.description = this.description
+      this.addTransport(this.result)
+      this.reset()
+    },
+    reset() {
+      this.result = {
+        name: '',
+        qnt: '',
+        grade: [],
+        transportCompanyId: '',
+        cityId: '',
+        description: '',
+      }
+      this.showForm = {
+        add: false,
+        price: false,
+        chooseTransportCompany: false,
+        addTransportCompany: false,
+        success: true
+      }
+      setTimeout(() => {
+        this.showForm = {
+          add: false,
+          price: false,
+          chooseTransportCompany: true,
+          addTransportCompany: false,
+          success: false
+        }
+      }, 2000)    
     }
   }
 };

@@ -12,18 +12,11 @@
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
                         <!-- Modal Vue component. Пока только "Транспорт" -->
                         <?php $scities = json_encode($cities_select); ?>
-                        <add-object-component 
+                        <add-transport-component 
                             type="@lang('labels.frontend.tours.'.$model_alias.'.management')"
-                            field-name="@lang('validation.attributes.frontend.general.name')"
-                            :fields="{
-                                name: 'Название',
-                                city: 'Город',
-                                quantity: 'Количество',
-                                description: 'Описание'
-                            }"
                             :cities-select="{{ $scities }}"
                             token="{{ csrf_token() }}"
-                        ></add-object-component>
+                        ></add-transport-component>
                         <!-- /Modal Vue component. Пока только "Транспорт" -->
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">

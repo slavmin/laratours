@@ -5,14 +5,17 @@
       type="button" 
       class="btn btn-outline-primary" 
       data-toggle="modal" 
-      data-target="#busScheme"
+      data-backdrop="static"
+      :data-target="'#busScheme-' + id"
+      @click="show = true"
     >
       Схема салона
     </button>
     <!-- /Button -->
     <!-- Modal wrap -->
     <div 
-      id="busScheme"
+      v-if="show"
+      :id="'busScheme-' + id"
       class="modal fade" 
       tabindex="-1" 
       role="dialog"
@@ -34,6 +37,7 @@
               type="button" 
               class="close" 
               data-dismiss="modal"
+              @click="show = false"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -236,6 +240,7 @@
               type="button" 
               class="btn btn-secondary" 
               data-dismiss="modal"
+              @click="show = false"
             >
               Закрыть
             </button>
@@ -256,12 +261,36 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
 
   name: 'BusSchemeComponent',
-
+  props: {
+    scheme: {
+      type: Object,
+      default: () => {
+        return {
+          rows: 10,
+          cols: 4,
+          driver: ['1-1', '1-2'],
+          doors: ['1-4'],
+          guide: ['2-4'],
+          pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
+          unavailable: [],
+          totalPassengersCount: 0
+        }
+      }
+    },
+    id: {
+      type: Number,
+      default: () => {
+        return 0
+      }
+    }
+  },
   data() {
     return {
+      show: false,
       bus: {
         rows: 10,
         cols: 4,
@@ -283,15 +312,16 @@ export default {
       unavailableSeatClass: 'unavailable-seat'
     };
   },
-  mounted() {
-    this.drawScheme()
-    this.setTotalPassengersCount()
+  created() {
+    this.bus = this.scheme
   },
   updated() {
     this.drawScheme()
+    this.totalPassengersCount = 0
     this.setTotalPassengersCount()
   },
   methods: {
+    ...mapMutations(['assignNewScheme']),
     addRow() {
       this.bus.rows++
     },
@@ -315,14 +345,18 @@ export default {
       this.drawScheme()
     },
     setAllSeatsCommon() {
-      let seats = document.getElementsByClassName('seat')
-      Array.from(seats).forEach(seat => {
-        seat.className = this.defaultClasses + this.commonSeatClass
-      })
+      if (this.show) {
+        let seats = document.getElementsByClassName('seat')
+        Array.from(seats).forEach(seat => {
+          seat.className = this.defaultClasses + this.commonSeatClass
+        })
+      }
     },
     setSeatClass(seatId, className) {
-      let seat = document.getElementById(seatId)
-      seat.className = this.defaultClasses + className
+      if (this.show) {
+        let seat = document.getElementById(seatId)
+        seat.className = this.defaultClasses + className
+      }
     },
     drawScheme() {
       this.setAllSeatsCommon()
@@ -417,8 +451,12 @@ export default {
       this.choosenSeats = []
     },
     exportBusScheme() {
-      alert('Объект выведен в консоль')
-      console.log('bus object: ', this.bus)
+      // console.log('id: ' + this.id)
+      // console.log('scheme: ', this.bus)
+      this.assignNewScheme({
+        id: this.id,
+        scheme: this.bus
+      })
     },
     setTotalPassengersCount() {
       let commonSeats = document.getElementsByClassName('common-seat')

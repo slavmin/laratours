@@ -24,11 +24,12 @@ window.Vue = Vue;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
-Vue.component('add-object-component', require('./components/AddObjectComponent.vue').default);
 Vue.component('object-prices-component', require('./components/ObjectPricesComponent.vue').default);
 Vue.component('bus-scheme-component', require('./components/BusSchemeComponent.vue').default);
 Vue.component('object-table-component', require('./tour/object/ObjectTableComponent.vue').default);
 Vue.component('transport-price-component', require('./tour/object/transport/TransportPriceComponent.vue').default);
+Vue.component('add-transport-component', require('./tour/object/transport/AddTransportComponent.vue').default);
+Vue.component('transport-company-component', require('./components/TransportCompanyComponent.vue').default);
 
 /**
  * Vuex store
