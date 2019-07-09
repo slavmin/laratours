@@ -2,18 +2,23 @@
   <div>
     <!-- Add button -->
     <button 
-      type="button" 
-      class="btn btn-primary" 
+      title="Редактировать"
+      class="btn btn-outline-success"
       data-toggle="modal" 
-      data-target="#addObjectModal"
+      data-target="#editTransportModal"
       data-backdrop="static"
     >
-      Добавить {{ type.toLowerCase() }}
+      <i 
+        data-toggle="tooltip" 
+        data-placement="top" 
+        title="Редактировать" 
+        class="fas fa-edit"
+      />    
     </button>
     <!-- /Add button -->
     <!-- Modal -->
     <div 
-      id="addObjectModal" 
+      id="editTransportModal" 
       class="modal fade" 
       tabindex="-1" 
       role="dialog"
@@ -28,7 +33,7 @@
               id="exampleModalLabel"
               class="modal-title"
             >
-              Создать новый {{ type.toLowerCase() }}
+              Редактирование транспорта
             </h5>
             <button 
               type="button" 
@@ -39,102 +44,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <!-- Choose tranpost company -->
-            <div 
-              v-if="showForm.chooseTransportCompany"
-            >
-              <h5>Выберите транспортную компанию</h5>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label 
-                    for="transportCompanySelect" 
-                    class="input-group-text"
-                  >
-                    Транспортная компания:
-                  </label>
-                </div>
-                <select 
-                  id="transportCompanySelect" 
-                  v-model="selectedTransportCompany"
-                  class="custom-select"
-                >
-                  <option selected>
-                    Выберите...
-                  </option>
-                  <option
-                    v-for="company in allTransportCompanies"
-                    :key="company.id"
-                    :value="company.id"
-                  >
-                    {{ company.name }}
-                  </option>
-                </select>
-              </div>
-              <button 
-                type="submit"
-                class="btn btn-primary"
-                @click="showAddTransportCompanyForm"
-              >
-                Добавить новую
-              </button>
-              <button 
-                type="submit"
-                class="btn btn-primary"
-                @click="showAddTransportForm"
-              >
-                Выбрать
-              </button>
-            </div>
-            <!-- /Choose tranpost company -->
-            <!-- Add transport company from -->
-            <div 
-              v-if="showForm.addTransportCompany"
-            >
-              <h5>Добавьте новую транспортную компанию</h5>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label 
-                    for="transportCompanyName" 
-                    class="input-group-text"
-                  >
-                    Название:
-                  </label>
-                </div>
-                <input
-                  id="transportCompanyName" 
-                  v-model="newTransportCompanyName"
-                  type="text"
-                  class="form-control"
-                  placeholder="ООО Автопарк"
-                  required
-                >
-              </div>
-              <button
-                class="btn btn-primary"
-                @click="returnToChooseTransportCompanyForm"
-              >
-                Вернуться
-              </button>
-              <button
-                class="btn btn-primary"
-                @click="addTransportCompanySubmit"
-              >
-                Добавить
-              </button>
-            </div>
-            <!-- /Add transport company from -->
-            <!-- Add transport form -->
+            <!-- Edit transport form -->
             <form 
-              v-if="showForm.add"
-              @submit.prevent="createTransport" 
+              @submit.prevent="edit" 
             >
-              <!-- method="POST"  -->
-              <!-- action="http://127.0.0.1:8000/operator/transport" -->
-              <input 
-                type="hidden" 
-                name="_token" 
-                :value="token"
-              >
               <div class="form-group">
                 <label for="name">Название транспорта</label>
                 <input 
@@ -241,8 +154,6 @@
                 </div>
               </div>
               <div class="row container mb-4">
-                <!-- <object-prices-component></object-prices-component>   -->
-                <!-- <bus-scheme-component></bus-scheme-component>     -->
                 <button 
                   type="button" 
                   class="btn btn-outline-primary" 
@@ -265,19 +176,10 @@
                 type="submit" 
                 class="btn btn-primary"
               >
-                Создать
+                Сохранить
               </button>        
             </form>
             <!-- /Add transport form -->
-            <!-- Success form -->
-            <div 
-              v-if="showForm.success"
-              class="alert alert-success mt-3" 
-              role="alert"
-            >
-              Транспорт добавлен!
-            </div>
-            <!-- /Success form -->
           </div>
         </div>
         <!-- /Modal content -->
@@ -291,7 +193,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
 
-  name: 'AddObjectComponent',
+  name: 'EditTransportComponent',
   props: {
     type: {
       type: String,
@@ -305,7 +207,13 @@ export default {
         return ''
       }
     }, 
-    citiesSelect: {
+    cities: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    data: {
       type: Object,
       default: () => {
         return {}
@@ -323,7 +231,6 @@ export default {
       prices: [],
       selectedCountry: 'Россия',
       key: '',
-      cities: this.citiesSelect,
       testObject: {
         '0': 'default',
         'Россия': {
@@ -354,36 +261,20 @@ export default {
       }
     }
   },
-  computed: mapGetters(['allTransportCompanies']),
   created() {
+    this.name = this.data.name
+    this.qnt = this.data.qnt
+    this.grade = this.data.grade
+    this.cityId = this.data.cityId
+    this.description = this.data.description
   },
   updated() {
   },
   mounted() {
   },
   methods: {
-    ...mapMutations(['addTransportCompany', 'addTransport']),
-    showAddTransportCompanyForm() {
-      this.showForm.chooseTransportCompany = false
-      this.showForm.addTransportCompany = true
-    },
-    returnToChooseTransportCompanyForm() {
-      this.showForm.addTransportCompany = false
-      this.showForm.chooseTransportCompany = true
-    },
-    addTransportCompanySubmit() {
-      this.addTransportCompany({
-        name: this.newTransportCompanyName,
-        id: this.allTransportCompanies.length + 1
-      })
-      this.returnToChooseTransportCompanyForm()
-    },
-    showAddTransportForm() {
-      this.result.transportCompanyId = this.selectedTransportCompany
-      this.showForm.chooseTransportCompany = false
-      this.showForm.add = true
-    },
-    createTransport() {
+    ...mapMutations(['editTransport']),
+    edit() {
       this.result.name = this.name
       this.result.qnt = this.qnt
       this.result.grade = this.grade
@@ -391,8 +282,7 @@ export default {
       this.result.description = this.description
       this.result.prices = this.prices
       console.log(this.result)
-      this.addTransport(this.result)
-      this.reset()
+      this.editTransport(this.result)
     },
     reset() {
       this.name = ''

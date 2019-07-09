@@ -9,6 +9,8 @@
       <thead>
         <th>Название</th>
         <th class="text-center">
+          Компания, 
+          <br>
           Город
         </th>
         <th class="text-center">
@@ -30,34 +32,25 @@
         >
           <!-- Object name and price -->
           <td>
-            <div>
+            <div class="object-name">
               {{ item.name }}
             </div>
-            <table class="price-table ml-5">
-              <thead>
-                <th />
-                <th>
-                  <transport-price-component />
-                </th>
-              </thead>
-              <tbody>
-                <tr 
-                  v-for="price in examplePrice"
-                  :key="price.id"
-                >
-                  <td>
-                    {{ price.name }}
-                  </td>
-                  <td class="text-right">
-                    {{ price.price }}₽
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div 
+              v-for="price in item.prices"
+              :key="price.id"
+              class="object-prices"
+            >
+              <div class="d-flex flex-row justify-content-between">
+                <div>{{ price.duration }}: </div>
+                <div>{{ price.price }}₽</div>
+              </div>
+            </div>
           </td>
           <!-- /Object name and price -->
           <!-- City -->
           <td class="align-middle text-center">
+            {{ getTransportCompanyName(item.transportCompanyId) }}
+            <br>
             {{ getCityName(item.cityId) }}
           </td>
           <!-- /City -->
@@ -85,43 +78,22 @@
               role="toolbar" 
               class="float-right"
             >
-              <div class="ml-1">
+              <div class="ml-1 d-flex flex-row">
                 <!-- Edit button -->
-                <!-- <a 
-                  :href="getEditLink(item)"
-                  class="btn btn-outline-success"
-                >
-                  <i 
-                    data-toggle="tooltip" 
-                    data-placement="top" 
-                    title="Редактировать" 
-                    class="fas fa-edit"
-                  />    
-                </a> -->
+                <edit-transport-component 
+                  :data="item" 
+                  :cities="cities"
+                />
                 <!-- /Edit button -->
                 <!-- Delete button -->
-                <!-- <form 
-                  :action="getDeleteLink(item)" 
-                  method="post" 
-                  style="display: inline-block;"
+                <button 
+                  title="Удалить" 
+                  class="btn btn-outline-danger ml-1"
+                  @click="del(item.id)"
                 >
-                  <input 
-                    type="hidden" 
-                    name="_token" 
-                    :value="token"
-                  >
-                  <input 
-                    type="hidden" 
-                    name="_method" 
-                    value="DELETE"
-                  >
-                  <button 
-                    title="Удалить" 
-                    class="btn btn-outline-danger"
-                  >
-                    <i class="far fa-trash-alt" />
-                  </button>
-                </form> -->
+                  <i class="far fa-trash-alt" />
+                </button>
+                <!-- </form> -->
                 <!-- /Delete button -->
               </div>
             </div>
@@ -135,7 +107,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
 
   name: 'TableComponent',
@@ -174,15 +146,17 @@ export default {
         { name: '3 часа', price: '2500'},
         { name: '8 часов', price: '6000'},
         { name: '24 часа', price: ''}
-      ]
+      ],
+      companies: []
     };
   },
-  computed: mapGetters(['allTransports']),
+  computed: mapGetters(['allTransports', 'allTransportCompanies']),
   created() {
       // console.log(this.tableItems)
       // this.objects.push(this.tableItems)
   },
   methods: {
+    ...mapMutations(['deleteTransport']),
     showMe() {
       console.log(this.tableItems)    
     },
@@ -194,12 +168,26 @@ export default {
     },
     getCityName(cityId) {
       return this.cities.Россия[cityId]
+    },
+    getTransportCompanyName(id) {
+      let company = this.allTransportCompanies.find(item => item.id == id)
+      return company.name
+    },
+    del(id) {
+      this.deleteTransport(id)
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.object-name {
+  font-size: 16px;
+}
+.object-prices {
+  font-size: 12px;
+  color: #515151;
+}
 .price-table {
     th {
         border: none;

@@ -30,6 +30,7 @@ Vue.component('object-table-component', require('./tour/object/ObjectTableCompon
 Vue.component('transport-price-component', require('./tour/object/transport/TransportPriceComponent.vue').default);
 Vue.component('add-transport-component', require('./tour/object/transport/AddTransportComponent.vue').default);
 Vue.component('transport-company-component', require('./components/TransportCompanyComponent.vue').default);
+Vue.component('edit-transport-component', require('./tour/object/transport/EditTransportComponent.vue').default);
 
 /**
  * Vuex store
