@@ -3,20 +3,20 @@
 @section('content')
 
     @include('frontend.tour.includes.city-select-form')
-
+    <?php $scities = json_encode($cities_select); ?>
+    <transport-index :cities="{{ $scities }}" data-app></transport-index>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
-                        <!-- Modal Vue component. Пока только "Транспорт" -->
-                        <?php $scities = json_encode($cities_select); ?>
-                        <add-transport-component 
+                        <!-- DELETE: Modal Vue component. Пока только "Транспорт" -->
+                       <!--  <add-transport-component 
                             type="@lang('labels.frontend.tours.'.$model_alias.'.management')"
                             :cities-select="{{ $scities }}"
                             token="{{ csrf_token() }}"
-                        ></add-transport-component>
+                        ></add-transport-component> -->
                         <!-- /Modal Vue component. Пока только "Транспорт" -->
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
@@ -27,15 +27,7 @@
                 </div><!--col-->
             </div><!--row-->
             
-            @if(count($items)>0)   
-            <?php $sitems = json_encode($items); ?>
-            <object-table-component
-                type="transport"
-                :table-items="{{ $sitems }}"
-                token="{{ csrf_token() }}"
-                :cities="{{ $scities }}"
-            > 
-            </object-table-component>
+            @if(count($items)>0)
             <div class="row mt-4">
                 <div class="col">
                     <div class="table-responsive">

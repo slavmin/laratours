@@ -10,7 +10,6 @@ export default{
       state.transports.find((item) => {
         if (item.id === data.id) {
           item.scheme = data.scheme
-          console.log(item)
         }
       })
     },
@@ -44,16 +43,11 @@ export default{
           unavailable: [],
           totalPassengersCount: 10
         },
-        prices: [
-          { id: 1, duration: '1 час', price: '1000'},
-          { id: 2, duration: '3 часа', price: '2800'},
-          { id: 3, duration: '8 часов', price: '7000'},
-          { id: 4, duration: 'Сутки', price: '15000'}
-        ]
+        prices: [1000, 2800, 7000, 15000]
       },
       { 
         id: 2, 
-        name: 'Vokswagen', 
+        name: 'Volkswagen', 
         cityId: 1, 
         grade: ['C-class', 'VIP'], 
         qnt: 22, 
@@ -69,12 +63,7 @@ export default{
           unavailable: ['1-2'],
           totalPassengersCount: 20
         },
-        prices: [
-          { id: 1, duration: '1 час', price: '1000'},
-          { id: 2, duration: '3 часа', price: '2800'},
-          { id: 3, duration: '8 часов', price: '7000'},
-          { id: 4, duration: 'Сутки', price: '15000'}
-        ]
+        prices: [1200, 2900, 7500, 16000]
       },
       { 
         id: 3, 
@@ -94,12 +83,7 @@ export default{
           unavailable: ['1-2'],
           totalPassengersCount: 20
         },
-        prices: [
-          { id: 1, duration: '1 час', price: '1000'},
-          { id: 2, duration: '3 часа', price: '2800'},
-          { id: 3, duration: '8 часов', price: '7000'},
-          { id: 4, duration: 'Сутки', price: '15000'}
-        ]
+        prices: [1500, 3000, 8000, 18000]
       }
     ]
   },

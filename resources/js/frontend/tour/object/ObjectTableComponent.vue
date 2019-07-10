@@ -4,6 +4,7 @@
     <!-- <button class="btn btn-primary" v-on:click="showMe">Show me value at console</button> -->
     <!-- <bus-scheme-component /> -->
     <!-- <example-component></example-component> -->
+    <transport-price-component />
     <table class="table table-hover mt-2">
       <!-- Table header -->
       <thead>

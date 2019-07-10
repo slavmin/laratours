@@ -31,7 +31,10 @@ Vue.component('transport-price-component', require('./tour/object/transport/Tran
 Vue.component('add-transport-component', require('./tour/object/transport/AddTransportComponent.vue').default);
 Vue.component('transport-company-component', require('./components/TransportCompanyComponent.vue').default);
 Vue.component('edit-transport-component', require('./tour/object/transport/EditTransportComponent.vue').default);
-
+Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
+Vue.component('transport-add-edit', require('./tour/object/transport/AddEdit.vue').default);
+Vue.component('transport-table', require('./tour/object/transport/Table.vue').default);
+Vue.component('transport-scheme', require('./tour/object/transport/Scheme.vue').default);
 /**
  * Vuex store
  *
