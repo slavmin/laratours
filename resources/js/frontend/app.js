@@ -35,6 +35,8 @@ Vue.component('transport-index', require('./tour/object/transport/Index.vue').de
 Vue.component('transport-add-edit', require('./tour/object/transport/AddEdit.vue').default);
 Vue.component('transport-table', require('./tour/object/transport/Table.vue').default);
 Vue.component('transport-scheme', require('./tour/object/transport/Scheme.vue').default);
+Vue.component('customer-type-table', require('./tour/customer/type/Table.vue').default);
+Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').default);
 /**
  * Vuex store
  *

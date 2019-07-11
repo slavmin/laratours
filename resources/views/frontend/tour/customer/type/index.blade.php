@@ -7,6 +7,12 @@
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.customer.type.management')</h6>
+                        <!-- Add customer Vue-component -->
+                        <customer-type-add
+                            header="@lang('labels.frontend.tours.customer.type.create')"
+                            token="{{ csrf_token() }}"
+                        ></customer-type-add>
+                        <!-- /Add customer Vue-component -->
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.customer-type.create') }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
                                 <i class="fas fa-plus"></i></a>
@@ -16,6 +22,13 @@
             </div><!--row-->
 
             @if(count($items)>0)
+            <?php $sitems = json_encode($items); ?>
+            <!-- Table customers Vue-component -->
+            <customer-type-table
+                :items="{{ $sitems }}"
+                data-app
+            ></customer-type-table>
+            <!-- /Table customers Vue-component -->
             <div class="row mt-4">
                 <div class="col">
                     <div class="table-responsive">
