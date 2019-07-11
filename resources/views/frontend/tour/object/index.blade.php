@@ -11,13 +11,6 @@
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
-                        <!-- DELETE: Modal Vue component. Пока только "Транспорт" -->
-                       <!--  <add-transport-component 
-                            type="@lang('labels.frontend.tours.'.$model_alias.'.management')"
-                            :cities-select="{{ $scities }}"
-                            token="{{ csrf_token() }}"
-                        ></add-transport-component> -->
-                        <!-- /Modal Vue component. Пока только "Транспорт" -->
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                             <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
                                 <i class="fas fa-plus"></i>
@@ -47,7 +40,6 @@
                                         <td>
                                             @if (array_key_exists($item->city_id, $cities_names))
                                                 <span class="text-secondary">{{$cities_names[$item->city_id]}}
-                                                <!-- {{$item}} -->
                                                 </span>
                                             @endif
                                         </td>

@@ -467,8 +467,7 @@ export default {
         scheme: this.bus
       })
       this.scheme = this.bus
-      console.log(this.bus)
-      console.log(this.scheme)
+      this.showScheme = false
     }
   }
 };
