@@ -71,7 +71,7 @@ class TeamsTableSeeder extends Seeder
 
         $agent_team->assignRole(config('access.teams.agent_role'));
 
-        $agent_team->subscriptions()->sync(1);
+        $agent_team->subscriptions()->sync($operator_team->id);
 
         $this->enableForeignKeys();
     }

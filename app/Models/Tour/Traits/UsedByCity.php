@@ -42,6 +42,7 @@ trait UsedByCity
         return TourCity::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
     }
 
+    // TO DO to be removed
     public static function getCitiesOptgroupAttribute($text = '')
     {
         $out_arr = [0 => $text];
@@ -55,6 +56,24 @@ trait UsedByCity
                 }
             }
             $out_arr[$val['name']] = $city_arr;
+        }
+
+        return $out_arr;
+    }
+
+    public static function getCountriesWithCities()
+    {
+        $out_arr = [];
+        $arr = TourCountry::whereHas('cities')->with(['cities'])->get()->flatten()->toArray();
+
+        foreach ($arr as $val) {
+            $city_arr = [];
+            if (is_array($val['cities'])) {
+                foreach ($val['cities'] as $city) {
+                    $city_arr[$city['id']] = $city['name'];
+                }
+            }
+            $out_arr[$val['id']] = ['name' => $val['name'], 'cities' => $city_arr];
         }
 
         return $out_arr;

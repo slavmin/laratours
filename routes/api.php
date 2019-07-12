@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Tour\TourOptionsController;
 use Illuminate\Http\Request;
 
 /*
@@ -21,4 +22,5 @@ use Illuminate\Http\Request;
 Route::post('/login', [AuthController::class, 'login'])->name('api-login');
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('api-logout');
+    Route::get('/tour-options', [TourOptionsController::class, 'getOptions'])->name('api-tour-options');
 });
