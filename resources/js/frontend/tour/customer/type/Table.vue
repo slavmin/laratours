@@ -8,8 +8,10 @@
         <v-data-table
           :headers="headers"
           :items="items.data"
-          hide-actions
           class="elevation-1"
+          rows-per-page-text="На странице:"
+          :rows-per-page-items="[10, 20, { 'text': 'Все', 'value': -1}]"
+          :pagination.sync="pagintaion"
         >
           <template v-slot:items="props">
             <td>
@@ -17,6 +19,18 @@
             </td>
             <td class="text-xs-center">
               {{ props.item.description }}
+            </td>
+            <td class="text-xs-right">
+              <div>
+                <customer-type-edit 
+                  :item="props.item"
+                  :token="token"
+                />
+                <customer-type-delete 
+                  :item="props.item"
+                  :token="token"
+                />
+              </div>
             </td>
           </template>
         </v-data-table>
@@ -35,6 +49,14 @@ export default {
       default: () => {
         return {}
       }
+    },
+    headerEdit: {
+      type: String,
+      default: ''
+    },
+    token: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -50,11 +72,19 @@ export default {
           align: 'center',
           value: 'description'
         },
-      ]
+        {
+          text: 'Действия',
+          align: 'center',
+          value: 'actions'
+        },
+      ],
+      pagintaion: {
+        rowsPerPage: -1 // -1 for All",
+      }
     };
   },
   created() {
-    
+
   }
 };
 </script>

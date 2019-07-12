@@ -2,7 +2,7 @@
   <v-container>
     <v-layout 
       row 
-      justify-center
+      justify-end
     >
       <v-dialog 
         v-model="dialog" 
@@ -11,6 +11,7 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn 
+            fab
             color="green" 
             dark 
             v-on="on"
@@ -28,29 +29,36 @@
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex 
-                  xs12 
-                  sm6 
-                >
-                  <v-text-field 
-                    v-model="name"
-                    label="Название" 
-                    color="green"
-                    required
-                  />
-                </v-flex>
-                <v-flex 
-                  xs12 
-                  sm6
-                >
-                  <v-text-field 
-                    v-model="description"
-                    label="Описание" 
-                    color="green"
-                  />
-                </v-flex>
-              </v-layout>
+              <form 
+                id="form"
+                @submit.prevent="save"
+              >
+                <v-layout wrap>
+                  <v-flex 
+                    xs12 
+                    sm6 
+                  >
+                    <v-text-field 
+                      v-model="name"
+                      label="Название" 
+                      color="green"
+                      outline
+                      required
+                    />
+                  </v-flex>
+                  <v-flex 
+                    xs12 
+                    sm6
+                  >
+                    <v-text-field 
+                      v-model="description"
+                      label="Описание" 
+                      outline
+                      color="green"
+                    />
+                  </v-flex>
+                </v-layout>
+              </form>
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -65,7 +73,8 @@
             <v-btn 
               color="green" 
               flat 
-              @click="save"
+              type="submit"
+              form="form"
             >
               Сохранить
             </v-btn>
@@ -79,7 +88,7 @@
 <script>
 export default {
 
-  name: 'IndexCustomerType',
+  name: 'AddCustomerType',
   props: {
     header: {
       type: String,
@@ -107,13 +116,14 @@ export default {
         '_token': this.token,
         name: this.name,
         description: this.description
-
       }
-      console.log(result)
-      axios.post('http://127.0.0.1:8000/operator/customer-type', result)
-        .then(r => console.log(r))
-        .catch(e => console.log(e))
-      this.dialog = false
+      axios.post('/operator/customer-type', result)
+        .then(r => {
+          this.name = ''
+          this.description = ''
+          this.dialog = false
+        })
+        .catch(e => console.log(e))  
     }
   }
 };
