@@ -77,12 +77,15 @@ class TourController extends Controller
 
         $city_id = $this->getCityId($request);
 
+        $countries_cities_options = Tour::getCountriesWithCities();
+
+        // TO DO to be removed
         //$cities_options = Tour::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
         $cities_options = Tour::getAllCities();
 
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.tour.create', compact('cities_options', 'tour_type_options'))
+        return view('frontend.tour.tour.create', compact('cities_options', 'countries_cities_options', 'tour_type_options'))
             ->with('method', 'POST')
             ->with('action', 'create')
             ->with('route', route('frontend.tour.'.$model_alias.'.store'))
@@ -148,6 +151,9 @@ class TourController extends Controller
 
         $tour_dates = $item->tour_dates;
 
+        $countries_cities_options = Tour::getCountriesWithCities();
+
+        // TO DO to be removed
         $cities_options = Tour::getAllCities();
 
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
@@ -165,7 +171,7 @@ class TourController extends Controller
         $attendant_options = Tour::getAttendantsOption();
 
 
-        return view('frontend.tour.tour.edit', compact('item', 'tour_dates', 'attributes', 'cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
+        return view('frontend.tour.tour.edit', compact('item', 'tour_dates', 'attributes', 'countries_cities_options', 'cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
