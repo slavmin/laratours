@@ -1,30 +1,36 @@
 <template>
-  <v-layout 
-    row 
-    justify-center
-  >
+  <div>
+    <v-btn 
+      color="green" 
+      title="Схема салона"
+      dark
+      flat
+      fab
+      outline
+      small 
+      @click="showScheme = true"
+    >
+      <i class="material-icons">
+        view_module
+      </i>
+    </v-btn>
     <v-dialog
+      v-if="showScheme"
       v-model="showScheme"
       lazy
       persistent
     >
-      <template v-slot:activator="{ on }">
-        <v-btn 
-          color="green" 
-          dark
-          flat
-          small 
-          v-on="on"
-        >
-          Схема
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Схема салона</span>
+          <span class="headline">
+            Схема салона: {{ object.name }}
+          </span>
         </v-card-title>
         <v-card-text>
-          <v-container grid-list-md>
+          <v-container 
+            fluid
+            grid-list-md
+          >
             <v-layout 
               row
               justify-space-between
@@ -32,6 +38,7 @@
               <v-flex
                 xs2
               >
+                <v-spacer />
                 <!-- Bus scheme -->
                 <div class="bus">
                   <div
@@ -54,7 +61,18 @@
                   </div>
                 </div>
                 <!-- /Bus scheme -->
+                <!-- Passengers seats count -->
+                <div 
+                  class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                  style="height: 38px;"
+                >
+                  <p class="mb-0">
+                    Пассажирских мест: {{ bus.totalPassengersCount }}
+                  </p>
+                </div>
+                <!-- /Passengers seats count -->
               </v-flex>
+              <v-spacer />
               <v-flex
                 xs3
               >
@@ -68,17 +86,19 @@
                     <!-- Add button -->
                     <button 
                       class="btn btn-primary rounded mr-2"
+                      :disabled="bus.rows == 50"
                       @click="addRow"
                     >
                       <i class="fas fa-plus" />
                     </button>
                     <!-- /Add button -->
                     <p class="mb-0">
-                      Рядов: {{ bus.rows }}
+                      Строк: {{ bus.rows }}
                     </p> <!-- Show rows count -->
                     <!-- Remove button -->
                     <button 
                       class="btn btn-primary rounded ml-2"
+                      :disabled="bus.rows == 1"
                       @click="removeRow"
                     >
                       <i class="fas fa-minus" />
@@ -94,6 +114,7 @@
                     <!-- Add button -->
                     <button 
                       class="btn btn-primary rounded mr-2"
+                      :disabled="bus.cols == 40"
                       @click="addCol"
                     >
                       <i class="fas fa-plus" />
@@ -105,6 +126,7 @@
                     <!-- Remove button -->
                     <button 
                       class="btn btn-primary rounded ml-2"
+                      :disabled="bus.cols == 1"
                       @click="removeCol"
                     >
                       <i class="fas fa-minus" />
@@ -198,16 +220,6 @@
                     </button>
                   </div>
                   <!-- /Set unavailable seats button -->
-                  <!-- Passengers seats count -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <p class="mb-0">
-                      Пассажирских мест: {{ bus.totalPassengersCount }}
-                    </p>
-                  </div>
-                  <!-- /Passengers seats count -->
                   <!-- Reset button -->
                   <div 
                     class="container-fluid d-flex justify-content-between align-items-center" 
@@ -236,17 +248,74 @@
           >
             Закрыть
           </v-btn>
-          <v-btn 
-            color="green darken-1" 
-            flat 
-            @click="save"
+          <form 
+            method="POST"
+            :action="'/operator/transport/' + companyId" 
           >
-            Сохранить
-          </v-btn>
+            <input 
+              id="_method" 
+              type="hidden" 
+              name="_method" 
+              value="PATCH"
+            >
+            <input 
+              type="hidden" 
+              name="_token" 
+              :value="token"
+            > 
+            <input 
+              :id="attribute + '[id]'" 
+              type="hidden" 
+              :name="attribute + '[id]'" 
+              :value="object.id"
+            > 
+            <input 
+              :id="attribute + '[name]'" 
+              type="hidden" 
+              :name="attribute + '[name]'" 
+              :value="object.name"
+            >
+            <input 
+              :id="attribute + '[description]'" 
+              type="hidden" 
+              :name="attribute + '[description]'" 
+              :value="object.description"
+            >
+            <input 
+              :id="attribute + '[qnt]'" 
+              type="hidden" 
+              :name="attribute + '[qnt]'" 
+              :value="object.qnt"
+            >
+            <input 
+              type="hidden" 
+              :value="JSON.stringify(extra)"
+              :name="attribute + '[extra]'"
+            > 
+            <input 
+              :id="attribute + '[customer_type_id]'" 
+              type="hidden" 
+              :name="attribute + '[customer_type_id]'" 
+              value="1"
+            > 
+            <input
+              type="hidden" 
+              value="1"
+              :name="attribute + '[price]'"
+            >
+            <v-btn 
+              color="green darken-1" 
+              flat 
+              type="submit"
+              @click="save"
+            >
+              Сохранить
+            </v-btn>
+          </form>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
+  </div>
 </template>
 
 <script>
@@ -255,26 +324,27 @@ export default {
 
   name: 'Scheme',
   props: {
-    scheme: {
-      type: Object,
-      default: () => {
-        return {
-          rows: 10,
-          cols: 4,
-          driver: ['1-1', '1-2'],
-          doors: ['1-4'],
-          guide: ['2-4'],
-          pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
-          unavailable: [],
-          totalPassengersCount: 0
-        }
-      }
-    },
     id: {
       type: Number,
       default: () => {
         return 0
       }
+    },
+    object: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    companyId: {
+      type: Number,
+      default: () => {
+        return 0
+      }
+    },
+    token: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -298,12 +368,21 @@ export default {
       doorClass: 'door',
       choosenSeatClass: 'choosen-seat',
       choosenSeats: [],
-      unavailableSeatClass: 'unavailable-seat'
+      unavailableSeatClass: 'unavailable-seat',
+      extra: {},
+      attribute: '',
+      initialScheme: {}
     };
   },
   created() {
-    this.bus = Object.assign({}, this.scheme)
-    console.log('hi')
+    if (this.object.extra !== null) {
+      this.extra = JSON.parse(this.object.extra)
+      this.initialScheme = Object.assign({}, this.extra.scheme)
+      this.bus = Object.assign({}, this.extra.scheme)
+    } else {
+      this.initialScheme = this.bus
+    }
+    this.attribute = 'attribute[' + this.object.id + ']'
   },
   mounted() {
     this.drawScheme()
@@ -314,6 +393,8 @@ export default {
     this.drawScheme()
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
+    this.extra.scheme = this.bus
+    console.log(this.extra)
   },
   methods: {
     ...mapMutations(['assignNewScheme']),
@@ -321,13 +402,25 @@ export default {
       this.bus.rows++
     },
     removeRow() {
+      const indicator = String(this.bus.rows + '-')
+      this.removeExtraSeats(indicator)
       this.bus.rows--
     },
     addCol() {
       this.bus.cols++
     },
     removeCol() {
+      const indicator = String('-' + this.bus.cols)
+      this.removeExtraSeats(indicator)
       this.bus.cols--
+    },
+    removeExtraSeats(indicator) {
+      this.bus.driver = this.bus.driver.filter(seat => !seat.includes(indicator))
+      this.bus.doors = this.bus.doors.filter(seat => !seat.includes(indicator))
+      this.bus.guide = this.bus.guide.filter(seat => !seat.includes(indicator))
+      this.bus.pass = this.bus.pass.filter(seat => !seat.includes(indicator))
+      this.bus.unavailable = this.bus.unavailable.filter(seat => !seat.includes(indicator))
+      this.choosenSeats = this.choosenSeats.filter(seat => !seat.includes(indicator))
     },
     reset() {
       this.bus.driver = []
@@ -383,6 +476,8 @@ export default {
     chooseSeat(seatId) {
       if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
       this.choosenSeats.push(seatId)
+      } else {
+        this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
       }
     },
     setDriverSeats() {
@@ -456,18 +551,22 @@ export default {
       this.bus.totalPassengersCount = commonSeats.length
     },
     close () {
-      console.log(this.bus)
-      console.log(this.scheme)
-      this.bus = Object.assign({}, this.scheme)
+      this.choosenSeats = []
+      this.bus = Object.assign({}, this.initialScheme)
       this.showScheme = false
+      this.bus.totalPassengersCount = 0
+      this.setTotalPassengersCount()
     },
     save() {
-      this.assignNewScheme({
-        id: this.id,
-        scheme: this.bus
-      })
+      // this.assignNewScheme({
+      //   id: this.id,
+      //   scheme: this.bus
+      // })
       this.scheme = this.bus
-      this.showScheme = false
+      console.log(this.bus)
+      setTimeout(() => {
+        this.showScheme = false
+      }, 2000)
     }
   }
 };
@@ -477,6 +576,13 @@ export default {
 .bus {
   /*border: 1px solid black;*/
   padding: 6px;
+  max-width: 225px;
+  position: relative;
+  z-index: 10
+}
+.spaces {
+  position: relative;
+  z-index: 1
 }
 .seat {
   cursor: pointer;
@@ -527,7 +633,7 @@ export default {
   color: white;
 }
 .controls {
-  max-width: 250px;
+  max-width: 300px;
 }
 .control {
   width: 100%;

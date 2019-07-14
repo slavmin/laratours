@@ -1,106 +1,83 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="allTransports"
-    class="elevation-1"
-    rows-per-page-text="На странице:"
-  >
-    <template v-slot:items="props">
-      <td class="text-xs-left">
-        {{ props.item.name }}
-      </td>
-      <td class="text-xs-center">
-        {{ getTransportCompanyName(props.item.transportCompanyId) }}
-      </td>
-      <td class="text-xs-center">
-        {{ props.item.qnt }}
-      </td>
-      <td class="text-xs-center">
-        {{ props.item.grade }}
-      </td>
-      <td class="text-xs-center">
-        {{ props.item.prices[1] }}
-      </td>
-      <td>
-        {{ props.item.description }}
-      </td>
-      <td class="text-xs-center">
-        <Scheme
-          :id="props.item.id" 
-          :scheme="props.item.scheme" 
+  <v-layout column>
+    <v-layout 
+      row
+      wrap
+    >
+      <v-flex
+        v-for="transport in allTransports"
+        :key="transport.id"
+        mb-5
+        xs12
+        md12
+        lg12
+        xl6
+      >
+        <h3 class="display-1">
+          {{ transport.name }}
+        </h3>
+        <div class="subheading mb-3">
+          {{ getCityName(transport.city_id) }}, {{ transport.description }}
+        </div>
+        <AttributesTable 
+          :transport-attributes="transport.objectables" 
+          :company-id="transport.id"
+          :token="token"
         />
-        <v-btn
-          color="red"
-          flat
-          dark
-          @click="del(props.item.id)"
-        >
-          <i class="far fa-trash-alt" />
-        </v-btn>
-      </td>
-    </template>
-  </v-data-table>
+      </v-flex>
+    </v-layout>
+  </v-layout>
 </template>
 
 <script>
-import Scheme from './Scheme'
-import { mapGetters, mapMutations } from 'vuex'
+import AttributesTable from './AttributesTable'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
 
   name: 'Table',
   components: {
-    Scheme
+    AttributesTable
+  },
+  props: {
+    token: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
-      headers: [
-        {
-          text: 'Название',
-          align: 'left',
-          value: 'name'
-        },
-        {
-          text: 'Компания',
-          align: 'center',
-          value: 'company'
-        },
-        {
-          text: 'Вместимость',
-          align: 'center',
-          value: 'qnt'
-        },
-        {
-          text: 'Класс',
-          align: 'center',
-          value: 'grade'
-        },
-        {
-          text: '3 часа',
-          align: 'center',
-          value: '1hour'
-        },
-        {
-          text: 'Описание',
-          align: 'center',
-          value: 'description'
-        },
-        {
-          text: 'Действия',
-          align: 'center',
-          value: 'description'
-        },
-      ],
+      
     };
   },
-  computed: mapGetters(['allTransports', 'allTransportCompanies']),
+  computed: mapGetters([
+    'allTransports', 
+    'allTransportCompanies',
+    'allCities'
+  ]),
+  mounted() {
+    this.fetchTransport()
+    this.fetchCities()
+  },
+  updated() {
+  },
   methods: {
     ...mapMutations(['deleteTransport']),
+    ...mapActions(['fetchTransport', 'fetchCities']),
     getTransportCompanyName(id) {
       let company = this.allTransportCompanies.find(item => item.id == id)
       return company.name
     },
+    getCityName(id) {
+      let cityName = ''
+      this.allCities.forEach(city => {
+        if (city.id == id) {
+          cityName = city.name
+        }
+      })
+      return cityName
+    },
     del(id) {
-      this.deleteTransport(id)
+      // this.deleteTransport(id)
     }
   }
 };

@@ -1,5 +1,6 @@
 <template>
   <v-container 
+    fluid
     grid-list-md 
     text-xs-center
   >
@@ -8,8 +9,11 @@
       wrap
     >
       <v-flex xs12>
-        <AddEdit :cities-select="cities" />
-        <Table />
+        <AddEdit 
+          :token="token"
+          :cities-select="cities" 
+        />
+        <Table :token="token" />
       </v-flex>
     </v-layout>
   </v-container>
@@ -36,6 +40,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    token: {
+      type: String,
+      default: ''
     }
   },
 
