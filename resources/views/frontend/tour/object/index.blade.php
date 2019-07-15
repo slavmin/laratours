@@ -11,6 +11,13 @@
             token="{{ csrf_token() }}"
         ></transport-index>
     @endif
+    @if ($model_alias == 'museum')
+        <museum-index 
+            :cities="{{ $scities }}" 
+            data-app
+            token="{{ csrf_token() }}"
+        ></museum-index>
+    @endif
     <div class="card mb-4">
         <div class="card-body">
              <div class="row">

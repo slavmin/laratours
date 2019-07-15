@@ -1,7 +1,7 @@
 export default {
   actions: {
     async fetchCustomerTypes(ctx) {
-      axios.get('http://127.0.0.1:8000/api/tour-options')
+      axios.get('/api/tour-options')
         .then(response => {
           console.log(response)
         })
@@ -11,9 +11,6 @@ export default {
   mutations: {
     updateCustomerTypes(state, customerTypes) {
       state.customerTypes = customerTypes
-    },
-    incrementToken(state) {
-      state.refreshToken += 1
     }
   },
   state: {
@@ -23,9 +20,6 @@ export default {
   getters: {
     allCustomerTypes(state) {
       return state.customerTypes
-    },
-    refreshToken(state) {
-      return state.refreshToken
     }
   }
 }

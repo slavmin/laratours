@@ -34,7 +34,7 @@ import AttributesTable from './AttributesTable'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
 
-  name: 'Table',
+  name: 'ObjectTransportTable',
   components: {
     AttributesTable
   },

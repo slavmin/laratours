@@ -5,6 +5,7 @@ import transportCompanies from './modules/transportCompanies'
 import transport from './modules/allTransports'
 import customerType from './modules/customerType'
 import cities from './modules/cities'
+import museum from './modules/museum'
 
 Vue.use(Vuex)
 
@@ -15,5 +16,6 @@ export default new Vuex.Store({
 		transport,
 		customerType,
     cities,
+    museum
 	}
 })
