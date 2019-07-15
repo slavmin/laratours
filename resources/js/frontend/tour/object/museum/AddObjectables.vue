@@ -1,0 +1,194 @@
+<template>
+  <v-container>
+    <v-layout 
+      row 
+      justify-end
+    >
+      <v-dialog 
+        v-model="dialog" 
+        persistent 
+        max-width="600px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn 
+            fab
+            small
+            color="green" 
+            dark 
+            v-on="on"
+          >
+            <i class="material-icons">
+              add
+            </i>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <v-layout 
+              column
+              wrap
+            >
+              <h3 class="mb-4">
+                <i class="material-icons mr-2">
+                  account_balance
+                </i>
+                {{ museum.name }}
+              </h3>  
+              <h4>Добавить тип билета:</h4>
+            </v-layout>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-form 
+                :id="'form' + museum.id"
+                ref="form"
+                lazy-validation
+                :action="'/operator/museum/' + museum.id"
+                method="POST"
+              >
+                <input 
+                  id="_method" 
+                  type="hidden" 
+                  name="_method" 
+                  value="PATCH"
+                >
+                <input 
+                  type="hidden" 
+                  name="_token" 
+                  :value="token"
+                > 
+                <input 
+                  :id="attribute + '[id]'" 
+                  type="hidden" 
+                  :name="attribute + '[id]'" 
+                  value="0"
+                > 
+                <input 
+                  :id="attribute + '[qnt]'" 
+                  type="hidden" 
+                  :name="attribute + '[qnt]'" 
+                  value="1"
+                > 
+                <input 
+                  :id="attribute + '[customer_type_id]'" 
+                  v-model="customerId"
+                  type="hidden" 
+                  :name="attribute + '[customer_type_id]'" 
+                > 
+                <input 
+                  :id="attribute + '[name]'" 
+                  v-model="customerName"
+                  type="hidden" 
+                  :name="attribute + '[name]'" 
+                > 
+                <v-layout
+                  column
+                  wrap
+                >
+                  <v-flex 
+                    xs12 
+                    sm6 
+                  >
+                    <v-select
+                      v-model="customerId"
+                      :items="customerTypes"
+                      item-text="name"
+                      item-value="id"
+                      label="Тип билета"
+                      outline
+                    />
+                    <v-text-field 
+                      :name="attribute + '[description]'" 
+                      label="Описание" 
+                      outline
+                      color="green"
+                      class="mb-3"
+                    />
+                    <v-text-field 
+                      :name="attribute + '[price]'"
+                      label="Цена" 
+                      mask="#####"
+                      outline
+                      color="green"
+                    />
+                  </v-flex>
+                </v-layout>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn 
+              color="green" 
+              flat 
+              @click="dialog = false"
+            >
+              Закрыть
+            </v-btn>
+            <!-- <v-btn 
+              color="green" 
+              flat 
+              @click="log"
+            >
+              заложить
+            </v-btn> -->
+            <v-btn 
+              color="green" 
+              flat 
+              type="submit"
+              :form="'form' + museum.id"
+            >
+              Сохранить
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+export default {
+
+  name: 'AddObjectables',
+  props: {
+    museum: {
+      type: Object,
+      required: true,
+      default: null,
+    },
+    token: {
+      type: String,
+      required: true,
+      default: null,
+    }
+  },
+  data() {
+    return {
+      dialog: false,
+      customerTypes: [
+        { id: '1', name: 'Взрослый'},
+        { id: '16', name: 'Пенсионер'},
+        { id: '15', name: 'Школьники до 16 лет'},
+      ],
+      customerId: 15
+    };
+  },
+  computed: {
+    attribute: function() {
+      return 'attribute[' + this.museum.id + ']'
+    },
+    customerName: function() {
+      return this.customerTypes.find(customer => customer.id == this.customerId).name
+    }
+  },
+  methods: {
+    log() {
+      console.log(this.customerName)
+    }
+  }
+};
+</script>
+
+<style lang="css" scoped>
+</style>

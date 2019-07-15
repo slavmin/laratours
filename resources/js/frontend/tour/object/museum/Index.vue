@@ -1,22 +1,20 @@
 <template>
-  <v-container 
+  <v-container
     fluid
-    grid-list-md 
+    grid-list-md
     text-xs-center
   >
-    <v-layout 
-      row 
-      wrap
-    >
-      <v-flex xs12>
-        <h1>Транспорт</h1>
-        <AddEdit 
-          :token="token"
-          :cities-select="cities" 
-        />
-        <Table :token="token" />
-      </v-flex>
-    </v-layout>
+    <h1 class="display-3 mb-5">
+      Музеи
+      <Add 
+        :token="token" 
+        :cities-select="cities"
+      />
+    </h1>
+    <Table 
+      :token="token" 
+      :cities="cities"
+    />
   </v-container>
 </template>
 
@@ -27,13 +25,13 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
 
 import Table from './Table'
-import AddEdit from './AddEdit'
+import Add from './Add'
 export default {
 
-  name: 'ObjectTransportIndex',
+  name: 'ObjectMuseumIndex',
   components: {
     Table,
-    AddEdit,
+    Add,
   },
   props: {
     cities: {
@@ -47,7 +45,6 @@ export default {
       default: ''
     }
   },
-
   data() {
     return {
 
@@ -56,8 +53,5 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.container {
-  font-family: 'Roboto', sans-serif;
-}
+<style lang="css" scoped>
 </style>
