@@ -43,7 +43,7 @@
           </div>
         </v-layout>
       </td>
-      <td>
+      <td style="max-width: 300px;">
         {{ props.item.description }}
       </td>
       <td class="text-xs-center">
@@ -64,7 +64,7 @@
             :company-id="companyId"
             :token="token"
           />
-          <v-btn
+          <!-- <v-btn
             color="red"
             fab
             small
@@ -74,7 +74,7 @@
             @click="del(props.item.id)"
           >
             <i class="far fa-trash-alt" />
-          </v-btn>
+          </v-btn> -->
         </v-layout>
       </td>
     </template>
