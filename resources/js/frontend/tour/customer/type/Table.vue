@@ -40,6 +40,7 @@
 </template>
 
 <script>
+// import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'CustomerTable',
@@ -83,9 +84,20 @@ export default {
       }
     };
   },
-  created() {
-
-  }
+  // computed: mapGetters(['refreshToken', 'allCustomerTypes']),
+  // created() {
+  //   console.log('-- Created:')
+  //   console.log(this.allCustomerTypes)
+  // },
+  // updated() {
+  //   console.log(this.allCustomerTypes)
+  // },
+  // async mounted() {
+  //   this.fetchCustomerTypes()
+  // },
+  // methods: {
+  //   ...mapActions(['fetchCustomerTypes'])
+  // }
 };
 </script>
 
