@@ -34,7 +34,7 @@
                 </i>
                 {{ museum.name }}
               </h3>  
-              <h4>Добавить тип билета:</h4>
+              <h4>Добавить экскурсию:</h4>
             </v-layout>
           </v-card-title>
           <v-card-text>
@@ -81,6 +81,12 @@
                   type="hidden" 
                   :name="attribute + '[name]'" 
                 > 
+                <input 
+                  :id="attribute + '[extra]'" 
+                  v-model="extra"
+                  type="hidden" 
+                  :name="attribute + '[extra]'" 
+                > 
                 <v-layout
                   column
                   wrap
@@ -108,6 +114,13 @@
                       :name="attribute + '[price]'"
                       label="Цена" 
                       mask="#####"
+                      outline
+                      color="green"
+                    />
+                    <v-text-field 
+                      v-model="duration"
+                      label="Продолжительность экскурсии в часах" 
+                      mask="##"
                       outline
                       color="green"
                     />
@@ -171,7 +184,8 @@ export default {
         { id: '16', name: 'Пенсионер'},
         { id: '15', name: 'Школьники до 16 лет'},
       ],
-      customerId: 15
+      customerId: 15,
+      duration: 0
     };
   },
   computed: {
@@ -180,6 +194,11 @@ export default {
     },
     customerName: function() {
       return this.customerTypes.find(customer => customer.id == this.customerId).name
+    },
+    extra: function() {
+      return JSON.stringify({
+        duration: this.duration
+      })
     }
   },
   methods: {

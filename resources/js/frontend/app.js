@@ -40,6 +40,7 @@ Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').defau
 Vue.component('customer-type-edit', require('./tour/customer/type/Edit.vue').default);
 Vue.component('customer-type-delete', require('./tour/customer/type/Delete.vue').default);
 Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
+Vue.component('tour-index', require('./tour/tour/Index.vue').default);
 /**
  * Vuex store
  *

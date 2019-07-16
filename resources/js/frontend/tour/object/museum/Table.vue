@@ -133,13 +133,16 @@
         >
           <template v-slot:items="props">
             <td class="text-xs-left">
-              {{ props.item.name }}
+              {{ props.item.description }}
             </td>
             <td class="text-xs-center">
               {{ props.item.price }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.description }}
+              {{ JSON.parse(props.item.extra).duration }} ч.
+            </td>
+            <td class="text-xs-center">
+              {{ props.item.name }}
             </td>
           </template>
         </v-data-table>
@@ -179,9 +182,9 @@ export default {
     return {
       headers: [
         {
-          text: 'Название',
+          text: 'Экскурсия',
           align: 'left',
-          value: 'name'
+          value: 'description'
         },
         {
           text: 'Цена',
@@ -189,9 +192,14 @@ export default {
           value: 'price'
         },
         {
-          text: 'Описание',
+          text: 'Время',
           align: 'center',
-          value: 'description'
+          value: 'duration'
+        },
+        {
+          text: 'Посетитель',
+          align: 'center',
+          value: 'name'
         },
       ]
     };
