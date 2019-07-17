@@ -41,6 +41,9 @@ Vue.component('customer-type-edit', require('./tour/customer/type/Edit.vue').def
 Vue.component('customer-type-delete', require('./tour/customer/type/Delete.vue').default);
 Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
 Vue.component('tour-index', require('./tour/tour/Index.vue').default);
+Vue.component('hotel-index', require('./tour/hotel/Index.vue').default);
+Vue.component('meal-index', require('./tour/meal/Index.vue').default);
+/**
 /**
  * Vuex store
  *

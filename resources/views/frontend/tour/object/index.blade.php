@@ -18,6 +18,18 @@
             token="{{ csrf_token() }}"
         ></museum-index>
     @endif
+    @if ($model_alias == 'hotel')
+        <hotel-index 
+            data-app
+            token="{{ csrf_token() }}"
+        ></hotel-index>
+    @endif
+<!--     @if ($model_alias == 'meal')
+        <meal-index 
+            data-app
+            token="{{ csrf_token() }}"
+        ></meal-index>
+    @endif -->
     <div class="card mb-4">
         <div class="card-body">
              <div class="row">
