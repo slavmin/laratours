@@ -5,10 +5,10 @@ export default {
         .then(response => {
           const countries = response.data[0].countries_cities_options
           let cities = []
-          for (let key in countries[1].cities) {
+          for (let key in countries[5].cities) {
             cities.push({
               id: key,
-              name: countries[1].cities[key]
+              name: countries[5].cities[key]
             })
           }
           ctx.commit('updateCities', cities)
