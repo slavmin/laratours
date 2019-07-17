@@ -33,144 +33,214 @@
             </v-icon>
           </v-btn>
           <v-toolbar-title>
-            Новый тур
+            {{ tourName == '' ? 'Новый тур' : tourName }}
           </v-toolbar-title>
         </v-toolbar>
-        <v-divider />
         <v-container fluid>
           <v-layout 
             row 
             wrap
             justify-center
           >
-            <v-flex xs6>
-              <v-select
-                v-model="choosenCities"
-                :items="allCities"
-                label="Тур по городам:"
-                item-text="name"
-                item-value="id"
-                :rules="[v => !!v || 'Это обязательное поле']"
-                append-outer-icon="map"
-                color="green lighten-3"
-                multiple
-                required
-              />
-              <v-divider />
-            </v-flex>
-            <v-flex xs12>
-              <transition name="fade">
-                <div v-if="showTransports">
-                  <v-layout 
-                    v-for="transport in actualTransports"
-                    :key="transport.id"
-                    row 
-                    wrap
-                    align-center
-                    mb-5
-                  >
-                    <v-flex xs12>
-                      <div class="text-xs-center display-2">
-                        {{ transport.name }}
-                      </div>
-                      <div class="text-xs-center subheading">
-                        {{ getCityName(transport.city_id) }},
-                        <i 
-                          class="material-icons"
-                          style="font-size: 12px;"
-                        >
-                          phone
-                        </i>
-                        {{ transport.description }}
-                      </div>
-                    </v-flex>
-                    <v-layout
-                      row
-                      wrap
-                      justify-center
-                    >
-                      <v-flex
-                        v-for="item in transport.objectables"
-                        :key="item.id"
-                        xs3
-                        lg2
-                        ma-2
-                      >
-                        <v-card 
-                          color="green lighten-5"
-                          pa-3
-                        >
-                          <v-card-title primary-title>
-                            <div>
-                              <div class="headline mb-2">
-                                {{ item.name }}
-                                <i 
-                                  class="material-icons ml-2"
-                                  style="color: grey; font-size: 20px;"
-                                  :title="item.description"
-                                >
-                                  info
-                                </i>
-                              </div>
-                              <v-divider />
-                              <div
-                                v-for="(price, i) in JSON.parse(item.extra).prices"
-                                :key="i"
-                                row
-                                justify-content-between
-                                wrap
-                              >
-                                <span class="grey--text text--darken-1">
-                                  {{ price.name }}: 
-                                </span>
-                                <p 
-                                  style="display: inline-block;"
-                                >
-                                  {{ price.value }}
-                                </p>
-                              </div>
-                              <br>
-                              <div
-                                v-for="(grade, i) in JSON.parse(item.extra).grade"
-                                :key="i"
-                                row
-                                justify-center
-                                wrap
-                                my-1
-                              >
-                                <span class="grey--text text--darken-1">
-                                  {{ grade }}
-                                </span>
-                              </div>
-                              <div class="mt-2">
-                                Мест: {{ item.qnt }}
-                              </div>
-                            </div>
-                          </v-card-title>
-                          <v-card-actions>
-                            <v-btn 
-                              flat
-                              :disabled="transportFull"
-                              @click="chooseTransport(transport.id, item.id)"
-                            >
-                              Выбрать
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-flex>
-                    </v-layout>
-                  </v-layout>
-                </div>
-              </transition>
-              <v-btn 
-                dark 
-                color="green"
-                @click="log"
+            <v-flex 
+              v-if="showTypes"
+              xs6
+            >
+              <v-form
+                ref="tourTypeForm"
+                v-model="tourTypeFormValid"
+                lazy-validation
               >
-                заложить
-              </v-btn>
+                <v-select
+                  v-model="tourType"
+                  :items="tourTypes"
+                  label="Тип тура:"
+                  item-text="name"
+                  item-value="id"
+                  :rules="[v => !!v || 'Выберите тип']"
+                  append-outer-icon="find_in_page"
+                  color="green lighten-3"
+                  required
+                />
+                <v-text-field
+                  v-model="tourName"
+                  label="Название тура"
+                  name="name"
+                  :rules="nameRules"
+                  append-outer-icon="title"
+                  color="green lighten-3"
+                  outline
+                  required
+                />
+                <v-select
+                  v-model="choosenCities"
+                  :items="allCities"
+                  label="Тур по городам:"
+                  item-text="name"
+                  item-value="id"
+                  :rules="[v => v.length != 0 || 'Выберите тип']"
+                  append-outer-icon="location_city"
+                  color="green lighten-3"
+                  multiple
+                  required
+                />
+                <v-divider />
+                <v-layout 
+                  row 
+                  wrap
+                  justify-content-between
+                >
+                  <v-flex xs3>
+                    <v-menu
+                      v-model="showDateStart"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="dateStart"
+                          label="Дата начала"
+                          :rules="[v => !!v || 'Выберите дату']"
+                          prepend-icon="event"
+                          readonly
+                          required
+                          v-on="on"
+                        />
+                      </template>
+                      <v-date-picker 
+                        v-model="dateStart" 
+                        color="green"
+                        locale="ru-ru"
+                        @input="showDateStart = false"
+                      />
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs3>
+                    <v-menu
+                      v-model="showDateEnd"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="dateEnd"
+                          label="Дата окончания"
+                          :rules="[v => !!v || 'Выберите дату']"
+                          prepend-icon="event"
+                          readonly
+                          required
+                          v-on="on"
+                        />
+                      </template>
+                      <v-date-picker 
+                        v-model="dateEnd" 
+                        color="green"
+                        locale="ru-ru"
+                        :min="dateStart"
+                        @input="showDateEnd = false"
+                      />
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-text-field
+                      v-model="days"
+                      label="Дней"
+                      name="days"
+                      disabled
+                      color="green lighten-3"
+                    />
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-text-field
+                      v-model="nights"
+                      label="Ночей"
+                      name="nights"
+                      disabled
+                      color="green lighten-3"
+                    />
+                  </v-flex>
+                </v-layout>
+                <v-layout 
+                  row 
+                  wrap
+                  justify-content-start
+                >
+                  <v-flex xs3>
+                    <v-select
+                      v-model="tourGrade"
+                      :items="tourGrades"
+                      name="grade"
+                      label="Класс:"
+                      item-text="name"
+                      item-value="id"
+                      :rules="[v => v.length != 0 || 'Выберите класс']"
+                      prepend-icon="grade"
+                      color="green lighten-3"
+                      multiple
+                      required
+                    />
+                  </v-flex>
+                  <v-flex 
+                    xs6
+                    offset-xs1
+                  >
+                    <v-select
+                      v-model="tourLanguages"
+                      :items="availableLanguages"
+                      name="languages"
+                      label="Язык:"
+                      item-text="name"
+                      item-value="id"
+                      :rules="[v => v.length != 0 || 'Выберите язык']"
+                      prepend-icon="language"
+                      color="green lighten-3"
+                      multiple
+                      required
+                    />
+                  </v-flex>
+                </v-layout>
+                <v-layout 
+                  row 
+                  wrap
+                  justify-content-end
+                >
+                  <v-btn
+                    :disabled="!tourTypeFormValid"
+                    color="green"
+                    class="white--text"
+                    @click="submitType"
+                  >
+                    Далее
+                  </v-btn>
+                </v-layout>
+              </v-form>
             </v-flex>
+            <DayConstructor 
+              :all-cities="allCities"
+              :actual-transports="actualTransports"
+              :actual-museum="actualMuseum"
+              :show-day-constructor="showDayConstructor"
+              :tour="tour"
+              @log="onLog"
+            />
           </v-layout>
+          <!-- <v-btn 
+            dark 
+            color="green"
+            @click="log"
+          >
+            log
+          </v-btn> -->
         </v-container>    
       </v-card>
     </v-dialog>
@@ -178,21 +248,91 @@
 </template>
 
 <script>
+import DayConstructor from './DayConstructor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'TourAdd',
-
+  components: {
+    DayConstructor,
+  },
   data() {
     return {
+      tourTypeFormValid: false,
+      tourName: '',
+      nameRules: [
+        v => !!v || 'Введите название тура',
+      ],
       dialog: false,
+      firstSlide: true,
+      showDateStart: false,
+      showDateEnd: false,
+      secondSlide: false,
+      tourType: '',
+      tourGrades: [
+        { id: 1, name: 'Стандарт'},
+        { id: 2, name: 'VIP'}
+      ],
+      tourGrade: [],
+      availableLanguages: [
+        { id: 1, name: 'Русский'},
+        { id: 2, name: 'Английский'},
+        { id: 3, name: 'Немецкий'},
+        { id: 4, name: 'Французский'},
+        { id: 5, name: 'Китайский'},
+        { id: 6, name: 'Испанский'},
+        { id: 7, name: 'Итальянский'},
+        { id: 8, name: 'Финский'}
+      ],
+      tourLanguages: [],
+      dateStart: new Date().toISOString().substr(0, 10),
+      dateEnd: new Date().toISOString().substr(0, 10),
       choosenCities: [],
       choosenTransport: [],
       transportCount: 2,
     };
   },
   computed: {
-    ...mapGetters(['allCities', 'allTransports']),
+    ...mapGetters([
+      'allCities', 
+      'allTransports',
+      'allTourOptions',
+    ]),
+    tour: function() {
+      return {
+        type: this.tourType,
+        name: this.tourName,
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd,
+        days: this.days,
+        nights: this.nights,
+        grade: this.tourGrade,
+        languages: this.tourLanguages,
+        transport: this.choosenTransport,
+      }
+    },
+    tourTypes: function() {
+      let types = []
+      for (let key in this.allTourOptions.tour_type_options) {
+        types.push({
+          id: key,
+          name: this.allTourOptions.tour_type_options[key]
+        })
+      }
+      return types
+    },
+    days: function() {
+      return (new Date(this.dateEnd) - new Date(this.dateStart)) / 864e5
+    },
+    nights: function() {
+      return this.days != 0 ? this.days - 1 : 0
+    },
+    showTypes: function() {
+      return this.firstSlide
+    },
+    showDayConstructor: function() {
+      return !this.firstSlide
+    },
     showTransports: function() {
       if (this.choosenCities.length === 0) {
         return false
@@ -209,33 +349,62 @@ export default {
       )
       return result
     },
-    tour: function() {
-      return {
-        transport: this.choosenTransport
-      }
+    actualMuseum: function() {
+      let result = []
+      this.allTourOptions.museum_options.map((item) => {
+          if (this.choosenCities.indexOf(item.city_id) !== -1) {
+            result.push(item)
+          }
+        }
+      )
+      return result
     },
     transportFull: function() {
       return this.choosenTransport.length == this.transportCount
-    }
+    },
   },
   created() {
     this.fetchCities()
     this.fetchTransport()
+    this.fetchAllTourOptions()
   },
   methods: {
     ...mapActions([
       'fetchCities',
-      'fetchTransport'
+      'fetchTransport',
+      'fetchAllTourOptions',
     ]),
     log() {
-      console.log(this.tour)
+      console.log(this.actualMuseum)
+    },
+    onLog: function() {
+      console.log('hello from DayConstructor')
     },
     close() {
       this.dialog = false
-      this.choosenCities = []
+      this.reset()
     },
-    getRandomId() {
-      return Math.floor(Math.random() * (10 - 200)) + 200;
+    submitType() {
+      if (this.$refs.tourTypeForm.validate()) {
+        this.snackbar = true
+        this.firstSlide = false
+      }
+    },
+    reset () {
+      this.tourTypeFormValid = false
+      this.tourName = ''
+      this.firstSlide = true
+      this.showDateStart = false
+      this.showDateEnd = false
+      this.secondSlide = false
+      this.tourType = ''
+      this.tourGrade = []
+      this.tourLanguages = []
+      this.dateStart = new Date().toISOString().substr(0, 10)
+      this.dateEnd = new Date().toISOString().substr(0, 10)
+      this.choosenCities = []
+      this.choosenTransport = []
+      this.transportCount = 2
     },
     getCityName(id) {
       let cityName = ''
@@ -246,18 +415,6 @@ export default {
       })
       return cityName
     },
-    chooseTransport(transportId, itemId) {
-      let company = {}
-      this.allTransports.map((transport) => {
-        if (transport.id == transportId) {
-          company = {
-            id: transport.id,
-            name: transport.name
-          }
-        }
-      })
-      this.choosenTransport.push(company) 
-    }
   }
 };
 </script>
