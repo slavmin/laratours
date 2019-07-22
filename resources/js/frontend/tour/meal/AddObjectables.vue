@@ -30,9 +30,9 @@
             >
               <h3 class="mb-4">
                 <i class="material-icons mr-2">
-                  hotel
+                  fastfood
                 </i>
-                {{ hotel.name }}
+                {{ meal.name }}
               </h3>  
               <h4>Добавить номер:</h4>
             </v-layout>
@@ -40,10 +40,10 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-form 
-                :id="'form' + hotel.id"
+                :id="'form' + meal.id"
                 ref="form"
                 lazy-validation
-                :action="'/operator/hotel/' + hotel.id"
+                :action="'/operator/meal/' + meal.id"
                 method="POST"
               >
                 <input 
@@ -104,11 +104,11 @@
                       outline
                     />
                     <v-select
-                      v-model="roomType"
-                      :items="roomTypes"
+                      v-model="mealType"
+                      :items="mealTypes"
                       item-text="name"
                       item-value="id"
-                      label="Тип номера:"
+                      label="Тип питания:"
                       outline
                     />
                     <v-text-field 
@@ -150,7 +150,7 @@
               color="green" 
               flat 
               type="submit"
-              :form="'form' + hotel.id"
+              :form="'form' + meal.id"
             >
               Сохранить
             </v-btn>
@@ -166,7 +166,7 @@ export default {
 
   name: 'AddObjectables',
   props: {
-    hotel: {
+    meal: {
       type: Object,
       required: true,
       default: null,
@@ -185,26 +185,25 @@ export default {
         { id: 2, name: 'Ребёнок'},
         { id: 3, name: 'Иностранец'}
       ],
-      roomTypes: [
-        { count: 1, name: 'Одноместный номер' },
-        { count: 2, name: 'Двухместный номер' },
-        { count: 3, name: 'Трёхместный номер' },
-        { count: 4, name: 'Четырёхместный номер' },
+      mealTypes: [
+        { count: 1, name: 'Завтрак' },
+        { count: 2, name: 'Обед' },
+        { count: 3, name: 'Ужин' },
       ],
       customerId: 15,
-      roomType: 0
+      mealType: 0
     };
   },
   computed: {
     attribute: function() {
-      return 'attribute[' + this.hotel.id + ']'
+      return 'attribute[' + this.meal.id + ']'
     },
     customerName: function() {
       return this.customerTypes.find(customer => customer.id == this.customerId).name
     },
     extra: function() {
       return JSON.stringify({
-        roomType: this.roomType
+        mealType: this.mealType
       })
     }
   },

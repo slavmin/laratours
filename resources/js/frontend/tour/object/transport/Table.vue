@@ -15,10 +15,78 @@
       >
         <h3 class="display-1">
           {{ transport.name }}
+          <Edit 
+            :transport="transport" 
+            :token="token"
+          />
         </h3>
         <div class="subheading mb-3">
-          {{ getCityName(transport.city_id) }}, {{ transport.description }}
+          <i class="material-icons mr-2">
+            location_city
+          </i>
+          {{ getCityName(transport.city_id) }}
         </div>
+        <v-layout 
+          row 
+          wrap
+          mb-2
+          justify-center
+        >
+          <div class="mr-3">
+            <i 
+              class="material-icons"
+              style="font-size: 12px;"
+            >
+              web
+            </i>
+            <a 
+              :href="JSON.parse(transport.description).contacts.site"
+              target="_blank"
+            >
+              {{ JSON.parse(transport.description).contacts.site }}
+            </a>
+          </div>
+          <div class="mr-3">
+            <i 
+              class="material-icons"
+              style="font-size: 12px;"
+            >
+              email
+            </i>
+            <a 
+              :href="'mailto:' + JSON.parse(transport.description).contacts.email"
+            >
+              {{ JSON.parse(transport.description).contacts.email }}
+            </a>
+          </div>
+          <div class="mr-5">
+            <i 
+              class="material-icons"
+              style="font-size: 12px;"
+            >
+              phone
+            </i>
+            {{ JSON.parse(transport.description).contacts.phone }}
+          </div>
+          <div class="mr-3">
+            <i 
+              class="material-icons"
+              style="font-size: 12px;"
+            >
+              person
+            </i>
+            {{ JSON.parse(transport.description).staff.name }}
+          </div>
+          <div>
+            <i 
+              class="material-icons"
+              style="font-size: 12px;"
+            >
+              phone
+            </i>
+            {{ JSON.parse(transport.description).staff.phone }}
+          </div>
+        </v-layout>
         <AttributesTable 
           :transport-attributes="transport.objectables" 
           :company-id="transport.id"
@@ -30,13 +98,15 @@
 </template>
 
 <script>
-import AttributesTable from './AttributesTable'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import AttributesTable from './AttributesTable'
+import Edit from './Edit'
 export default {
 
   name: 'ObjectTransportTable',
   components: {
-    AttributesTable
+    Edit,
+    AttributesTable,
   },
   props: {
     token: {

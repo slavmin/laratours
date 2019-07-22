@@ -8,7 +8,7 @@ import cities from './modules/cities'
 import museum from './modules/museum'
 import hotel from './modules/hotel'
 import meal from './modules/meal'
-import tourOptions from './modules/tourOptions'
+import tourConstructor from './modules/tourConstructor'
 
 Vue.use(Vuex)
 
@@ -22,6 +22,6 @@ export default new Vuex.Store({
     museum,
     hotel,
     meal,
-    tourOptions,
+    tourConstructor,
 	}
 })

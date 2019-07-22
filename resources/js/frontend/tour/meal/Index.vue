@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Add from './Add'
 import Table from './Table'
 export default {
@@ -30,6 +31,12 @@ export default {
     token: {
       type: String,
       default: ''
+    },
+    meal: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
@@ -37,6 +44,12 @@ export default {
 
     };
   },
+  created() {
+    this.pushMealToStorage(this.meal.data)
+  },
+  methods: {
+    ...mapActions(['pushMealToStorage']),
+  }
 };
 </script>
 

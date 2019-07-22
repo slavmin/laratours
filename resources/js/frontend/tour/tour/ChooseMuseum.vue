@@ -1,115 +1,133 @@
 <template>
   <div>
-    <h2 class="text-xs-center grey--text">
-      Музеи:
-    </h2>
     <v-layout
       row
       wrap
     >
-      <v-layout 
-        v-for="museum in actualMuseum"
-        :key="museum.id"
-        row 
-        wrap
-        align-center
-        mb-5
-      >
-        <v-flex xs12>
-          <div class="text-xs-center display-2">
-            {{ museum.name }}
-          </div>
-          <div class="text-xs-center subheading">
-            {{ getCityName(transport.city_id) }},
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
-            >
-              phone
-            </i>
-            {{ transport.description }}
-          </div>
-        </v-flex>
-        <v-layout
-          row
+      <v-flex>
+        <h2 class="text-xs-center grey--text">
+          Выберите музеи и экскурсии:
+        </h2>
+        <v-layout 
+          v-for="museum in getActualMuseum"
+          :key="museum.id"
+          row 
           wrap
-          justify-center
+          align-center
+          mb-5
         >
-          <v-flex
-            v-for="item in transport.objectables"
-            :key="item.id"
-            xs3
-            lg2
-            ma-2
+          <v-flex xs12>
+            <div class="text-xs-center display-2">
+              {{ museum.name }}
+            </div>
+            <div class="text-xs-center subheading">
+              {{ getCityName(museum.city_id) }},
+              <i 
+                class="material-icons"
+                style="font-size: 12px;"
+              >
+                phone
+              </i>
+              {{ JSON.parse(museum.description).contacts.phone }}
+            </div>
+          </v-flex>
+          <v-layout
+            row
+            wrap
+            justify-center
           >
-            <v-card 
-              color="green lighten-5"
-              pa-3
+            <v-flex
+              v-for="item in museum.objectables"
+              :key="item.id"
+              xs3
+              lg2
+              ma-2
             >
-              <v-card-title primary-title>
-                <div>
-                  <div class="headline mb-2">
-                    {{ item.name }}
-                    <i 
-                      class="material-icons ml-2"
-                      style="color: grey; font-size: 20px;"
-                      :title="item.description"
+              <v-card 
+                class="museum-card"
+                :class="{'is-select' : item.selected}"
+                pa-3
+              >
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline mb-2">
+                      {{ item.description }}
+                      <i 
+                        class="material-icons ml-2"
+                        style="color: grey; font-size: 20px;"
+                        :title="item.description"
+                      >
+                        info
+                      </i>
+                    </div>
+                    <v-divider />
+                    <v-select
+                      :items="days"
+                      :dark="item.selected"
+                      :disabled="item.selected"
+                      label="День тура"
+                      outline
+                    />
+                    <div
+                      v-for="(price, i) in JSON.parse(item.extra).prices"
+                      :key="i"
+                      row
+                      justify-content-between
+                      wrap
                     >
-                      info
-                    </i>
-                  </div>
-                  <v-divider />
-                  <div
-                    v-for="(price, i) in JSON.parse(item.extra).prices"
-                    :key="i"
-                    row
-                    justify-content-between
-                    wrap
-                  >
+                      <span class="grey--text text--darken-1">
+                        {{ price.name }}: 
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ price.value }}
+                      </p>
+                    </div>
+                    <br>
                     <span class="grey--text text--darken-1">
-                      {{ price.name }}: 
+                      Цена: {{ item.price }}
                     </span>
-                    <p 
-                      style="display: inline-block;"
-                    >
-                      {{ price.value }}
-                    </p>
+                    <div class="mt-2">
+                      Длительность: {{ JSON.parse(item.extra).duration }}ч.
+                    </div>
                   </div>
-                  <br>
-                  <div
-                    v-for="(grade, i) in JSON.parse(item.extra).grade"
-                    :key="i"
-                    row
-                    justify-center
-                    wrap
-                    my-1
+                </v-card-title>
+                <v-card-actions>
+                  <v-btn 
+                    flat
+                    :dark="item.selected"
+                    @click="choose(museum, item)"
                   >
-                    <span class="grey--text text--darken-1">
-                      {{ grade }}
-                    </span>
-                  </div>
-                  <div class="mt-2">
-                    Мест: {{ item.qnt }}
-                  </div>
-                </div>
-              </v-card-title>
-              <v-card-actions>
-                <v-btn 
-                  flat
-                  @click="$emit('choose', transport, item)"
-                >
-                  Выбрать
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+                    {{ item.selected ? 'Убрать' : 'Выбрать' }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-layout>
+        <v-layout 
+          row 
+          wrap
+          justify-end
+        >
+          <v-flex xs2>  
+            <v-btn 
+              dark
+              color="green"
+              @click="done"
+            >
+              OK
+            </v-btn>
           </v-flex>
         </v-layout>
-      </v-layout>
+      </v-flex>
     </v-layout>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'ChooseMuseum',
@@ -119,7 +137,29 @@ export default {
 
     };
   },
+  computed: {
+    ...mapGetters([
+      'allCities',
+      'getActualMuseum',
+      'getTour'
+    ]),
+    days: function() {
+      let result = []
+      for (let i = 1; i <= this.getTour.options.days; i++) {
+        result.push(i)
+      } 
+      return result
+    },
+  },
+  created() {
+    this.updateActualMuseum()
+  },
   methods: {
+    ...mapActions([
+      'updateActualMuseum',
+      'updateNewMuseumOptions',
+      'updateTourMuseum',
+    ]),
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {
@@ -129,9 +169,29 @@ export default {
       })
       return cityName
     },
+    choose(museum, item) {
+      let updData = {
+        'museum': museum,
+        'item': {
+          ...item,
+          selected: !item.selected,
+        }, 
+      }
+      this.updateNewMuseumOptions(updData)
+    },
+    done() {
+      this.updateTourMuseum()
+    },
   }
 };
 </script>
 
 <style lang="css" scoped>
+.museum-card {
+  background-color: #E8F5E9;
+}
+.is-select {
+  background-color: #FFAB16;
+  color: white;
+}
 </style>

@@ -24,12 +24,14 @@
             token="{{ csrf_token() }}"
         ></hotel-index>
     @endif
-<!--     @if ($model_alias == 'meal')
+    @if ($model_alias == 'meal')
+        <?php $smeal = json_encode($items); ?>
         <meal-index 
             data-app
+            :meal="{{ $smeal }}"
             token="{{ csrf_token() }}"
         ></meal-index>
-    @endif -->
+    @endif
     <div class="card mb-4">
         <div class="card-body">
              <div class="row">

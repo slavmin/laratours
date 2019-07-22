@@ -18,7 +18,7 @@
       v-if="showScheme"
       v-model="showScheme"
       lazy
-      persistent
+      hide-overlay
     >
       <v-card>
         <v-card-title>
@@ -220,7 +220,7 @@
                     </button>
                   </div>
                   <!-- /Set unavailable seats button -->
-                  <!-- Reset button -->
+                  <!-- Make all seats common button -->
                   <div 
                     class="container-fluid d-flex justify-content-between align-items-center" 
                     style="height: 38px;"
@@ -232,7 +232,7 @@
                       Сбросить
                     </button>
                   </div>
-                  <!-- /Reset button -->
+                  <!-- /Make all seats common button -->
                 </div>
                 <!-- /Controls -->
               </v-flex>
@@ -394,7 +394,6 @@ export default {
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
     this.extra.scheme = this.bus
-    console.log(this.extra)
   },
   methods: {
     ...mapMutations(['assignNewScheme']),
