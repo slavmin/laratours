@@ -125,7 +125,7 @@
         >
           <template v-slot:items="props">
             <td class="text-xs-left">
-              <!-- {{ JSON.parse(props.item.extra).roomType }} -->
+              {{ JSON.parse(props.item.extra).mealType }}
             </td>
             <td class="text-xs-center">
               {{ props.item.price }}

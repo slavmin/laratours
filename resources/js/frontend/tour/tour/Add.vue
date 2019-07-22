@@ -42,205 +42,32 @@
             wrap
             justify-center
           >
-            <v-flex 
-              v-if="showTypes"
-              xs6
+            <v-flex
+              v-if="showOptions"
+              xs6 
             >
-              <v-form
-                ref="tourTypeForm"
-                v-model="tourTypeFormValid"
-                lazy-validation
-              >
-                <v-select
-                  v-model="tourType"
-                  :items="tourTypes"
-                  label="Тип тура:"
-                  item-text="name"
-                  item-value="id"
-                  :rules="[v => !!v || 'Выберите тип']"
-                  append-outer-icon="find_in_page"
-                  color="green lighten-3"
-                  required
-                />
-                <v-text-field
-                  v-model="tourName"
-                  label="Название тура"
-                  name="name"
-                  :rules="nameRules"
-                  append-outer-icon="title"
-                  color="green lighten-3"
-                  outline
-                  required
-                />
-                <v-select
-                  v-model="choosenCities"
-                  :items="allCities"
-                  label="Тур по городам:"
-                  item-text="name"
-                  item-value="id"
-                  :rules="[v => v.length != 0 || 'Выберите тип']"
-                  append-outer-icon="location_city"
-                  color="green lighten-3"
-                  multiple
-                  required
-                />
-                <v-divider />
-                <v-layout 
-                  row 
-                  wrap
-                  justify-content-between
-                >
-                  <v-flex xs3>
-                    <v-menu
-                      v-model="showDateStart"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="dateStart"
-                          label="Дата начала"
-                          :rules="[v => !!v || 'Выберите дату']"
-                          prepend-icon="event"
-                          readonly
-                          required
-                          v-on="on"
-                        />
-                      </template>
-                      <v-date-picker 
-                        v-model="dateStart" 
-                        color="green"
-                        locale="ru-ru"
-                        @input="showDateStart = false"
-                      />
-                    </v-menu>
-                  </v-flex>
-                  <v-flex xs3>
-                    <v-menu
-                      v-model="showDateEnd"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="dateEnd"
-                          label="Дата окончания"
-                          :rules="[v => !!v || 'Выберите дату']"
-                          prepend-icon="event"
-                          readonly
-                          required
-                          v-on="on"
-                        />
-                      </template>
-                      <v-date-picker 
-                        v-model="dateEnd" 
-                        color="green"
-                        locale="ru-ru"
-                        :min="dateStart"
-                        @input="showDateEnd = false"
-                      />
-                    </v-menu>
-                  </v-flex>
-                  <v-flex xs2>
-                    <v-text-field
-                      v-model="days"
-                      label="Дней"
-                      name="days"
-                      disabled
-                      color="green lighten-3"
-                    />
-                  </v-flex>
-                  <v-flex xs2>
-                    <v-text-field
-                      v-model="nights"
-                      label="Ночей"
-                      name="nights"
-                      disabled
-                      color="green lighten-3"
-                    />
-                  </v-flex>
-                </v-layout>
-                <v-layout 
-                  row 
-                  wrap
-                  justify-content-start
-                >
-                  <v-flex xs3>
-                    <v-select
-                      v-model="tourGrade"
-                      :items="tourGrades"
-                      name="grade"
-                      label="Класс:"
-                      item-text="name"
-                      item-value="id"
-                      :rules="[v => v.length != 0 || 'Выберите класс']"
-                      prepend-icon="grade"
-                      color="green lighten-3"
-                      multiple
-                      required
-                    />
-                  </v-flex>
-                  <v-flex 
-                    xs6
-                    offset-xs1
-                  >
-                    <v-select
-                      v-model="tourLanguages"
-                      :items="availableLanguages"
-                      name="languages"
-                      label="Язык:"
-                      item-text="name"
-                      item-value="id"
-                      :rules="[v => v.length != 0 || 'Выберите язык']"
-                      prepend-icon="language"
-                      color="green lighten-3"
-                      multiple
-                      required
-                    />
-                  </v-flex>
-                </v-layout>
-                <v-layout 
-                  row 
-                  wrap
-                  justify-content-end
-                >
-                  <v-btn
-                    :disabled="!tourTypeFormValid"
-                    color="green"
-                    class="white--text"
-                    @click="submitType"
-                  >
-                    Далее
-                  </v-btn>
-                </v-layout>
-              </v-form>
+              <Options />
             </v-flex>
-            <DayConstructor 
-              :all-cities="allCities"
-              :actual-transports="actualTransports"
-              :actual-museum="actualMuseum"
-              :show-day-constructor="showDayConstructor"
-              :tour="tour"
-              @log="onLog"
-            />
+            <v-flex 
+              v-if="showChooseTransport"
+              xs12
+            >
+              <ChooseTransport />
+            </v-flex>
+            <v-flex 
+              v-if="showChooseMuseum"
+              xs12
+            >
+              <ChooseMuseum />
+            </v-flex>
           </v-layout>
-          <!-- <v-btn 
+          <v-btn 
             dark 
             color="green"
             @click="log"
           >
             log
-          </v-btn> -->
+          </v-btn>
         </v-container>    
       </v-card>
     </v-dialog>
@@ -248,13 +75,19 @@
 </template>
 
 <script>
-import DayConstructor from './DayConstructor'
+import Options from './Options'
+import ChooseTransport from './ChooseTransport'
+import ChooseMuseum from './ChooseMuseum'
+// import DayConstructor from './DayConstructor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'TourAdd',
   components: {
-    DayConstructor,
+    Options,
+    ChooseTransport,
+    ChooseMuseum,
+    // DayConstructor,
   },
   data() {
     return {
@@ -297,6 +130,7 @@ export default {
       'allCities', 
       'allTransports',
       'allTourOptions',
+      'getConstructorCurrentStage'
     ]),
     tour: function() {
       return {
@@ -321,17 +155,14 @@ export default {
       }
       return types
     },
-    days: function() {
-      return (new Date(this.dateEnd) - new Date(this.dateStart)) / 864e5
+    showOptions: function() {
+      return this.getConstructorCurrentStage === 'Initial stage' ? true : false
     },
-    nights: function() {
-      return this.days != 0 ? this.days - 1 : 0
+    showChooseTransport: function() {
+      return this.getConstructorCurrentStage == 'Options are set' ? true : false
     },
-    showTypes: function() {
-      return this.firstSlide
-    },
-    showDayConstructor: function() {
-      return !this.firstSlide
+    showChooseMuseum: function() {
+      return this.getConstructorCurrentStage == 'Transport is set' ? true : false
     },
     showTransports: function() {
       if (this.choosenCities.length === 0) {
@@ -339,24 +170,14 @@ export default {
       } 
       return true
     },
-    actualTransports: function() {
-      let result = []
-      this.allTransports.map((item) => {
-          if (this.choosenCities.indexOf(item.city_id) !== -1) {
-            result.push(item)
-          }
-        }
-      )
-      return result
-    },
     actualMuseum: function() {
       let result = []
-      this.allTourOptions.museum_options.map((item) => {
-          if (this.choosenCities.indexOf(item.city_id) !== -1) {
-            result.push(item)
-          }
-        }
-      )
+      // this.allTourOptions.museum_options.map((item) => {
+      //     if (this.choosenCities.indexOf(item.city_id) !== -1) {
+      //       result.push(item)
+      //     }
+      //   }
+      // )
       return result
     },
     transportFull: function() {
@@ -375,7 +196,7 @@ export default {
       'fetchAllTourOptions',
     ]),
     log() {
-      console.log(this.actualMuseum)
+      console.log(this.allTourOptions)
     },
     onLog: function() {
       console.log('hello from DayConstructor')

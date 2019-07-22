@@ -9,11 +9,13 @@
       wrap
     >
       <v-flex xs12>
-        <h1>Транспорт</h1>
-        <AddEdit 
-          :token="token"
-          :cities-select="cities" 
-        />
+        <h1 class="mb-5">
+          Транспорт
+          <AddEdit 
+            :token="token"
+            :cities-select="cities" 
+          />
+        </h1>
         <Table :token="token" />
       </v-flex>
     </v-layout>

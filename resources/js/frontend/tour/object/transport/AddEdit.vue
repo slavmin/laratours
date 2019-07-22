@@ -10,8 +10,8 @@
     <template v-slot:activator="{ on }">
       <v-btn 
         :small="edit"
-        :fab="edit"
-        :outline="edit"
+        fab
+        outline
         :title="edit ? 'Редактировать' : 'Создать'"
         color="green"
         dark 
@@ -250,14 +250,29 @@
                       label="Описание"
                       color="green"
                     />
-                    <v-text-field
-                      v-model="qnt"
-                      :name="attribute + '[qnt]'" 
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      label="Вместимость"
-                      color="green"
-                      required
-                    />
+                    <v-layout 
+                      row 
+                      wrap
+                    >
+                      <v-flex xs6>
+                        <v-text-field
+                          v-model="qnt"
+                          :name="attribute + '[qnt]'" 
+                          :rules="[v => !!v || 'Это обязательное поле']"
+                          label="Вместимость"
+                          color="green"
+                          required
+                        />
+                      </v-flex> 
+                      <!-- <v-flex xs6>
+                        Схема салона:
+                        <Scheme
+                          :object="editItem"
+                          :company-id="companyId"
+                          :token="token"
+                        />
+                      </v-flex>  -->
+                    </v-layout>
                     <v-select
                       v-model="grade"
                       :items="grades"
@@ -303,18 +318,7 @@
                   <v-text-field
                     v-model="price1"
                     color="green"
-                    label="3 часа"
-                    @changed="generateExtraString"
-                  />
-                  <v-text-field
-                    v-model="price2"
-                    color="green"
-                    label="8 часов"
-                  />
-                  <v-text-field
-                    v-model="price3"
-                    color="green"
-                    label="Сутки"
+                    label="1 км"
                   />
                 </v-flex>
               </v-layout>
@@ -339,9 +343,13 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+// import Scheme from './Scheme'
 export default {
 
   name: 'AddEdit',
+  components: {
+    // Scheme,
+  },
   props: {
     citiesSelect: {
       type: Object,
@@ -368,7 +376,6 @@ export default {
       default: ''
     }
   },
-
   data() {
     return {
       dialog: false,
@@ -412,17 +419,9 @@ export default {
       ],
       currentDateRange: '1 января - 10 января',
       currentPrices: [],
-      durations: ['1 час', '3 часа', '8 часов', 'Сутки'],
-      simplePrices: [
-        { id: 0, name: '1 час', price: '1800' },
-        { id: 1, name: '3 часа', price: '3000' },
-        { id: 2, name: '8 часов', price: '5500' },
-        { id: 3, name: 'Сутки', price: '13000' }
-      ],
+      durations: ['1 час', '1 км'],
       price0: 0,
       price1: 0,
-      price2: 0,
-      price3: 0,
       result: {
         name: '',
         qnt: '',
@@ -434,7 +433,6 @@ export default {
       },
       attribute: 'attribute',
       price: 10000,
-      extra: {},
       defaultScheme: {
         rows: 10,
         cols: 4,
@@ -447,7 +445,19 @@ export default {
       },
     }
   },
-  computed: mapGetters(['allTransports']),
+  computed: {
+    ...mapGetters(['allTransports']),
+    extra: function() {
+      let result = {}
+      result.prices = this.getPricesArray()
+      result.grade = this.grade
+      result.scheme = this.defaultScheme
+      if (JSON.parse(this.editItem.extra).scheme != undefined) {
+        result.scheme = JSON.parse(this.editItem.extra).scheme
+      }
+      return result
+    }
+  },
   created() {
     for (let city in this.citiesSelect.Россия) {
       this.cities.push({'id': city, 'name': this.citiesSelect.Россия[city]})
@@ -456,9 +466,7 @@ export default {
     this.currentPrices = element.prices
     this.attribute = this.attribute + '[' + this.editItem.id + ']'
   },
-  updated() {
-    this.generateExtraString()
-  },
+
   methods: {
     ...mapMutations(['addTransportCompany', 'addTransport']),
     close() {
@@ -537,9 +545,7 @@ export default {
     getPricesArray() {
       return [ 
         { name: '1 час', value: parseInt(this.price0) }, 
-        { name: '3 часа', value:parseInt(this.price1) }, 
-        { name: '8 часов', value: parseInt(this.price2) }, 
-        { name: '24 часа', value: parseInt(this.price3) } 
+        { name: '1 км', value:parseInt(this.price1) }, 
       ]
     },
     editModeOn() {
@@ -552,19 +558,8 @@ export default {
       let extra = JSON.parse(this.editItem.extra)
       this.price0 = extra.prices[0].value
       this.price1 = extra.prices[1].value
-      this.price2 = extra.prices[2].value
-      this.price3 = extra.prices[3].value
       this.grade = extra.grade
-      this.generateExtraString()
     },
-    generateExtraString() {
-      this.extra.prices = this.getPricesArray()
-      this.extra.grade = this.grade
-      this.extra.scheme = this.defaultScheme
-      if (JSON.parse(this.editItem.extra).scheme != undefined) {
-        this.extra.scheme = JSON.parse(this.editItem.extra).scheme
-      }
-    }
   }
 };
 </script>

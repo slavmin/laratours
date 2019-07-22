@@ -4,11 +4,17 @@ export default {
       axios.get('/api/tour-options')
         .then(response => {
           const countries = response.data[0].countries_cities_options
+          let country = []
+          for (let key in countries) {
+            if (countries[key].name == 'Россия') {
+              country = countries[key]
+            }
+          }
           let cities = []
-          for (let key in countries[5].cities) {
+          for (let key in country.cities) {
             cities.push({
               id: key,
-              name: countries[5].cities[key]
+              name: country.cities[key]
             })
           }
           ctx.commit('updateCities', cities)
