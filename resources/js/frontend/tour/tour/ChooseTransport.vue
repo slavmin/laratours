@@ -166,28 +166,116 @@
       <!-- /Choose transport -->
       <!-- Set transport options -->
       <v-flex v-if="transportSelected">
-        <h2 class="text-xs-center display-2">
-          Транспорт:
-        </h2>
-        <div class="text-xs-center display-1">
-          Компания: {{ choosenTransport.company.name }}.
-          {{ choosenTransport.item.name }}.
-          <v-btn 
-            outline 
-            fab
-            small 
-            color="red"
-            @click="remove"
-          >
-            <v-icon>remove</v-icon>
-          </v-btn>
-        </div>
-        <p class="text-xs-center display-1">
-          Мест: {{ choosenTransport.item.qnt }}
-        </p>
-        <p class="text-xs-center display-1">
-          Цена за час: {{ JSON.parse(choosenTransport.item.extra).prices[0].value }}
-        </p>
+        <v-layout 
+          row 
+          wrap
+          justify-center
+        >
+          <v-flex xs6>
+            <h2 class="text-xs-center display-2">
+              Транспорт:
+            </h2>
+            <div class="text-xs-center display-1">
+              Компания: {{ choosenTransport.company.name }}.
+              {{ choosenTransport.item.name }}.
+              <v-btn 
+                outline 
+                fab
+                small 
+                color="red"
+                @click="remove"
+              >
+                <v-icon>remove</v-icon>
+              </v-btn>
+            </div>
+            <p class="text-xs-center display-1">
+              Мест: {{ choosenTransport.item.qnt }}
+            </p>
+            <v-divider />
+            <v-layout 
+              row 
+              wrap
+              justify-center
+            >
+              <v-flex xs6>
+                <v-tabs
+                  v-model="active"
+                  slider-color="yellow"
+                >
+                  <v-tab
+                    v-for="type in priceTypes"
+                    :key="type"
+                    ripple
+                  >
+                    {{ type }}
+                  </v-tab>
+                  <v-tab-item>
+                    <v-card flat>
+                      <v-card-text>
+                        <v-input
+                          class="text-xs-center display-1"
+                        >
+                          {{ JSON.parse(choosenTransport.item.extra).prices[0].value }} руб./час
+                        </v-input>
+                        <v-text-field
+                          v-model="duration"
+                          label="Количество часов"
+                          name="time"
+                          append-outer-icon="watch"
+                          color="green lighten-3"
+                          mask="##"
+                          autofocus
+                          outline
+                          required
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card flat>
+                      <v-card-text>
+                        <v-input
+                          v-model="currentPrice"
+                          class="text-xs-center display-1"
+                        >
+                          {{ JSON.parse(choosenTransport.item.extra).prices[1].value }} руб./км
+                        </v-input>
+                        <v-text-field
+                          v-model="distance"
+                          label="Количество км"
+                          name="distance"
+                          append-outer-icon="shutter_speed"
+                          color="green lighten-3"
+                          mask="####"
+                          autofocus
+                          outline
+                          required
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card flat>
+                      <v-card-text>
+                        <v-text-field
+                          v-model="customPrice"
+                          label="Общая стоимость"
+                          name="customPrice"
+                          append-outer-icon="attach_money"
+                          color="green lighten-3"
+                          mask="########"
+                          autofocus
+                          outline
+                          required
+                        />
+                      </v-card-text>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
         <v-layout 
           row 
           wrap
@@ -195,18 +283,7 @@
         >
           <v-flex xs3>
             <v-text-field
-              v-model="transportDuration"
-              label="Количество часов"
-              name="transportDuration"
-              append-outer-icon="watch"
-              color="green lighten-3"
-              mask="##"
-              autofocus
-              outline
-              required
-            />
-            <v-text-field
-              v-if="transportDuration"
+              v-if="(duration || distance) && active != 2"
               v-model="transportPrice"
               label="Стоимость:"
               name="transportPrice"
@@ -219,13 +296,14 @@
             <v-text-field
               v-model="description"
               label="Описание"
+              append-outer-icon="description"
               class="mt-3"
               color="green"
             />
             <v-layout 
               row 
               wrap
-              justify-content-center
+              justify-center
             >
               <v-flex xs12>
                 <v-btn 
@@ -243,7 +321,7 @@
               justify-content-center
             >
               <v-btn 
-                v-if="transportDuration"
+                v-if="duration || distance || customPrice"
                 dark 
                 color="green"
                 @click="submit"
@@ -258,7 +336,7 @@
       <!-- Add more transport? -->
       <v-flex v-if="anotherOne">
         <h2 class="text-xs-center display-2">
-          Добавить ещё?
+          Добавить ещё транспорт?
         </h2>
         <v-layout 
           row 
@@ -297,8 +375,18 @@ export default {
       transportSelected: false,
       anotherOne: false,
       choosenTransport: {},
-      transportDuration: NaN,
-      description: ''
+      duration: NaN,
+      distance: NaN,
+      description: '',
+      active: null,
+      currentPrice: 0,
+      customPrice: NaN,
+      priceTypes: [
+        'Цена за 1 час',
+        'за 1 км',
+        'Ввести вручную'
+      ],
+      currentPriceType: '',
     };
   },
   computed: {
@@ -309,9 +397,17 @@ export default {
       'getTour',
     ]),
     transportPrice: function() {
-      let price = JSON.parse(this.choosenTransport.item.extra).prices[0]
-      return price.value * this.transportDuration
+      if (this.active === 0) {
+        return JSON.parse(this.choosenTransport.item.extra).prices[0].value * this.duration
+      }
+      if (this.active === 1) {
+        return JSON.parse(this.choosenTransport.item.extra).prices[1].value * this.distance
+      }
+      return this.customPrice
     },
+  },
+  updated() {
+    this.customPrice
   },
   methods: {
     ...mapActions([
@@ -339,6 +435,7 @@ export default {
       this.transport = {}
       this.transportDuration = NaN
       this.description = ''
+      this.transportPrice = NaN
       this.transportSelected = false
       this.chooseTransport = true
     },
@@ -361,6 +458,10 @@ export default {
     },
     end() {
       this.updateConstructorCurrentStage('Transport is set')
+    },
+    next() {
+      const active = parseInt(this.active)
+        this.active = (active < 2 ? active + 1 : 0)
     }
   },
 };

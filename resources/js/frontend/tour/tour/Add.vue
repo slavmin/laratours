@@ -170,19 +170,6 @@ export default {
       } 
       return true
     },
-    actualMuseum: function() {
-      let result = []
-      // this.allTourOptions.museum_options.map((item) => {
-      //     if (this.choosenCities.indexOf(item.city_id) !== -1) {
-      //       result.push(item)
-      //     }
-      //   }
-      // )
-      return result
-    },
-    transportFull: function() {
-      return this.choosenTransport.length == this.transportCount
-    },
   },
   created() {
     this.fetchCities()
@@ -197,9 +184,6 @@ export default {
     ]),
     log() {
       console.log(this.allTourOptions)
-    },
-    onLog: function() {
-      console.log('hello from DayConstructor')
     },
     close() {
       this.dialog = false
