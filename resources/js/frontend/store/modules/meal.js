@@ -4,7 +4,6 @@ export default {
       axios.get('/api/tour-options')
         .then(response => {
           const meal = response.data[0].meal_options
-          console.log(meal)
           ctx.commit('updateMeal', meal)
         })
         .catch(e => console.log(e))

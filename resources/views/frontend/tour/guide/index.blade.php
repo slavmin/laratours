@@ -1,6 +1,10 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <guide-index 
+        data-app
+        token="{{ csrf_token() }}"
+    ></guide-index>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
