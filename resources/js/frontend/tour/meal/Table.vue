@@ -37,15 +37,8 @@
           mb-3
           align-center
         >
-          <i class="material-icons mr-2">
-            fastfood
-          </i>
-          <div 
-            v-for="(type, i) in JSON.parse(meal.description).mealType"
-            :key="i"
-            class="mr-2"
-          >
-            {{ type }}
+          <div>
+            {{ JSON.parse(meal.description).mealType }}
           </div>
         </v-layout>
         <v-layout 

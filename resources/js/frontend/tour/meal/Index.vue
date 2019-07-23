@@ -5,6 +5,9 @@
     text-xs-center
   >
     <h1 class="display-3 mb-5">
+      <i class="material-icons mr-2">
+        fastfood
+      </i>
       Питание
       <Add 
         :token="token" 
@@ -17,7 +20,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import Add from './Add'
 import Table from './Table'
 export default {
@@ -32,23 +34,11 @@ export default {
       type: String,
       default: ''
     },
-    meal: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
   },
   data() {
     return {
 
     };
-  },
-  created() {
-    this.pushMealToStorage(this.meal.data)
-  },
-  methods: {
-    ...mapActions(['pushMealToStorage']),
   }
 };
 </script>
