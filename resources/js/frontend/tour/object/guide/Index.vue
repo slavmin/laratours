@@ -5,10 +5,13 @@
     text-xs-center
   >
     <h1 class="display-3 mb-5">
-      <i class="material-icons mr-2">
-        fastfood
+      <i 
+        class="material-icons mr-2"
+        style="font-size: 42px;"
+      >
+        nature_people
       </i>
-      Питание
+      Гиды
       <Add 
         :token="token" 
       />
@@ -24,7 +27,7 @@ import Add from './Add'
 import Table from './Table'
 export default {
 
-  name: 'ObjectMealIndex',
+  name: 'ObjectGuideIndex',
   components: {
     Add,
     Table

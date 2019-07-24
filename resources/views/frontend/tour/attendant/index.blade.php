@@ -1,6 +1,10 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <attendant-index 
+        data-app
+        token="{{ csrf_token() }}"
+    ></attendant-index>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

@@ -8,20 +8,26 @@ import cities from './modules/cities'
 import museum from './modules/museum'
 import hotel from './modules/hotel'
 import meal from './modules/meal'
+import guide from './modules/guide'
+import attendant from './modules/attendant'
+import languages from './modules/languages'
 import tourConstructor from './modules/tourConstructor'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	modules: {
-		post,
-		transportCompanies,
-		transport,
-		customerType,
+	post,
+	transportCompanies,
+	transport,
+	customerType,
     cities,
     museum,
     hotel,
     meal,
+    guide,
+    attendant,
+    languages,
     tourConstructor,
 	}
 })
