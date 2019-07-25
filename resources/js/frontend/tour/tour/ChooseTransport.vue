@@ -305,7 +305,7 @@
               wrap
               justify-center
             >
-              <v-flex xs12>
+              <!-- <v-flex xs12>
                 <v-btn 
                   flat 
                   small 
@@ -313,7 +313,7 @@
                 >
                   Забронировать место второму водителю
                 </v-btn>
-              </v-flex>
+              </v-flex> -->
             </v-layout>
             <v-layout 
               row 

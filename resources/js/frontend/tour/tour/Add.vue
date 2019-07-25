@@ -60,6 +60,38 @@
             >
               <ChooseMuseum />
             </v-flex>
+            <v-flex 
+              v-if="showChooseHotel"
+              xs12
+            >
+              <ChooseHotel />
+            </v-flex>
+            <v-flex 
+              v-if="showChooseGuide"
+              xs12
+            >
+              <ChooseGuide />
+            </v-flex>
+            <v-flex 
+              v-if="showServices"
+              xs12
+            >
+              <Services />
+            </v-flex>
+            <v-flex 
+              v-if="showChooseAttendant"
+              xs12
+            >
+              <ChooseAttendant />
+            </v-flex>
+            <v-flex 
+              v-if="showSummary"
+              xs12
+            >
+              <Summary 
+                :token="token"
+              />
+            </v-flex>
           </v-layout>
           <v-btn 
             dark 
@@ -78,6 +110,11 @@
 import Options from './Options'
 import ChooseTransport from './ChooseTransport'
 import ChooseMuseum from './ChooseMuseum'
+import ChooseHotel from './ChooseHotel'
+import ChooseGuide from './ChooseGuide'
+import ChooseAttendant from './ChooseAttendant'
+import Services from './Services'
+import Summary from './Summary'
 // import DayConstructor from './DayConstructor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -87,7 +124,18 @@ export default {
     Options,
     ChooseTransport,
     ChooseMuseum,
+    ChooseHotel,
+    ChooseGuide,
+    ChooseAttendant,
+    Services,
+    Summary,
     // DayConstructor,
+  },
+  props: {
+    token: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -163,6 +211,21 @@ export default {
     },
     showChooseMuseum: function() {
       return this.getConstructorCurrentStage == 'Transport is set' ? true : false
+    },
+    showChooseHotel: function() {
+      return this.getConstructorCurrentStage == 'Museum is set' ? true : false
+    },
+    showChooseGuide: function() {
+      return this.getConstructorCurrentStage == 'Hotel is set' ? true : false
+    },
+    showChooseAttendant: function() {
+      return this.getConstructorCurrentStage == 'Show attendant' ? true : false
+    },
+    showServices: function() {
+      return this.getConstructorCurrentStage == 'Show services' ? true : false
+    },
+    showSummary: function() {
+      return this.getConstructorCurrentStage == 'Show summary' ? true : false
     },
     showTransports: function() {
       if (this.choosenCities.length === 0) {

@@ -6,11 +6,9 @@
     >
       <v-flex>
         <h2 class="text-xs-center grey--text">
-          Выберите музеи и экскурсии:
+          Выберите гида:
         </h2>
         <v-layout 
-          v-for="museum in getActualMuseum"
-          :key="museum.id"
           row 
           wrap
           align-center
@@ -18,17 +16,7 @@
         >
           <v-flex xs12>
             <div class="text-xs-center display-2">
-              {{ museum.name }}
-            </div>
-            <div class="text-xs-center subheading">
-              {{ getCityName(museum.city_id) }},
-              <i 
-                class="material-icons"
-                style="font-size: 12px;"
-              >
-                phone
-              </i>
-              {{ JSON.parse(museum.description).contacts.phone }}
+              <!-- {{ getCityName(guide.city_id) }} -->
             </div>
           </v-flex>
           <v-layout
@@ -37,79 +25,69 @@
             justify-center
           >
             <v-flex
-              v-for="item in museum.objectables"
-              :key="item.id"
+              v-for="guide in getActualGuide"
+              :key="guide.id"
               xs3
               lg2
               ma-2
             >
               <v-card 
-                class="museum-card"
-                :class="{'is-select' : item.selected}"
+                class="guide-card"
+                :class="{'is-select' : guide.selected}"
                 pa-3
               >
                 <v-card-title primary-title>
                   <div>
                     <div class="headline mb-2">
-                      {{ item.description }}
+                      {{ guide.name }}
                       <i 
                         class="material-icons ml-2"
                         style="color: grey; font-size: 20px;"
-                        :title="item.description"
+                        :title="JSON.parse(guide.description).about"
                       >
                         info
                       </i>
                     </div>
                     <v-divider />
                     <v-select
-                      v-model="item.day"
+                      v-model="guide.day"
                       :items="days"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="День тура"
+                      :dark="guide.selected"
+                      :disabled="guide.selected"
+                      label="Количество дней"
                       outline
                     />
                     <v-text-field
-                      :id="'about' + [item.id]"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="Описание"
-                      append-outer-icon="watch"
+                      v-model="guide.duration"
+                      :dark="guide.selected"
+                      :disabled="guide.selected"
+                      label="Количество часов"
+                      mask="####"
                       class="mt-3"
                       color="green"
                     />
-                    <div
-                      v-for="(price, i) in JSON.parse(item.extra).prices"
-                      :key="i"
-                      row
-                      justify-content-between
-                      wrap
-                    >
-                      <span class="grey--text text--darken-1">
-                        {{ price.name }}: 
-                      </span>
-                      <p 
-                        style="display: inline-block;"
-                      >
-                        {{ price.value }}
-                      </p>
-                    </div>
+                    <v-text-field
+                      v-model="about"
+                      :dark="guide.selected"
+                      :disabled="guide.selected"
+                      label="Описание"
+                      append-outer-icon="description"
+                      class="mt-3"
+                      color="green"
+                    />
                     <br>
                     <span class="grey--text text--darken-1">
-                      Цена: {{ item.price }}
+                      Цена: {{ guide.price }}
                     </span>
-                    <div class="mt-2">
-                      Длительность: {{ JSON.parse(item.extra).duration }}ч.
-                    </div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
                   <v-btn 
                     flat
-                    :dark="item.selected"
-                    @click="choose(museum, item)"
+                    :dark="guide.selected"
+                    @click="choose(guide)"
                   >
-                    {{ item.selected ? 'Убрать' : 'Выбрать' }}
+                    {{ guide.selected ? 'Убрать' : 'Выбрать' }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -140,17 +118,18 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'ChooseMuseum',
+  name: 'ChooseGuide',
 
   data() {
     return {
       about: '',
+      duration: NaN,
     };
   },
   computed: {
     ...mapGetters([
       'allCities',
-      'getActualMuseum',
+      'getActualGuide',
       'getTour'
     ]),
     days: function() {
@@ -162,13 +141,13 @@ export default {
     },
   },
   created() {
-    this.updateActualMuseum()
+    this.updateActualGuide()
   },
   methods: {
     ...mapActions([
-      'updateActualMuseum',
-      'updateNewMuseumOptions',
-      'updateTourMuseum',
+      'updateActualGuide',
+      'updateNewGuideOptions',
+      'updateTourGuide',
       'updateConstructorCurrentStage',
     ]),
     getCityName(id) {
@@ -180,33 +159,27 @@ export default {
       })
       return cityName
     },
-    choose(museum, item) {
-      let updData = {
-        'museum': museum,
-        'item': {
-          ...item,
-          selected: !item.selected,
-          'about': document.getElementById('about' + item.id).value,
-        }, 
+    choose(guide) {
+      let updGuide = {
+        ...guide,
+        selected: !guide.selected,
+        'about': this.about,
       }
-      this.updateNewMuseumOptions(updData)
+      this.updateNewGuideOptions(updGuide)
     },
     done() {
-      this.updateTourMuseum()
+      this.updateTourGuide()
       this.end()
     },
-    unselect(item) {
-      item.selected = false
-    },
     end() {
-      this.updateConstructorCurrentStage('Museum is set')
+      this.updateConstructorCurrentStage('Show services')
     },
   }
 };
 </script>
 
 <style lang="css" scoped>
-.museum-card {
+.guide-card {
   background-color: #E8F5E9;
 }
 .is-select {

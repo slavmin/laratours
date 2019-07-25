@@ -160,16 +160,16 @@ export default {
   data() {
     return {
       tourTypeFormValid: false,
-      tourName: 'Первый тур',
+      tourName: '',
       nameRules: [
         v => !!v || 'Введите название тура',
       ],
-      tourType: '1',
+      tourType: 0,
       tourGrades: [
         { id: 1, name: 'Стандарт'},
         { id: 2, name: 'VIP'}
       ],
-      tourGrade: [1],
+      tourGrade: [],
       availableLanguages: [
         { id: 1, name: 'Русский'},
         { id: 2, name: 'Английский'},
@@ -185,7 +185,7 @@ export default {
       showDateEnd: false,
       dateStart: new Date().toISOString().substr(0, 10),
       dateEnd: new Date().toISOString().substr(0, 10),
-      choosenCities: ['1'],
+      choosenCities: [],
       days: NaN,
       nights: 0
     };

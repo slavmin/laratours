@@ -3,7 +3,12 @@
 @section('content')
 
     @include('frontend.tour.includes.city-type-select-form')
-    <tour-index data-app></tour-index>
+    <?php $sitems = json_encode($items); ?>
+    <tour-index 
+        data-app
+        token="{{ csrf_token() }}"
+        :items="{{ $sitems }}"
+    ></tour-index>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

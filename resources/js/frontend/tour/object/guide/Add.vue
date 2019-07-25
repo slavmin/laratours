@@ -107,6 +107,16 @@
                       outline
                       required
                     />
+                    <v-text-field
+                      v-model="price"
+                      label="Цена"
+                      mask="#####"
+                      name="about"
+                      color="green lighten-3"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
+                      required
+                    />
                     <v-select
                       v-model="grade"
                       :items="grades"
@@ -212,6 +222,7 @@ export default {
       email: '',
       phone: '+7-',
       secretPhone: '+7-',
+      price: 0,
       grades: [
         'Стандарт',
         'VIP',
@@ -237,6 +248,7 @@ export default {
         city: this.city,
         guideType: this.type,
         about: this.about,
+        price: this.price,
         grade: this.grade,
         languages: this.languages,
         contacts: {

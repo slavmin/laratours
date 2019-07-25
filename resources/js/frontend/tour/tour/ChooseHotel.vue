@@ -6,11 +6,11 @@
     >
       <v-flex>
         <h2 class="text-xs-center grey--text">
-          Выберите музеи и экскурсии:
+          Выберите размещение:
         </h2>
         <v-layout 
-          v-for="museum in getActualMuseum"
-          :key="museum.id"
+          v-for="hotel in getActualHotel"
+          :key="hotel.id"
           row 
           wrap
           align-center
@@ -18,17 +18,17 @@
         >
           <v-flex xs12>
             <div class="text-xs-center display-2">
-              {{ museum.name }}
+              {{ hotel.name }}
             </div>
             <div class="text-xs-center subheading">
-              {{ getCityName(museum.city_id) }},
+              {{ getCityName(hotel.city_id) }},
               <i 
                 class="material-icons"
                 style="font-size: 12px;"
               >
                 phone
               </i>
-              {{ JSON.parse(museum.description).contacts.phone }}
+              {{ JSON.parse(hotel.description).contacts.phone }}
             </div>
           </v-flex>
           <v-layout
@@ -37,21 +37,21 @@
             justify-center
           >
             <v-flex
-              v-for="item in museum.objectables"
+              v-for="item in hotel.objectables"
               :key="item.id"
               xs3
               lg2
               ma-2
             >
               <v-card 
-                class="museum-card"
+                class="hotel-card"
                 :class="{'is-select' : item.selected}"
                 pa-3
               >
                 <v-card-title primary-title>
                   <div>
                     <div class="headline mb-2">
-                      {{ item.description }}
+                      {{ JSON.parse(item.extra).roomType }}
                       <i 
                         class="material-icons ml-2"
                         style="color: grey; font-size: 20px;"
@@ -66,15 +66,24 @@
                       :items="days"
                       :dark="item.selected"
                       :disabled="item.selected"
-                      label="День тура"
+                      label="Количество ночей"
                       outline
                     />
                     <v-text-field
-                      :id="'about' + [item.id]"
+                      v-model="item.roomsCount"
+                      :dark="item.selected"
+                      :disabled="item.selected"
+                      label="Количество номеров"
+                      mask="###"
+                      class="mt-3"
+                      color="green"
+                    />
+                    <v-text-field
+                      :id="'about' + item.id"
                       :dark="item.selected"
                       :disabled="item.selected"
                       label="Описание"
-                      append-outer-icon="watch"
+                      append-outer-icon="description"
                       class="mt-3"
                       color="green"
                     />
@@ -98,16 +107,13 @@
                     <span class="grey--text text--darken-1">
                       Цена: {{ item.price }}
                     </span>
-                    <div class="mt-2">
-                      Длительность: {{ JSON.parse(item.extra).duration }}ч.
-                    </div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
                   <v-btn 
                     flat
                     :dark="item.selected"
-                    @click="choose(museum, item)"
+                    @click="choose(hotel, item)"
                   >
                     {{ item.selected ? 'Убрать' : 'Выбрать' }}
                   </v-btn>
@@ -140,7 +146,7 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'ChooseMuseum',
+  name: 'ChooseHotel',
 
   data() {
     return {
@@ -150,7 +156,7 @@ export default {
   computed: {
     ...mapGetters([
       'allCities',
-      'getActualMuseum',
+      'getActualHotel',
       'getTour'
     ]),
     days: function() {
@@ -162,13 +168,13 @@ export default {
     },
   },
   created() {
-    this.updateActualMuseum()
+    this.updateActualHotel()
   },
   methods: {
     ...mapActions([
-      'updateActualMuseum',
-      'updateNewMuseumOptions',
-      'updateTourMuseum',
+      'updateActualHotel',
+      'updateNewHotelOptions',
+      'updateTourHotel',
       'updateConstructorCurrentStage',
     ]),
     getCityName(id) {
@@ -180,33 +186,30 @@ export default {
       })
       return cityName
     },
-    choose(museum, item) {
+    choose(hotel, item) {
       let updData = {
-        'museum': museum,
+        'hotel': hotel,
         'item': {
           ...item,
           selected: !item.selected,
           'about': document.getElementById('about' + item.id).value,
         }, 
       }
-      this.updateNewMuseumOptions(updData)
+      this.updateNewHotelOptions(updData)
     },
     done() {
-      this.updateTourMuseum()
+      this.updateTourHotel()
       this.end()
     },
-    unselect(item) {
-      item.selected = false
-    },
     end() {
-      this.updateConstructorCurrentStage('Museum is set')
+      this.updateConstructorCurrentStage('Hotel is set')
     },
   }
 };
 </script>
 
 <style lang="css" scoped>
-.museum-card {
+.hotel-card {
   background-color: #E8F5E9;
 }
 .is-select {

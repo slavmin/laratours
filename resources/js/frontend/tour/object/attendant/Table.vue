@@ -37,7 +37,7 @@
             </span>
           </td>
           <td class="text-xs-right">
-            {{ props.item.price }}
+            {{ JSON.parse(props.item.description).price }}
           </td>
         </template>
       </v-data-table>

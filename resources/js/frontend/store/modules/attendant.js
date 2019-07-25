@@ -3,12 +3,11 @@ export default {
     async fetchAttendant(ctx) {
       axios.get('/api/tour-options')
         .then((response) => {
-          console.log(response)
           const attendant = response.data[0].attendant_options
           ctx.commit('updateAttendant', attendant)
         })
         .catch(e => console.log(e))
-    }
+    },
   },
   mutations: {
     updateAttendant(state, attendant) {

@@ -18,7 +18,7 @@
         v-on="on"
       >
         <i class="material-icons">
-          {{ edit ? 'edit' : 'add' }}
+          {{ edit ? 'edit' : 'directions_bus' }}
         </i>
       </v-btn>
     </template>
@@ -75,13 +75,13 @@
                 color="green lighten-3"
                 required
               />
-              <v-btn 
+              <!-- <v-btn 
                 dark
                 color="green"
                 @click="showAddCompany"
               >
                 Добавить новую
-              </v-btn>
+              </v-btn> -->
               <v-btn 
                 dark
                 color="green"
@@ -111,19 +111,20 @@
                 name="_token" 
                 :value="token"
               > 
+              <input 
+                type="hidden"
+                :value="JSON.stringify(extra)"
+                :name="attribute + '[extra]'"
+              > 
+              <input
+                v-model="description"
+                type="hidden"
+                :name="description" 
+              >
               <v-text-field
                 v-model="newCompany"
                 label="Название транспортной компании"
                 name="name"
-                color="green lighten-3"
-                :rules="[v => !!v || 'Это обязательное поле']"
-                outline
-                required
-              />
-              <v-text-field
-                v-model="newCompanyDescription"
-                label="Описание"
-                name="description"
                 color="green lighten-3"
                 :rules="[v => !!v || 'Это обязательное поле']"
                 outline
@@ -452,9 +453,9 @@ export default {
       result.prices = this.getPricesArray()
       result.grade = this.grade
       result.scheme = this.defaultScheme
-      if (JSON.parse(this.editItem.extra).scheme != undefined) {
-        result.scheme = JSON.parse(this.editItem.extra).scheme
-      }
+      // if (JSON.parse(this.editItem.extra).scheme != undefined) {
+      //   result.scheme = JSON.parse(this.editItem.extra).scheme
+      // }
       return result
     }
   },

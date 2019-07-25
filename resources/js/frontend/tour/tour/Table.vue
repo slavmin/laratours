@@ -1,5 +1,6 @@
 <template>
   <v-layout column> 
+    <h1>Туры</h1>
     <v-layout 
       row
       wrap
@@ -7,7 +8,7 @@
     >
       <v-data-table
         :headers="headers"
-        :items="allGuide"
+        :items="tours"
         class="elevation-1"
       >
         <template v-slot:items="props">
@@ -15,29 +16,27 @@
             {{ props.item.name }}
           </td>
           <td class="text-xs-right">
-            {{ getCityName(JSON.parse(props.item.description).city) }}
-          </td>
-          <td class="text-xs-right">
             <span 
-              v-for="grade in JSON.parse(props.item.description).grade"
-              :key="grade"
+              v-for="(city, i) in props.item.cities_list"
+              :key="i"
               class="grey--text"
-            >
-              {{ grade }}
+            > 
+              {{ getCityName(city) }}
             </span>
           </td>
           <td class="text-xs-right">
-            <span 
-              v-for="lang in JSON.parse(props.item.description).languages"
-              :key="lang"
-              class="grey--text"
-            >
-              {{ getLanguageName(lang) }}
-              <br>
-            </span>
+            {{ props.item.tour_type_id }}
           </td>
           <td class="text-xs-right">
-            {{ JSON.parse(props.item.description).price }}
+            {{ JSON.parse(props.item.description).options.days }}
+          </td>
+          <td class="text-xs-right">
+            {{ JSON.parse(props.item.description).correctedPrice }}
+          </td>
+          <td>
+            <About 
+              :tour="props.item"
+            />
           </td>
         </template>
       </v-data-table>
@@ -46,51 +45,58 @@
 </template>
 
 <script>
+import About from './About'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'ObjectGuideTable',
+  name: 'TourTable',
+  components: {
+    About,
+  },
   props: {
     token: {
       type: String,
       default: ''
+    },
+    tours: {
+      type: Array,
+      default: () => {
+        return []
+      }
     },
   },
   data () {
     return {
       headers: [
         {
-          text: 'ФИО гида',
+          text: 'Название тура',
           align: 'left',
           sortable: false,
           value: 'name'
         },
-        { text: 'Город', value: 'сity' },
-        { text: 'Уровень', value: 'grade' },
-        { text: 'Язык', value: 'language' },
-        { text: 'Стоимость', value: 'price' }
+        { text: 'Города', value: 'сity' },
+        { text: 'Тип тура', value: 'type' },
+        { text: 'Дней', value: 'days' },
+        { text: 'Стоимость', value: 'price' },
+        { text: 'Описание', value: 'about' }
       ],
     }
   },
   computed: {
     ...mapGetters([
-      'allGuide',
       'allCities',
-      'allAvailableLanguages',
     ]),
   },
   created() {
-    this.fetchGuide()
+    this.fetchAttendant()
     this.fetchCities()
+    console.log(this.tours)
   },
   methods: {
     ...mapActions([
-      'fetchGuide',
+      'fetchAttendant',
       'fetchCities',
     ]),
-    show() {
-      console.log(this.allAvailableLanguages)
-    },
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {
@@ -99,15 +105,6 @@ export default {
         }
       })
       return cityName
-    },
-    getLanguageName(id) {
-      let languageName = ''
-      this.allAvailableLanguages.forEach((language) => {
-        if (language.id == id) {
-          languageName = language.name
-        }
-      })
-      return languageName
     },
   },
 
