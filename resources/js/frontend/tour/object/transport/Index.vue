@@ -11,6 +11,10 @@
       <v-flex xs12>
         <h1 class="mb-5">
           Транспорт
+          <AddCompany
+            :token="token"
+            :transport="transport" 
+          />
           <AddEdit 
             :token="token"
             :cities-select="cities" 
@@ -30,12 +34,14 @@ Vue.use(Vuetify)
 
 import Table from './Table'
 import AddEdit from './AddEdit'
+import AddCompany from './AddCompany'
 export default {
 
   name: 'ObjectTransportIndex',
   components: {
     Table,
     AddEdit,
+    AddCompany,
   },
   props: {
     cities: {
@@ -52,7 +58,11 @@ export default {
 
   data() {
     return {
+      transport: {
+        name: '',
+        city_id: 0,
 
+      }
     };
   },
 };

@@ -33,7 +33,7 @@
           <v-icon>close</v-icon>
         </v-btn>
         <v-toolbar-title>
-          Сопровождающий
+          Добавление транспортной компании
         </v-toolbar-title>
         <v-spacer />
       </v-toolbar>
@@ -43,7 +43,7 @@
           wrap
           justify-center
         >
-          <v-flex xs6>
+          <v-flex xs12>
             <v-layout 
               row 
               wrap
@@ -51,7 +51,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/attendant/"
+                action="/operator/transport/"
                 method="POST"
                 class="form"
               >
@@ -59,7 +59,7 @@
                   row 
                   wrap
                 >
-                  <v-flex xs12>
+                  <v-flex xs6>
                     <input 
                       type="hidden" 
                       name="_token" 
@@ -74,8 +74,8 @@
                       Общая информация:
                     </div>
                     <v-text-field
-                      v-model="name"
-                      label="ФИО сопровождающего"
+                      :value="transport.name"
+                      label="Название транспортной компании"
                       name="name"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
@@ -107,40 +107,6 @@
                       outline
                       required
                     />
-                    <v-text-field
-                      v-model="price"
-                      label="Цена"
-                      mask="#####"
-                      name="about"
-                      color="green lighten-3"
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      outline
-                      required
-                    />
-                    <v-select
-                      v-model="grade"
-                      :items="grades"
-                      color="green"
-                      :menu-props="{ maxHeight: '400' }"
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      label="Класс обслуживания"
-                      multiple
-                      hint="Можно выбрать несколько"
-                      persistent-hint
-                    />
-                    <v-select
-                      v-model="languages"
-                      :items="availableLanguages"
-                      name="languages"
-                      label="Язык:"
-                      item-text="name"
-                      item-value="id"
-                      :rules="[v => v.length != 0 || 'Выберите язык']"
-                      prepend-icon="language"
-                      color="green lighten-3"
-                      multiple
-                      required
-                    />
                     <input 
                       v-model="details"
                       type="hidden" 
@@ -149,6 +115,15 @@
                     <div class="display-1 mb-3">
                       Контакты:
                     </div>
+                    <v-text-field
+                      v-model="site"
+                      label="Сайт"
+                      name="site"
+                      color="green lighten-3"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
+                      required
+                    />
                     <v-text-field
                       v-model="email"
                       label="e-mail"
@@ -167,10 +142,24 @@
                       outline
                       required
                     />
+                  </v-flex>
+                  <v-flex xs6>
+                    <div class="display-1 mb-3">
+                      Сотрудник:
+                    </div>
                     <v-text-field
-                      v-model="secretPhone"
-                      label="Служебный телефон"
-                      name="phone"
+                      v-model="staffName"
+                      label="Ф.И.О. сотрудника"
+                      name="staffName"
+                      color="green lighten-3"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
+                      required
+                    />
+                    <v-text-field
+                      v-model="staffPhone"
+                      label="Телефон"
+                      name="staffPhone"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
@@ -201,11 +190,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'  
+import { mapActions, mapGetters } from 'vuex'
 export default {
-
-  name: 'ObjectAttendantAdd',
+  name: 'ObjectTransportCompanyEdit',
   props: {
+    transport: {
+      type: Object,
+      required: true,
+      default: null,
+    },
     token: {
       type: String,
       default: ''
@@ -215,67 +208,55 @@ export default {
     return {
       dialog: false,
       name: '',
-      city: '',
-      about: '',
-      grade: [],
-      languages: [],
+      cities: [],
+      city: 0,
+      site: 'http://',
       email: '',
       phone: '+7-',
-      secretPhone: '+7-',
-      price: 0,
-      grades: [
-        'Стандарт',
-        'VIP',
-      ],
-      availableLanguages: [
-        { id: 1, name: 'Русский'},
-        { id: 2, name: 'Английский'},
-        { id: 3, name: 'Немецкий'},
-        { id: 4, name: 'Французский'},
-        { id: 5, name: 'Китайский'},
-        { id: 6, name: 'Испанский'},
-        { id: 7, name: 'Итальянский'},
-        { id: 8, name: 'Финский'}
-      ],
-    };
+      staffName: '',
+      staffPhone: '+7-',
+      about: '',
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-    ]),
+    ...mapGetters(['allCities']),
     details: function () {
       return JSON.stringify({
-        city: this.city,
-        attendant: this.type,
         about: this.about,
-        price: this.price,
-        grade: this.grade,
-        languages: this.languages,
         contacts: {
+          site: this.site,
           email: this.email,
           phone: this.phone,
-          secretPhone: this.secretPhone,
+        },
+        staff: {
+          name: this.staffName,
+          phone: this.staffPhone,
         },
       }) 
     }
   },
   created() {
     this.fetchCities()
-    this.fetchMeal()
+    this.city = this.transport.city_id
+    const objectInfo = JSON.parse(this.transport.description)
+    this.about = objectInfo.about
+    this.site = objectInfo.contacts.site
+    this.email = objectInfo.contacts.email
+    this.phone = objectInfo.contacts.phone
+    this.staffName = objectInfo.staff.name
+    this.staffPhone = objectInfo.staff.phone
   },
   methods: {
-    ...mapActions([
-      'fetchCities',
-      'fetchMeal'
-    ]),
+    ...mapActions(['fetchCities']),
+    setDefaults() {
+
+    },
     log() {
       console.log(this.details)
-    },
-    setDefaults(){},
+    }
   }
-};
+}
 </script>
-
 <style lang="css" scoped>
 .form {
   width: 100%;

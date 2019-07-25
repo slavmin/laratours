@@ -1,16 +1,37 @@
 <template>
   <v-container fluid>
-    <Add />
+    <Add 
+      :token="token"
+      :tours="items.data"
+    />
+    <Table
+      :token="token"
+      :tours="items.data"
+    />
   </v-container>
 </template>
 
 <script>
 import Add from './Add'
+import Table from './Table'
 export default {
 
   name: 'TourIndex',
   components: {
-    Add
+    Add,
+    Table
+  },
+  props: {
+    token: {
+      type: String,
+      default: ''
+    },
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data() {
     return {
