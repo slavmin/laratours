@@ -1,6 +1,5 @@
 <template>
   <v-layout column> 
-    <h1>Туры</h1>
     <v-layout 
       row
       wrap
@@ -78,7 +77,8 @@ export default {
         { text: 'Тип тура', value: 'type' },
         { text: 'Дней', value: 'days' },
         { text: 'Стоимость', value: 'price' },
-        { text: 'Описание', value: 'about' }
+        { text: 'Описание', value: 'about' },
+        { text: 'Забронировано', value: 'ordered' }
       ],
     }
   },

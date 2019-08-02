@@ -12,10 +12,15 @@
       <template v-slot:activator="{ on }">
         <v-btn 
           color="green" 
+          fab
+          flat
+          outline
           dark 
           v-on="on"
         >
-          Создать тур          
+          <i class="material-icons">
+            add
+          </i>         
         </v-btn>
       </template>
       <v-card>
@@ -93,13 +98,13 @@
               />
             </v-flex>
           </v-layout>
-          <v-btn 
+          <!-- <v-btn 
             dark 
             color="green"
             @click="log"
           >
             log
-          </v-btn>
+          </v-btn> -->
         </v-container>    
       </v-card>
     </v-dialog>

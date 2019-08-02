@@ -1,5 +1,18 @@
 <template>
-  <v-container fluid>
+  <v-container 
+    fluid
+    grid-list-md
+    text-xs-center
+  >
+    <v-layout 
+      row 
+      wrap
+      justify-center
+    >  
+      <v-flex> 
+        <h1>Туры</h1>
+      </v-flex>
+    </v-layout>
     <Add 
       :token="token"
       :tours="items.data"
