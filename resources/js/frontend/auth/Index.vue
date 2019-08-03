@@ -90,7 +90,18 @@
             <!-- Физ лицо -->
             <v-tab-item>
               <v-card flat>
-                <v-card-text>Регистрация физ.лица</v-card-text>
+                <v-card-text>
+                  <h2 class="text-center grey--text">
+                    Регистрация физ.лица
+                  </h2>
+                  <transition name="fade">
+                    <div>
+                      <FizForm
+                        :token="token"
+                      />
+                    </div>
+                  </transition>
+                </v-card-text>
               </v-card>
             </v-tab-item>
             <!-- /Физ лицо -->
@@ -103,10 +114,12 @@
 
 <script>
 import UlForm from './UlForm'
+import FizForm from './FizForm'
 export default {
   name: 'SelectType',
   components: {
     UlForm,
+    FizForm,
   },
   props: {
     token: {

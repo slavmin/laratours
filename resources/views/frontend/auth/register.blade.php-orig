@@ -3,9 +3,10 @@
 @section('title', app_name() . ' | ' . __('labels.frontend.auth.register_box_title'))
 
 @section('content')
-    <select-type-register
+    @include('includes.partials.messages')
+    <register-index
         token="{{ csrf_token() }}"
-    ></select-type-register>
+    ></register-index>
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
             <div class="card">

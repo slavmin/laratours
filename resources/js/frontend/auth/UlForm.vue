@@ -64,6 +64,15 @@
           outline
           required
         />
+        <v-text-field
+          v-model="companyInfo.company_email"
+          label="E-mail организации"
+          name="profile[formal][company_email]"
+          color="green lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
       </v-flex>
       <v-flex xs5>
         <v-text-field
@@ -86,19 +95,19 @@
         />
         <v-text-field
           v-model="companyInfo.phone"
-          label="Телефон. В формате: +7-(код)-номер"
+          label="Телефон. Знаки +, ( ), - добавляются автоматически"
           placeholder="+7"
           name="profile[formal][company_phone]"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
-          mask="+7 (###) ###-####"
+          mask="+7 (###) ###-##-##"
           required
         />
         <v-text-field
           v-model="companyInfo.email"
-          label="E-mail"
-          name="profile[formal][email]"
+          label="E-mail. Будет использоваться для входа в систему"
+          name="email"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -108,6 +117,7 @@
           v-model="companyInfo.password"
           label="Пароль"
           name="password"
+          type="password"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -117,6 +127,7 @@
           label="Подтверждение пароля"
           name="password_confirmation"
           color="green lighten-3"
+          type="password"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
