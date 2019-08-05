@@ -418,9 +418,8 @@ export default {
   updated() {
     this.customPrice
   },
-  created() {
+  mounted() {
     this.updateActualTransport()
-    console.log(this.getActualTransport)
   },
   methods: {
     ...mapActions([

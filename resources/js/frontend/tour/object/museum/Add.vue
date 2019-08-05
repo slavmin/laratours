@@ -52,7 +52,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/museum/"
+                action="/operator/museum"
                 method="POST"
                 class="form"
               >

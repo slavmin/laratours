@@ -203,7 +203,9 @@ export default {
       'allCities', 
       'allTransports',
       'allTourOptions',
-      'getConstructorCurrentStage'
+      'getConstructorCurrentStage',
+      'allState'
+      
     ]),
     tour: function() {
       return {
@@ -229,6 +231,7 @@ export default {
       return types
     },
     showOptions: function() {
+      console.log()
       return this.getConstructorCurrentStage === 'Initial stage' ? true : false
     },
     showChooseTransport: function() {
@@ -263,6 +266,9 @@ export default {
     this.fetchCities()
     this.fetchTransport()
     this.fetchAllTourOptions()
+  },
+  updated() {
+    console.log(this.allState)
   },
   methods: {
     ...mapActions([

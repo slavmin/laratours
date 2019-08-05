@@ -51,7 +51,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/hotel/"
+                action="/operator/hotel"
                 method="POST"
                 class="form"
               >

@@ -58,11 +58,7 @@ export default {
 
   data() {
     return {
-      transport: {
-        name: '',
-        city_id: 0,
-
-      }
+      transport: {}
     };
   },
 };
