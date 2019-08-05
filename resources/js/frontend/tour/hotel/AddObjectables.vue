@@ -47,7 +47,6 @@
                 method="POST"
               >
                 <input 
-                  id="_method" 
                   type="hidden" 
                   name="_method" 
                   value="PATCH"
@@ -64,12 +63,6 @@
                   value="0"
                 > 
                 <input 
-                  :id="attribute + '[qnt]'" 
-                  type="hidden" 
-                  :name="attribute + '[qnt]'" 
-                  value="1"
-                > 
-                <input 
                   :id="attribute + '[customer_type_id]'" 
                   v-model="customerId"
                   type="hidden" 
@@ -77,7 +70,7 @@
                 > 
                 <input 
                   :id="attribute + '[name]'" 
-                  v-model="customerName"
+                  v-model="roomType"
                   type="hidden" 
                   :name="attribute + '[name]'" 
                 > 
@@ -124,6 +117,15 @@
                       mask="#####"
                       outline
                       color="green"
+                      required
+                    />
+                    <v-text-field 
+                      :name="attribute + '[qnt]'"
+                      label="Количество номеров" 
+                      mask="#####"
+                      outline
+                      color="green"
+                      required
                     />
                   </v-flex>
                 </v-layout>
@@ -175,12 +177,18 @@ export default {
       type: String,
       required: true,
       default: null,
+    },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
     return {
       dialog: false,
-      customerTypes: [
+      customerTypesHardCoded: [
         { id: 15, name: 'Взрослый'},
         { id: 2, name: 'Ребёнок'},
         { id: 3, name: 'Иностранец'}
@@ -199,18 +207,31 @@ export default {
     attribute: function() {
       return 'attribute[' + this.hotel.id + ']'
     },
-    customerName: function() {
-      return this.customerTypes.find(customer => customer.id == this.customerId).name
-    },
     extra: function() {
       return JSON.stringify({
-        roomType: this.roomType
+        roomType: this.roomType,
+        customer: this.customerId,
       })
+    },
+    customerTypes: function() {
+      let result = []
+      Object.keys(this.customers).map((key) => {
+        if (key != '') {
+          result.push({
+            id: key,
+            name: this.customers[key]
+          })
+        }
+      })
+      return result
     }
+  },
+  mounted() {
+    
   },
   methods: {
     log() {
-      console.log(this.customerName)
+      console.log(typeof this.item)
     }
   }
 };

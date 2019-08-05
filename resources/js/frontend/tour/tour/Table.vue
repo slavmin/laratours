@@ -47,10 +47,44 @@
           </td>
           <td />
           <td>
-            <Edit
-              :tour-to-edit="props.item"
-              :token="token"
-            />
+            <v-layout 
+              row 
+              wrap
+              align-top
+            >
+              <Edit
+                :tour-to-edit="props.item"
+                :token="token"
+              />
+              <form 
+                :action="'/operator/tour/' + props.item.id"
+                method="POST"
+              > 
+                <input 
+                  type="hidden"
+                  name="_method"
+                  value="DELETE"
+                >
+                <input 
+                  type="hidden"
+                  name="_token"
+                  :value="token"
+                >
+                <v-btn 
+                  color="red"
+                  flat
+                  fab
+                  outline
+                  small
+                  dark
+                  type="submit"
+                >
+                  <i class="material-icons">
+                    delete
+                  </i>
+                </v-btn>
+              </form>
+            </v-layout>
           </td>
         </template>
       </v-data-table>
@@ -96,7 +130,7 @@ export default {
         { text: 'Стоимость', value: 'price' },
         { text: 'Описание', value: 'about' },
         { text: 'Забронировано', value: 'ordered' },
-        { text: 'Редактировать', value: 'edit' }
+        { text: 'Действия', value: 'actions' }
       ],
     }
   },

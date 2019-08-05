@@ -31,8 +31,14 @@
             <v-container grid-list-md>
               <form 
                 id="form"
-                @submit.prevent="save"
+                action="/operator/customer-type"
+                method="POST"
               >
+                <input 
+                  type="hidden"
+                  name="_token"
+                  :value="token"
+                >
                 <v-layout wrap>
                   <v-flex 
                     xs12 
@@ -40,6 +46,7 @@
                   >
                     <v-text-field 
                       v-model="name"
+                      name="name"
                       label="Название" 
                       color="green"
                       outline
@@ -52,6 +59,7 @@
                   >
                     <v-text-field 
                       v-model="description"
+                      name="description"
                       label="Описание" 
                       outline
                       color="green"
@@ -66,7 +74,7 @@
             <v-btn 
               color="green" 
               flat 
-              @click="dialog = false"
+              @click="close"
             >
               Закрыть
             </v-btn>
@@ -111,6 +119,11 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.name = ''
+      this.description = ''
+      this.dialog = false
+    },
     save() {
       let result = {
         '_token': this.token,

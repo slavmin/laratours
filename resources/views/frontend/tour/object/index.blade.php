@@ -12,15 +12,19 @@
         ></transport-index>
     @endif
     @if ($model_alias == 'museum')
+    <?php $scustomers = json_encode($customer_type_options); ?>
         <museum-index 
-            :cities="{{ $scities }}" 
             data-app
+            :cities="{{ $scities }}" 
+            :customers="{{ $scustomers }}"
             token="{{ csrf_token() }}"
         ></museum-index>
     @endif
     @if ($model_alias == 'hotel')
+    <?php $scustomers = json_encode($customer_type_options); ?>
         <hotel-index 
             data-app
+            :customers="{{ $scustomers }}"
             token="{{ csrf_token() }}"
         ></hotel-index>
     @endif

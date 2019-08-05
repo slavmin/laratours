@@ -45,11 +45,14 @@ class HotelController extends Controller
 
         $cities_select = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted'))
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+        
+        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted','customer_type_options'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('model_alias', $model_alias);
+            ->with('model_alias', $model_alias)
+            ->with('customer_type_options', $customer_type_options);
     }
 
     public function show($id)

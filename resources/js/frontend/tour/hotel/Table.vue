@@ -130,16 +130,17 @@
             <td class="text-xs-center">
               {{ props.item.price }}
             </td>
-            <!-- <td class="text-xs-center">
-              {{ JSON.parse(props.item.extra).duration }} ч.
-            </td> -->
             <td class="text-xs-center">
-              {{ props.item.name }}
+              {{ props.item.qnt }}
+            </td>
+            <td class="text-xs-center">
+              {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
             </td>
           </template>
         </v-data-table>
         <AddObjectables
           :hotel="hotel" 
+          :customers="customers"
           :token="token"
         />
       </v-flex>
@@ -163,6 +164,12 @@ export default {
       type: String,
       default: ''
     },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data() {
     return {
@@ -178,6 +185,11 @@ export default {
           value: 'price'
         },
         {
+          text: 'Кол-во номеров',
+          align: 'center',
+          value: 'qnt'
+        },
+        {
           text: 'Посетитель',
           align: 'center',
           value: 'name'
@@ -189,7 +201,19 @@ export default {
     ...mapGetters([
       'allHotel',
       'allCities'
-    ])
+    ]),
+    customerTypes: function() {
+      let result = []
+      Object.keys(this.customers).map((key) => {
+        if (key != '') {
+          result.push({
+            id: key,
+            name: this.customers[key]
+          })
+        }
+      })
+      return result
+    },
   },
   mounted() {
     this.fetchMuseum()
@@ -200,9 +224,6 @@ export default {
       'fetchMuseum',
       'fetchCities'
     ]),
-    show() {
-      console.log(this.allMuseum)
-    },
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {
@@ -212,6 +233,9 @@ export default {
       })
       return cityName
     },
+    getCustomerName(id) {
+      return this.customerTypes.find(c => c.id == id).name
+    }
   },
 
 };
