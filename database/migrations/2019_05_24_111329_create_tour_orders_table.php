@@ -29,7 +29,7 @@ class CreateTourOrdersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('tour_id')->references('id')->on('tours');
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('set null');
             $table->foreign('team_id')
                 ->references('id')
                 ->on(\Config::get( 'teamwork.teams_table' ))
