@@ -13,13 +13,47 @@
         lg12
         xl6
       >
-        <h3 class="display-1">
-          {{ transport.name }}
+        <v-layout 
+          row 
+          wrap
+          justify-center
+        >
+          <h3 class="display-1">
+            {{ transport.name }}
+          </h3>
           <Edit 
             :transport="transport" 
             :token="token"
           />
-        </h3>
+          <form 
+            :action="'/operator/transport/' + transport.id"
+            method="POST"
+          >
+            <input 
+              type="hidden"
+              name="_token"
+              :value="token"
+            >
+            <input 
+              type="hidden"
+              name="_method"
+              value="DELETE"
+            >
+            <v-btn 
+              color="red"
+              flat
+              fab
+              outline
+              small
+              dark
+              type="submit"
+            >
+              <i class="material-icons">
+                delete
+              </i>
+            </v-btn>
+          </form>  
+        </v-layout>
         <div class="subheading mb-3">
           <i class="material-icons mr-2">
             location_city

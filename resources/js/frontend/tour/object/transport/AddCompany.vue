@@ -51,7 +51,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/transport/"
+                action="/operator/transport"
                 method="POST"
                 class="form"
               >
@@ -194,12 +194,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'ObjectTransportCompanyEdit',
+  name: 'AddCompany',
   props: {
     transport: {
       type: Object,
       required: true,
-      default: null,
+      default: () => {
+        return {}
+      },
     },
     token: {
       type: String,
@@ -240,13 +242,16 @@ export default {
   created() {
     this.fetchCities()
     this.city = this.transport.city_id
-    const objectInfo = JSON.parse(this.transport.description)
-    this.about = objectInfo.about
-    this.site = objectInfo.contacts.site
-    this.email = objectInfo.contacts.email
-    this.phone = objectInfo.contacts.phone
-    this.staffName = objectInfo.staff.name
-    this.staffPhone = objectInfo.staff.phone
+    if (this.transport.description) {
+      console.log(this.transport)
+      const objectInfo = JSON.parse(this.transport.description)
+      this.about = objectInfo.about
+      this.site = objectInfo.contacts.site
+      this.email = objectInfo.contacts.email
+      this.phone = objectInfo.contacts.phone
+      this.staffName = objectInfo.staff.name
+      this.staffPhone = objectInfo.staff.phone
+    }
   },
   methods: {
     ...mapActions(['fetchCities']),

@@ -51,7 +51,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/guide/"
+                action="/operator/guide"
                 method="POST"
                 class="form"
               >

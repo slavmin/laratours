@@ -10,6 +10,9 @@ export default {
     async updateTourOptions({ commit }, options) {
       commit('setTourOptions', options)
     },
+    async updateActualTransport({ commit }) {
+      commit('setActualTransport')
+    },
     async updateTourTransport({ commit }, transport) {
       commit('setTourTransport', transport)
     },
@@ -71,6 +74,18 @@ export default {
     },
     setTourOptions(state, options) {
       state.tour.options = options
+    },
+    setActualTransport(state) {
+      let result = []
+      if (state.tourOptions.transport_options != undefined) {
+          state.tourOptions.transport_options.map((item) => {
+            if (state.tour.options.cities.indexOf(item.city_id) !== -1) {
+              result.push(item)
+            }
+          }
+        )
+      }
+      state.actualTransport = result
     },
     setTourTransport(state, transport) {
       state.tour.transport.push(transport)
@@ -251,8 +266,12 @@ export default {
     actualHotel: [],
     actualGuide: [],
     actualAttendant: [],
+    actualTransport: [],
   },
   getters: {
+    allState(state) {
+      return state
+    },
     allTourOptions(state) {
       return state.tourOptions
     },
@@ -263,16 +282,7 @@ export default {
     //   return state.tour.options.cities
     // },
     getActualTransport(state) {
-      let result = []
-      if (state.tourOptions.transport_options != undefined) {
-          state.tourOptions.transport_options.map((item) => {
-            if (state.tour.options.cities.indexOf(item.city_id) !== -1) {
-              result.push(item)
-            }
-          }
-        )
-      }
-      return result
+      return state.actualTransport
     },
     getActualMuseum(state) {
       return state.actualMuseum
