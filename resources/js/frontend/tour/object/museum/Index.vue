@@ -12,6 +12,7 @@
       />
     </h1>
     <Table 
+      :customers="customers"
       :token="token" 
       :cities="cities"
     />
@@ -43,6 +44,12 @@ export default {
     token: {
       type: String,
       default: ''
+    },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {

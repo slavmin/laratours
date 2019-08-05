@@ -77,7 +77,7 @@
                 > 
                 <input 
                   :id="attribute + '[name]'" 
-                  v-model="customerName"
+                  v-model="name"
                   type="hidden" 
                   :name="attribute + '[name]'" 
                 > 
@@ -104,7 +104,7 @@
                       outline
                     />
                     <v-text-field 
-                      :name="attribute + '[description]'" 
+                      v-model="name"
                       label="Описание" 
                       outline
                       color="green"
@@ -174,37 +174,47 @@ export default {
       type: String,
       required: true,
       default: null,
+    },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
     return {
       dialog: false,
-      customerTypes: [
-        { id: '1', name: 'Взрослый'},
-        { id: '16', name: 'Пенсионер'},
-        { id: '15', name: 'Школьники до 16 лет'},
-      ],
-      customerId: 15,
-      duration: 0
+      customerId: 0,
+      duration: 0,
+      name: '',
     };
   },
   computed: {
     attribute: function() {
       return 'attribute[' + this.museum.id + ']'
     },
-    customerName: function() {
-      return this.customerTypes.find(customer => customer.id == this.customerId).name
-    },
     extra: function() {
       return JSON.stringify({
-        duration: this.duration
+        duration: this.duration,
+        customer: this.customerId,
       })
+    },
+    customerTypes: function() {
+      let result = []
+      Object.keys(this.customers).map((key) => {
+        if (key != '') {
+          result.push({
+            id: key,
+            name: this.customers[key]
+          })
+        }
+      })
+      console.log(result)
+      return result
     }
   },
   methods: {
-    log() {
-      console.log(this.customerName)
-    }
   }
 };
 </script>

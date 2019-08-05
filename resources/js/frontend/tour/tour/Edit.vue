@@ -1,8 +1,5 @@
 <template>
-  <v-layout 
-    row 
-    justify-center
-  >
+  <div>
     <v-dialog 
       v-model="dialog" 
       fullscreen 
@@ -14,6 +11,7 @@
         <v-btn 
           color="green"
           flat
+          fab
           outline
           small
           dark 
@@ -135,7 +133,7 @@
         </v-container>    
       </v-card>
     </v-dialog>
-  </v-layout>
+  </div>
 </template>
 
 <script>

@@ -133,7 +133,7 @@
         >
           <template v-slot:items="props">
             <td class="text-xs-left">
-              {{ props.item.description }}
+              {{ props.item.name }}
             </td>
             <td class="text-xs-center">
               {{ props.item.price }}
@@ -142,12 +142,13 @@
               {{ JSON.parse(props.item.extra).duration }} ч.
             </td>
             <td class="text-xs-center">
-              {{ props.item.name }}
+              {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
             </td>
           </template>
         </v-data-table>
         <AddObjectables
           :museum="museum" 
+          :customers="customers"
           :token="token"
         />
       </v-flex>
@@ -177,6 +178,12 @@ export default {
         return {}
       }
     },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data() {
     return {
@@ -208,7 +215,19 @@ export default {
     ...mapGetters([
       'allMuseum',
       'allCities'
-    ])
+    ]),
+    customerTypes: function() {
+      let result = []
+      Object.keys(this.customers).map((key) => {
+        if (key != '') {
+          result.push({
+            id: key,
+            name: this.customers[key]
+          })
+        }
+      })
+      return result
+    },
   },
   mounted() {
     this.fetchMuseum()
@@ -231,6 +250,9 @@ export default {
       })
       return cityName
     },
+    getCustomerName(id) {
+      return this.customerTypes.find(c => c.id == id).name
+    }
   },
 
 };

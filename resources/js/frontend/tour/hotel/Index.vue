@@ -12,6 +12,7 @@
     </h1>
     <Table 
       :token="token" 
+      :customers="customers"
     />
   </v-container>
 </template>
@@ -30,6 +31,12 @@ export default {
     token: {
       type: String,
       default: ''
+    },
+    customers: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {

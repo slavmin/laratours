@@ -44,11 +44,14 @@ class MuseumController extends Controller
 
         $cities_select = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+        
         return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select','deleted'))
             ->with('city_id', (int)$city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('model_alias', $model_alias);
+            ->with('model_alias', $model_alias)
+            ->with('customer_type_options', $customer_type_options);
     }
 
     public function show($id)

@@ -161,6 +161,7 @@
                     <v-text-field
                       v-model="phone"
                       label="Телефон"
+                      mask="+7 (###) ###-##-##"
                       name="phone"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
@@ -170,6 +171,7 @@
                     <v-text-field
                       v-model="secretPhone"
                       label="Служебный телефон"
+                      mask="+7 (###) ###-##-##"
                       name="phone"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
