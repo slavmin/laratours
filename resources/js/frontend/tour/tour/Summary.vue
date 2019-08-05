@@ -245,6 +245,11 @@
           <input 
             type="hidden"
             :value="JSON.stringify(tourExtra)"
+            name="extra"
+          > 
+          <input 
+            type="hidden"
+            :value="JSON.stringify(tourExtra)"
             name="description"
           > 
           <v-btn 

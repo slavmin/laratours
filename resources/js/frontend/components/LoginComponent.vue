@@ -112,6 +112,14 @@
         Вход
       </button>
     </div>
+    <div class="row justify-content-md-center align-items-center mt-3">
+      <a
+        class="btn btn-outline-light" 
+        href="/register"
+      >
+        Зарегистрироваться
+      </a>
+    </div>
     <!-- /Button switch display login form -->
     <div class="row justify-content-center mt-4">
       <button 

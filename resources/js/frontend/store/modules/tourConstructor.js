@@ -55,6 +55,15 @@ export default {
     async updateCustomPrice({ commit }, customPrice) {
       commit('setCustomPrice', customPrice)
     },
+    async updateEditorsContent({ commit }, content) {
+      commit('setEditorsContent', content)
+    },
+    async updateMuseumInEditMode({ commit }, updData) {
+      commit('setMuseumInEditMode', updData)
+    },
+    async updateEditorsContent({ commit }, content) {
+      commit('setEditorsContent', content)
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -212,6 +221,15 @@ export default {
     },
     setCustomPrice: (state, price) => {
       state.tour.customPrice.push(price)
+    },
+    setEditorsContent: (state, content) => {
+      state.tour.editorsContent = content
+    },
+    setMuseumInEditMode: (state, updData) => {
+      state.tour.museum = updData
+    },
+    setEditorsContent: (state, content) => {
+      state.tour.editorsContent = content
     }
   },
   state: {
@@ -224,6 +242,7 @@ export default {
       guide: [],
       attendant: [],
       customPrice: [],
+      editorsContent: [],
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',

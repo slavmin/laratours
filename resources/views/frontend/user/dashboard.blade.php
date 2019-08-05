@@ -55,19 +55,19 @@
                         </div><!--col-md-4-->
 
                         <div class="col-md-8 order-2 order-sm-1">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col">
                                     <div class="card mb-4">
                                         <div class="card-header">
                                             Для удобства:
-                                        </div><!--card-header-->
+                                        </div><!-card-header->
 
                                         <div class="card-body">
                                             <a href="/operator/transport" type="button" class="btn btn-primary">Транспорт</a>
-                                        </div><!--card-body-->
-                                    </div><!--card-->
-                                </div><!--col-md-6-->
-                            </div><!--row-->
+                                        </div><!-card-body->
+                                    </div><!-card->
+                                </div><!-col-md-6->
+                            </div><!-row-> -->
 
                             <div class="row">
                                 <div class="col">

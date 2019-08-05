@@ -12,15 +12,15 @@
     >
       <template v-slot:activator="{ on }">
         <v-btn 
-          color="green" 
-          fab
+          color="green"
           flat
           outline
+          small
           dark 
           v-on="on"
         >
           <i class="material-icons">
-            add
+            edit
           </i>         
         </v-btn>
       </template>
@@ -39,7 +39,8 @@
             </v-icon>
           </v-btn>
           <v-toolbar-title>
-            {{ tourName == '' ? 'Новый тур' : tourName }}
+            Редактирование тура:
+            {{ tourToEdit.name }}
           </v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
@@ -71,19 +72,25 @@
               v-if="showOptions"
               xs6 
             >
-              <Options />
+              <Options 
+                :tour-to-edit="tourToEdit"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseTransport"
               xs12
             >
-              <ChooseTransport />
+              <ChooseTransport 
+                :tour-to-edit="tourToEdit"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseMuseum"
               xs12
             >
-              <ChooseMuseum />
+              <ChooseMuseum 
+                :tour-to-edit="tourToEdit"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseHotel"
@@ -144,7 +151,7 @@ import Summary from './Summary'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'TourAdd',
+  name: 'TourEdit',
   components: {
     Options,
     ChooseTransport,
@@ -154,12 +161,17 @@ export default {
     ChooseAttendant,
     Services,
     Summary,
-    // DayConstructor,
   },
   props: {
     token: {
       type: String,
       default: ''
+    },
+    tourToEdit: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data() {
@@ -328,6 +340,7 @@ export default {
 .navigator {
   display: none;
   position: fixed;
+  z-index: 10;
   top: 45%;
   text-align: left;
   color: #9c9e9c;

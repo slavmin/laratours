@@ -33,7 +33,9 @@
           justify-center
           mt-5
         >
-          <h3>Доп. услуги:</h3>
+          <h3 class="grey--text">
+            Доп. услуги:
+          </h3>
         </v-layout>
         <v-layout 
           row 
@@ -110,6 +112,43 @@
             </table>
           </v-flex>
         </v-layout>
+        <h3 
+          class="grey--text"
+          mt-5
+        >
+          Редакторы:
+        </h3>
+        <v-layout 
+          row 
+          wrap
+          justify-center
+        >
+          <v-flex xs8>
+            <v-expansion-panel popout>
+              <v-expansion-panel-content
+                v-for="(item,i) in editorsCount"
+                :key="parseInt(i)"
+              >
+                <template v-slot:header>
+                  <h5 class="subheading">
+                    Программа на день: {{ i + 1 }}
+                  </h5>
+                </template>
+                <v-card>
+                  <v-card-text>
+                    <Editor 
+                      :id="'editor-day-' + i"
+                      v-model="editorsContent[i]"
+                      :api-key="tiny.apiKey"
+                      :init="tiny.init"
+                      class="editor"
+                    />
+                  </v-card-text>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-flex>
+        </v-layout>
         <v-layout 
           row 
           wrap
@@ -132,23 +171,44 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Editor from '@tinymce/tinymce-vue'
 export default {
 
   name: 'Services',
-
+  components: {
+    Editor,
+  },
   data() {
     return {
       customPrice: {
         name: '',
-        value: NaN,
-      }
+        value: NaN, 
+      },
+      tiny: {
+        apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
+        init: {
+          // plugins: 'wordcount', 
+          min_width: '500px',
+          branding: false, 
+        }
+      },
+      editorsContent: [], 
     };
   },
   computed: {
-    ...mapGetters(['getCustomPrice']),
+    ...mapGetters([
+      'getTour',
+      'getCustomPrice',
+    ]),
     showTable: function() {
       return this.getCustomPrice.length == 0 ? false : true
     },
+    editorsCount: function() {
+      console.log(this.getTour.options.days)
+      return parseInt(this.getTour.options.days)
+    },
+  },
+  created() {
   },
   updated() {
     this.getCustomPrice
@@ -158,6 +218,7 @@ export default {
       'updateConstructorCurrentStage',
       'updateCustomPrice',
       'updateConstructorCurrentStage',
+      'updateEditorsContent',
     ]),
     addMoreGuide() {
       this.updateConstructorCurrentStage('Hotel is set')
@@ -173,9 +234,10 @@ export default {
           value: NaN,
         }
       }
-      console.log(this.getCustomPrice)
     },
     done() {
+      this.updateEditorsContent(this.editorsContent)
+      console.log(this.getTour)
       this.updateConstructorCurrentStage('Show summary')
     }
   },

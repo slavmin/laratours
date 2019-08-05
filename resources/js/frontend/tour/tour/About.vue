@@ -3,6 +3,7 @@
     <v-dialog 
       v-model="dialog" 
       scrollable 
+      lazy
       max-width="500px"
     >
       <template 
@@ -138,7 +139,6 @@ export default {
   },
   created() {
     this.fetchCities()
-    console.log(this.tour)
   },
   methods: {
     ...mapActions([

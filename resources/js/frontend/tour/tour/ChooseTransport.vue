@@ -370,6 +370,14 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'ChooseTransport',
+  props: {
+    tourToEdit: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+  },
   data() {
     return {
       chooseTransport: true,
