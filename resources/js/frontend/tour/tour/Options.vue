@@ -156,7 +156,14 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'Options',
-
+  props: {
+    tourToEdit: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+  },
   data() {
     return {
       tourTypeFormValid: false,
@@ -221,6 +228,9 @@ export default {
   created() {
     this.fetchAllTourOptions()
   },
+  mounted() {
+    this.fillValuesToEdit()
+  },
   methods: {
     ...mapActions([
       'fetchAllTourOptions',
@@ -234,6 +244,17 @@ export default {
         this.updateConstructorCurrentStage('Options are set')
       }
     },
+    fillValuesToEdit() {
+      if (this.tourToEdit.extra) {
+        console.log('yep, we are in edit mode')
+        this.tourName = this.tourToEdit.extra.options.name
+        this.tourType = this.tourToEdit.extra.options.type
+        this.choosenCities = this.tourToEdit.extra.options.cities
+        this.days = this.tourToEdit.extra.options.days
+        this.nights = this.tourToEdit.extra.options.nights
+        this.tourGrade = this.tourToEdit.extra.options.grade
+      }
+    }
   },
 };
 </script>

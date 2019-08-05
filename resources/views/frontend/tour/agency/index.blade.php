@@ -3,7 +3,18 @@
 @section('content')
 
     @include('frontend.tour.includes.agency-select-form')
-
+    <!-- Vue component -->
+    @if(count($items)>0)
+        <?php $sitems = json_encode($items); ?>
+        <?php $scities = json_encode($cities_names); ?>
+        <agency-tours-index
+            data-app
+            :items="{{ $sitems }}"
+            :cities="{{ $scities }}"
+            token="{{ csrf_token() }}"
+        ></agency-tours-index>
+    @endif
+    <!-- /Vue component -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

@@ -44,6 +44,7 @@
               ma-2
             >
               <v-card 
+                :id="'museum-' + museum.id + '-card-' + item.id"
                 class="museum-card"
                 :class="{'is-select' : item.selected}"
                 pa-3
@@ -141,7 +142,14 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'ChooseMuseum',
-
+  props: {
+    tourToEdit: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+  },
   data() {
     return {
       about: '',
@@ -164,12 +172,16 @@ export default {
   created() {
     this.updateActualMuseum()
   },
+  mounted() {
+    this.fillStorageInEditMode()
+  },
   methods: {
     ...mapActions([
       'updateActualMuseum',
       'updateNewMuseumOptions',
       'updateTourMuseum',
       'updateConstructorCurrentStage',
+      'updateMuseumInEditMode',
     ]),
     getCityName(id) {
       let cityName = ''
@@ -201,6 +213,22 @@ export default {
     end() {
       this.updateConstructorCurrentStage('Museum is set')
     },
+    fillStorageInEditMode() {
+      if (this.tourToEdit != {}) {
+        let museum = []
+        this.tourToEdit.extra.museum.forEach(m =>  {
+          console.log(m)
+          let updData = {
+            ...m
+          }
+          updData.obj.selected = true
+          museum.push(updData)
+        })
+        console.log(museum)
+        this.updateMuseumInEditMode(museum)
+        // let el = document.getElementById()
+      }
+    }
   }
 };
 </script>

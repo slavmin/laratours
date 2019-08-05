@@ -1,6 +1,5 @@
 <template>
   <v-layout column> 
-    <h1>Туры</h1>
     <v-layout 
       row
       wrap
@@ -28,14 +27,29 @@
             {{ props.item.tour_type_id }}
           </td>
           <td class="text-xs-right">
-            {{ JSON.parse(props.item.description).options.days }}
+            {{ 
+              props.item.description 
+                ? JSON.parse(props.item.description).options.days 
+                : '' 
+            }}
           </td>
           <td class="text-xs-right">
-            {{ JSON.parse(props.item.description).correctedPrice }}
+            {{ 
+              props.item.description 
+                ? JSON.parse(props.item.description).correctedPrice 
+                : '' 
+            }}
           </td>
           <td>
             <About 
               :tour="props.item"
+            />
+          </td>
+          <td />
+          <td>
+            <Edit
+              :tour-to-edit="props.item"
+              :token="token"
             />
           </td>
         </template>
@@ -46,12 +60,14 @@
 
 <script>
 import About from './About'
+import Edit from './Edit'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'TourTable',
   components: {
     About,
+    Edit,
   },
   props: {
     token: {
@@ -78,7 +94,9 @@ export default {
         { text: 'Тип тура', value: 'type' },
         { text: 'Дней', value: 'days' },
         { text: 'Стоимость', value: 'price' },
-        { text: 'Описание', value: 'about' }
+        { text: 'Описание', value: 'about' },
+        { text: 'Забронировано', value: 'ordered' },
+        { text: 'Редактировать', value: 'edit' }
       ],
     }
   },

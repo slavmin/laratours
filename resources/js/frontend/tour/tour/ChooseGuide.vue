@@ -77,7 +77,7 @@
                     />
                     <br>
                     <span class="grey--text text--darken-1">
-                      Цена: {{ guide.price }}
+                      Цена: {{ JSON.parse(guide.description).price }}
                     </span>
                   </div>
                 </v-card-title>

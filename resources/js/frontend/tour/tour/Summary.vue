@@ -63,7 +63,7 @@
               <td>
                 {{ event.museum.name }}:
                 <br>
-                {{ event.obj.name }}
+                {{ event.obj.description }}
               </td>
               <td class="price">
                 {{ event.obj.price }}
@@ -94,7 +94,7 @@
               <td>
                 {{ hotel.hotel.name }}:
                 <br>
-                {{ hotel.obj.name }}
+                {{ JSON.parse(hotel.obj.extra).roomType }}
               </td>
               <td class="price">
                 {{ hotel.obj.price }}
@@ -126,7 +126,7 @@
                 {{ guide.name }}:
               </td>
               <td class="price">
-                {{ guide.price }}
+                {{ JSON.parse(guide.description).price }}
               </td>
               <td>
                 <v-text-field
@@ -136,7 +136,7 @@
               </td>
               <td>
                 <v-text-field
-                  v-model="guide.correctedPrice"
+                  :value="corPrice(JSON.parse(guide.description).price, guide.correction)"
                   class="corrected-price"
                   name="corrected"
                 />
@@ -245,6 +245,11 @@
           <input 
             type="hidden"
             :value="JSON.stringify(tourExtra)"
+            name="extra"
+          > 
+          <input 
+            type="hidden"
+            :value="JSON.stringify(tourExtra)"
             name="description"
           > 
           <v-btn 
@@ -309,6 +314,15 @@ export default {
     },
     saveTour() {
       console.log(this.getTour)
+    },
+    corPrice(price, correction) {
+      if (correction == NaN) {
+        return price
+      } else {
+        let total = parseInt(price) + (parseInt(price) * parseInt(correction)) / 100
+        return total
+      }
+      
     }
   },
 };

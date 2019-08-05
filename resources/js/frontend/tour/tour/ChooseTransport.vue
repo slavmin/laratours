@@ -97,6 +97,7 @@
               xs3
               lg2
               ma-2
+              color=""
             >
               <v-card 
                 color="green lighten-5"
@@ -369,6 +370,14 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'ChooseTransport',
+  props: {
+    tourToEdit: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+  },
   data() {
     return {
       chooseTransport: true,
@@ -409,10 +418,15 @@ export default {
   updated() {
     this.customPrice
   },
+  created() {
+    this.updateActualTransport()
+    console.log(this.getActualTransport)
+  },
   methods: {
     ...mapActions([
       'fetchCities',
       'fetchTransport',
+      'updateActualTransport',
       'updateTourTransport',
       'updateConstructorCurrentStage',
     ]),
@@ -454,6 +468,8 @@ export default {
       this.transportSelected = false
       this.chooseTransport = true
       this.transportDuration = NaN
+      this.duration = NaN
+      this.distance = NaN
       this.description = ''
     },
     end() {
