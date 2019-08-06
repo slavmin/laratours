@@ -163,11 +163,36 @@ export default {
         v => !!v || 'Введите название тура',
       ],
       nav: [
-        { name: 'Настройки', stage: 'Initial stage' },
-        { name: 'Транспорт', stage: 'Options are set' },
-        { name: 'Экскурскии', stage: 'Transport is set' },
-        { name: 'Проживание', stage: 'Museum is set' },
-        { name: 'Допы', stage: 'Show services' }
+        { 
+          name: 'Настройки', 
+          stage: 'Initial stage', 
+          active: false,
+          disabled: false,
+        },
+        { 
+          name: 'Транспорт', 
+          stage: 'Options are set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Экскурсии', 
+          stage: 'Transport is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Проживание', 
+          stage: 'Museum is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Допы', 
+          stage: 'Show services', 
+          active: false,
+          disabled: false, 
+        }
       ],
       dialog: false,
       firstSlide: true,

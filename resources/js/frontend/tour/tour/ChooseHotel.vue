@@ -168,7 +168,7 @@ export default {
     },
   },
   created() {
-    this.updateActualHotel()
+    // this.updateActualHotel()
   },
   methods: {
     ...mapActions([

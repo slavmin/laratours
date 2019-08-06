@@ -27,8 +27,8 @@
               </td>
             </tr>
             <tr 
-              v-for="transport in getTour.transport"
-              :key="transport.id"
+              v-for="(transport, i) in getTour.transport"
+              :key="`T-${i}`"
             >
               <td>
                 {{ transport.company.name }}:
@@ -57,13 +57,13 @@
               </td>
             </tr>
             <tr 
-              v-for="event in getTour.museum"
-              :key="event.id"
+              v-for="(event, i) in getTour.museum"
+              :key="`M-${i}`"
             >
               <td>
                 {{ event.museum.name }}:
                 <br>
-                {{ event.obj.description }}
+                {{ event.obj.name }}
               </td>
               <td class="price">
                 {{ event.obj.price }}
@@ -88,8 +88,8 @@
               </td>
             </tr>
             <tr 
-              v-for="hotel in getTour.hotel"
-              :key="hotel.id"
+              v-for="(hotel, i) in getTour.hotel"
+              :key="`H-${i}`"
             >
               <td>
                 {{ hotel.hotel.name }}:
@@ -119,14 +119,14 @@
               </td>
             </tr>
             <tr 
-              v-for="guide in getTour.guide"
-              :key="guide.id"
+              v-for="(guide, i) in getTour.guide"
+              :key="`G-${i}`"
             >
               <td>
                 {{ guide.name }}:
               </td>
               <td class="price">
-                {{ JSON.parse(guide.description).price }}
+                {{ guide.price }}
               </td>
               <td>
                 <v-text-field
@@ -136,7 +136,7 @@
               </td>
               <td>
                 <v-text-field
-                  :value="corPrice(JSON.parse(guide.description).price, guide.correction)"
+                  v-model="guide.correctedPrice"
                   class="corrected-price"
                   name="corrected"
                 />
@@ -144,12 +144,12 @@
             </tr>
             <tr>
               <td colspan="4">
-                Гиды
+                Сопровождающие
               </td>
             </tr>
             <tr 
-              v-for="attendant in getTour.attendant"
-              :key="attendant.id"
+              v-for="(attendant, i) in getTour.attendant"
+              :key="`A-${i}`"
             >
               <td>
                 {{ attendant.name }}:
@@ -177,8 +177,8 @@
               </td>
             </tr>
             <tr 
-              v-for="price in getTour.customPrice"
-              :key="price.id"
+              v-for="(price, i) in getTour.customPrice"
+              :key="`CP-${i}`"
             >
               <td>
                 {{ price.name }}
@@ -196,11 +196,11 @@
                 Итого: 
               </td>
               <td>
-                {{ totalPrice }}
+                {{ getTour.totalPrice }}
               </td>
               <td />
               <td>
-                {{ getCorrectedPrice }}
+                {{ getTour.correctedPrice }}
               </td>
             </tr>
           </tbody>
@@ -294,35 +294,36 @@ export default {
       }
     },
   },
-  created() {
-    this.getTour
-    this.total()
+  watch: {
+    getTour: {
+      handler(value) {
+        this.updateTourCorrectedPrice()
+      },
+      deep: true,
+    }
   },
-  updated() {
-    this.total()
-    console.log(this.getTour)
+  mounted() {
+    this.updateTourTotalPrice()
   },
   methods: {
-    ...mapActions(['updateTransportPrice']),
-    total() {
-      // Calculate total price (first column)
-      let summ = 0
-      Array.from(document.getElementsByClassName('price')).forEach((item) => {
-        summ += parseInt(item.innerText)
-      })
-      this.totalPrice = summ
-    },
+    ...mapActions([
+      'updateTransportPrice',
+      'updateTourTotalPrice',  
+      'updateTourCorrectedPrice',
+    ]),
+    // total() {
+    //   // Calculate total price (first column)
+    //   let summ = 0
+    //   Array.from(document.getElementsByClassName('price')).forEach((item) => {
+    //     summ += parseInt(item.innerText)
+    //   })
+    //   this.totalPrice = summ
+    // },
     saveTour() {
       console.log(this.getTour)
     },
-    corPrice(price, correction) {
-      if (correction == NaN) {
-        return price
-      } else {
-        let total = parseInt(price) + (parseInt(price) * parseInt(correction)) / 100
-        return total
-      }
-      
+    inputCorrection() {
+      console.log('changed')
     }
   },
 };
