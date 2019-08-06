@@ -477,6 +477,9 @@ export default {
     next() {
       const active = parseInt(this.active)
         this.active = (active < 2 ? active + 1 : 0)
+    },
+    back() {
+      this.updateConstructorCurrentStage('Initial stage')
     }
   },
 };

@@ -39,29 +39,22 @@
             </v-icon>
           </v-btn>
           <v-toolbar-title>
-            {{ tourName == '' ? 'Новый тур' : tourName }}
+            {{ tourName == '' ? 'Новый тур' : getTour.options.name }}
           </v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items>
+            <v-btn 
+              v-for="item in nav" 
+              :key="item.name"
+              dark 
+              flat
+              @click="changeConstructorStage(item.stage)"
+            >
+              {{ item.name }}
+            </v-btn>
+          </v-toolbar-items>
         </v-toolbar>
         <v-container fluid>
-          <div class="navigator">
-            <ul>
-              <li @click="changeConstructorStage('Initial stage')">
-                Настройки тура
-              </li>
-              <li @click="changeConstructorStage('Options are set')">
-                Выбор транспорта
-              </li>
-              <li @click="changeConstructorStage('Transport is set')">
-                Выбор экскурский
-              </li>
-              <li @click="changeConstructorStage('Museum is set')">
-                Выбор проживания
-              </li>
-              <li @click="changeConstructorStage('Show services')">
-                Допы
-              </li>
-            </ul>
-          </div>
           <v-layout 
             row 
             wrap
@@ -169,6 +162,13 @@ export default {
       nameRules: [
         v => !!v || 'Введите название тура',
       ],
+      nav: [
+        { name: 'Настройки', stage: 'Initial stage' },
+        { name: 'Транспорт', stage: 'Options are set' },
+        { name: 'Экскурскии', stage: 'Transport is set' },
+        { name: 'Проживание', stage: 'Museum is set' },
+        { name: 'Допы', stage: 'Show services' }
+      ],
       dialog: false,
       firstSlide: true,
       showDateStart: false,
@@ -204,32 +204,10 @@ export default {
       'allTransports',
       'allTourOptions',
       'getConstructorCurrentStage',
-      'allState'
+      'allState',
+      'getTour',
       
     ]),
-    tour: function() {
-      return {
-        type: this.tourType,
-        name: this.tourName,
-        dateStart: this.dateStart,
-        dateEnd: this.dateEnd,
-        days: this.days,
-        nights: this.nights,
-        grade: this.tourGrade,
-        languages: this.tourLanguages,
-        transport: this.choosenTransport,
-      }
-    },
-    tourTypes: function() {
-      let types = []
-      for (let key in this.allTourOptions.tour_type_options) {
-        types.push({
-          id: key,
-          name: this.allTourOptions.tour_type_options[key]
-        })
-      }
-      return types
-    },
     showOptions: function() {
       console.log()
       return this.getConstructorCurrentStage === 'Initial stage' ? true : false
@@ -268,7 +246,7 @@ export default {
     this.fetchAllTourOptions()
   },
   updated() {
-    console.log(this.allState)
+    console.log('allState: ', this.allState)
   },
   methods: {
     ...mapActions([
@@ -332,20 +310,19 @@ export default {
   transform: scale(0.1)
 }
 .navigator {
-  display: none;
-  position: fixed;
-  top: 45%;
   text-align: left;
-  color: #9c9e9c;
+  color: white;
   font-size: 14px;
-  li {
-    transform: scale(1);
-    cursor: pointer;
-  }
-  li:hover {
-    color: #3bc34d;
-    font-size: 20px;
-    transform: scale(1.1);
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    li {
+      cursor: pointer;
+    }
+    li:hover {
+      color: white;
+    }
   }
 }
 </style>

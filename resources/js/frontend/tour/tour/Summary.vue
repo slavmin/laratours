@@ -230,7 +230,7 @@
           <input 
             type="hidden" 
             name="tour_type_id" 
-            :value="getTour.options.type"
+            :value="getTour.options.tourType"
           > 
           <input 
             type="hidden" 

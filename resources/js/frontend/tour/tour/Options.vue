@@ -6,7 +6,7 @@
       lazy-validation
     >
       <v-select
-        v-model="tourType"
+        v-model="getTour.options.tourType"
         :items="tourTypes"
         label="Тип тура:"
         item-text="name"
@@ -17,7 +17,7 @@
         required
       />
       <v-text-field
-        v-model="tourName"
+        v-model="getTour.options.name"
         label="Название тура"
         name="name"
         :rules="nameRules"
@@ -27,7 +27,7 @@
         required
       />
       <v-select
-        v-model="choosenCities"
+        v-model="getTour.options.cities"
         :items="allCities"
         label="Тур по городам:"
         item-text="name"
@@ -57,7 +57,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="dateStart"
+                v-model="getTour.options.dateStart"
                 label="Дата начала"
                 :rules="[v => !!v || 'Выберите дату']"
                 prepend-icon="event"
@@ -67,7 +67,7 @@
               />
             </template>
             <v-date-picker 
-              v-model="dateStart" 
+              v-model="getTour.options.dateStart" 
               color="green"
               locale="ru-ru"
               @input="showDateStart = false"
@@ -76,7 +76,7 @@
         </v-flex>
         <v-flex xs2>
           <v-text-field
-            v-model="days"
+            v-model="getTour.options.days"
             label="Дней"
             :rules="[v => !!v || 'Укажите количество дней']"
             name="days"
@@ -86,7 +86,7 @@
         </v-flex>
         <v-flex xs2>
           <v-text-field
-            v-model="nights"
+            v-model="getTour.optionsnights"
             label="Ночей"
             name="nights"
             mask="###"
@@ -101,7 +101,7 @@
       >
         <v-flex xs3>
           <v-select
-            v-model="tourGrade"
+            v-model="getTour.options.tourGrade"
             :items="tourGrades"
             name="grade"
             label="Класс:"
@@ -118,7 +118,7 @@
           xs6
         >
           <v-select
-            v-model="tourLanguages"
+            v-model="getTour.options.tourLanguages"
             :items="availableLanguages"
             name="languages"
             label="Язык:"
@@ -167,16 +167,13 @@ export default {
   data() {
     return {
       tourTypeFormValid: false,
-      tourName: '',
       nameRules: [
         v => !!v || 'Введите название тура',
       ],
-      tourType: 0,
       tourGrades: [
         { id: 1, name: 'Стандарт'},
         { id: 2, name: 'VIP'}
       ],
-      tourGrade: [],
       availableLanguages: [
         { id: 1, name: 'Русский'},
         { id: 2, name: 'Английский'},
@@ -187,20 +184,17 @@ export default {
         { id: 7, name: 'Итальянский'},
         { id: 8, name: 'Финский'}
       ],
-      tourLanguages: [1],
       showDateStart: false,
       showDateEnd: false,
-      dateStart: new Date().toISOString().substr(0, 10),
       dateEnd: new Date().toISOString().substr(0, 10),
-      choosenCities: [],
-      days: NaN,
-      nights: 0
     };
   },
   computed: {
     ...mapGetters([
       'allCities',
       'allTourOptions',
+      'getTour',
+      'getTourName',
     ]),
     tourTypes: function() {
       let types = []
@@ -212,49 +206,23 @@ export default {
       }
       return types
     },
-    tourOptions: function() {
-      return {
-        type: this.tourType,
-        name: this.tourName,
-        dateStart: this.dateStart,
-        days: this.days,
-        nights: this.nights,
-        grade: this.tourGrade,
-        languages: this.tourLanguages,
-        cities: this.choosenCities,
-      }
-    },
   },
   created() {
     this.fetchAllTourOptions()
-  },
-  mounted() {
-    this.fillValuesToEdit()
   },
   methods: {
     ...mapActions([
       'fetchAllTourOptions',
       'updateTourOptions',
       'updateConstructorCurrentStage',
+      'updateTourName',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
         this.snackbar = true
-        this.updateTourOptions(this.tourOptions)
         this.updateConstructorCurrentStage('Options are set')
       }
     },
-    fillValuesToEdit() {
-      if (this.tourToEdit.extra) {
-        console.log('yep, we are in edit mode')
-        this.tourName = this.tourToEdit.extra.options.name
-        this.tourType = this.tourToEdit.extra.options.type
-        this.choosenCities = this.tourToEdit.extra.options.cities
-        this.days = this.tourToEdit.extra.options.days
-        this.nights = this.tourToEdit.extra.options.nights
-        this.tourGrade = this.tourToEdit.extra.options.grade
-      }
-    }
   },
 };
 </script>
