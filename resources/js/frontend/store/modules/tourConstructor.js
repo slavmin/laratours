@@ -86,9 +86,11 @@ export default {
     },
     setActualTransport(state) {
       let result = []
+      let citiesIdNumbers = []
+      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       if (state.tourOptions.transport_options != undefined) {
           state.tourOptions.transport_options.map((item) => {
-            if (state.tour.options.cities.indexOf(item.city_id) != -1) {
+            if (citiesIdNumbers.indexOf(item.city_id) != -1) {
               result.push(item)
             }
           }
@@ -104,8 +106,10 @@ export default {
     },
     setActualMuseum(state) {
       let result = []
+      let citiesIdNumbers = []
+      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.museum_options.map((museum) => {
-          if (state.tour.options.cities.indexOf(museum.city_id) != -1) {
+          if (citiesIdNumbers.indexOf(museum.city_id) != -1) {
             result.push({
               ...museum
             })
@@ -144,8 +148,10 @@ export default {
     },
     setActualHotel(state) {
       let result = []
+      let citiesIdNumbers = []
+      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.hotel_options.map((hotel) => {
-          if (state.tour.options.cities.indexOf(hotel.city_id) != -1) {
+          if (citiesIdNumbers.indexOf(hotel.city_id) != -1) {
             result.push({
               ...hotel
             })
@@ -186,9 +192,11 @@ export default {
     },
     setActualGuide(state) {
       let result = []
+      let citiesIdNumbers = []
+      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.guide_options.map((guide) => {
         let guideCity = JSON.parse(guide.description).city
-          if (state.tour.options.cities.indexOf(guideCity) != -1) {
+          if (citiesIdNumbers.indexOf(guideCity) != -1) {
             result.push({
               ...guide,
               selected: false,
@@ -215,9 +223,11 @@ export default {
     },
     setActualAttendant(state) {
       let result = []
+      let citiesIdNumbers = []
+      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.attendant_options.map((attendant) => {
         let attendantCity = JSON.parse(attendant.description).city
-          if (state.tour.options.cities.indexOf(attendantCity) != -1) {
+          if (citiesIdNumbers.indexOf(attendantCity) != -1) {
             result.push({
               ...attendant,
               selected: false,
