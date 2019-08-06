@@ -52,7 +52,7 @@
                 <v-card-title primary-title>
                   <div>
                     <div class="headline mb-2">
-                      {{ item.description }}
+                      {{ item.name }}
                       <i 
                         class="material-icons ml-2"
                         style="color: grey; font-size: 20px;"
@@ -173,7 +173,7 @@ export default {
     this.updateActualMuseum()
   },
   mounted() {
-    this.fillStorageInEditMode()
+    // this.fillStorageInEditMode()
   },
   methods: {
     ...mapActions([

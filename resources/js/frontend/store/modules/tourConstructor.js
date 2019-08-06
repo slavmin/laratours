@@ -67,6 +67,9 @@ export default {
     async updateEditorsContent({ commit }, content) {
       commit('setEditorsContent', content)
     },
+    async updateTourName({ commit }, name) {
+      commit('setTourName', name)
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -245,12 +248,24 @@ export default {
     },
     setEditorsContent: (state, content) => {
       state.tour.editorsContent = content
+    },
+    setTourName: (state, name) => {
+      state.tour.options.name = name
     }
   },
   state: {
     tourOptions: [],
     tour: {
-      options: {},
+      options: {
+        name: '',
+        tourType: 0,
+        cities: [],
+        tourGrade: [],
+        tourLanguages: [1],
+        days: NaN,
+        nights: NaN,
+        dateStart: new Date().toISOString().substr(0, 10),
+      },
       transport: [],
       museum: [],
       hotel: [],
@@ -373,6 +388,9 @@ export default {
         summ += parseInt(price.value)
       })
       return summ
+    },
+    getTourName(state) {
+      return state.tour.options.name
     }
   }
 }
