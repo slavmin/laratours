@@ -66,9 +66,9 @@
                       :value="token"
                     > 
                     <input 
+                      v-model="price"
                       type="hidden" 
-                      name="price" 
-                      value="1"
+                      name="price"
                     > 
                     <div class="display-1 mb-3">
                       Общая информация:
@@ -250,7 +250,6 @@ export default {
         city: this.city,
         attendant: this.type,
         about: this.about,
-        price: this.price,
         grade: this.grade,
         languages: this.languages,
         contacts: {

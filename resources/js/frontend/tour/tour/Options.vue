@@ -216,10 +216,16 @@ export default {
       'updateTourOptions',
       'updateConstructorCurrentStage',
       'updateTourName',
+      'updateActualTransport',
+      'updateActualMuseum',
+      'updateActualHotel',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
         this.snackbar = true
+        this.updateActualTransport()
+        this.updateActualMuseum()
+        this.updateActualHotel()
         this.updateConstructorCurrentStage('Options are set')
       }
     },

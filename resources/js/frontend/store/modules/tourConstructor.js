@@ -70,6 +70,12 @@ export default {
     async updateTourName({ commit }, name) {
       commit('setTourName', name)
     },
+    async updateTourTotalPrice({ commit }) {
+      commit('calculateTourTotalPrice')
+    },
+    async updateTourCorrectedPrice({ commit }) {
+      commit('calculateTourCorrectedPrice')
+    }
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -251,6 +257,50 @@ export default {
     },
     setTourName: (state, name) => {
       state.tour.options.name = name
+    },
+    calculateTourTotalPrice: (state) => {
+      let summ = 0
+      state.tour.transport.forEach((transport) => {
+        summ += parseInt(transport.totalPrice)
+      })
+      state.tour.museum.forEach((museum) => {
+        summ += parseInt(museum.obj.price)
+      })
+      state.tour.hotel.forEach((hotel) => {
+        summ += parseInt(hotel.obj.price)
+      })
+      state.tour.guide.forEach((guide) => {
+        summ += parseInt(guide.price)
+      })
+      state.tour.attendant.forEach((attendant) => {
+        summ += parseInt(attendant.price)
+      })
+      state.tour.customPrice.forEach((price) => {
+        summ += parseInt(price.value)
+      })
+      state.tour.totalPrice = summ
+    },
+    calculateTourCorrectedPrice: (state) => {
+      let summ = 0
+      state.tour.transport.forEach((transport) => {
+        summ += parseInt(transport.correctedPrice)
+      })
+      state.tour.museum.forEach((museum) => {
+        summ += parseInt(museum.correctedPrice)
+      })
+      state.tour.hotel.forEach((hotel) => {
+        summ += parseInt(hotel.correctedPrice)
+      })
+      state.tour.guide.forEach((guide) => {
+        summ += parseInt(guide.correctedPrice)
+      })
+      state.tour.attendant.forEach((attendant) => {
+        summ += parseInt(attendant.correctedPrice)
+      })
+      state.tour.customPrice.forEach((price) => {
+        summ += parseInt(price.value)
+      })
+      state.tour.correctedPrice = summ
     }
   },
   state: {
@@ -273,6 +323,7 @@ export default {
       attendant: [],
       customPrice: [],
       editorsContent: [],
+      totalPrice: NaN,
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',

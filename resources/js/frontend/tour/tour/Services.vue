@@ -204,7 +204,6 @@ export default {
       return this.getCustomPrice.length == 0 ? false : true
     },
     editorsCount: function() {
-      console.log(this.getTour.options.days)
       return parseInt(this.getTour.options.days)
     },
   },

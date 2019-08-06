@@ -170,7 +170,7 @@ export default {
     },
   },
   created() {
-    this.updateActualMuseum()
+    // this.updateActualMuseum()
   },
   mounted() {
     // this.fillStorageInEditMode()

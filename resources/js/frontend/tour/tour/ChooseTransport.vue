@@ -117,8 +117,8 @@
                     </div>
                     <v-divider />
                     <div
-                      v-for="(price, i) in JSON.parse(item.extra).prices"
-                      :key="i"
+                      v-for="price in JSON.parse(item.extra).prices"
+                      :key="price.name"
                       row
                       justify-content-between
                       wrap
@@ -419,7 +419,7 @@ export default {
     this.customPrice
   },
   mounted() {
-    this.updateActualTransport()
+    // this.updateActualTransport()
   },
   methods: {
     ...mapActions([
