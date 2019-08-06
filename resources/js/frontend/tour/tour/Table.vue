@@ -33,7 +33,15 @@
                 : '' 
             }}
           </td>
-          <td class="text-xs-right">
+          <td class="text-xs-right grey--text">
+            Нетто:
+            {{ 
+              props.item.description 
+                ? JSON.parse(props.item.description).totalPrice
+                : '' 
+            }}
+            <br>
+            С наценкой:
             {{ 
               props.item.description 
                 ? JSON.parse(props.item.description).correctedPrice 

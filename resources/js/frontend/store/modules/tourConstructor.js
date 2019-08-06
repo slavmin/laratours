@@ -88,7 +88,7 @@ export default {
       let result = []
       if (state.tourOptions.transport_options != undefined) {
           state.tourOptions.transport_options.map((item) => {
-            if (state.tour.options.cities.indexOf(item.city_id) !== -1) {
+            if (state.tour.options.cities.indexOf(item.city_id) != -1) {
               result.push(item)
             }
           }
@@ -105,7 +105,7 @@ export default {
     setActualMuseum(state) {
       let result = []
       state.tourOptions.museum_options.map((museum) => {
-          if (state.tour.options.cities.indexOf(museum.city_id) !== -1) {
+          if (state.tour.options.cities.indexOf(museum.city_id) != -1) {
             result.push({
               ...museum
             })
@@ -124,12 +124,12 @@ export default {
     setNewMuseumOptions: (state, updData) => {
       let updMuseum = updData.museum
       let updItem = updData.item
-      let itemIndex = updMuseum.objectables.findIndex(obj => obj.id === updItem.id)
-      if (itemIndex !== -1) {
+      let itemIndex = updMuseum.objectables.findIndex(obj => obj.id == updItem.id)
+      if (itemIndex != -1) {
         updMuseum.objectables.splice(itemIndex, 1, updItem)
       }
-      const index = state.actualMuseum.findIndex(museum => museum.id === updMuseum.id)
-      if (index !== -1) {
+      const index = state.actualMuseum.findIndex(museum => museum.id == updMuseum.id)
+      if (index != -1) {
         state.actualMuseum.splice(index, 1, updMuseum)
       }
     }, 
@@ -145,7 +145,7 @@ export default {
     setActualHotel(state) {
       let result = []
       state.tourOptions.hotel_options.map((hotel) => {
-          if (state.tour.options.cities.indexOf(hotel.city_id) !== -1) {
+          if (state.tour.options.cities.indexOf(hotel.city_id) != -1) {
             result.push({
               ...hotel
             })
@@ -166,12 +166,12 @@ export default {
       let updHotel = updData.hotel
       let updItem = updData.item
       let about = updData.about
-      let itemIndex = updHotel.objectables.findIndex(obj => obj.id === updItem.id)
-      if (itemIndex !== -1) {
+      let itemIndex = updHotel.objectables.findIndex(obj => obj.id == updItem.id)
+      if (itemIndex != -1) {
         updHotel.objectables.splice(itemIndex, 1, updItem)
       }
-      const index = state.actualHotel.findIndex(hotel => hotel.id === updHotel.id)
-      if (index !== -1) {
+      const index = state.actualHotel.findIndex(hotel => hotel.id == updHotel.id)
+      if (index != -1) {
         state.actualHotel.splice(index, 1, updHotel)
       }
     }, 
@@ -188,7 +188,7 @@ export default {
       let result = []
       state.tourOptions.guide_options.map((guide) => {
         let guideCity = JSON.parse(guide.description).city
-          if (state.tour.options.cities.indexOf(guideCity) !== -1) {
+          if (state.tour.options.cities.indexOf(guideCity) != -1) {
             result.push({
               ...guide,
               selected: false,
@@ -201,8 +201,8 @@ export default {
       state.actualGuide = result
     },
     setNewGuideOptions: (state, updGuide) => {
-      const index = state.actualGuide.findIndex(guide => guide.id === updGuide.id)
-      if (index !== -1) {
+      const index = state.actualGuide.findIndex(guide => guide.id == updGuide.id)
+      if (index != -1) {
         state.actualGuide.splice(index, 1, updGuide)
       }
     },  
@@ -217,7 +217,7 @@ export default {
       let result = []
       state.tourOptions.attendant_options.map((attendant) => {
         let attendantCity = JSON.parse(attendant.description).city
-          if (state.tour.options.cities.indexOf(attendantCity) !== -1) {
+          if (state.tour.options.cities.indexOf(attendantCity) != -1) {
             result.push({
               ...attendant,
               selected: false,
@@ -231,8 +231,8 @@ export default {
       state.actualAttendant = result
     },
     setNewAttendantOptions: (state, updAttendant) => {
-      const index = state.actualAttendant.findIndex(attendant => attendant.id === updAttendant.id)
-      if (index !== -1) {
+      const index = state.actualAttendant.findIndex(attendant => attendant.id == updAttendant.id)
+      if (index != -1) {
         state.actualAttendant.splice(index, 1, updAttendant)
       }
     },   
