@@ -49,14 +49,14 @@
                       </i>
                     </div>
                     <v-divider />
-                    <v-select
+                    <!-- <v-select
                       v-model="guide.day"
                       :items="days"
                       :dark="guide.selected"
                       :disabled="guide.selected"
                       label="Количество дней"
                       outline
-                    />
+                    /> -->
                     <v-text-field
                       v-model="guide.duration"
                       :dark="guide.selected"
@@ -160,6 +160,11 @@ export default {
       return cityName
     },
     choose(guide) {
+      if (guide.duration) {
+        guide.totalPrice = guide.price * guide.duration
+      } else {
+        guide.totalPrice = guide.price
+      }
       let updGuide = {
         ...guide,
         selected: !guide.selected,

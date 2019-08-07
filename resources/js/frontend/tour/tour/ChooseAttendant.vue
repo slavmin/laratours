@@ -49,14 +49,14 @@
                       </i>
                     </div>
                     <v-divider />
-                    <v-select
+                    <!-- <v-select
                       v-model="attendant.day"
                       :items="days"
                       :dark="attendant.selected"
                       :disabled="attendant.selected"
                       label="Количество дней"
                       outline
-                    />
+                    /> -->
                     <v-text-field
                       v-model="attendant.duration"
                       :dark="attendant.selected"
@@ -160,6 +160,11 @@ export default {
       return cityName
     },
     choose(attendant) {
+      if (attendant.duration) {
+        attendant.totalPrice = attendant.price * attendant.duration
+      } else {
+        attendant.totalPrice = attendant.price
+      }
       let updAttendant = {
         ...attendant,
         selected: !attendant.selected,

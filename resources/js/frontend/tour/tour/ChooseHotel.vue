@@ -69,7 +69,7 @@
                       label="Количество ночей"
                       outline
                     />
-                    <v-text-field
+                    <!-- <v-text-field
                       v-model="item.roomsCount"
                       :dark="item.selected"
                       :disabled="item.selected"
@@ -77,7 +77,7 @@
                       mask="###"
                       class="mt-3"
                       color="green"
-                    />
+                    /> -->
                     <v-text-field
                       :id="'about' + item.id"
                       :dark="item.selected"
@@ -144,6 +144,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 export default {
 
   name: 'ChooseHotel',
@@ -187,6 +188,11 @@ export default {
       return cityName
     },
     choose(hotel, item) {
+      if (item.day != 0) {
+        item.totalPrice = item.price * item.day
+      } else {
+        item.totalPrice = item.price
+      }
       let updData = {
         'hotel': hotel,
         'item': {
@@ -195,6 +201,7 @@ export default {
           'about': document.getElementById('about' + item.id).value,
         }, 
       }
+      console.log(item)
       this.updateNewHotelOptions(updData)
     },
     done() {

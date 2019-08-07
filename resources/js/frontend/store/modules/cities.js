@@ -13,7 +13,7 @@ export default {
           let cities = []
           for (let key in country.cities) {
             cities.push({
-              id: key,
+              id: parseInt(key),
               name: country.cities[key]
             })
           }
