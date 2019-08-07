@@ -75,6 +75,9 @@ export default {
     },
     async updateTourCorrectedPrice({ commit }) {
       commit('calculateTourCorrectedPrice')
+    },
+    async updateCorrectionToAll({ commit }, correction) {
+      commit('setCorrectionToAll', correction)
     }
   },
   mutations: {
@@ -86,11 +89,10 @@ export default {
     },
     setActualTransport(state) {
       let result = []
-      let citiesIdNumbers = []
-      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
+      console.log('setActualTransport')
       if (state.tourOptions.transport_options != undefined) {
           state.tourOptions.transport_options.map((item) => {
-            if (citiesIdNumbers.indexOf(item.city_id) != -1) {
+            if (state.tour.options.cities.indexOf(parseInt(item.city_id)) != -1) {
               result.push(item)
             }
           }
@@ -106,10 +108,9 @@ export default {
     },
     setActualMuseum(state) {
       let result = []
-      let citiesIdNumbers = []
-      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
+      console.log('setActualMuseum')
       state.tourOptions.museum_options.map((museum) => {
-          if (citiesIdNumbers.indexOf(museum.city_id) != -1) {
+          if (state.tour.options.cities.indexOf(parseInt(museum.city_id)) != -1) {
             result.push({
               ...museum
             })
@@ -148,10 +149,9 @@ export default {
     },
     setActualHotel(state) {
       let result = []
-      let citiesIdNumbers = []
-      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
+      console.log('setActualHotel')
       state.tourOptions.hotel_options.map((hotel) => {
-          if (citiesIdNumbers.indexOf(hotel.city_id) != -1) {
+          if (state.tour.options.cities.indexOf(parseInt(hotel.city_id)) != -1) {
             result.push({
               ...hotel
             })
@@ -192,11 +192,9 @@ export default {
     },
     setActualGuide(state) {
       let result = []
-      let citiesIdNumbers = []
-      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.guide_options.map((guide) => {
         let guideCity = JSON.parse(guide.description).city
-          if (citiesIdNumbers.indexOf(guideCity) != -1) {
+          if (state.tour.options.cities.indexOf(parseInt(guideCity)) != -1) {
             result.push({
               ...guide,
               selected: false,
@@ -223,11 +221,9 @@ export default {
     },
     setActualAttendant(state) {
       let result = []
-      let citiesIdNumbers = []
-      state.tour.options.cities.forEach(i => citiesIdNumbers.push(parseInt))
       state.tourOptions.attendant_options.map((attendant) => {
         let attendantCity = JSON.parse(attendant.description).city
-          if (citiesIdNumbers.indexOf(attendantCity) != -1) {
+          if (state.tour.options.cities.indexOf(parseInt(attendantCity)) != -1) {
             result.push({
               ...attendant,
               selected: false,
@@ -277,13 +273,13 @@ export default {
         summ += parseInt(museum.obj.price)
       })
       state.tour.hotel.forEach((hotel) => {
-        summ += parseInt(hotel.obj.price)
+        summ += parseInt(hotel.obj.totalPrice)
       })
       state.tour.guide.forEach((guide) => {
-        summ += parseInt(guide.price)
+        summ += parseInt(guide.totalPrice)
       })
       state.tour.attendant.forEach((attendant) => {
-        summ += parseInt(attendant.price)
+        summ += parseInt(attendant.totalPrice)
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.value)
@@ -311,6 +307,24 @@ export default {
         summ += parseInt(price.value)
       })
       state.tour.correctedPrice = summ
+    },
+    setCorrectionToAll: (state, correction) => {
+      console.log(correction)
+      state.tour.transport.forEach((transport) => {
+        transport.correction = correction
+      })
+      state.tour.museum.forEach((museum) => {
+        museum.correction = correction
+      })
+      state.tour.hotel.forEach((hotel) => {
+        hotel.correction = correction
+      })
+      state.tour.guide.forEach((guide) => {
+        guide.correction = correction
+      })
+      state.tour.attendant.forEach((attendant) => {
+        attendant.correction = correction
+      })
     }
   },
   state: {
@@ -388,30 +402,30 @@ export default {
       state.tour.hotel.forEach((hotel) => {
         if (hotel.correction > 0) {
           hotel.correctedPrice = 
-            hotel.obj.price + 
-            (hotel.obj.price * hotel.correction / 100) 
+            hotel.obj.totalPrice + 
+            (hotel.obj.totalPrice * hotel.correction / 100) 
         } else {
-          hotel.correctedPrice = hotel.obj.price
+          hotel.correctedPrice = hotel.obj.totalPrice
         }
       })
       // Add price-fields to Guide
       state.tour.guide.forEach((guide) => {
         if (guide.correction > 0) {
           guide.correctedPrice = 
-            guide.price + 
-            (guide.price * guide.correction / 100) 
+            guide.totalPrice + 
+            (guide.totalPrice * guide.correction / 100) 
         } else {
-          guide.correctedPrice = guide.price
+          guide.correctedPrice = guide.totalPrice
         }
       })
       // Add price-fields to Attendant
       state.tour.attendant.forEach((attendant) => {
         if (attendant.correction > 0) {
           attendant.correctedPrice = 
-            attendant.price + 
-            (attendant.price * attendant.correction / 100) 
+            attendant.totalPrice + 
+            (attendant.totalPrice * attendant.correction / 100) 
         } else {
-          attendant.correctedPrice = attendant.price
+          attendant.correctedPrice = attendant.totalPrice
         }
       })
       return state.tour

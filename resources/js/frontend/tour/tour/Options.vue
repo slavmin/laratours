@@ -37,6 +37,7 @@
         color="green lighten-3"
         multiple
         required
+        @change="logCity"
       />
       <v-divider />
       <v-layout 
@@ -86,7 +87,7 @@
         </v-flex>
         <v-flex xs2>
           <v-text-field
-            v-model="getTour.optionsnights"
+            v-model="getTour.options.nights"
             label="Ночей"
             name="nights"
             mask="###"
@@ -219,6 +220,8 @@ export default {
       'updateActualTransport',
       'updateActualMuseum',
       'updateActualHotel',
+      'updateActualGuide',
+      'updateActualAttendant',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
@@ -226,9 +229,15 @@ export default {
         this.updateActualTransport()
         this.updateActualMuseum()
         this.updateActualHotel()
+        this.updateActualGuide()
+        this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')
       }
     },
+    logCity() {
+      console.log(this.allCities)
+      console.log(this.getTour.options.cities)
+    }
   },
 };
 </script>

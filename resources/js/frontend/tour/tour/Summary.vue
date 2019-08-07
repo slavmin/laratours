@@ -14,15 +14,33 @@
               Стоимость
             </th>
             <th>
-              Наценка, %
+              <v-layout 
+                row 
+                wrap
+                align-center
+              >
+                <v-flex xs9>
+                  Наценка, %
+                </v-flex>
+                <v-flex xs3>
+                  <v-text-field
+                    v-model="correctionToAll"
+                    label="На все"
+                    outline
+                  /> 
+                </v-flex>
+              </v-layout>
             </th>
             <th>
               Итого
             </th>
           </thead>
           <tbody>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.transport.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Транспорт
               </td>
             </tr>
@@ -51,8 +69,11 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.museum.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Экскурсии
               </td>
             </tr>
@@ -82,8 +103,11 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.hotel.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Размещение
               </td>
             </tr>
@@ -95,9 +119,15 @@
                 {{ hotel.hotel.name }}:
                 <br>
                 {{ JSON.parse(hotel.obj.extra).roomType }}
+                <br>
+                <div class="body-1 grey--text">
+                  Ночей: {{ hotel.obj.day }}
+                  <br>
+                  Цена: {{ hotel.obj.price }}
+                </div>
               </td>
               <td class="price">
-                {{ hotel.obj.price }}
+                {{ hotel.obj.totalPrice }}
               </td>
               <td>
                 <v-text-field
@@ -113,8 +143,11 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.guide.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Гиды
               </td>
             </tr>
@@ -124,6 +157,11 @@
             >
               <td>
                 {{ guide.name }}:
+                <div class="body-1 grey--text">
+                  Часов: {{ guide.duration }}
+                  <br>
+                  Цена: {{ guide.price }}
+                </div>
               </td>
               <td class="price">
                 {{ guide.price }}
@@ -142,8 +180,11 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.attendant.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Сопровождающие
               </td>
             </tr>
@@ -153,9 +194,15 @@
             >
               <td>
                 {{ attendant.name }}:
+                <br>
+                <div class="body-1 grey--text">
+                  Часов: {{ attendant.duration }}
+                  <br>
+                  Цена: {{ attendant.price }}
+                </div>
               </td>
               <td class="price">
-                {{ attendant.price }}
+                {{ attendant.totalPrice }}
               </td>
               <td>
                 <v-text-field
@@ -171,8 +218,11 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4">
+            <tr v-if="getTour.customPrice.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
                 Доп.услуги
               </td>
             </tr>
@@ -280,6 +330,7 @@ export default {
     return {
       totalPrice: 0,
       correctedPrice: 0,
+      correctionToAll: 0,
     };
   },
   computed: {
@@ -297,9 +348,16 @@ export default {
   watch: {
     getTour: {
       handler(value) {
+        console.log(this.getTour)
         this.updateTourCorrectedPrice()
       },
       deep: true,
+    },
+    correctionToAll: {
+      handler(value) {
+        console.log('client correction: ', value)
+        this.updateCorrectionToAll(value)
+      }
     }
   },
   mounted() {
@@ -310,6 +368,7 @@ export default {
       'updateTransportPrice',
       'updateTourTotalPrice',  
       'updateTourCorrectedPrice',
+      'updateCorrectionToAll',
     ]),
     // total() {
     //   // Calculate total price (first column)
@@ -337,6 +396,9 @@ export default {
     border: 1px solid gray;
     padding: 16px;
     font-size: 24px;
+  }
+  td {
+    text-align: left
   }
 }
 </style>
