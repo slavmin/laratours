@@ -103,9 +103,9 @@ export default {
       default: ''
     },
     items: {
-      type: Array,
+      type: Object,
       default: () => {
-        return []
+        return {}
       }
     },
     cities: {
@@ -152,6 +152,9 @@ export default {
       }
       return filteredItems.length == 0 ? this.items.data : result
     }
+  },
+  created() {
+    console.log(this.items)
   },
   methods: {
     // filterItems() {
