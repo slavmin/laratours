@@ -1,6 +1,20 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <!-- @if(count($items)>0)
+        <?php $sitems = json_encode($items); ?>
+        <?php $sagencies = json_encode($agencies); ?>
+        <?php $sstatuses = json_encode($statuses); ?>
+        <?php $stour_names = json_encode($tour_names); ?>
+        <operator-orders-index
+            data-app
+            :items="{{ $sitems }}"
+            :agencies="{{ $sagencies }}"
+            :statuses="{{ $sstatuses }}"
+            :tour-names="{{ $stour_names }}"
+        >
+        </operator-orders-index>
+    @endif -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

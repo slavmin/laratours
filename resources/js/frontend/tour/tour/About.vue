@@ -27,73 +27,9 @@
         </v-card-title>
         <v-divider />
         <v-card-text style="height: 300px;">
-          <div class="item">
-            <span class="header">
-              Города:
-            </span>
-            <span
-              v-for="city in tour.cities_list"
-              :key="city"
-            >
-              {{ getCityName(city) }}
-            </span>
-          </div>
-          <div class="item">
-            <span class="header">
-              Дата начала:
-            </span>
-            <span>
-              {{ tourInfo.options.dateStart }}
-            </span>
-          </div>
-          <div class="item">
-            <span class="header">
-              Дней:
-            </span>
-            <span>
-              {{ tourInfo.options.days }}
-            </span>
-          </div>
-          <div class="item">
-            <span class="header">
-              Транспорт:
-            </span>
-            <span
-              v-for="transport in tourInfo.transport"
-              :key="transport.id"
-            >
-              <br>
-              {{ transport.company.name }}: 
-              {{ transport.item.name }}.
-              Мест: 
-              {{ transport.item.qnt }}
-            </span>
-          </div>
-          <div class="item">
-            <span class="header">
-              Экскурсии:
-            </span>
-            <span
-              v-for="event in tourInfo.museum"
-              :key="event.obj.id"
-            >
-              <br>
-              {{ event.museum.name }}: 
-              {{ event.obj.description }}.
-            </span>
-          </div>
-          <div class="item">
-            <span class="header">
-              Размещение:
-            </span>
-            <span
-              v-for="hotel in tourInfo.hotel"
-              :key="hotel.obj.id"
-            >
-              <br>
-              {{ hotel.hotel.name }}
-            </span>
-          </div>
+          <v-card-text 
+            v-html="contentString" 
+          />
         </v-card-text>
         <v-divider />
         <v-card-actions>
@@ -135,6 +71,17 @@ export default {
     ]),
     tourInfo: function() {
       return JSON.parse(this.tour.description)
+    },
+    contentString: function() {
+      if (this.tourInfo.editorsContent.length > 0) {
+        let result = ''
+         this.tourInfo.editorsContent.forEach((item) => {
+           result += item
+         })
+        return result
+      } else {
+        return 'Программа не заполнена'
+      }
     }
   },
   created() {

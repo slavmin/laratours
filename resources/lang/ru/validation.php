@@ -220,6 +220,7 @@ return [
                 'country' => 'Страна',
                 'city' => 'Город',
                 'address' => 'Адрес',
+                'passport' => 'Паспорт'
             ],
             'general' => [
                 'name' => 'Название',

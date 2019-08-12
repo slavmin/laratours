@@ -25,7 +25,7 @@
         label="Серия и номер паспорта"
         placeholder="44 00-123 123"
         :rules="[v => !!v || 'Укажите данные']"
-        :name="'customer[' + profileId + '][address]'"
+        :name="'customer[' + profileId + '][passport]'"
         mask="## ##-### ###"
         color="green lighten-3"
         required

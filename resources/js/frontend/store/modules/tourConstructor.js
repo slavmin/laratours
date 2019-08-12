@@ -312,6 +312,7 @@ export default {
       console.log(correction)
       state.tour.transport.forEach((transport) => {
         transport.correction = correction
+        console.log(transport.correction)
       })
       state.tour.museum.forEach((museum) => {
         museum.correction = correction
