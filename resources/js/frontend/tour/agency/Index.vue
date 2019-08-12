@@ -103,9 +103,9 @@ export default {
       default: ''
     },
     items: {
-      type: Array,
+      type: Object,
       default: () => {
-        return []
+        return {}
       }
     },
     cities: {
@@ -153,23 +153,10 @@ export default {
       return filteredItems.length == 0 ? this.items.data : result
     }
   },
+  created() {
+    console.log(this.items)
+  },
   methods: {
-    // filterItems() {
-    //   // Get cities id from array of cities names
-    //   let citiesId = []
-    //   this.selectedCities.forEach((city) => {
-    //     citiesId.push(_.indexOf(this.citiesArray, city))
-    //   })
-    //   // Filter items by cities id
-    //   let filteredItems = []
-    //   this.items.data.forEach((item) => {
-    //     // console.log(item.cities_list)
-    //     if (citiesId[0] == item.cities_list[0]) {
-    //       filteredItems.push(item)
-    //     }
-    //   })
-    //   console.log(filteredItems)
-    // }
     datePicked() {
     }
   }

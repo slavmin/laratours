@@ -164,7 +164,7 @@
                 </div>
               </td>
               <td class="price">
-                {{ guide.price }}
+                {{ guide.totalPrice }}
               </td>
               <td>
                 <v-text-field
@@ -357,7 +357,8 @@ export default {
       handler(value) {
         console.log('client correction: ', value)
         this.updateCorrectionToAll(value)
-      }
+      },
+      deep: true,
     }
   },
   mounted() {

@@ -15,12 +15,8 @@
             {{ props.item.name }}
           </td>
           <td class="text-xs-right">
-            <span 
-              v-for="(city, i) in props.item.cities_list"
-              :key="i"
-              class="grey--text"
-            > 
-              {{ getCityName(city) }}
+            <span> 
+              {{ getCitiesNames(props.item.cities_list) }}
             </span>
           </td>
           <td class="text-xs-right">
@@ -53,7 +49,9 @@
               :tour="props.item"
             />
           </td>
-          <td />
+          <td>
+            15/48
+          </td>
           <td>
             <v-layout 
               row 
@@ -157,6 +155,14 @@ export default {
       'fetchAttendant',
       'fetchCities',
     ]),
+    getCitiesNames(cities) {
+      const citiesArray = Array.from(cities[0])
+      let result = ''
+      citiesArray.forEach((id) => {
+        result += this.getCityName(id) + ' '
+      })
+      return result
+    },
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {
@@ -165,7 +171,7 @@ export default {
         }
       })
       return cityName
-    },
+    }
   },
 
 };

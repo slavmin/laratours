@@ -271,8 +271,6 @@ export default {
     this.fetchAllTourOptions()
   },
   updated() {
-    console.log('getTour: ', this.getTour)
-    console.log('allState: ', this.allState)
   },
   methods: {
     ...mapActions([

@@ -47,6 +47,9 @@ Vue.component('guide-index', require('./tour/object/guide/Index.vue').default);
 Vue.component('attendant-index', require('./tour/object/attendant/Index.vue').default);
 Vue.component('register-index', require('./auth/Index.vue').default);
 Vue.component('agency-tours-index', require('./tour/agency/Index.vue').default);
+Vue.component('agency-order-tour', require('./tour/agency/OrderTour.vue').default);
+Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);
+Vue.component('operator-order-edit', require('./tour/order/Edit.vue').default);
 /**
 /**
 /**

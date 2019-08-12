@@ -70,10 +70,20 @@
             }}
           </td>
           <td>
-            <OrderTour 
+            <!-- <OrderTour 
               :tour="item"
               :token="token"
-            />
+            /> -->
+            <v-btn
+              :href="'/agency/order/create/' + item.id"
+              color="green"
+              dark
+              small
+              flat
+              outline
+            >
+              Заказать
+            </v-btn>
           </td>
         </tr>
       </tbody>
@@ -83,12 +93,10 @@
 
 <script>
 import AboutTour from './AboutTour'
-import OrderTour from './OrderTour'
 export default {
   name: 'Table',
   components: {
     AboutTour,
-    OrderTour,
   },
   props: {
     token: {
@@ -109,13 +117,14 @@ export default {
     },
   },
   created() {
+    console.log(this.cities)
   },
   methods: {
     getCityName(id) {
       let cityName = ''
       _.toArray(this.cities).forEach((city, i) => {
         if (i == id) {
-          cityName = city
+          cityName = this.cities[i]
         }
       })
       return cityName
