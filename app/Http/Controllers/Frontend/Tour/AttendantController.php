@@ -51,7 +51,7 @@ class AttendantController extends Controller
             //'description'=> '',
         ]);
 
-        $attendant = new TourAttendant($request->only('name', 'description', 'price'));
+        $attendant = new TourAttendant($request->all());
 
         $attendant->save();
 
@@ -83,7 +83,7 @@ class AttendantController extends Controller
 
         $attendant = TourAttendant::findOrFail($id);
 
-        $attendant->update($request->only('name', 'description', 'price'));
+        $attendant->update($request->all());
 
         return redirect()->route('frontend.tour.attendant.index')->withFlashSuccess(__('alerts.general.updated'));
     }

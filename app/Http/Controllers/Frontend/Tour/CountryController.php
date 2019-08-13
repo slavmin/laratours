@@ -57,7 +57,7 @@ class CountryController extends Controller
             //'description'=> '',
         ]);
 
-        $country = new TourCountry($request->only('name', 'description'));
+        $country = new TourCountry($request->all());
 
         $country->save();
 
@@ -89,7 +89,7 @@ class CountryController extends Controller
 
         $country = TourCountry::findOrFail($id);
 
-        $country->update($request->only('name', 'description'));
+        $country->update($request->all());
 
         return redirect()->route('frontend.tour.country.index')->withFlashSuccess(__('alerts.frontend.tours.countries.updated'));
     }

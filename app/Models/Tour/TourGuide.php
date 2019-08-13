@@ -13,12 +13,13 @@ class TourGuide extends Model
 {
     use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'description', 'price'];
+    protected $fillable = ['name', 'description', 'price', 'extra'];
 
     protected $appends = ['model_alias'];
 
     protected $casts = [
         'price' => 'float',
+        'extra' => 'array',
     ];
 
     public static function getModelAliasAttribute()

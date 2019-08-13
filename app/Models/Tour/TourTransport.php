@@ -19,6 +19,10 @@ class TourTransport extends Model
 
     protected $appends = ['model_alias'];
 
+    protected $casts = [
+        'extra' => 'array',
+    ];
+
     public static function getModelAliasAttribute()
     {
         return 'transport';
