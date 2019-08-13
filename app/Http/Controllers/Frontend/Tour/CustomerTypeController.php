@@ -53,7 +53,7 @@ class CustomerTypeController extends Controller
             //'description'=> '',
         ]);
 
-        $tour_customer_type = new TourCustomerType($request->only('name', 'description'));
+        $tour_customer_type = new TourCustomerType($request->all());
 
         $tour_customer_type->save();
 
@@ -85,7 +85,7 @@ class CustomerTypeController extends Controller
 
         $tour_customer_type = TourCustomerType::findOrFail($id);
 
-        $tour_customer_type->update($request->only('name', 'description'));
+        $tour_customer_type->update($request->all());
 
         return redirect()->route('frontend.tour.customer-type.index')->withFlashSuccess(__('alerts.general.updated'));
     }

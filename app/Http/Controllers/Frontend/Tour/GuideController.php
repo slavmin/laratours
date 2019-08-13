@@ -51,7 +51,7 @@ class GuideController extends Controller
             //'description'=> '',
         ]);
 
-        $guide = new TourGuide($request->only('name', 'description', 'price'));
+        $guide = new TourGuide($request->all());
 
         $guide->save();
 
@@ -83,7 +83,7 @@ class GuideController extends Controller
 
         $guide = TourGuide::findOrFail($id);
 
-        $guide->update($request->only('name', 'description', 'price'));
+        $guide->update($request->all());
 
         return redirect()->route('frontend.tour.guide.index')->withFlashSuccess(__('alerts.general.updated'));
     }
