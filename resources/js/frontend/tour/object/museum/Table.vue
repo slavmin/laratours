@@ -1,12 +1,5 @@
 <template>
   <v-layout column> 
-    <!-- <v-btn 
-      color="green"
-      dark
-      @click="show"
-    >
-      Show me
-    </v-btn> -->
     <v-layout 
       row
       wrap
@@ -38,6 +31,19 @@
             :token="token"
             :cities-select="cities"
           />
+          <v-btn 
+            small
+            fab
+            outline
+            :title="`Удалить '` + museum.name + `'`"
+            color="red"
+            dark 
+            v-on="on"
+          >
+            <i class="material-icons">
+              delete
+            </i>
+          </v-btn>
         </v-layout>
         <v-layout 
           row 
@@ -136,13 +142,46 @@
               {{ props.item.name }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.price }}
-            </td>
-            <td class="text-xs-center">
               {{ JSON.parse(props.item.extra).duration }} ч.
             </td>
-            <td class="text-xs-center">
-              {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
+            <td>
+              <v-layout
+                v-for="price in JSON.parse(props.item.extra).priceList "
+                :key="price.customerId"
+                row
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div 
+                  d-flex
+                  class="grey--text"  
+                >
+                  {{ price.customerName }}
+                </div>
+                <div d-flex>
+                  {{ price.price }}
+                </div>
+              </v-layout>
+            </td>
+            <td class="text-xs-right">
+              <EditObjectables
+                :museum="museum" 
+                :customers="customers"
+                :event="props.item"
+                :token="token"
+              />
+              <v-btn 
+                fab
+                small
+                outline
+                color="red"
+                dark 
+              >
+                <i class="material-icons">
+                  delete
+                </i>
+              </v-btn>
             </td>
           </template>
         </v-data-table>
@@ -160,12 +199,14 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Edit from './Edit'
 import AddObjectables from './AddObjectables'
+import EditObjectables from './EditObjectables'
 export default {
 
   name: 'ObjectMuseumTable',
   components: {
     Edit,
-    AddObjectables
+    AddObjectables,
+    EditObjectables,
   },
   props: {
     token: {
@@ -194,20 +235,20 @@ export default {
           value: 'description'
         },
         {
-          text: 'Цена',
-          align: 'center',
-          value: 'price'
-        },
-        {
           text: 'Время',
           align: 'center',
           value: 'duration'
         },
         {
-          text: 'Посетитель',
+          text: 'Расценки',
           align: 'center',
           value: 'name'
         },
+        {
+          text: 'Действия',
+          align: 'center',
+          value: 'actions'
+        }
       ]
     };
   },
@@ -238,9 +279,6 @@ export default {
       'fetchMuseum',
       'fetchCities'
     ]),
-    show() {
-      console.log(this.allMuseum)
-    },
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {

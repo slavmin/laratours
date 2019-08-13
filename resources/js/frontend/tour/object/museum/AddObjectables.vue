@@ -14,6 +14,7 @@
             fab
             small
             color="green" 
+            :title="`Добавить экскурсию. Музей: ` + museum.name"
             dark 
             v-on="on"
           >
@@ -71,7 +72,7 @@
                 > 
                 <input 
                   :id="attribute + '[customer_type_id]'" 
-                  v-model="customerId"
+                  value="1"
                   type="hidden" 
                   :name="attribute + '[customer_type_id]'" 
                 > 
@@ -87,6 +88,12 @@
                   type="hidden" 
                   :name="attribute + '[extra]'" 
                 > 
+                <input 
+                  :id="attribute + '[price]'"
+                  value="0"
+                  type="hidden"
+                  :name="attribute + '[price]'"
+                >
                 <v-layout
                   column
                   wrap
@@ -95,27 +102,12 @@
                     xs12 
                     sm6 
                   >
-                    <v-select
-                      v-model="customerId"
-                      :items="customerTypes"
-                      item-text="name"
-                      item-value="id"
-                      label="Тип билета"
-                      outline
-                    />
                     <v-text-field 
                       v-model="name"
-                      label="Описание" 
+                      label="Название" 
                       outline
                       color="green"
                       class="mb-3"
-                    />
-                    <v-text-field 
-                      :name="attribute + '[price]'"
-                      label="Цена" 
-                      mask="#####"
-                      outline
-                      color="green"
                     />
                     <v-text-field 
                       v-model="duration"
@@ -124,6 +116,29 @@
                       outline
                       color="green"
                     />
+                    <h5 class="subheading grey--text">
+                      Цены:
+                    </h5>
+                    <div class="grey--text">
+                      Заполните только нужные поля. Остальные оставьте пустыми.
+                    </div>
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <v-flex
+                        v-for="(customer, i) in customerTypes"
+                        :key="customer.id"
+                      >
+                        <v-text-field
+                          v-model="priceArray[i]"
+                          :label="customer.name"
+                          outline
+                          mask="#####"
+                        />
+                      </v-flex>
+                    </v-layout>
                   </v-flex>
                 </v-layout>
               </v-form>
@@ -188,6 +203,7 @@ export default {
       customerId: 0,
       duration: 0,
       name: '',
+      priceArray: [],
     };
   },
   computed: {
@@ -197,7 +213,7 @@ export default {
     extra: function() {
       return JSON.stringify({
         duration: this.duration,
-        customer: this.customerId,
+        priceList: this.getPriceList(),
       })
     },
     customerTypes: function() {
@@ -210,11 +226,23 @@ export default {
           })
         }
       })
-      console.log(result)
       return result
-    }
+    },
   },
   methods: {
+    getPriceList() {
+      let result = []
+      this.customerTypes.forEach((customer) => {
+        if (this.priceArray[customer.id - 1]) {
+          result.push({
+            customerId: customer.id,
+            customerName: customer.name,
+            price: parseInt(this.priceArray[customer.id - 1])
+          })
+        }
+      })
+      return result
+    }
   }
 };
 </script>

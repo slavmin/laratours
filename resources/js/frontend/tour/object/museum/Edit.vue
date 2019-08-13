@@ -12,7 +12,7 @@
         small
         fab
         outline
-        title="Редактировать"
+        title="Редактировать музей"
         color="green"
         dark 
         v-on="on"
