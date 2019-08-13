@@ -78,29 +78,4 @@ trait UsedByCity
 
         return $out_arr;
     }
-
-    public function saveObjectAttributes($attributes)
-    {
-        if(is_array($attributes)) {
-            foreach ($attributes as $attribute) {
-                return $this->objectables()->updateOrCreate(
-                    ['id' => $attribute['id']],
-                    ['name' => $attribute['name'], 'qnt' => $attribute['qnt'] ?? null, 'price' => $attribute['price'] ?? null,
-                        'description' => $attribute['description'] ?? null, 'extra' => $attribute['extra'] ?? null, 'customer_type_id' => $attribute['customer_type_id'] ?? null]
-                );
-            }
-        }
-    }
-
-//    public function getCityAttribute()
-//    {
-//        $cities = TourCity::all()->pluck('name', 'id')->toArray();
-//
-//        if (in_array($this->city_id, array_keys($cities))) {
-//            return ucwords($cities[$this->city_id]);
-//        }
-//
-//        return 'N/A';
-//    }
-
 }
