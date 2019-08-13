@@ -90,10 +90,10 @@
               web
             </i>
             <a 
-              :href="museum.extra.contacts.site"
+              :href="JSON.parse(museum.extra).contacts.site"
               target="_blank"
             >
-              {{ museum.extra.contacts.site }}
+              {{ JSON.parse(museum.extra).contacts.site }}
             </a>
           </div>
           <div class="mr-3">
@@ -104,9 +104,9 @@
               email
             </i>
             <a 
-              :href="'mailto:' + museum.extra.contacts.email"
+              :href="'mailto:' + JSON.parse(museum.extra).contacts.email"
             >
-              {{ museum.extra.contacts.email }}
+              {{ JSON.parse(museum.extra).contacts.email }}
             </a>
           </div>
           <div>
@@ -116,7 +116,7 @@
             >
               phone
             </i>
-            {{ museum.extra.contacts.phone }}
+            {{ JSON.parse(museum.extra).contacts.phone }}
           </div>
         </v-layout>
         <v-layout 
@@ -131,7 +131,7 @@
             >
               person
             </i>
-            {{ museum.extra.staff.name }}
+            {{ JSON.parse(museum.extra).staff.name }}
           </div>
           <div>
             <i 
@@ -140,11 +140,11 @@
             >
               phone
             </i>
-            {{ museum.extra.staff.phone }}
+            {{ JSON.parse(museum.extra).staff.phone }}
           </div>
         </v-layout>
         <div class="heading text-xs-left mb-3">
-          {{ museum.extra.about }}
+          {{ JSON.parse(museum.extra).about }}
         </div> 
         <v-data-table
           :headers="headers"
@@ -191,7 +191,8 @@
                 small
                 outline
                 color="red"
-                dark 
+                disabled
+                @click="remove(museum, props.item)"
               >
                 <i class="material-icons">
                   delete
@@ -288,6 +289,7 @@ export default {
   mounted() {
     this.fetchMuseum()
     this.fetchCities()
+    console.log(this.allMuseum)
   },
   methods: {
     ...mapActions([
@@ -305,6 +307,9 @@ export default {
     },
     getCustomerName(id) {
       return this.customerTypes.find(c => c.id == id).name
+    },
+    remove(museum, event) {
+      console.log(museum, event)
     }
   },
 
