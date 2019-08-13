@@ -31,6 +31,19 @@
             :token="token"
             :cities-select="cities"
           />
+          <v-btn 
+            small
+            fab
+            outline
+            :title="`Удалить '` + museum.name + `'`"
+            color="red"
+            dark 
+            v-on="on"
+          >
+            <i class="material-icons">
+              delete
+            </i>
+          </v-btn>
         </v-layout>
         <v-layout 
           row 
@@ -129,13 +142,27 @@
               {{ props.item.name }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.price }}
-            </td>
-            <td class="text-xs-center">
               {{ JSON.parse(props.item.extra).duration }} ч.
             </td>
-            <td class="text-xs-center">
-              {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
+            <td>
+              <v-layout
+                v-for="price in JSON.parse(props.item.extra).priceList "
+                :key="price.customerId"
+                row
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div 
+                  d-flex
+                  class="grey--text"  
+                >
+                  {{ price.customerName }}
+                </div>
+                <div d-flex>
+                  {{ price.price }}
+                </div>
+              </v-layout>
             </td>
             <td class="text-xs-right">
               <EditObjectables
@@ -208,17 +235,12 @@ export default {
           value: 'description'
         },
         {
-          text: 'Цена',
-          align: 'center',
-          value: 'price'
-        },
-        {
           text: 'Время',
           align: 'center',
           value: 'duration'
         },
         {
-          text: 'Посетитель',
+          text: 'Расценки',
           align: 'center',
           value: 'name'
         },

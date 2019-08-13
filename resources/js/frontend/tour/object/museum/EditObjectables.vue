@@ -72,7 +72,7 @@
             > 
             <input 
               :id="attribute + '[customer_type_id]'" 
-              v-model="customerId"
+              value="1"
               type="hidden" 
               :name="attribute + '[customer_type_id]'" 
             > 
@@ -88,6 +88,12 @@
               type="hidden" 
               :name="attribute + '[extra]'" 
             > 
+            <input 
+              :id="attribute + '[price]'"
+              value="0"
+              type="hidden"
+              :name="attribute + '[price]'"
+            >
             <v-layout
               column
               wrap
@@ -96,14 +102,6 @@
                 xs12 
                 sm6 
               >
-                <v-select
-                  v-model="customerId"
-                  :items="customerTypes"
-                  item-text="name"
-                  item-value="id"
-                  label="Тип билета"
-                  outline
-                />
                 <v-text-field 
                   v-model="name"
                   label="Название" 
@@ -112,20 +110,35 @@
                   class="mb-3"
                 />
                 <v-text-field 
-                  v-model="price"
-                  :name="attribute + '[price]'"
-                  label="Цена" 
-                  mask="#####"
-                  outline
-                  color="green"
-                />
-                <v-text-field 
                   v-model="duration"
                   label="Продолжительность экскурсии в часах" 
                   mask="##"
                   outline
                   color="green"
                 />
+                <h5 class="subheading grey--text">
+                  Цены:
+                </h5>
+                <div class="grey--text">
+                  Заполните только нужные поля. Остальные оставьте пустыми.
+                </div>
+                <v-layout 
+                  row 
+                  wrap
+                  justify-space-between
+                >
+                  <v-flex
+                    v-for="(customer, i) in customerTypes"
+                    :key="customer.id"
+                  >
+                    <v-text-field
+                      v-model="priceArray[i]"
+                      :label="customer.name"
+                      outline
+                      mask="#####"
+                    />
+                  </v-flex>
+                </v-layout>
               </v-flex>
             </v-layout>
           </v-form>
@@ -189,6 +202,7 @@ export default {
       customerId: 0,
       name: '',
       price: 0,
+      priceArray: [],
     };
   },
   computed: {
@@ -198,7 +212,7 @@ export default {
     extra: function() {
       return JSON.stringify({
         duration: this.duration,
-        customer: this.customerId,
+        priceList: this.getPriceList()
       })
     },
     customerTypes: function() {
@@ -215,19 +229,36 @@ export default {
     },
   },
   mounted() {
-    console.log(this.event)
     this.parseInfo()
   },
   methods: {
     parseInfo() {
-      this.duration = JSON.parse(this.event.extra).duration
-      this.customerId = JSON.parse(this.event.extra).customer
       this.name = this.event.name
       this.price = this.event.price
+      this.duration = JSON.parse(this.event.extra).duration
+      this.customerId = JSON.parse(this.event.extra).customer
+      if (JSON.parse(this.event.extra).priceList) {
+        JSON.parse(this.event.extra).priceList.forEach((price, i) => {
+          this.priceArray[i] = price.price
+        })
+      }
     },
     close() {
       this.parseInfo()
       this.dialog = false
+    },
+    getPriceList() {
+      let result = []
+      this.customerTypes.forEach((customer) => {
+        if (this.priceArray[customer.id - 1]) {
+          result.push({
+            customerId: customer.id,
+            customerName: customer.name,
+            price: parseInt(this.priceArray[customer.id - 1])
+          })
+        }
+      })
+      return result
     }
   }
 };
