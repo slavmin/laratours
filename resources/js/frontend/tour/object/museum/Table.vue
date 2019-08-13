@@ -1,12 +1,5 @@
 <template>
   <v-layout column> 
-    <!-- <v-btn 
-      color="green"
-      dark
-      @click="show"
-    >
-      Show me
-    </v-btn> -->
     <v-layout 
       row
       wrap
@@ -144,6 +137,25 @@
             <td class="text-xs-center">
               {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
             </td>
+            <td class="text-xs-right">
+              <EditObjectables
+                :museum="museum" 
+                :customers="customers"
+                :event="props.item"
+                :token="token"
+              />
+              <v-btn 
+                fab
+                small
+                outline
+                color="red"
+                dark 
+              >
+                <i class="material-icons">
+                  delete
+                </i>
+              </v-btn>
+            </td>
           </template>
         </v-data-table>
         <AddObjectables
@@ -160,12 +172,14 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Edit from './Edit'
 import AddObjectables from './AddObjectables'
+import EditObjectables from './EditObjectables'
 export default {
 
   name: 'ObjectMuseumTable',
   components: {
     Edit,
-    AddObjectables
+    AddObjectables,
+    EditObjectables,
   },
   props: {
     token: {
@@ -208,6 +222,11 @@ export default {
           align: 'center',
           value: 'name'
         },
+        {
+          text: 'Действия',
+          align: 'center',
+          value: 'actions'
+        }
       ]
     };
   },
@@ -238,9 +257,6 @@ export default {
       'fetchMuseum',
       'fetchCities'
     ]),
-    show() {
-      console.log(this.allMuseum)
-    },
     getCityName(id) {
       let cityName = ''
       this.allCities.forEach(city => {

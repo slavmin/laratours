@@ -1,5 +1,4 @@
-
-                      mask="+7 (###) ###-##-##"теле<template>
+<template>
   <v-dialog 
     v-model="dialog" 
     fullscreen 
@@ -12,7 +11,7 @@
       <v-btn 
         fab
         outline
-        title="Добавить"
+        title="Добавить музей"
         color="green"
         dark 
         v-on="on"

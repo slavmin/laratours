@@ -14,6 +14,7 @@
             fab
             small
             color="green" 
+            :title="`Добавить экскурсию. Музей: ` + museum.name"
             dark 
             v-on="on"
           >
@@ -105,7 +106,7 @@
                     />
                     <v-text-field 
                       v-model="name"
-                      label="Описание" 
+                      label="Название" 
                       outline
                       color="green"
                       class="mb-3"
@@ -210,7 +211,6 @@ export default {
           })
         }
       })
-      console.log(result)
       return result
     }
   },
