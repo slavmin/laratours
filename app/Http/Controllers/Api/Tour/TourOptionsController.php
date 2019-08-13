@@ -68,6 +68,7 @@ class TourOptionsController extends Controller
                 'city_id' => $item->city_id,
                 'name' => $item->name,
                 'description' => $item->description,
+                'extra' => $item->extra,
                 'qnt' => $item->qnt,
                 'objectables' => $item->objectables->map(function ($objectable) {
                     return [
