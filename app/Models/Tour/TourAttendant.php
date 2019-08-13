@@ -13,10 +13,11 @@ class TourAttendant extends Model
 {
     use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'description', 'price'];
+    protected $fillable = ['name', 'description', 'price', 'extra'];
 
     protected $casts = [
         'price' => 'float',
+        'extra' => 'array',
     ];
 
     protected $appends = ['model_alias'];

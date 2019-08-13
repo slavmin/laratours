@@ -53,7 +53,7 @@ class HotelCategoryController extends Controller
             //'description'=> '',
         ]);
 
-        $hotel_category = new TourHotelCategory($request->only('name', 'description'));
+        $hotel_category = new TourHotelCategory($request->all());
 
         $hotel_category->save();
 
@@ -85,7 +85,7 @@ class HotelCategoryController extends Controller
 
         $hotel_category = TourHotelCategory::findOrFail($id);
 
-        $hotel_category->update($request->only('name', 'description'));
+        $hotel_category->update($request->all());
 
         return redirect()->route('frontend.tour.hotel-category.index')->withFlashSuccess(__('alerts.general.updated'));
     }

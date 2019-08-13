@@ -15,9 +15,13 @@ class TourHotel extends Model
 {
     use SoftDeletes, UsedByTeams, UsedByCity, HasPagination, HasProfile, HasObjectAttributes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'city_id', 'category_id', 'description', 'qnt'];
+    protected $fillable = ['name', 'city_id', 'category_id', 'description', 'qnt', 'extra'];
 
     protected $appends = ['model_alias'];
+
+    protected $casts = [
+        'extra' => 'array',
+    ];
 
     public static function getModelAliasAttribute()
     {

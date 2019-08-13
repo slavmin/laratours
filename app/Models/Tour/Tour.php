@@ -17,7 +17,7 @@ class Tour extends Model
 {
     use Uuid, SoftDeletes, UsedByTeams, HasPagination, UsedByCity, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'cities_list', 'city_id', 'tour_type_id', 'description', 'duration'];
+    protected $fillable = ['name', 'cities_list', 'city_id', 'tour_type_id', 'description', 'duration', 'commission', 'extra'];
 
     protected $casts = [
         'extra' => 'array',
