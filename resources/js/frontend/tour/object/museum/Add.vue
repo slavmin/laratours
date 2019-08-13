@@ -120,7 +120,7 @@
                     <input 
                       v-model="details"
                       type="hidden" 
-                      name="description" 
+                      name="extra" 
                     > 
                     <div class="display-1 mb-3">
                       Контакты:

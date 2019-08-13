@@ -31,19 +31,34 @@
             :token="token"
             :cities-select="cities"
           />
-          <v-btn 
-            small
-            fab
-            outline
-            :title="`Удалить '` + museum.name + `'`"
-            color="red"
-            dark 
-            v-on="on"
+          <form 
+            :action="'/operator/museum/' + museum.id"
+            method="post"
           >
-            <i class="material-icons">
-              delete
-            </i>
-          </v-btn>
+            <input
+              type="hidden"
+              name="_method"
+              value="DELETE"
+            >
+            <input
+              type="hidden"
+              name="_token"
+              :value="token"
+            >
+            <v-btn 
+              small
+              fab
+              outline
+              :title="`Удалить '` + museum.name + `'`"
+              color="red"
+              dark 
+              type="submit"
+            >
+              <i class="material-icons">
+                delete
+              </i>
+            </v-btn>
+          </form>
         </v-layout>
         <v-layout 
           row 
@@ -55,7 +70,7 @@
             account_balance
           </i>
           <div 
-            v-for="(type, i) in JSON.parse(museum.description).museumType"
+            v-for="(type, i) in JSON.parse(museum.extra).museumType"
             :key="i"
             class="mr-2"
           >
@@ -75,10 +90,10 @@
               web
             </i>
             <a 
-              :href="JSON.parse(museum.description).contacts.site"
+              :href="JSON.parse(museum.extra).contacts.site"
               target="_blank"
             >
-              {{ JSON.parse(museum.description).contacts.site }}
+              {{ JSON.parse(museum.extra).contacts.site }}
             </a>
           </div>
           <div class="mr-3">
@@ -89,9 +104,9 @@
               email
             </i>
             <a 
-              :href="'mailto:' + JSON.parse(museum.description).contacts.email"
+              :href="'mailto:' + JSON.parse(museum.extra).contacts.email"
             >
-              {{ JSON.parse(museum.description).contacts.email }}
+              {{ JSON.parse(museum.extra).contacts.email }}
             </a>
           </div>
           <div>
@@ -101,7 +116,7 @@
             >
               phone
             </i>
-            {{ JSON.parse(museum.description).contacts.phone }}
+            {{ JSON.parse(museum.extra).contacts.phone }}
           </div>
         </v-layout>
         <v-layout 
@@ -116,7 +131,7 @@
             >
               person
             </i>
-            {{ JSON.parse(museum.description).staff.name }}
+            {{ JSON.parse(museum.extra).staff.name }}
           </div>
           <div>
             <i 
@@ -125,11 +140,11 @@
             >
               phone
             </i>
-            {{ JSON.parse(museum.description).staff.phone }}
+            {{ JSON.parse(museum.extra).staff.phone }}
           </div>
         </v-layout>
         <div class="heading text-xs-left mb-3">
-          {{ JSON.parse(museum.description).about }}
+          {{ JSON.parse(museum.extra).about }}
         </div> 
         <v-data-table
           :headers="headers"
@@ -176,7 +191,8 @@
                 small
                 outline
                 color="red"
-                dark 
+                disabled
+                @click="remove(museum, props.item)"
               >
                 <i class="material-icons">
                   delete
@@ -273,6 +289,7 @@ export default {
   mounted() {
     this.fetchMuseum()
     this.fetchCities()
+    console.log(this.allMuseum)
   },
   methods: {
     ...mapActions([
@@ -290,6 +307,9 @@ export default {
     },
     getCustomerName(id) {
       return this.customerTypes.find(c => c.id == id).name
+    },
+    remove(museum, event) {
+      console.log(museum, event)
     }
   },
 

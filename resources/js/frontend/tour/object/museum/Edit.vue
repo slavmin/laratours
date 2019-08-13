@@ -127,7 +127,7 @@
                     <input 
                       v-model="details"
                       type="hidden" 
-                      name="description" 
+                      name="extra" 
                     > 
                     <div class="display-1 mb-3">
                       Контакты:
@@ -270,7 +270,7 @@ export default {
       this.cities.push({'id': city, 'name': this.citiesSelect.Россия[city]})
     }
     this.city = this.museum.city_id
-    const museumInfo = JSON.parse(this.museum.description)
+    const museumInfo = JSON.parse(this.museum.extra)
     this.about = museumInfo.about
     this.type = museumInfo.museumType
     this.site = museumInfo.contacts.site
