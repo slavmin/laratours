@@ -8,7 +8,7 @@
       small 
       @click="showScheme = true"
     >
-      Выбрать место в астобусе
+      Выбрать место в автобусе
     </v-btn>
     <v-dialog
       v-if="showScheme"
@@ -34,6 +34,13 @@
               <v-flex
                 xs10
               >
+                <v-alert
+                  :value="showError"
+                  color="red"
+                  type="error"
+                >
+                  Это не пассажирское место.
+                </v-alert>
                 <v-spacer />
                 <!-- Bus scheme -->
                 <div class="bus">
@@ -171,6 +178,7 @@ export default {
   data() {
     return {
       showScheme: false,
+      showError: false,
       bus: {
         rows: 10,
         cols: 4,
@@ -215,6 +223,8 @@ export default {
     this.drawScheme()
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
+    this.setServiceSeats()
+    console.log(this.bus)
   },
   updated() {
     console.log('updated')
@@ -309,10 +319,15 @@ export default {
       })
     },
     chooseSeat(seatId) {
-      if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
-      this.choosenSeats.push(seatId)
-      } else {
-        this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
+      if (this.bus.service.find(serviceSeat => { return serviceSeat === seatId }) !== undefined) {
+        this.showError = true
+      } else{
+        this.showError = false
+        if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
+        this.choosenSeats.push(seatId)
+        } else {
+          this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
+        }
       }
       console.log(this.choosenSeats)
     },
@@ -397,6 +412,16 @@ export default {
     setTotalPassengersCount() {
       let commonSeats = document.getElementsByClassName('common-seat')
       this.bus.totalPassengersCount = commonSeats.length
+    },
+    setServiceSeats() {
+      // Unavailable seats for order
+      this.bus.service = _.concat(
+        this.bus.doors,
+        this.bus.driver,
+        this.bus.guide,
+        this.bus.pass,
+        this.bus.unavailable
+      )
     },
     close () {
       this.choosenSeats = []

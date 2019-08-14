@@ -364,15 +364,16 @@ export default {
     return {
       showScheme: false,
       bus: {
-          rows: 10,
-          cols: 4,
-          driver: ['1-1', '1-2'],
-          doors: ['1-4'],
-          guide: ['2-4'],
-          pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
-          unavailable: [],
-          totalPassengersCount: 0
-        },
+        rows: 10,
+        cols: 4,
+        driver: ['1-1', '1-2'],
+        doors: ['1-4'],
+        guide: ['2-4'],
+        pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
+        unavailable: [],
+        service: [],
+        totalPassengersCount: 0
+      },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
       driverSeatClass: 'driver-seat',
@@ -406,6 +407,7 @@ export default {
     this.drawScheme()
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
+    // this.setServiceSeats()
     this.extra.scheme = this.bus
   },
   methods: {
@@ -594,7 +596,7 @@ export default {
       //   scheme: this.bus
       // })
       this.scheme = this.bus
-      console.log(this.bus)
+      // console.log(this.bus)
       setTimeout(() => {
         this.showScheme = false
       }, 2000)
