@@ -111,8 +111,7 @@
                     />
                     <v-text-field 
                       v-model="duration"
-                      label="Продолжительность экскурсии в часах" 
-                      mask="##"
+                      label="Продолжительность экскурсии"
                       outline
                       color="green"
                     />
@@ -149,7 +148,7 @@
             <v-btn 
               color="green" 
               flat 
-              @click="dialog = false"
+              @click="close"
             >
               Закрыть
             </v-btn>
@@ -242,8 +241,16 @@ export default {
         }
       })
       return result
+    },
+    close() {
+      this.customerId = 0
+      this.duration = 0
+      this.name = ''
+      this.priceArray = []
+      this.dialog = false
     }
-  }
+  },
+  
 };
 </script>
 

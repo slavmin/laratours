@@ -30,6 +30,34 @@
             :hotel="hotel" 
             :token="token"
           />
+          <form 
+            :action="'/operator/hotel/' + hotel.id"
+            method="post"
+          >
+            <input
+              type="hidden"
+              name="_method"
+              value="DELETE"
+            >
+            <input
+              type="hidden"
+              name="_token"
+              :value="token"
+            >
+            <v-btn 
+              small
+              fab
+              outline
+              :title="`Удалить '` + hotel.name + `'`"
+              color="red"
+              dark 
+              type="submit"
+            >
+              <i class="material-icons">
+                delete
+              </i>
+            </v-btn>
+          </form>
         </v-layout>
         <v-layout 
           row 
@@ -41,7 +69,7 @@
             hotel
           </i>
           <div 
-            v-for="(type, i) in JSON.parse(hotel.description).hotelType"
+            v-for="(type, i) in JSON.parse(hotel.extra).hotelType"
             :key="i"
             class="mr-2"
           >
@@ -61,10 +89,10 @@
               web
             </i>
             <a 
-              :href="JSON.parse(hotel.description).contacts.site"
+              :href="JSON.parse(hotel.extra).contacts.site"
               target="_blank"
             >
-              {{ JSON.parse(hotel.description).contacts.site }}
+              {{ JSON.parse(hotel.extra).contacts.site }}
             </a>
           </div>
           <div class="mr-3">
@@ -75,9 +103,9 @@
               email
             </i>
             <a 
-              :href="'mailto:' + JSON.parse(hotel.description).contacts.email"
+              :href="'mailto:' + JSON.parse(hotel.extra).contacts.email"
             >
-              {{ JSON.parse(hotel.description).contacts.email }}
+              {{ JSON.parse(hotel.extra).contacts.email }}
             </a>
           </div>
           <div>
@@ -87,7 +115,7 @@
             >
               phone
             </i>
-            {{ JSON.parse(hotel.description).contacts.phone }}
+            {{ JSON.parse(hotel.extra).contacts.phone }}
           </div>
         </v-layout>
         <v-layout 
@@ -102,7 +130,7 @@
             >
               person
             </i>
-            {{ JSON.parse(hotel.description).staff.name }}
+            {{ JSON.parse(hotel.extra).staff.name }}
           </div>
           <div>
             <i 
@@ -111,11 +139,11 @@
             >
               phone
             </i>
-            {{ JSON.parse(hotel.description).staff.phone }}
+            {{ JSON.parse(hotel.extra).staff.phone }}
           </div>
         </v-layout>
         <div class="heading text-xs-left mb-3">
-          {{ JSON.parse(hotel.description).about }}
+          {{ JSON.parse(hotel.extra).about }}
         </div> 
         <v-data-table
           :headers="headers"
@@ -125,16 +153,101 @@
         >
           <template v-slot:items="props">
             <td class="text-xs-left">
-              {{ JSON.parse(props.item.extra).roomType }}
+              {{ props.item.name }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.price }}
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Стандартное размещение:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.standard }}
+                </div>
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Single размещение:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.single }}
+                </div>
+              </v-layout>
+              <div v-if="JSON.parse(props.item.extra).priceList.additionalPrices.length > 0">
+                <h6 class="grey--text body-1">
+                  Доп. места:
+                </h6>
+                <v-layout
+                  v-for="price in JSON.parse(props.item.extra).priceList.additionalPrices"
+                  :key="price.name"
+                  row
+                  wrap
+                  justify-space-between
+                  my-2
+                >
+                  <div 
+                    d-flex
+                    class="grey--text"  
+                  >
+                    {{ price[0].name }}
+                  </div>
+                  <div d-flex>
+                    {{ price[0].price }}
+                  </div>
+                  <br>
+                  <div 
+                    d-flex
+                    class="grey--text"  
+                  >
+                    {{ price[1].name }}
+                  </div>
+                  <div d-flex>
+                    {{ price[1].price }}
+                  </div>
+                </v-layout>
+              </div>
             </td>
             <td class="text-xs-center">
               {{ props.item.qnt }}
             </td>
-            <td class="text-xs-center">
-              {{ getCustomerName(JSON.parse(props.item.extra).customer) }}
+            <td>
+              <EditObjectables
+                :hotel="hotel" 
+                :customers="customers"
+                :room="props.item"
+                :token="token"
+              />
+              <v-btn 
+                fab
+                small
+                outline
+                color="red"
+                disabled
+                @click="remove(museum, props.item)"
+              >
+                <i class="material-icons">
+                  delete
+                </i>
+              </v-btn>
             </td>
           </template>
         </v-data-table>
@@ -152,12 +265,14 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Edit from './Edit'
 import AddObjectables from './AddObjectables'
+import EditObjectables from './EditObjectables'
 export default {
 
   name: 'ObjectHotelTable',
   components: {
     Edit,
-    AddObjectables
+    AddObjectables,
+    EditObjectables,
   },
   props: {
     token: {
@@ -175,9 +290,9 @@ export default {
     return {
       headers: [
         {
-          text: 'Тип номера',
+          text: 'Название номера',
           align: 'left',
-          value: 'description'
+          value: 'name'
         },
         {
           text: 'Цена',
@@ -190,10 +305,10 @@ export default {
           value: 'qnt'
         },
         {
-          text: 'Посетитель',
+          text: 'Действия',
           align: 'center',
-          value: 'name'
-        },
+          value: 'actions'
+        }
       ]
     };
   },
