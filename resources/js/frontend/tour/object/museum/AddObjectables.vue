@@ -207,7 +207,7 @@ export default {
   },
   computed: {
     attribute: function() {
-      return 'attribute[' + this.museum.id + ']'
+      return 'attribute[0]'
     },
     extra: function() {
       return JSON.stringify({

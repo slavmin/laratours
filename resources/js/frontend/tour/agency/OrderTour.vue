@@ -106,7 +106,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.items)
+    console.log(this.tour)
   },
   methods: {
     close() {
