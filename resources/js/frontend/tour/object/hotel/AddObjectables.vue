@@ -265,7 +265,7 @@ export default {
   },
   computed: {
     attribute: function() {
-      return 'attribute[' + this.hotel.id + ']'
+      return 'attribute[0]'
     },
     extra: function() {
       return JSON.stringify({
