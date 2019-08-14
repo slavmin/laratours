@@ -25,9 +25,6 @@ trait HasObjectAttributes
     {
         $items = collect(array_values($attributes));
 
-        // $tmp = $this->objectables->makeHidden(['model_alias', 'team_id', 'objectable_id', 'objectable_type', 'created_at', 'updated_at'])->toArray();
-        // $items = collect(array_values($tmp));
-
         $current = $this->objectables()->pluck('id');
         $current->each(function ($id) use ($items) {
             if (!$items->contains('id', $id)) {
@@ -36,7 +33,17 @@ trait HasObjectAttributes
         });
 
         $items->each(function ($item) {
-            $this->objectables()->updateOrCreate((array) $item);
+            return $this->objectables()->updateOrCreate(
+                ['id' => $item['id']],
+                [
+                    'name' => $item['name'],
+                    'qnt' => $item['qnt'] ?? null, 'price' => $item['price'] ?? null,
+                    'description' => $item['description'] ?? null,
+                    'price' => $item['price'] ?? null,
+                    'extra' => $item['extra'] ?? null,
+                    'customer_type_id' => $item['customer_type_id'] ?? null,
+                ]
+            );
         });
     }
 
