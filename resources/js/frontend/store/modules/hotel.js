@@ -4,7 +4,6 @@ export default {
       axios.get('/api/tour-options')
         .then(response => {
           const hotel = response.data[0].hotel_options
-          console.log(hotel)
           ctx.commit('updateHotel', hotel)
         })
         .catch(e => console.log(e))

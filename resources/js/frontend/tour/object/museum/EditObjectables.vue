@@ -41,14 +41,13 @@
       <v-card-text>
         <v-container grid-list-md>
           <v-form 
-            :id="'form' + museum.id"
+            :id="'form' + museum.id + event.id"
             ref="form"
             lazy-validation
             :action="'/operator/museum/' + museum.id"
             method="POST"
           >
             <input 
-              id="_method" 
               type="hidden" 
               name="_method" 
               value="PATCH"
@@ -111,7 +110,7 @@
                 />
                 <v-text-field 
                   v-model="duration"
-                  label="Продолжительность экскурсии в часах" 
+                  label="Продолжительность экскурсии" 
                   mask="##"
                   outline
                   color="green"
@@ -157,7 +156,7 @@
           color="green" 
           flat 
           type="submit"
-          :form="'form' + museum.id"
+          :form="'form' + museum.id + event.id"
         >
           Сохранить
         </v-btn>

@@ -9,15 +9,16 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn 
+        small
         fab
         outline
-        title="Добавить"
+        title="Редактировать"
         color="green"
         dark 
         v-on="on"
       >
         <i class="material-icons">
-          add
+          edit
         </i>
       </v-btn>
     </template>
@@ -33,7 +34,7 @@
           <v-icon>close</v-icon>
         </v-btn>
         <v-toolbar-title>
-          Добавление размещения
+          {{ 'Редактирование отеля: ' + hotel.name }}
         </v-toolbar-title>
         <v-spacer />
       </v-toolbar>
@@ -51,7 +52,7 @@
               <v-form
                 ref="form"
                 lazy-validation
-                action="/operator/hotel"
+                :action="'/operator/hotel/' + hotel.id"
                 method="POST"
                 class="form"
               >
@@ -60,6 +61,12 @@
                   wrap
                 >
                   <v-flex xs6>
+                    <input 
+                      id="_method" 
+                      type="hidden" 
+                      name="_method" 
+                      value="PATCH"
+                    >
                     <input 
                       type="hidden" 
                       name="_token" 
@@ -74,7 +81,7 @@
                       Общая информация:
                     </div>
                     <v-text-field
-                      v-model="name"
+                      :value="hotel.name"
                       label="Название отеля"
                       name="name"
                       color="green lighten-3"
@@ -101,7 +108,7 @@
                     <v-select
                       v-model="type"
                       :items="hotelTypes"
-                      label="Категория (звёздность)"
+                      label="Тип отеля"
                       multiple
                       hint="Можно выбрать несколько"
                       persistent-hint
@@ -120,7 +127,7 @@
                     <input 
                       v-model="details"
                       type="hidden" 
-                      name="description" 
+                      name="extra" 
                     > 
                     <div class="display-1 mb-3">
                       Контакты:
@@ -146,7 +153,6 @@
                     <v-text-field
                       v-model="phone"
                       label="Телефон"
-                      mask="+7 (###) ###-##-##"
                       name="phone"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
@@ -160,7 +166,7 @@
                     </div>
                     <v-text-field
                       v-model="staffName"
-                      label="Ф.И.О. сотрудника отеля"
+                      label="Ф.И.О. сотрудника музея"
                       name="staffName"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
@@ -170,7 +176,6 @@
                     <v-text-field
                       v-model="staffPhone"
                       label="Телефон"
-                      mask="+7 (###) ###-##-##"
                       name="staffPhone"
                       color="green lighten-3"
                       :rules="[v => !!v || 'Это обязательное поле']"
@@ -202,11 +207,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'  
+import { mapActions, mapGetters } from 'vuex'
 export default {
-
-  name: 'ObjectHotelAdd',
+  name: 'ObjectHotelEdit',
   props: {
+    hotel: {
+      type: Object,
+      required: true,
+      default: null,
+    },
     token: {
       type: String,
       default: ''
@@ -216,8 +225,13 @@ export default {
     return {
       dialog: false,
       name: '',
-      city: '',
-      about: '',
+      cities: [],
+      city: 0,
+      site: 'http://',
+      email: '',
+      phone: '+7-',
+      staffName: '',
+      staffPhone: '+7-',
       hotelTypes: [
         'Ведомственная',
         'Хостел',
@@ -233,19 +247,17 @@ export default {
         { count: 3, name: 'Трёхместный номер' },
         { count: 4, name: 'Четырёхместный номер' },
       ],
+      customerTypes: [
+        { id: 1, name: 'Взрослый'},
+        { id: 2, name: 'Ребёнок'},
+        { id: 3, name: 'Иностранец'}
+      ],
       type: [],
-      site: 'http://',
-      email: '',
-      phone: '+7-',
-      staffName: '',
-      staffPhone: '+7-',
-    };
+      about: '',
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'allHotel'
-    ]),
+    ...mapGetters(['allCities']),
     details: function () {
       return JSON.stringify({
         hotelType: this.type,
@@ -264,21 +276,27 @@ export default {
   },
   created() {
     this.fetchCities()
-    this.fetchHotel()
+    this.city = this.hotel.city_id
+    const objectInfo = JSON.parse(this.hotel.extra)
+    this.about = objectInfo.about
+    this.type = objectInfo.hotelType
+    this.site = objectInfo.contacts.site
+    this.email = objectInfo.contacts.email
+    this.phone = objectInfo.contacts.phone
+    this.staffName = objectInfo.staff.name
+    this.staffPhone = objectInfo.staff.phone
   },
   methods: {
-    ...mapActions([
-      'fetchCities',
-      'fetchHotel'
-    ]),
+    ...mapActions(['fetchCities']),
+    setDefaults() {
+
+    },
     log() {
       console.log(this.details)
-    },
-    setDefaults(){},
+    }
   }
-};
+}
 </script>
-
 <style lang="css" scoped>
 .form {
   width: 100%;

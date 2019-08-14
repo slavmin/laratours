@@ -100,6 +100,15 @@
                       color="green lighten-3"
                       required
                     />
+                    <v-text-field
+                      v-model="address"
+                      label="Адрес"
+                      name="address"
+                      color="green lighten-3"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
+                      required
+                    />
                     <input 
                       type="hidden" 
                       name="city_id" 
@@ -231,6 +240,7 @@ export default {
       name: '',
       cities: [],
       city: 0,
+      address: '',
       site: 'http://',
       email: '',
       phone: '+7-',
@@ -252,6 +262,7 @@ export default {
     details: function () {
       return JSON.stringify({
         museumType: this.type,
+        address: this.address,
         about: this.about,
         contacts: {
           site: this.site,
@@ -271,6 +282,7 @@ export default {
     }
     this.city = this.museum.city_id
     const museumInfo = JSON.parse(this.museum.extra)
+    this.address = museumInfo.address
     this.about = museumInfo.about
     this.type = museumInfo.museumType
     this.site = museumInfo.contacts.site
