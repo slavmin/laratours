@@ -49,11 +49,11 @@
               :key="`T-${i}`"
             >
               <td>
-                {{ transport.company.name }}:
-                {{ transport.item.name }}.
+                {{ transport.transport.name }}:
+                {{ transport.obj.name }}.
               </td>
               <td class="price">
-                {{ transport.totalPrice }}
+                {{ transport.obj.price }}
               </td>
               <td>
                 <v-text-field
@@ -297,11 +297,11 @@
             :value="JSON.stringify(tourExtra)"
             name="extra"
           > 
-          <input 
+          <!-- <input 
             type="hidden"
             :value="JSON.stringify(tourExtra)"
             name="description"
-          > 
+          >  -->
           <v-btn 
             dark
             color="green"
