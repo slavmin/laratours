@@ -210,6 +210,7 @@
                       :company-id="companyId"
                       :token="token"
                       new
+                      :current-scheme="currentScheme"
                       @update="updateScheme"
                     />
                   </div>
@@ -358,14 +359,28 @@ export default {
     let element = this.priceList.find(item => item.dateRange == this.currentDateRange)
     this.currentPrices = element.prices
     this.attribute = this.attribute + '[' + this.editItem.id + ']'
+    this.currentScheme = this.defaultScheme
   },
 
   methods: {
     ...mapMutations(['addTransportCompany', 'addTransport']),
     close() {
       this.dialog = false
+      // Set default scheme
+      this.currentScheme = {
+        rows: 10,
+        cols: 4,
+        driver: ['1-1', '1-2'],
+        doors: ['1-4'],
+        guide: ['2-4'],
+        pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
+        unavailable: [],
+        totalPassengersCount: 0
+      }
+      this.price0 = 0
+      this.price1 = 0
       this.showScheme = false
-      console.log('closed')
+      console.log('closed', this.currentScheme)
     },
     save() {
       this.dialog = false
@@ -456,10 +471,7 @@ export default {
     },
     updateScheme(scheme) {
       this.currentScheme = scheme
-      // let extra = JSON.parse(this.item.extra)
-      // extra.scheme = scheme
-      // this.item.extra = JSON.stringify(extra)
-      // console.log(this.item)
+      console.log('child updated')
     },
   }
 };

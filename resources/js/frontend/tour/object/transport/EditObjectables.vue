@@ -328,6 +328,7 @@ export default {
       result.prices = this.getPricesArray()
       result.grade = this.grade
       result.scheme = this.currentScheme
+      console.log(result.scheme)
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
@@ -348,14 +349,20 @@ export default {
     this.grade = JSON.parse(this.item.extra).grade
     this.price0 = JSON.parse(this.item.extra).prices[0].value
     this.price1 = JSON.parse(this.item.extra).prices[1].value
-    this.currentScheme, this.initialScheme = JSON.parse(this.item.extra).scheme
-    console.log(this.currentScheme)
+    this.currentScheme = Object.assign({}, JSON.parse(this.item.extra).scheme)
+    this.initialScheme = Object.assign({}, JSON.parse(this.item.extra).scheme)
+    console.log(this.item)
   },
   methods: {
     ...mapMutations(['addTransportCompany', 'addTransport']),
     close() {
       this.dialog = false
       this.showScheme = false
+      this.name = this.item.name
+      this.description = this.item.description
+      this.grade = JSON.parse(this.item.extra).grade
+      this.price0 = JSON.parse(this.item.extra).prices[0].value
+      this.price1 = JSON.parse(this.item.extra).prices[1].value
       let extra = JSON.parse(this.item.extra)
       extra.scheme = this.initialScheme
       this.item.extra = JSON.stringify(extra)
