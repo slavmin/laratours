@@ -44,14 +44,14 @@
                 :id="'form' + museum.id"
                 ref="form"
                 lazy-validation
-                :action="'/operator/museum/' + museum.id"
+                action="/operator/attribute"
                 method="POST"
               >
                 <input 
                   id="_method" 
                   type="hidden" 
                   name="_method" 
-                  value="PATCH"
+                  value="POST"
                 >
                 <input 
                   type="hidden" 
@@ -59,40 +59,44 @@
                   :value="token"
                 > 
                 <input 
-                  :id="attribute + '[id]'" 
                   type="hidden" 
-                  :name="attribute + '[id]'" 
+                  name="parent_model_id" 
+                  :value="museum.id"
+                >
+                <input 
+                  type="hidden" 
+                  name="parent_model_alias" 
+                  value="museum"
+                >  
+                <input 
+                  type="hidden" 
+                  name="id" 
                   value="0"
                 > 
-                <input 
-                  :id="attribute + '[qnt]'" 
+                <input
                   type="hidden" 
-                  :name="attribute + '[qnt]'" 
+                  name="qnt'" 
                   value="1"
                 > 
                 <input 
-                  :id="attribute + '[customer_type_id]'" 
                   value="1"
                   type="hidden" 
-                  :name="attribute + '[customer_type_id]'" 
+                  name="customer_type_id" 
                 > 
                 <input 
-                  :id="attribute + '[name]'" 
                   v-model="name"
                   type="hidden" 
-                  :name="attribute + '[name]'" 
+                  name="name" 
                 > 
                 <input 
-                  :id="attribute + '[extra]'" 
                   v-model="extra"
                   type="hidden" 
-                  :name="attribute + '[extra]'" 
+                  name="extra" 
                 > 
                 <input 
-                  :id="attribute + '[price]'"
                   value="0"
                   type="hidden"
-                  :name="attribute + '[price]'"
+                  name="price"
                 >
                 <v-layout
                   column
@@ -207,7 +211,7 @@ export default {
   },
   computed: {
     attribute: function() {
-      return 'attribute[0]'
+      return ''
     },
     extra: function() {
       return JSON.stringify({
