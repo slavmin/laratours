@@ -15,10 +15,6 @@
             :token="token"
             :transport="transport" 
           />
-          <AddEdit 
-            :token="token"
-            :cities-select="cities" 
-          />
         </h1>
         <Table :token="token" />
       </v-flex>
@@ -33,14 +29,12 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
 
 import Table from './Table'
-import AddEdit from './AddEdit'
 import AddCompany from './AddCompany'
 export default {
 
   name: 'ObjectTransportIndex',
   components: {
     Table,
-    AddEdit,
     AddCompany,
   },
   props: {

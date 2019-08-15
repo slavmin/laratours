@@ -126,6 +126,10 @@
           :company-id="transport.id"
           :token="token"
         />
+        <AddObjectables 
+          :token="token"
+          :company-id="transport.id"
+        />
       </v-flex>
     </v-layout>
   </v-layout>
@@ -134,6 +138,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AttributesTable from './AttributesTable'
+import AddObjectables from './AddObjectables'
 import Edit from './Edit'
 export default {
 
@@ -141,6 +146,7 @@ export default {
   components: {
     Edit,
     AttributesTable,
+    AddObjectables,
   },
   props: {
     token: {

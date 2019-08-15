@@ -1,334 +1,311 @@
 <template>
-  <div>
-    <v-btn 
-      color="green" 
-      title="Схема салона"
-      dark
-      flat
-      fab
-      outline
-      small 
-      @click="showScheme = true"
-    >
-      <i class="material-icons">
-        view_module
-      </i>
-    </v-btn>
-    <v-dialog
-      v-if="showScheme"
-      v-model="showScheme"
-      lazy
-      hide-overlay
-    >
-      <v-card>
-        <v-card-title>
-          <span class="headline">
-            Схема салона: {{ object.name }}
-          </span>
-        </v-card-title>
-        <v-card-text>
-          <v-container 
-            fluid
-            grid-list-md
+  <v-card>
+    <v-card-title>
+      <span class="headline">
+        Схема салона: {{ object.name }}
+      </span>
+    </v-card-title>
+    <v-card-text>
+      <v-container 
+        fluid
+        grid-list-md
+      >
+        <v-layout 
+          row
+          justify-space-between
+        >
+          <v-flex
+            xs2
           >
-            <v-layout 
-              row
-              justify-space-between
-            >
-              <v-flex
-                xs2
+            <v-spacer />
+            <!-- Bus scheme -->
+            <div class="bus">
+              <div
+                v-for="row in bus.rows"
+                :key="row" 
+                class="d-flex flex-row mb-1"
               >
-                <v-spacer />
-                <!-- Bus scheme -->
-                <div class="bus">
-                  <div
-                    v-for="row in bus.rows"
-                    :key="row" 
-                    class="d-flex flex-row mb-1"
-                  >
-                    <div 
-                      v-for="col in bus.cols"
-                      :key="col"
-                    >
-                      <div 
-                        :id="[row + '-' + col]"
-                        class="seat"
-                        @click="chooseSeat(row + '-' + col)"
-                      >
-                        |__|
-                      </div>                
-                    </div>    
-                  </div>
-                </div>
-                <!-- /Bus scheme -->
-                <!-- Passengers seats count -->
                 <div 
-                  class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                  style="height: 38px;"
+                  v-for="col in bus.cols"
+                  :key="col"
                 >
-                  <p class="mb-0">
-                    Пассажирских мест: {{ bus.totalPassengersCount }}
-                  </p>
-                </div>
-                <!-- /Passengers seats count -->
-              </v-flex>
-              <v-spacer />
-              <v-flex
-                xs3
-              >
-                <!-- Controls -->
-                <div class="controls d-flex flex-column">
-                  <!-- Add/remove rows -->
                   <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
+                    :id="[row + '-' + col]"
+                    class="seat"
+                    @click="chooseSeat(row + '-' + col)"
                   >
-                    <!-- Add button -->
-                    <button 
-                      class="btn btn-primary rounded mr-2"
-                      :disabled="bus.rows == 50"
-                      @click="addRow"
-                    >
-                      <i class="fas fa-plus" />
-                    </button>
-                    <!-- /Add button -->
-                    <p class="mb-0">
-                      Строк: {{ bus.rows }}
-                    </p> <!-- Show rows count -->
-                    <!-- Remove button -->
-                    <button 
-                      class="btn btn-primary rounded ml-2"
-                      :disabled="bus.rows == 1"
-                      @click="removeRow"
-                    >
-                      <i class="fas fa-minus" />
-                    </button>
-                    <!-- /Remove button -->
-                  </div>
-                  <!-- /Add/remove rows -->
-                  <!-- Add/remove cols -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <!-- Add button -->
-                    <button 
-                      class="btn btn-primary rounded mr-2"
-                      :disabled="bus.cols == 40"
-                      @click="addCol"
-                    >
-                      <i class="fas fa-plus" />
-                    </button>
-                    <!-- /Add button -->
-                    <p class="mb-0">
-                      Мест: {{ bus.cols }}
-                    </p> <!-- Show rows count -->
-                    <!-- Remove button -->
-                    <button 
-                      class="btn btn-primary rounded ml-2"
-                      :disabled="bus.cols == 1"
-                      @click="removeCol"
-                    >
-                      <i class="fas fa-minus" />
-                    </button>
-                    <!-- /Remove button -->
-                  </div>
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 12px;"
-                  >
-                    <p 
-                      class="mb-0 text-align-right" 
-                      style="font-size: 10px;"
-                    >
-                      Мест в ряду, включая проходы.
-                    </p>
-                  </div>
-                  <!-- /Add/remove cols -->
-                  <!-- Selected seats -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <p class="mb-0">  
-                      Выделено мест: {{ choosenSeats.length }}
-                    </p>
-                  </div>
-                  <!-- /Selected seats -->
-                  <!-- Set driver seats button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary pass control"
-                      @click="setPass"
-                    >
-                      Проход
-                    </button>
-                  </div>
-                  <!-- /Set driver seats button -->
-                  <!-- Set doors button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary door control"
-                      @click="setDoors"
-                    >
-                      Двери
-                    </button>
-                  </div>
-                  <!-- /Set doors button -->
-                  <!-- Set guide seats button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary guide-seat control"
-                      @click="setGuideSeats"
-                    >
-                      Место гида
-                    </button>
-                  </div>
-                  <!-- /Set guide seats button -->
-                  <!-- Set common seats button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary common-seat control"
-                      @click="setCommonSeats"
-                    >
-                      Место пассажира
-                    </button>
-                  </div>
-                  <!-- /Set common seats button -->
-                  <!-- Set driver seats button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary driver-seat control"
-                      @click="setDriverSeats"
-                    >
-                      Место водителя
-                    </button>
-                  </div>
-                  <!-- /Set driver seats button -->
-                  <!-- Set unavailable seats button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center mb-1" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary unavailable-seat control"
-                      @click="setUnavailableSeats"
-                    >
-                      Недоступно
-                    </button>
-                  </div>
-                  <!-- /Set unavailable seats button -->
-                  <!-- Make all seats common button -->
-                  <div 
-                    class="container-fluid d-flex justify-content-between align-items-center" 
-                    style="height: 38px;"
-                  >
-                    <button
-                      class="btn btn-primary reset-btn control"
-                      @click="reset"
-                    >
-                      Сбросить
-                    </button>
-                  </div>
-                  <!-- /Make all seats common button -->
-                </div>
-                <!-- /Controls -->
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
+                    |__|
+                  </div>                
+                </div>    
+              </div>
+            </div>
+            <!-- /Bus scheme -->
+            <!-- Passengers seats count -->
+            <div 
+              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+              style="height: 38px;"
+            >
+              <p class="mb-0">
+                Пассажирских мест: {{ bus.totalPassengersCount }}
+              </p>
+            </div>
+            <!-- /Passengers seats count -->
+          </v-flex>
           <v-spacer />
-          <v-btn 
-            color="green darken-1" 
-            flat 
-            @click="close"
+          <v-flex
+            xs3
           >
-            Закрыть
-          </v-btn>
-          <form 
-            method="POST"
-            :action="'/operator/transport/' + companyId" 
-          >
-            <input 
-              id="_method" 
-              type="hidden" 
-              name="_method" 
-              value="PATCH"
-            >
-            <input 
-              type="hidden" 
-              name="_token" 
-              :value="token"
-            > 
-            <input 
-              :id="attribute + '[id]'" 
-              type="hidden" 
-              :name="attribute + '[id]'" 
-              :value="object.id"
-            > 
-            <input 
-              :id="attribute + '[name]'" 
-              type="hidden" 
-              :name="attribute + '[name]'" 
-              :value="object.name"
-            >
-            <input 
-              :id="attribute + '[description]'" 
-              type="hidden" 
-              :name="attribute + '[description]'" 
-              :value="object.description"
-            >
-            <input 
-              :id="attribute + '[qnt]'" 
-              type="hidden" 
-              :name="attribute + '[qnt]'" 
-              :value="object.qnt"
-            >
-            <input 
-              type="hidden" 
-              :value="JSON.stringify(extra)"
-              :name="attribute + '[extra]'"
-            > 
-            <input 
-              :id="attribute + '[customer_type_id]'" 
-              type="hidden" 
-              :name="attribute + '[customer_type_id]'" 
-              value="1"
-            > 
-            <input
-              type="hidden" 
-              value="1"
-              :name="attribute + '[price]'"
-            >
-            <v-btn 
-              color="green darken-1" 
-              flat 
-              type="submit"
-              @click="save"
-            >
-              Сохранить
-            </v-btn>
-          </form>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+            <!-- Controls -->
+            <div class="controls d-flex flex-column">
+              <!-- Add/remove rows -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <!-- Add button -->
+                <button 
+                  class="btn btn-primary rounded mr-2"
+                  :disabled="bus.rows == 50"
+                  @click="addRow"
+                >
+                  <i class="fas fa-plus" />
+                </button>
+                <!-- /Add button -->
+                <p class="mb-0">
+                  Строк: {{ bus.rows }}
+                </p> <!-- Show rows count -->
+                <!-- Remove button -->
+                <button 
+                  class="btn btn-primary rounded ml-2"
+                  :disabled="bus.rows == 1"
+                  @click="removeRow"
+                >
+                  <i class="fas fa-minus" />
+                </button>
+                <!-- /Remove button -->
+              </div>
+              <!-- /Add/remove rows -->
+              <!-- Add/remove cols -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <!-- Add button -->
+                <button 
+                  class="btn btn-primary rounded mr-2"
+                  :disabled="bus.cols == 40"
+                  @click="addCol"
+                >
+                  <i class="fas fa-plus" />
+                </button>
+                <!-- /Add button -->
+                <p class="mb-0">
+                  Мест: {{ bus.cols }}
+                </p> <!-- Show rows count -->
+                <!-- Remove button -->
+                <button 
+                  class="btn btn-primary rounded ml-2"
+                  :disabled="bus.cols == 1"
+                  @click="removeCol"
+                >
+                  <i class="fas fa-minus" />
+                </button>
+                <!-- /Remove button -->
+              </div>
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 12px;"
+              >
+                <p 
+                  class="mb-0 text-align-right" 
+                  style="font-size: 10px;"
+                >
+                  Мест в ряду, включая проходы.
+                </p>
+              </div>
+              <!-- /Add/remove cols -->
+              <!-- Selected seats -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <p class="mb-0">  
+                  Выделено мест: {{ choosenSeats.length }}
+                </p>
+              </div>
+              <!-- /Selected seats -->
+              <!-- Set driver seats button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary pass control"
+                  @click="setPass"
+                >
+                  Проход
+                </button>
+              </div>
+              <!-- /Set driver seats button -->
+              <!-- Set doors button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary door control"
+                  @click="setDoors"
+                >
+                  Двери
+                </button>
+              </div>
+              <!-- /Set doors button -->
+              <!-- Set guide seats button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary guide-seat control"
+                  @click="setGuideSeats"
+                >
+                  Место гида
+                </button>
+              </div>
+              <!-- /Set guide seats button -->
+              <!-- Set common seats button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary common-seat control"
+                  @click="setCommonSeats"
+                >
+                  Место пассажира
+                </button>
+              </div>
+              <!-- /Set common seats button -->
+              <!-- Set driver seats button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary driver-seat control"
+                  @click="setDriverSeats"
+                >
+                  Место водителя
+                </button>
+              </div>
+              <!-- /Set driver seats button -->
+              <!-- Set unavailable seats button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary unavailable-seat control"
+                  @click="setUnavailableSeats"
+                >
+                  Недоступно
+                </button>
+              </div>
+              <!-- /Set unavailable seats button -->
+              <!-- Make all seats common button -->
+              <div 
+                class="container-fluid d-flex justify-content-between align-items-center" 
+                style="height: 38px;"
+              >
+                <button
+                  class="btn btn-primary reset-btn control"
+                  @click="reset"
+                >
+                  Сбросить
+                </button>
+              </div>
+              <!-- /Make all seats common button -->
+            </div>
+            <!-- /Controls -->
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn 
+        color="green darken-1" 
+        flat 
+        @click="close"
+      >
+        Закрыть
+      </v-btn>
+      <form 
+        method="POST"
+        :action="'/operator/transport/' + companyId" 
+      >
+        <input 
+          id="_method" 
+          type="hidden" 
+          name="_method" 
+          value="PATCH"
+        >
+        <input 
+          type="hidden" 
+          name="_token" 
+          :value="token"
+        > 
+        <input 
+          :id="attribute + '[id]'" 
+          type="hidden" 
+          :name="attribute + '[id]'" 
+          :value="object.id"
+        > 
+        <input 
+          :id="attribute + '[name]'" 
+          type="hidden" 
+          :name="attribute + '[name]'" 
+          :value="object.name"
+        >
+        <input 
+          :id="attribute + '[description]'" 
+          type="hidden" 
+          :name="attribute + '[description]'" 
+          :value="object.description"
+        >
+        <input 
+          :id="attribute + '[qnt]'" 
+          type="hidden" 
+          :name="attribute + '[qnt]'" 
+          :value="object.qnt"
+        >
+        <input 
+          type="hidden" 
+          :value="JSON.stringify(extra)"
+          :name="attribute + '[extra]'"
+        > 
+        <input 
+          :id="attribute + '[customer_type_id]'" 
+          type="hidden" 
+          :name="attribute + '[customer_type_id]'" 
+          value="1"
+        > 
+        <input
+          type="hidden" 
+          value="1"
+          :name="attribute + '[price]'"
+        >
+        <v-btn 
+          color="green darken-1" 
+          flat 
+          type="submit"
+          @click="save"
+        >
+          Сохранить
+        </v-btn>
+      </form>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
