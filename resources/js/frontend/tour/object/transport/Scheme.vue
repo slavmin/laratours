@@ -387,7 +387,8 @@ export default {
       this.extra = JSON.parse(this.object.extra)
       this.initialScheme = Object.assign({}, this.extra.scheme)
       this.bus = Object.assign({}, this.extra.scheme)
-    } else {
+    } 
+    if (this.new) {
       this.initialScheme = this.bus
     }
     this.attribute = 'attribute[' + this.object.id + ']'
