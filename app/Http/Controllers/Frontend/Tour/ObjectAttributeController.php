@@ -42,32 +42,32 @@ class ObjectAttributeController extends Controller
     {
         if($request->get('attribute')){
             $request->validate([
-                'parent_id' => 'required',
-                'parent_name' => 'required',
+                'parent_model_id' => 'required',
+                'parent_model_alias' => 'required',
                 'name' => 'required|min:3',
                 'price'=> 'required',
                 'customer_type_id' => 'nullable|exists:tour_customer_types,id',
             ]);
         }
 
-        $parent_id = $request->get('parent_id');
-        $parent_name = $request->get('parent_name');
+        $parent_model_id = $request->get('parent_model_id');
+        $parent_model_alias = $request->get('parent_model_alias');
 
-        switch ($parent_name) {
+        switch ($parent_model_alias) {
             case 'hotel':
-            $parent = TourHotel::findOrFail($parent_id);
+            $parent = TourHotel::findOrFail($parent_model_id);
                 break;
 
             case 'meal':
-            $parent = TourMeal::findOrFail($parent_id);
+            $parent = TourMeal::findOrFail($parent_model_id);
                 break;
 
             case 'museum':
-            $parent = TourMuseum::findOrFail($parent_id);
+            $parent = TourMuseum::findOrFail($parent_model_id);
                 break;
 
             case 'transport':
-            $parent = TourTransport::findOrFail($parent_id);
+            $parent = TourTransport::findOrFail($parent_model_id);
                 break;
             
             default:
