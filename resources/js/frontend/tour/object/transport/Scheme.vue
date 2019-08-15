@@ -364,6 +364,17 @@ export default {
         service: [],
         totalPassengersCount: 0
       },
+      defaultScheme: {
+        rows: 10,
+        cols: 4,
+        driver: ['1-1', '1-2'],
+        doors: ['1-4'],
+        guide: ['2-4'],
+        pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
+        unavailable: [],
+        service: [],
+        totalPassengersCount: 0
+      },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
       driverSeatClass: 'driver-seat',
@@ -389,7 +400,7 @@ export default {
       this.bus = Object.assign({}, this.extra.scheme)
     } 
     if (this.new) {
-      this.initialScheme = this.bus
+      this.bus = this.currentScheme
     }
     this.attribute = 'attribute[' + this.object.id + ']'
     this.drawScheme()
