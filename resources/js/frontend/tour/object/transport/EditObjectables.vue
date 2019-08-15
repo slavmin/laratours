@@ -59,6 +59,7 @@
                     Транспорт:
                   </h2>
                   <form 
+                    :id="'form' + companyId + item.id"
                     method="POST"
                     :action="'/operator/attribute/' + item.id" 
                   >
@@ -122,6 +123,17 @@
                       label="Описание"
                       color="green"
                     />
+                    <v-select
+                      v-model="grade"
+                      :items="grades"
+                      color="green"
+                      :menu-props="{ maxHeight: '400' }"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      label="Класс обслуживания"
+                      multiple
+                      hint="Можно выбрать несколько"
+                      persistent-hint
+                    />
                     <v-layout 
                       row 
                       wrap
@@ -136,33 +148,7 @@
                           required
                         />
                       </v-flex>  -->
-                      <!-- <v-flex xs6>
-                        Схема салона:
-                        <Scheme
-                          :object="editItem"
-                          :company-id="companyId"
-                          :token="token"
-                        />
-                      </v-flex>  -->
                     </v-layout>
-                    <v-select
-                      v-model="grade"
-                      :items="grades"
-                      color="green"
-                      :menu-props="{ maxHeight: '400' }"
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      label="Класс обслуживания"
-                      multiple
-                      hint="Можно выбрать несколько"
-                      persistent-hint
-                    />
-                    <v-btn 
-                      type="submit"
-                      dark
-                      color="green"
-                    >
-                      Сохранить
-                    </v-btn>
                   </form>
                 </v-flex>
                 <v-flex 
@@ -184,6 +170,51 @@
                   />
                 </v-flex>
               </v-layout>
+              <v-layout 
+                row 
+                wrap
+                mt-5
+              >
+                <v-flex>
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-start  
+                  >
+                    <v-btn 
+                      small
+                      outline
+                      color="green"
+                      dark
+                      @click="showScheme = !showScheme"
+                    >
+                      {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
+                    </v-btn>
+                  </v-layout>
+                  <div v-if="showScheme">
+                    <Scheme
+                      :object="item"
+                      :company-id="companyId"
+                      :token="token"
+                      @update="updateScheme"
+                    />
+                  </div>
+                </v-flex>   
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                justify-end
+              >
+                <v-btn 
+                  type="submit"
+                  dark
+                  color="green"
+                  :form="'form' + companyId + item.id"
+                >
+                  Сохранить
+                </v-btn>
+              </v-layout>
             </v-container>
             <!-- /Edit transport form -->
           </v-flex>
@@ -194,13 +225,13 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-// import Scheme from './Scheme'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import Scheme from './Scheme'
 export default {
 
   name: 'EditObjectables',
   components: {
-    // Scheme,
+    Scheme,
   },
   props: {
     citiesSelect: {
@@ -285,6 +316,10 @@ export default {
         unavailable: [],
         totalPassengersCount: 0
       },
+      currentScheme: {
+
+      },
+      showScheme: false,
     }
   },
   computed: {
@@ -293,7 +328,7 @@ export default {
       let result = {}
       result.prices = this.getPricesArray()
       result.grade = this.grade
-      result.scheme = this.defaultScheme
+      result.scheme = this.currentScheme
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
@@ -314,11 +349,14 @@ export default {
     this.grade = JSON.parse(this.item.extra).grade
     this.price0 = JSON.parse(this.item.extra).prices[0].value
     this.price1 = JSON.parse(this.item.extra).prices[1].value
+    this.currentScheme = JSON.parse(this.item.extra).scheme
+    console.log(this.currentScheme)
   },
   methods: {
     ...mapMutations(['addTransportCompany', 'addTransport']),
     close() {
       this.dialog = false
+      this.showScheme = false
       console.log('closed')
     },
     save() {
@@ -346,6 +384,13 @@ export default {
         { name: '1 км', value:parseInt(this.price1) }, 
       ]
     },
+    updateScheme(scheme) {
+      this.currentScheme = scheme
+      let extra = JSON.parse(this.item.extra)
+      extra.scheme = scheme
+      this.item.extra = JSON.stringify(extra)
+      console.log(this.item)
+    }
   }
 };
 </script>

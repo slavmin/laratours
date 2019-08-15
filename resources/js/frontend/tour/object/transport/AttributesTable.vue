@@ -11,6 +11,10 @@
       </td>
       <td class="text-xs-center">
         {{ JSON.parse(props.item.extra).scheme.totalPassengersCount }}
+        <span v-if="JSON.parse(props.item.extra).scheme.guide.length > 0">
+          +
+          {{ JSON.parse(props.item.extra).scheme.guide.length }}
+        </span>
       </td>
       <td class="text-xs-center">
         <v-layout

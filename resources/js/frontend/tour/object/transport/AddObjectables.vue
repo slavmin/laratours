@@ -65,6 +65,7 @@
                     Транспорт:
                   </h2>
                   <form 
+                    :id="'form' + companyId"
                     method="POST"
                     action="/operator/attribute" 
                   >
@@ -162,13 +163,6 @@
                       hint="Можно выбрать несколько"
                       persistent-hint
                     />
-                    <v-btn 
-                      type="submit"
-                      dark
-                      color="green"
-                    >
-                      {{ edit ? 'Сохранить' : 'Добавить' }}
-                    </v-btn>
                   </form>
                 </v-flex>
                 <v-flex 
@@ -190,6 +184,51 @@
                   />
                 </v-flex>
               </v-layout>
+              <v-layout 
+                row 
+                wrap
+                mt-5
+              >
+                <v-flex>
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-start  
+                  >
+                    <v-btn 
+                      small
+                      outline
+                      color="green"
+                      dark
+                      @click="showScheme = !showScheme"
+                    >
+                      {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
+                    </v-btn>
+                  </v-layout>
+                  <div v-if="showScheme">
+                    <Scheme
+                      :company-id="companyId"
+                      :token="token"
+                      new
+                      @update="updateScheme"
+                    />
+                  </div>
+                </v-flex>   
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                justify-end
+              >
+                <v-btn 
+                  type="submit"
+                  dark
+                  color="green"
+                  :form="'form' + companyId"
+                >
+                  Сохранить
+                </v-btn>
+              </v-layout>
             </v-container>
             <!-- /Add transport form -->
           </v-flex>
@@ -201,12 +240,12 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-// import Scheme from './Scheme'
+import Scheme from './Scheme'
 export default {
 
   name: 'AddObjectables',
   components: {
-    // Scheme,
+    Scheme,
   },
   props: {
     citiesSelect: {
@@ -295,6 +334,8 @@ export default {
         unavailable: [],
         totalPassengersCount: 0
       },
+      showScheme: false,
+      currentScheme: {},
     }
   },
   computed: {
@@ -303,7 +344,7 @@ export default {
       let result = {}
       result.prices = this.getPricesArray()
       result.grade = this.grade
-      result.scheme = this.defaultScheme
+      result.scheme = this.currentScheme
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
@@ -323,6 +364,7 @@ export default {
     ...mapMutations(['addTransportCompany', 'addTransport']),
     close() {
       this.dialog = false
+      this.showScheme = false
       console.log('closed')
     },
     save() {
@@ -411,6 +453,13 @@ export default {
       this.price0 = extra.prices[0].value
       this.price1 = extra.prices[1].value
       this.grade = extra.grade
+    },
+    updateScheme(scheme) {
+      this.currentScheme = scheme
+      // let extra = JSON.parse(this.item.extra)
+      // extra.scheme = scheme
+      // this.item.extra = JSON.stringify(extra)
+      // console.log(this.item)
     },
   }
 };
