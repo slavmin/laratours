@@ -13,6 +13,9 @@ export default {
     async updateActualTransport({ commit }) {
       commit('setActualTransport')
     },
+    async updateNewTransportOptions({ commit }, updData) {
+      commit('setNewTransportOptions', updData)
+    },
     async updateTourTransport({ commit }, transport) {
       commit('setTourTransport', transport)
     },
@@ -98,10 +101,40 @@ export default {
           }
         )
       }
+      result.forEach((transport) => {
+        transport.objectables.forEach((obj) => {
+          obj.selected = false
+          obj.duration = {
+            hours: 0,
+            kilometers: 0,
+            show: true,
+          }
+          obj.manualPrice = 0
+        })
+      })
+      console.log('actual transport: ', result)
       state.actualTransport = result
     },
-    setTourTransport(state, transport) {
-      state.tour.transport.push(transport)
+    setNewTransportOptions: (state, updData) => {
+      let updTransport = updData.company
+      let updItem = updData.item
+      let itemIndex = updTransport.objectables.findIndex(obj => obj.id == updItem.id)
+      if (itemIndex != -1) {
+        updTransport.objectables.splice(itemIndex, 1, updItem)
+      }
+      const index = state.actualTransport.findIndex(transport => transport.id == updTransport.id)
+      if (index != -1) {
+        state.actualTransport.splice(index, 1, updTransport)
+      }
+    }, 
+    setTourTransport(state) {
+      state.actualTransport.forEach((transport) => {
+        transport.objectables.forEach((obj) => {
+          if (obj.selected) {
+            state.tour.transport.push({ transport, obj })
+          }
+        })
+      })
     },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage

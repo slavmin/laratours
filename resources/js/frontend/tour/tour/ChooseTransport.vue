@@ -5,7 +5,7 @@
       wrap
     >
       <!-- Choose transport -->
-      <v-flex v-if="chooseTransport">
+      <v-flex>
         <h2 class="text-xs-center grey--text">
           Выберите транспорт:
         </h2>
@@ -97,10 +97,11 @@
               xs3
               lg2
               ma-2
-              color=""
             >
               <v-card 
-                color="green lighten-5"
+                :id="'transport-' + transport.id + '-card-' + item.id"
+                class="transport-card"
+                :class="{'is-select' : item.selected}"
                 pa-3
               >
                 <v-card-title primary-title>
@@ -116,22 +117,93 @@
                       </i>
                     </div>
                     <v-divider />
-                    <div
-                      v-for="price in JSON.parse(item.extra).prices"
-                      :key="price.name"
+                    <div>
+                      <v-layout
+                        row
+                        justify-content-between
+                        align-center
+                        wrap
+                        mb-3
+                      >
+                        <v-flex xs6>
+                          <span class="grey--text text--darken-1 body-2">
+                            {{ JSON.parse(item.extra).prices[0].name }}: 
+                          </span>
+                          <p 
+                            style="display: inline-block;"
+                          >
+                            {{ JSON.parse(item.extra).prices[0].value }}
+                          </p>
+                        </v-flex>
+                        <v-flex xs6>
+                          <v-text-field
+                            v-model="item.duration.hours"
+                            label="Часов"
+                            :disabled="item.selected"
+                            @input="calculateTotal(item, 'hours')"
+                          />
+                        </v-flex>
+                      </v-layout>
+                      <v-layout
+                        row
+                        justify-content-between
+                        align-center
+                        wrap
+                        mb-3
+                      >
+                        <v-flex xs6>
+                          <span class="grey--text text--darken-1 body-2">
+                            {{ JSON.parse(item.extra).prices[1].name }}: 
+                          </span>
+                          <p 
+                            style="display: inline-block;"
+                          >
+                            {{ JSON.parse(item.extra).prices[1].value }}
+                          </p>
+                        </v-flex>
+                        <v-flex xs6>
+                          <v-text-field
+                            v-model="item.duration.kilometers"
+                            :disabled="item.selected"
+                            label="Км"
+                            @input="calculateTotal(item, 'kilometers')"
+                          />
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                    <div>
+                      <v-layout
+                        row
+                        justify-content-between
+                        align-center
+                        wrap
+                        mb-3
+                      >
+                        <v-flex xs6>
+                          <span class="grey--text text--darken-1 body-2">
+                            Вручную: 
+                          </span>
+                        </v-flex>
+                        <v-flex xs6>
+                          <v-text-field
+                            v-model="item.manualPrice"
+                            :disabled="item.selected"
+                            @input="calculateTotal(item, 'manual')"
+                          />
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                    <v-layout
                       row
                       justify-content-between
+                      align-center
                       wrap
+                      mb-3
                     >
-                      <span class="grey--text text--darken-1">
-                        {{ price.name }}: 
-                      </span>
-                      <p 
-                        style="display: inline-block;"
-                      >
-                        {{ price.value }}
-                      </p>
-                    </div>
+                      <v-flex class="body-2">
+                        Итого: {{ item.price }}
+                      </v-flex>
+                    </v-layout>
                     <br>
                     <div
                       v-for="(grade, i) in JSON.parse(item.extra).grade"
@@ -156,17 +228,33 @@
                     flat
                     @click="choose(transport, item)"
                   >
-                    Выбрать
+                    {{ item.selected ? 'Убрать' : 'Выбрать' }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
           </v-layout>
         </v-layout>
+        <v-layout 
+          row 
+          wrap
+          justify-end
+        >
+          <v-flex xs2> 
+            <v-btn 
+              dark
+              color="green"
+              @click="done"
+            >
+              OK
+            </v-btn>
+          </v-flex>
+        </v-layout>
       </v-flex>
       <!-- /Choose transport -->
       <!-- Set transport options -->
-      <v-flex v-if="transportSelected">
+      <!-- Delete this block -->
+      <!-- <v-flex v-if="transportSelected">
         <v-layout 
           row 
           wrap
@@ -306,15 +394,6 @@
               wrap
               justify-center
             >
-              <!-- <v-flex xs12>
-                <v-btn 
-                  flat 
-                  small 
-                  color="green"
-                >
-                  Забронировать место второму водителю
-                </v-btn>
-              </v-flex> -->
             </v-layout>
             <v-layout 
               row 
@@ -332,10 +411,10 @@
             </v-layout>
           </v-flex>
         </v-layout>
-      </v-flex>
+      </v-flex> -->
       <!-- /Set transport options -->
       <!-- Add more transport? -->
-      <v-flex v-if="anotherOne">
+      <!-- <v-flex v-if="anotherOne">
         <h2 class="text-xs-center display-2">
           Добавить ещё транспорт?
         </h2>
@@ -359,7 +438,8 @@
             Нет
           </v-btn>
         </v-layout>
-      </v-flex>
+      </v-flex> -->
+      <!-- /Delete this block -->
       <!-- /Add more transport? -->
     </v-layout>
   </div>
@@ -380,9 +460,6 @@ export default {
   },
   data() {
     return {
-      chooseTransport: true,
-      transportSelected: false,
-      anotherOne: false,
       choosenTransport: {},
       duration: NaN,
       distance: NaN,
@@ -405,21 +482,6 @@ export default {
       'getActualTransport',
       'getTour',
     ]),
-    transportPrice: function() {
-      if (this.active === 0) {
-        return JSON.parse(this.choosenTransport.item.extra).prices[0].value * this.duration
-      }
-      if (this.active === 1) {
-        return JSON.parse(this.choosenTransport.item.extra).prices[1].value * this.distance
-      }
-      return this.customPrice
-    },
-  },
-  updated() {
-    this.customPrice
-  },
-  mounted() {
-    // this.updateActualTransport()
   },
   methods: {
     ...mapActions([
@@ -428,6 +490,7 @@ export default {
       'updateActualTransport',
       'updateTourTransport',
       'updateConstructorCurrentStage',
+      'updateNewTransportOptions',
     ]),
     getCityName(id) {
       let cityName = ''
@@ -439,51 +502,57 @@ export default {
       return cityName
     },
     choose(transport, item) {
-      this.choosenTransport.company = transport
-      this.choosenTransport.item = item
-      this.chooseTransport = false
-      this.transportSelected = true
-    },
-    remove() {
-      this.transport = {}
-      this.transportDuration = NaN
-      this.description = ''
-      this.transportPrice = NaN
-      this.transportSelected = false
-      this.chooseTransport = true
-    },
-    submit() {
-      this.updateTourTransport({
-        ...this.choosenTransport,
-        totalDuration: this.transportDuration,
-        totalPrice: this.transportPrice,
-        description: this.description,
-      })
-      this.transportSelected = false
-      this.anotherOne = true
-    },
-    addMore() {
-      this.anotherOne = false
-      this.transportSelected = false
-      this.chooseTransport = true
-      this.transportDuration = NaN
-      this.duration = NaN
-      this.distance = NaN
-      this.description = ''
+      let updData = {
+        'company': transport,
+        'item': {
+          ...item,
+          selected: !item.selected,
+        },
+      }
+      this.updateNewTransportOptions(updData)
     },
     end() {
       this.updateConstructorCurrentStage('Transport is set')
     },
-    next() {
-      const active = parseInt(this.active)
-        this.active = (active < 2 ? active + 1 : 0)
+    done() {
+      this.updateTourTransport()
+      this.end()
     },
-    back() {
-      this.updateConstructorCurrentStage('Initial stage')
+    calculateTotal(item, flag) {
+      item.price = 0
+      if (flag === 'hours') {
+        item.duration.kilometers = 0
+        item.manualPrice = 0
+        const cost = JSON.parse(item.extra).prices[0].value
+        item.price = item.duration.hours * cost
+      }
+      if (flag === 'kilometers') {
+        item.duration.hours = 0
+        item.manualPrice = 0
+        const cost = JSON.parse(item.extra).prices[1].value
+        item.price = item.duration.kilometers * cost
+      }
+      if (flag === 'manual') {
+        item.duration.kilometers = 0
+        item.duration.hourd = 0
+        item.price = item.manualPrice
+      }
+    },
+    click(item) {
+      item.duration.show = !item.duration.show
+      console.log(item)
     }
   },
 };
 </script>
 
 <style lang="css" scoped>
+.transport-card {
+  background-color: #E8F5E9;
+}
+.is-select {
+  background-color: #FFAB16;
+  color: white;
+  transform: scale(0.9);
+}
 </style>
