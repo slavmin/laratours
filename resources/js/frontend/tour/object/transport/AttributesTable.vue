@@ -10,7 +10,11 @@
         {{ props.item.name }}
       </td>
       <td class="text-xs-center">
-        {{ props.item.qnt }}
+        {{ JSON.parse(props.item.extra).scheme.totalPassengersCount }}
+        <span v-if="JSON.parse(props.item.extra).scheme.guide.length > 0">
+          +
+          {{ JSON.parse(props.item.extra).scheme.guide.length }}
+        </span>
       </td>
       <td class="text-xs-center">
         <v-layout
@@ -52,18 +56,60 @@
           wrap
           justify-center
         >
-          <Edit 
+          <!-- <Edit 
             :edit-item="props.item" 
             :company-id="companyId"
             :edit="true"
             :token="token"
+          /> -->
+          <EditObjectables
+            :item="props.item" 
+            :company-id="companyId"
+            :token="token"
           />
-          <Scheme
+          <!-- <Scheme
             :id="props.item.id" 
             :object="props.item"
             :company-id="companyId"
             :token="token"
-          />
+          /> -->
+          <form 
+            :action="'/operator/attribute/' + props.item.id"
+            method="POST"
+          >
+            <input 
+              id="_method" 
+              type="hidden" 
+              name="_method" 
+              value="DELETE"
+            >
+            <input 
+              type="hidden" 
+              name="_token" 
+              :value="token"
+            > 
+            <input 
+              type="hidden" 
+              name="parent_model_id" 
+              :value="companyId"
+            >
+            <input 
+              type="hidden" 
+              name="parent_model_alias" 
+              value="transport"
+            >  
+            <v-btn 
+              fab
+              small
+              outline
+              color="red"
+              type="submit"
+            >
+              <i class="material-icons">
+                delete
+              </i>
+            </v-btn>
+          </form>
           <!-- <v-btn
             color="red"
             fab
@@ -82,14 +128,16 @@
 </template>
 
 <script>
-import Scheme from './Scheme'
-import Edit from './AddEdit'
+// import Scheme from './Scheme'
+// import Edit from './AddEdit'
+import EditObjectables from './EditObjectables'
 export default {
 
   name: 'AttributesTable',
   components: {
-    Scheme,
-    Edit
+    // Scheme,
+    // Edit
+    EditObjectables
   },
   props: {
     transportAttributes: {

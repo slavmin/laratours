@@ -42,7 +42,7 @@ Vue.component('customer-type-delete', require('./tour/customer/type/Delete.vue')
 Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
 Vue.component('tour-index', require('./tour/tour/Index.vue').default);
 Vue.component('hotel-index', require('./tour/object/hotel/Index.vue').default);
-Vue.component('meal-index', require('./tour/meal/Index.vue').default);
+Vue.component('meal-index', require('./tour/object/meal/Index.vue').default);
 Vue.component('guide-index', require('./tour/object/guide/Index.vue').default);
 Vue.component('attendant-index', require('./tour/object/attendant/Index.vue').default);
 Vue.component('register-index', require('./auth/Index.vue').default);

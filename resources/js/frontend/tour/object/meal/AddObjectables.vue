@@ -43,14 +43,14 @@
                 :id="'form' + meal.id"
                 ref="form"
                 lazy-validation
-                :action="'/operator/meal/' + meal.id"
+                action="/operator/attribute"
                 method="POST"
               >
                 <input 
                   id="_method" 
                   type="hidden" 
                   name="_method" 
-                  value="PATCH"
+                  value="POST"
                 >
                 <input 
                   type="hidden" 
@@ -58,34 +58,39 @@
                   :value="token"
                 > 
                 <input 
-                  :id="attribute + '[id]'" 
                   type="hidden" 
-                  :name="attribute + '[id]'" 
+                  name="parent_model_id" 
+                  :value="meal.id"
+                >
+                <input 
+                  type="hidden" 
+                  name="parent_model_alias" 
+                  value="meal"
+                >  
+                <input  
+                  type="hidden" 
+                  name="id" 
                   value="0"
                 > 
                 <input 
-                  :id="attribute + '[qnt]'" 
                   type="hidden" 
-                  :name="attribute + '[qnt]'" 
+                  name="qnt" 
                   value="1"
                 > 
                 <input 
-                  :id="attribute + '[customer_type_id]'" 
-                  v-model="customerId"
                   type="hidden" 
-                  :name="attribute + '[customer_type_id]'" 
+                  name="customer_type_id" 
+                  value="1"
+                > 
+                <input  
+                  v-model="mealType"
+                  type="hidden" 
+                  name="name" 
                 > 
                 <input 
-                  :id="attribute + '[name]'" 
-                  v-model="customerName"
-                  type="hidden" 
-                  :name="attribute + '[name]'" 
-                > 
-                <input 
-                  :id="attribute + '[extra]'" 
                   v-model="extra"
                   type="hidden" 
-                  :name="attribute + '[extra]'" 
+                  name="extra" 
                 > 
                 <v-layout
                   column
@@ -96,14 +101,6 @@
                     sm6 
                   >
                     <v-select
-                      v-model="customerId"
-                      :items="customerTypes"
-                      item-text="name"
-                      item-value="id"
-                      label="Тип туриста:"
-                      outline
-                    />
-                    <v-select
                       v-model="mealType"
                       :items="mealTypes"
                       item-text="name"
@@ -112,14 +109,14 @@
                       outline
                     />
                     <v-text-field 
-                      :name="attribute + '[description]'" 
+                      name="description" 
                       label="Описание" 
                       outline
                       color="green"
                       class="mb-3"
                     />
                     <v-text-field 
-                      :name="attribute + '[price]'"
+                      name="price"
                       label="Цена" 
                       mask="#####"
                       outline
@@ -203,7 +200,7 @@ export default {
     },
     extra: function() {
       return JSON.stringify({
-        mealType: this.mealType
+        
       })
     }
   },

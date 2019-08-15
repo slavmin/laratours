@@ -42,13 +42,13 @@
                 :id="'form' + hotel.id"
                 ref="form"
                 lazy-validation
-                :action="'/operator/hotel/' + hotel.id"
+                action="/operator/attribute"
                 method="POST"
               >
                 <input 
                   type="hidden" 
                   name="_method" 
-                  value="PATCH"
+                  value="POST"
                 >
                 <input 
                   type="hidden" 
@@ -56,28 +56,34 @@
                   :value="token"
                 > 
                 <input 
-                  :id="attribute + '[id]'" 
                   type="hidden" 
-                  :name="attribute + '[id]'" 
+                  name="parent_model_id" 
+                  :value="hotel.id"
+                >
+                <input 
+                  type="hidden" 
+                  name="parent_model_alias" 
+                  value="hotel"
+                >  
+                <input  
+                  type="hidden" 
+                  name="id" 
                   value="0"
                 > 
                 <input 
-                  :id="attribute + '[customer_type_id]'" 
                   value="1"
                   type="hidden" 
-                  :name="attribute + '[customer_type_id]'" 
+                  name="customer_type_id" 
                 >
                 <input 
-                  :id="attribute + '[price]'" 
                   value="0"
                   type="hidden" 
-                  :name="attribute + '[price]'" 
+                  name="price" 
                 >
                 <input 
-                  :id="attribute + '[extra]'" 
                   v-model="extra"
                   type="hidden" 
-                  :name="attribute + '[extra]'" 
+                  name="extra" 
                 > 
                 <v-layout
                   column
@@ -89,14 +95,14 @@
                   >
                     <v-text-field 
                       v-model="name"
-                      :name="attribute + '[name]'" 
+                      name="name" 
                       label="Название" 
                       outline
                       color="green"
                     />
                     <v-text-field 
                       v-model="qnt"
-                      :name="attribute + '[qnt]'"
+                      name="qnt"
                       label="Количество номеров" 
                       mask="#####"
                       outline

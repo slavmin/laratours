@@ -30,6 +30,34 @@
             :meal="meal" 
             :token="token"
           />
+          <form 
+            :action="'/operator/meal/' + meal.id"
+            method="post"
+          >
+            <input
+              type="hidden"
+              name="_method"
+              value="DELETE"
+            >
+            <input
+              type="hidden"
+              name="_token"
+              :value="token"
+            >
+            <v-btn 
+              small
+              fab
+              outline
+              :title="`Удалить '` + meal.name + `'`"
+              color="red"
+              dark 
+              type="submit"
+            >
+              <i class="material-icons">
+                delete
+              </i>
+            </v-btn>
+          </form>
         </v-layout>
         <v-layout 
           row 
@@ -118,16 +146,57 @@
         >
           <template v-slot:items="props">
             <td class="text-xs-left">
-              {{ JSON.parse(props.item.extra).mealType }}
+              {{ props.item.name }}
             </td>
             <td class="text-xs-center">
               {{ props.item.price }}
             </td>
-            <!-- <td class="text-xs-center">
-              {{ JSON.parse(props.item.extra).duration }} ч.
-            </td> -->
             <td class="text-xs-center">
-              {{ props.item.name }}
+              {{ props.item.description }}
+            </td>
+            <td>
+              <EditObjectables
+                :meal="meal" 
+                :event="props.item"
+                :token="token"
+              />
+              <form 
+                :action="'/operator/attribute/' + props.item.id"
+                method="POST"
+              >
+                <input 
+                  id="_method" 
+                  type="hidden" 
+                  name="_method" 
+                  value="DELETE"
+                >
+                <input 
+                  type="hidden" 
+                  name="_token" 
+                  :value="token"
+                > 
+                <input 
+                  type="hidden" 
+                  name="parent_model_id" 
+                  :value="meal.id"
+                >
+                <input 
+                  type="hidden" 
+                  name="parent_model_alias" 
+                  value="meal"
+                >  
+                <v-btn 
+                  fab
+                  small
+                  outline
+                  color="red"
+                  type="submit"
+                >
+                  <i class="material-icons">
+                    delete
+                  </i>
+                </v-btn>
+              </form>
             </td>
           </template>
         </v-data-table>
@@ -144,12 +213,14 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Edit from './Edit'
 import AddObjectables from './AddObjectables'
+import EditObjectables from './EditObjectables'
 export default {
 
   name: 'ObjectHotelTable',
   components: {
     Edit,
-    AddObjectables
+    AddObjectables,
+    EditObjectables,
   },
   props: {
     token: {
@@ -161,9 +232,9 @@ export default {
     return {
       headers: [
         {
-          text: 'Тип номера',
+          text: 'Название',
           align: 'left',
-          value: 'description'
+          value: 'name'
         },
         {
           text: 'Цена',
@@ -171,9 +242,14 @@ export default {
           value: 'price'
         },
         {
-          text: 'Посетитель',
+          text: 'Описание',
           align: 'center',
-          value: 'name'
+          value: 'description'
+        },
+        {
+          text: 'Действия',
+          align: 'center',
+          value: 'actions'
         },
       ]
     };

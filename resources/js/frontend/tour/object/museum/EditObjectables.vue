@@ -44,7 +44,7 @@
             :id="'form' + museum.id + event.id"
             ref="form"
             lazy-validation
-            :action="'/operator/museum/' + museum.id"
+            :action="'/operator/attribute/' + event.id"
             method="POST"
           >
             <input 
@@ -56,42 +56,46 @@
               type="hidden" 
               name="_token" 
               :value="token"
-            > 
+            >  
             <input 
-              :id="attribute + '[id]'" 
+              type="hidden" 
+              name="parent_model_id" 
+              :value="museum.id"
+            >
+            <input 
+              type="hidden" 
+              name="parent_model_alias" 
+              value="museum"
+            >
+            <input 
               v-model="event.id"
               type="hidden" 
-              :name="attribute + '[id]'"
+              name="id"
             > 
             <input 
-              :id="attribute + '[qnt]'" 
               type="hidden" 
-              :name="attribute + '[qnt]'" 
+              name="qnt" 
               value="1"
             > 
             <input 
-              :id="attribute + '[customer_type_id]'" 
               value="1"
               type="hidden" 
-              :name="attribute + '[customer_type_id]'" 
+              name="customer_type_id" 
             > 
             <input 
-              :id="attribute + '[name]'" 
               v-model="name"
               type="hidden" 
-              :name="attribute + '[name]'" 
+              name="name" 
             > 
             <input 
-              :id="attribute + '[extra]'" 
               v-model="extra"
               type="hidden" 
-              :name="attribute + '[extra]'" 
+              name="extra" 
             > 
             <input 
-              :id="attribute + '[price]'"
               value="0"
               type="hidden"
-              :name="attribute + '[price]'"
+              name="price"
             >
             <v-layout
               column

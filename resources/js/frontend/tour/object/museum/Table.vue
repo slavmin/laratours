@@ -187,18 +187,43 @@
                 :event="props.item"
                 :token="token"
               />
-              <v-btn 
-                fab
-                small
-                outline
-                color="red"
-                disabled
-                @click="remove(museum, props.item)"
+              <form 
+                :action="'/operator/attribute/' + props.item.id"
+                method="POST"
               >
-                <i class="material-icons">
-                  delete
-                </i>
-              </v-btn>
+                <input 
+                  id="_method" 
+                  type="hidden" 
+                  name="_method" 
+                  value="DELETE"
+                >
+                <input 
+                  type="hidden" 
+                  name="_token" 
+                  :value="token"
+                > 
+                <input 
+                  type="hidden" 
+                  name="parent_model_id" 
+                  :value="museum.id"
+                >
+                <input 
+                  type="hidden" 
+                  name="parent_model_alias" 
+                  value="museum"
+                >  
+                <v-btn 
+                  fab
+                  small
+                  outline
+                  color="red"
+                  type="submit"
+                >
+                  <i class="material-icons">
+                    delete
+                  </i>
+                </v-btn>
+              </form>
             </td>
           </template>
         </v-data-table>
