@@ -377,6 +377,8 @@ export default {
         unavailable: [],
         totalPassengersCount: 0
       }
+      this.price0 = 0
+      this.price1 = 0
       this.showScheme = false
       console.log('closed', this.currentScheme)
     },
