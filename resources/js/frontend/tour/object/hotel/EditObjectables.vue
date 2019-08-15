@@ -38,7 +38,7 @@
             :id="'form' + hotel.id + room.id"
             ref="form"
             lazy-validation
-            :action="'/operator/hotel/' + hotel.id"
+            :action="'/operator/attribute/' + room.id"
             method="POST"
           >
             <input 
@@ -52,40 +52,44 @@
               :value="token"
             > 
             <input 
-              :id="attribute + '[id]'" 
+              type="hidden" 
+              name="parent_model_id" 
+              :value="hotel.id"
+            >
+            <input 
+              type="hidden" 
+              name="parent_model_alias" 
+              value="hotel"
+            >
+            <input 
               v-model="room.id"
               type="hidden" 
-              :name="attribute + '[id]'" 
+              name="id" 
             > 
             <input 
-              :id="attribute + '[customer_type_id]'" 
               value="1"
               type="hidden" 
-              :name="attribute + '[customer_type_id]'" 
+              name="customer_type_id" 
             >
             <input 
-              :id="attribute + '[name]'" 
               v-model="name"
               type="hidden" 
-              :name="attribute + '[name]'" 
+              name="name" 
             > 
             <input 
-              :id="attribute + '[qnt]'" 
               v-model="qnt"
               type="hidden" 
-              :name="attribute + '[qnt]'" 
+              name="qnt" 
             > 
             <input 
-              :id="attribute + '[price]'" 
               value="0"
               type="hidden" 
-              :name="attribute + '[price]'" 
+              name="price" 
             >
             <input 
-              :id="attribute + '[extra]'" 
               v-model="extra"
               type="hidden" 
-              :name="attribute + '[extra]'" 
+              name="extra" 
             > 
             <v-layout
               column

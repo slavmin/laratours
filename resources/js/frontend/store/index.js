@@ -12,6 +12,7 @@ import guide from './modules/guide'
 import attendant from './modules/attendant'
 import languages from './modules/languages'
 import tourConstructor from './modules/tourConstructor'
+import busScheme from './modules/busScheme'
 
 Vue.use(Vuex)
 
@@ -29,5 +30,6 @@ export default new Vuex.Store({
     attendant,
     languages,
     tourConstructor,
+    busScheme,
 	}
 })
