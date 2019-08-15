@@ -23,7 +23,8 @@ trait HasObjectAttributes
      */
     public function saveObjectAttributes($attributes)
     {
-        $items = collect(array_values($attributes));
+        $attributes = is_array($attributes) ? array_values($attributes) : [];
+        $items = collect($attributes);
 
         $current = $this->objectables()->pluck('id');
         $current->each(function ($id) use ($items) {
