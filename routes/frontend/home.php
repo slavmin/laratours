@@ -22,6 +22,7 @@ use App\Http\Controllers\Frontend\Tour\MuseumController;
 use App\Http\Controllers\Frontend\Tour\MealController;
 use App\Http\Controllers\Frontend\Tour\TransportController;
 use App\Http\Controllers\Frontend\Tour\OrderController;
+use App\Http\Controllers\Frontend\Tour\ObjectAttributeController;
 // Agency controllers
 use App\Http\Controllers\Frontend\Tour\Agency\TourController as AgencyTourController;
 use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderController;
@@ -178,6 +179,9 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
                 Route::get('restore', [OrderController::class, 'restore'])->name('order.restore');
                 Route::delete('delete', [OrderController::class, 'delete'])->name('order.delete-permanently');
             });
+
+            // Tour Objects attributes Management
+            Route::resource('attribute', \ObjectAttributeController::class, ['except' => ['index', 'create', 'show', 'edit']]);
         });
 
     });
