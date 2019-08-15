@@ -316,9 +316,8 @@ export default {
         unavailable: [],
         totalPassengersCount: 0
       },
-      currentScheme: {
-
-      },
+      currentScheme: {},
+      initialScheme: {},
       showScheme: false,
     }
   },
@@ -349,7 +348,7 @@ export default {
     this.grade = JSON.parse(this.item.extra).grade
     this.price0 = JSON.parse(this.item.extra).prices[0].value
     this.price1 = JSON.parse(this.item.extra).prices[1].value
-    this.currentScheme = JSON.parse(this.item.extra).scheme
+    this.currentScheme, this.initialScheme = JSON.parse(this.item.extra).scheme
     console.log(this.currentScheme)
   },
   methods: {
@@ -357,11 +356,12 @@ export default {
     close() {
       this.dialog = false
       this.showScheme = false
-      console.log('closed')
+      let extra = JSON.parse(this.item.extra)
+      extra.scheme = this.initialScheme
+      this.item.extra = JSON.stringify(extra)
     },
     save() {
       this.dialog = false
-      console.log('saved!')
     },
     setDefaultValues() {
       this.selectedCompany = ''
