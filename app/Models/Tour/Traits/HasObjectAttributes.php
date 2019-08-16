@@ -23,7 +23,11 @@ trait HasObjectAttributes
      */
     public function saveObjectAttributes($attributes)
     {
-        $items = collect(array_values($attributes));
+        // Function disabled in favor of ObjectAttributeController
+        return null;
+        
+        $attributes = is_array($attributes) ? array_values($attributes) : [];
+        $items = collect($attributes);
 
         $current = $this->objectables()->pluck('id');
         $current->each(function ($id) use ($items) {
@@ -37,7 +41,8 @@ trait HasObjectAttributes
                 ['id' => $item['id']],
                 [
                     'name' => $item['name'],
-                    'qnt' => $item['qnt'] ?? null, 'price' => $item['price'] ?? null,
+                    'qnt' => $item['qnt'] ?? null,
+                    'price' => $item['price'] ?? null,
                     'description' => $item['description'] ?? null,
                     'price' => $item['price'] ?? null,
                     'extra' => $item['extra'] ?? null,

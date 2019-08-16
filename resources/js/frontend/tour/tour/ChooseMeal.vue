@@ -6,11 +6,11 @@
     >
       <v-flex>
         <h2 class="text-xs-center grey--text">
-          Выберите музеи и экскурсии:
+          Выберите питание:
         </h2>
         <v-layout 
-          v-for="museum in getActualMuseum"
-          :key="museum.id"
+          v-for="meal in getActualMeal"
+          :key="meal.id"
           row 
           wrap
           align-center
@@ -18,17 +18,17 @@
         >
           <v-flex xs12>
             <div class="text-xs-center display-2">
-              {{ museum.name }}
+              {{ meal.name }}
             </div>
             <div class="text-xs-center subheading">
-              {{ getCityName(museum.city_id) }},
+              {{ getCityName(meal.city_id) }},
               <i 
                 class="material-icons"
                 style="font-size: 12px;"
               >
                 phone
               </i>
-              {{ JSON.parse(museum.extra).contacts.phone }}
+              {{ JSON.parse(meal.extra).contacts.phone }}
             </div>
           </v-flex>
           <v-layout
@@ -37,15 +37,15 @@
             justify-center
           >
             <v-flex
-              v-for="item in museum.objectables"
+              v-for="item in meal.objectables"
               :key="item.id"
               xs3
               lg2
               ma-2
             >
               <v-card 
-                :id="'museum-' + museum.id + '-card-' + item.id"
-                class="museum-card"
+                :id="'meal-' + meal.id + '-card-' + meal.id"
+                class="meal-card"
                 :class="{'is-select' : item.selected}"
                 pa-3
               >
@@ -79,33 +79,28 @@
                       class="mt-3"
                       color="green"
                     />
-                    <div
-                      v-for="(price, i) in JSON.parse(item.extra).priceList"
-                      :key="i"
+                    <v-layout
                       row
                       justify-content-between
                       wrap
                     >
                       <span class="grey--text text--darken-1">
-                        {{ price.customerName }}: 
+                        {{ item.description }}: 
                       </span>
                       <p 
                         style="display: inline-block;"
                       >
-                        {{ price.price }}
+                        {{ item.price }}
                       </p>
-                    </div>
+                    </v-layout>
                     <br>
-                    <div class="mt-2">
-                      Длительность: {{ JSON.parse(item.extra).duration }}ч.
-                    </div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
                   <v-btn 
                     flat
                     :dark="item.selected"
-                    @click="choose(museum, item)"
+                    @click="choose(meal, item)"
                   >
                     {{ item.selected ? 'Убрать' : 'Выбрать' }}
                   </v-btn>
@@ -138,7 +133,7 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'ChooseMuseum',
+  name: 'ChooseMeal',
   props: {
     tourToEdit: {
       type: Object,
@@ -155,8 +150,8 @@ export default {
   computed: {
     ...mapGetters([
       'allCities',
-      'getActualMuseum',
-      'getTour'
+      'getActualMeal',
+      'getTour',
     ]),
     days: function() {
       let result = []
@@ -167,19 +162,16 @@ export default {
     },
   },
   created() {
-    // this.updateActualMuseum()
+    this.updateActualMeal()
   },
   mounted() {
-    // this.fillStorageInEditMode()
-    console.log(this.getActualMuseum)
   },
   methods: {
     ...mapActions([
-      'updateActualMuseum',
-      'updateNewMuseumOptions',
-      'updateTourMuseum',
+      'updateActualMeal',
+      'updateNewMealOptions',
+      'updateTourMeal',
       'updateConstructorCurrentStage',
-      'updateMuseumInEditMode',
     ]),
     getCityName(id) {
       let cityName = ''
@@ -190,49 +182,32 @@ export default {
       })
       return cityName
     },
-    choose(museum, item) {
+    choose(meal, item) {
       let updData = {
-        'museum': museum,
+        'meal': meal,
         'item': {
           ...item,
           selected: !item.selected,
-          'about': document.getElementById('about' + item.id).value,
         }, 
       }
-      this.updateNewMuseumOptions(updData)
+      this.updateNewMealOptions(updData)
     },
     done() {
-      this.updateTourMuseum()
+      this.updateTourMeal()
       this.end()
     },
     unselect(item) {
       item.selected = false
     },
     end() {
-      this.updateConstructorCurrentStage('Museum is set')
+      this.updateConstructorCurrentStage('Meal is set')
     },
-    fillStorageInEditMode() {
-      if (this.tourToEdit != {}) {
-        let museum = []
-        this.tourToEdit.extra.museum.forEach(m =>  {
-          console.log(m)
-          let updData = {
-            ...m
-          }
-          updData.obj.selected = true
-          museum.push(updData)
-        })
-        console.log(museum)
-        this.updateMuseumInEditMode(museum)
-        // let el = document.getElementById()
-      }
-    }
   }
 };
 </script>
 
 <style lang="css" scoped>
-.museum-card {
+.meal-card {
   background-color: #E8F5E9;
 }
 .is-select {

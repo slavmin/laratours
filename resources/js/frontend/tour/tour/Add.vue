@@ -84,6 +84,12 @@
             >
               <ChooseHotel />
             </v-flex>
+            <v-flex
+              v-if="showChooseMeal"
+              xs12
+            >
+              <ChooseMeal />
+            </v-flex>
             <v-flex 
               v-if="showChooseGuide"
               xs12
@@ -129,6 +135,7 @@ import Options from './Options'
 import ChooseTransport from './ChooseTransport'
 import ChooseMuseum from './ChooseMuseum'
 import ChooseHotel from './ChooseHotel'
+import ChooseMeal from './ChooseMeal'
 import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
 import Services from './Services'
@@ -143,6 +150,7 @@ export default {
     ChooseTransport,
     ChooseMuseum,
     ChooseHotel,
+    ChooseMeal,
     ChooseGuide,
     ChooseAttendant,
     Services,
@@ -184,6 +192,24 @@ export default {
         { 
           name: 'Проживание', 
           stage: 'Museum is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Питание', 
+          stage: 'Hotel is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Гиды', 
+          stage: 'Meal is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Сопровождающие', 
+          stage: 'Show attendant', 
           active: false,
           disabled: false, 
         },
@@ -246,8 +272,11 @@ export default {
     showChooseHotel: function() {
       return this.getConstructorCurrentStage == 'Museum is set' ? true : false
     },
-    showChooseGuide: function() {
+    showChooseMeal: function() {
       return this.getConstructorCurrentStage == 'Hotel is set' ? true : false
+    },
+    showChooseGuide: function() {
+      return this.getConstructorCurrentStage == 'Meal is set' ? true : false
     },
     showChooseAttendant: function() {
       return this.getConstructorCurrentStage == 'Show attendant' ? true : false

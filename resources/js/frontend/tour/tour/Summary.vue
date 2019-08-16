@@ -26,7 +26,9 @@
                   <v-text-field
                     v-model="correctionToAll"
                     label="На все"
+                    mask="###"
                     outline
+                    @input="inputCorrection"
                   /> 
                 </v-flex>
               </v-layout>
@@ -59,6 +61,7 @@
                 <v-text-field
                   v-model="transport.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -85,14 +88,17 @@
                 {{ event.museum.name }}:
                 <br>
                 {{ event.obj.name }}
+                <br>
+                {{ JSON.parse(event.obj.extra).priceList[0].customerName }}
               </td>
               <td class="price">
-                {{ event.obj.price }}
+                {{ JSON.parse(event.obj.extra).priceList[0].price }}
               </td>
               <td>
                 <v-text-field
                   v-model="event.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -118,12 +124,12 @@
               <td>
                 {{ hotel.hotel.name }}:
                 <br>
-                {{ JSON.parse(hotel.obj.extra).roomType }}
+                {{ hotel.obj.name }}
                 <br>
                 <div class="body-1 grey--text">
                   Ночей: {{ hotel.obj.day }}
                   <br>
-                  Цена: {{ hotel.obj.price }}
+                  Цена: {{ JSON.parse(hotel.obj.extra).priceList.standard }}
                 </div>
               </td>
               <td class="price">
@@ -133,11 +139,51 @@
                 <v-text-field
                   v-model="hotel.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
                 <v-text-field
                   v-model="hotel.correctedPrice"
+                  class="corrected-price"
+                  name="corrected"
+                />
+              </td>
+            </tr>
+            <tr v-if="getTour.meal.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
+                Питание
+              </td>
+            </tr>
+            <tr 
+              v-for="(meal, i) in getTour.meal"
+              :key="`Meal-${i}`"
+            >
+              <td>
+                {{ meal.meal.name }}:
+                <br>
+                {{ meal.obj.name }}
+                <br>
+                <div class="body-1 grey--text">
+                  Описание: {{ meal.obj.description }}
+                </div>
+              </td>
+              <td class="price">
+                {{ meal.obj.price }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="meal.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  v-model="meal.correctedPrice"
                   class="corrected-price"
                   name="corrected"
                 />
@@ -156,20 +202,21 @@
               :key="`G-${i}`"
             >
               <td>
-                {{ guide.name }}:
+                {{ guide.guide.name }}:
                 <div class="body-1 grey--text">
-                  Часов: {{ guide.duration }}
+                  Часов: {{ guide.guide.duration }}
                   <br>
-                  Цена: {{ guide.price }}
+                  Цена: {{ guide.guide.price }}
                 </div>
               </td>
               <td class="price">
-                {{ guide.totalPrice }}
+                {{ guide.guide.totalPrice }}
               </td>
               <td>
                 <v-text-field
                   v-model="guide.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -208,6 +255,7 @@
                 <v-text-field
                   v-model="attendant.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -215,6 +263,7 @@
                   v-model="attendant.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  @input="correctPrice"
                 />
               </td>
             </tr>
@@ -349,20 +398,24 @@ export default {
     getTour: {
       handler(value) {
         console.log(this.getTour)
+        this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
       },
       deep: true,
     },
-    correctionToAll: {
-      handler(value) {
-        console.log('client correction: ', value)
-        this.updateCorrectionToAll(value)
-      },
-      deep: true,
-    }
+    // correctionToAll: {
+    //   handler(value) {
+    //     this.updateCorrectionToAll(value)
+    //     this.updateCorrectedPriceValues()
+    //     this.updateTourCorrectedPrice()
+    //   },
+    //   deep: true,
+    // }
   },
   mounted() {
     this.updateTourTotalPrice()
+    this.updateCorrectedPriceValues()
+    this.updateTourCorrectedPrice()
   },
   methods: {
     ...mapActions([
@@ -370,6 +423,7 @@ export default {
       'updateTourTotalPrice',  
       'updateTourCorrectedPrice',
       'updateCorrectionToAll',
+      'updateCorrectedPriceValues',
     ]),
     // total() {
     //   // Calculate total price (first column)
@@ -383,7 +437,14 @@ export default {
       console.log(this.getTour)
     },
     inputCorrection() {
-      console.log('changed')
+      this.updateCorrectionToAll(this.correctionToAll)
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+    },
+    correctPrice() {
+      console.log('correctPrice')
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
     }
   },
 };

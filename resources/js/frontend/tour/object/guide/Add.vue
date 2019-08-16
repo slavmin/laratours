@@ -91,6 +91,7 @@
                       outline
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="green lighten-3"
+                      multiple
                       required
                     />
                     <input 

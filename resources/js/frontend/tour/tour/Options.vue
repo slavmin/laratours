@@ -37,7 +37,6 @@
         color="green lighten-3"
         multiple
         required
-        @change="logCity"
       />
       <v-divider />
       <v-layout 
@@ -211,6 +210,8 @@ export default {
   created() {
     this.fetchAllTourOptions()
   },
+  mounted() {
+  },
   methods: {
     ...mapActions([
       'fetchAllTourOptions',
@@ -235,8 +236,6 @@ export default {
       }
     },
     logCity() {
-      console.log(this.allCities)
-      console.log(this.getTour.options.cities)
     }
   },
 };
