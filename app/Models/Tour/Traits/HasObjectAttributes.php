@@ -42,7 +42,6 @@ trait HasObjectAttributes
                 [
                     'name' => $item['name'],
                     'qnt' => $item['qnt'] ?? null,
-                    'price' => $item['price'] ?? null,
                     'description' => $item['description'] ?? null,
                     'price' => $item['price'] ?? null,
                     'extra' => $item['extra'] ?? null,
