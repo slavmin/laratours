@@ -106,7 +106,7 @@
                     >
                     <input
                       type="hidden" 
-                      value="1"
+                      value="0"
                       name="price"
                     >
                     <v-text-field
@@ -328,21 +328,12 @@ export default {
       result.prices = this.getPricesArray()
       result.grade = this.grade
       result.scheme = this.currentScheme
-      console.log(result.scheme)
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
       return result
     }
   },
-  // created() {
-  //   for (let city in this.citiesSelect.Россия) {
-  //     this.cities.push({'id': city, 'name': this.citiesSelect.Россия[city]})
-  //   }
-  //   let element = this.priceList.find(item => item.dateRange == this.currentDateRange)
-  //   this.currentPrices = element.prices
-  //   this.attribute = this.attribute + '[' + this.editItem.id + ']'
-  // },
   mounted() {
     this.name = this.item.name
     this.description = this.item.description
@@ -351,7 +342,6 @@ export default {
     this.price1 = JSON.parse(this.item.extra).prices[1].value
     this.currentScheme = Object.assign({}, JSON.parse(this.item.extra).scheme)
     this.initialScheme = Object.assign({}, JSON.parse(this.item.extra).scheme)
-    console.log(this.item)
   },
   methods: {
     ...mapMutations(['addTransportCompany', 'addTransport']),

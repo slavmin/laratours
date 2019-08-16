@@ -28,7 +28,7 @@
               >
                 phone
               </i>
-              {{ JSON.parse(hotel.description).contacts.phone }}
+              {{ JSON.parse(hotel.extra).contacts.phone }}
             </div>
           </v-flex>
           <v-layout
@@ -51,7 +51,7 @@
                 <v-card-title primary-title>
                   <div>
                     <div class="headline mb-2">
-                      {{ JSON.parse(item.extra).roomType }}
+                      {{ item.name }}
                       <i 
                         class="material-icons ml-2"
                         style="color: grey; font-size: 20px;"
@@ -87,26 +87,64 @@
                       class="mt-3"
                       color="green"
                     />
-                    <div
-                      v-for="(price, i) in JSON.parse(item.extra).prices"
-                      :key="i"
-                      row
-                      justify-content-between
+                    <v-layout 
+                      row 
                       wrap
+                      justify-space-between
                     >
                       <span class="grey--text text--darken-1">
-                        {{ price.name }}: 
+                        Обычное размещение:
                       </span>
                       <p 
                         style="display: inline-block;"
                       >
-                        {{ price.value }}
+                        {{ JSON.parse(item.extra).priceList.standard }}
+                      </p>            
+                    </v-layout>
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <span class="grey--text text--darken-1">
+                        Single размещение:
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ JSON.parse(item.extra).priceList.single }}
+                      </p>            
+                    </v-layout>
+                    <div v-if="JSON.parse(item.extra).priceList.additionalPrices.length > 0">
+                      <p>
+                        Доп. места:
                       </p>
+                      <v-layout
+                        v-for="(price, i) in JSON.parse(item.extra).priceList.additionalPrices"
+                        :key="i"
+                        row
+                        justify-content-between
+                        wrap
+                      >
+                        <span class="grey--text text--darken-1">
+                          {{ price[0].name }}: 
+                        </span>
+                        <p 
+                          style="display: inline-block;"
+                        >
+                          {{ price[0].price }}
+                        </p>
+                        <br>
+                        <span class="grey--text text--darken-1">
+                          {{ price[1].name }}: 
+                        </span>
+                        <p 
+                          style="display: inline-block;"
+                        >
+                          {{ price[1].price }}
+                        </p>
+                      </v-layout>
                     </div>
-                    <br>
-                    <span class="grey--text text--darken-1">
-                      Цена: {{ item.price }}
-                    </span>
                   </div>
                 </v-card-title>
                 <v-card-actions>
@@ -189,9 +227,9 @@ export default {
     },
     choose(hotel, item) {
       if (item.day != 0) {
-        item.totalPrice = item.price * item.day
+        item.totalPrice = JSON.parse(item.extra).priceList.standard * item.day
       } else {
-        item.totalPrice = item.price
+        item.totalPrice = JSON.parse(item.extra).priceList.standard
       }
       let updData = {
         'hotel': hotel,
@@ -201,7 +239,6 @@ export default {
           'about': document.getElementById('about' + item.id).value,
         }, 
       }
-      console.log(item)
       this.updateNewHotelOptions(updData)
     },
     done() {

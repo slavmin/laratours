@@ -70,7 +70,7 @@ export default {
       'allCities',
     ]),
     tourInfo: function() {
-      return JSON.parse(this.tour.description)
+      return JSON.parse(this.tour.extra)
     },
     contentString: function() {
       if (this.tourInfo.editorsContent.length > 0) {

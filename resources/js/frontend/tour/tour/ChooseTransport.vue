@@ -218,7 +218,7 @@
                       </span>
                     </div>
                     <div class="mt-2">
-                      Мест: {{ item.qnt }}
+                      Мест: {{ JSON.parse(item.extra).scheme.totalPassengersCount }}
                     </div>
                   </div>
                 </v-card-title>
@@ -538,10 +538,6 @@ export default {
         item.price = item.manualPrice
       }
     },
-    click(item) {
-      item.duration.show = !item.duration.show
-      console.log(item)
-    }
   },
 };
 </script>

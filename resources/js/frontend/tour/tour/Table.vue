@@ -20,27 +20,27 @@
             </span>
           </td>
           <td class="text-xs-right">
-            {{ props.item.tour_type_id }}
+            {{ getTourTypes[props.item.tour_type_id] }}
           </td>
           <td class="text-xs-right">
             {{ 
-              props.item.description 
-                ? JSON.parse(props.item.description).options.days 
+              props.item.extra 
+                ? JSON.parse(props.item.extra).options.days 
                 : '' 
             }}
           </td>
           <td class="text-xs-right grey--text">
             Нетто:
             {{ 
-              props.item.description 
-                ? JSON.parse(props.item.description).totalPrice
+              props.item.extra 
+                ? JSON.parse(props.item.extra).totalPrice
                 : '' 
             }}
             <br>
             С наценкой:
             {{ 
-              props.item.description 
-                ? JSON.parse(props.item.description).correctedPrice 
+              props.item.extra 
+                ? JSON.parse(props.item.extra).correctedPrice 
                 : '' 
             }}
           </td>
@@ -50,7 +50,9 @@
             />
           </td>
           <td>
-            15/48
+            0
+            /
+            {{ JSON.parse(props.item.extra).qnt }}
           </td>
           <td>
             <v-layout 
@@ -59,7 +61,7 @@
               align-top
             >
               <Edit
-                :tour-to-edit="props.item"
+                :edit-tour="props.item"
                 :token="token"
               />
               <form 
@@ -143,17 +145,19 @@ export default {
   computed: {
     ...mapGetters([
       'allCities',
+      'getTourTypes',
     ]),
   },
   created() {
     this.fetchAttendant()
     this.fetchCities()
-    console.log(this.tours)
+    this.fetchTourTypes()
   },
   methods: {
     ...mapActions([
       'fetchAttendant',
       'fetchCities',
+      'fetchTourTypes',
     ]),
     getCitiesNames(cities) {
       const citiesArray = Array.from(cities[0])
