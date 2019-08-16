@@ -81,6 +81,9 @@ export default {
     },
     async updateCorrectionToAll({ commit }, correction) {
       commit('setCorrectionToAll', correction)
+    },
+    async updateCorrectedPriceValues({ commit }) {
+      commit('setCorrectedPriceValues')
     }
   },
   mutations: {
@@ -131,10 +134,18 @@ export default {
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
-            state.tour.transport.push({ transport, obj })
+            state.tour.transport.push({ 
+              transport, 
+              obj,
+              correction: 0,
+              correctedPrice: 0,
+            })
+            const objQnt = JSON.parse(obj.extra).scheme.totalPassengersCount
+            state.tour.qnt = objQnt 
           }
         })
       })
+      console.log(state.tour.transport)
     },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage
@@ -153,7 +164,6 @@ export default {
       result.forEach((museum) => {
           museum.objectables.forEach((obj) => {
             obj.selected = false
-            obj.day = 0
           })
         }
       )
@@ -175,7 +185,12 @@ export default {
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (obj.selected) {
-            state.tour.museum.push({ museum, obj })
+            state.tour.museum.push({ 
+              museum, 
+              obj,
+              correction: 0,
+              correctedPrice: 0, 
+            })
           }
         })
       })
@@ -218,7 +233,12 @@ export default {
       state.actualHotel.forEach((hotel) => {
         hotel.objectables.forEach((obj) => {
           if (obj.selected) {
-            state.tour.hotel.push({ hotel, obj })
+            state.tour.hotel.push({ 
+              hotel, 
+              obj,
+              correction: 0,
+              correctedPrice: 0, 
+            })
           }
         })
       })
@@ -248,7 +268,11 @@ export default {
     setTourGuide: (state) => {
       state.actualGuide.forEach((guide) => {
         if (guide.selected) {
-          state.tour.guide.push(guide)
+          state.tour.guide.push({
+            guide,
+            correction: 0,
+            correctedPrice: 0,
+          })
         }
       })
     },
@@ -278,15 +302,16 @@ export default {
     setTourAttendant: (state) => {
       state.actualAttendant.forEach((attendant) => {
         if (attendant.selected) {
-          state.tour.attendant.push(attendant)
+          state.tour.attendant.push({
+            attendant,
+            correction: 0,
+            correctedPrice: 0,
+          })
         }
       })
     },
     setCustomPrice: (state, price) => {
       state.tour.customPrice.push(price)
-    },
-    setEditorsContent: (state, content) => {
-      state.tour.editorsContent = content
     },
     setMuseumInEditMode: (state, updData) => {
       state.tour.museum = updData
@@ -300,10 +325,10 @@ export default {
     calculateTourTotalPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.totalPrice)
+        summ += parseInt(transport.obj.price)
       })
       state.tour.museum.forEach((museum) => {
-        summ += parseInt(museum.obj.price)
+        summ += parseInt(JSON.parse(museum.obj.extra).priceList[0].price)
       })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
@@ -342,10 +367,14 @@ export default {
       state.tour.correctedPrice = summ
     },
     setCorrectionToAll: (state, correction) => {
-      console.log(correction)
+      if (correction == NaN || correction == '') {
+        console.log('correction is ', typeof correction)
+        correction = 0
+        console.log('set correction = 0')
+      }
       state.tour.transport.forEach((transport) => {
-        transport.correction = correction
-        console.log(transport.correction)
+        transport.correction = parseInt(correction)
+        console.log('transport correction: ', transport.correction)
       })
       state.tour.museum.forEach((museum) => {
         museum.correction = correction
@@ -358,6 +387,60 @@ export default {
       })
       state.tour.attendant.forEach((attendant) => {
         attendant.correction = correction
+      })
+    },
+    setCorrectedPriceValues(state) {
+      console.log('hello from setcorrected')
+      // Add price-fields to Transport
+      state.tour.transport.forEach((transport) => {
+        if (transport.correction > 0) {
+          console.log(transport)
+          transport.correctedPrice = 
+            transport.obj.price + 
+            (transport.obj.price * parseInt(transport.correction) / 100) 
+        } else {
+          transport.correctedPrice = transport.obj.price
+        }
+      })
+      // Add price-fields to Museum
+      state.tour.museum.forEach((museum) => {
+        if (museum.correction > 0) {
+          museum.correctedPrice = 
+            JSON.parse(museum.obj.extra).priceList[0].price + 
+            (JSON.parse(museum.obj.extra).priceList[0].price * museum.correction / 100) 
+        } else {
+          museum.correctedPrice = JSON.parse(museum.obj.extra).priceList[0].price
+        }
+      })
+      // Add price-fields to Hotel
+      state.tour.hotel.forEach((hotel) => {
+        if (hotel.correction > 0) {
+          hotel.correctedPrice = 
+            parseInt(hotel.obj.totalPrice) + 
+            (hotel.obj.totalPrice * hotel.correction / 100) 
+        } else {
+          hotel.correctedPrice = parseInt(hotel.obj.totalPrice)
+        }
+      })
+      // Add price-fields to Guide
+      state.tour.guide.forEach((guide) => {
+        if (guide.correction > 0) {
+          guide.correctedPrice = 
+            guide.totalPrice + 
+            (guide.totalPrice * guide.correction / 100) 
+        } else {
+          guide.correctedPrice = guide.totalPrice
+        }
+      })
+      // Add price-fields to Attendant
+      state.tour.attendant.forEach((attendant) => {
+        if (attendant.correction > 0) {
+          attendant.correctedPrice = 
+            attendant.totalPrice + 
+            (attendant.totalPrice * attendant.correction / 100) 
+        } else {
+          attendant.correctedPrice = attendant.totalPrice
+        }
       })
     }
   },
@@ -382,6 +465,8 @@ export default {
       customPrice: [],
       editorsContent: [],
       totalPrice: NaN,
+      ordered: 0,
+      qnt: 0,
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',
@@ -412,56 +497,6 @@ export default {
       return state.actualMuseum
     },
     getTour(state) {
-      // Add price-fields to Transport
-      state.tour.transport.forEach((transport) => {
-        if (transport.correction > 0) {
-          transport.correctedPrice = 
-            transport.totalPrice + 
-            (transport.totalPrice * transport.correction / 100) 
-        } else {
-          transport.correctedPrice = transport.totalPrice
-        }
-      })
-      // Add price-fields to Museum
-      state.tour.museum.forEach((museum) => {
-        if (museum.correction > 0) {
-          museum.correctedPrice = 
-            museum.obj.price + 
-            (museum.obj.price * museum.correction / 100) 
-        } else {
-          museum.correctedPrice = museum.obj.price
-        }
-      })
-      // Add price-fields to Hotel
-      state.tour.hotel.forEach((hotel) => {
-        if (hotel.correction > 0) {
-          hotel.correctedPrice = 
-            hotel.obj.totalPrice + 
-            (hotel.obj.totalPrice * hotel.correction / 100) 
-        } else {
-          hotel.correctedPrice = hotel.obj.totalPrice
-        }
-      })
-      // Add price-fields to Guide
-      state.tour.guide.forEach((guide) => {
-        if (guide.correction > 0) {
-          guide.correctedPrice = 
-            guide.totalPrice + 
-            (guide.totalPrice * guide.correction / 100) 
-        } else {
-          guide.correctedPrice = guide.totalPrice
-        }
-      })
-      // Add price-fields to Attendant
-      state.tour.attendant.forEach((attendant) => {
-        if (attendant.correction > 0) {
-          attendant.correctedPrice = 
-            attendant.totalPrice + 
-            (attendant.totalPrice * attendant.correction / 100) 
-        } else {
-          attendant.correctedPrice = attendant.totalPrice
-        }
-      })
       return state.tour
     },
     getActualHotel(state) {

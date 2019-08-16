@@ -26,7 +26,9 @@
                   <v-text-field
                     v-model="correctionToAll"
                     label="На все"
+                    mask="###"
                     outline
+                    @input="inputCorrection"
                   /> 
                 </v-flex>
               </v-layout>
@@ -59,6 +61,7 @@
                 <v-text-field
                   v-model="transport.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -85,14 +88,17 @@
                 {{ event.museum.name }}:
                 <br>
                 {{ event.obj.name }}
+                <br>
+                {{ JSON.parse(event.obj.extra).priceList[0].customerName }}
               </td>
               <td class="price">
-                {{ event.obj.price }}
+                {{ JSON.parse(event.obj.extra).priceList[0].price }}
               </td>
               <td>
                 <v-text-field
                   v-model="event.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -118,12 +124,12 @@
               <td>
                 {{ hotel.hotel.name }}:
                 <br>
-                {{ JSON.parse(hotel.obj.extra).roomType }}
+                {{ hotel.obj.name }}
                 <br>
                 <div class="body-1 grey--text">
                   Ночей: {{ hotel.obj.day }}
                   <br>
-                  Цена: {{ hotel.obj.price }}
+                  Цена: {{ JSON.parse(hotel.obj.extra).priceList.standard }}
                 </div>
               </td>
               <td class="price">
@@ -133,6 +139,7 @@
                 <v-text-field
                   v-model="hotel.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -170,6 +177,7 @@
                 <v-text-field
                   v-model="guide.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -208,6 +216,7 @@
                 <v-text-field
                   v-model="attendant.correction"
                   name="correction"
+                  @input="correctPrice"
                 />
               </td>
               <td>
@@ -215,6 +224,7 @@
                   v-model="attendant.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  @input="correctPrice"
                 />
               </td>
             </tr>
@@ -349,20 +359,24 @@ export default {
     getTour: {
       handler(value) {
         console.log(this.getTour)
+        this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
       },
       deep: true,
     },
-    correctionToAll: {
-      handler(value) {
-        console.log('client correction: ', value)
-        this.updateCorrectionToAll(value)
-      },
-      deep: true,
-    }
+    // correctionToAll: {
+    //   handler(value) {
+    //     this.updateCorrectionToAll(value)
+    //     this.updateCorrectedPriceValues()
+    //     this.updateTourCorrectedPrice()
+    //   },
+    //   deep: true,
+    // }
   },
   mounted() {
     this.updateTourTotalPrice()
+    this.updateCorrectedPriceValues()
+    this.updateTourCorrectedPrice()
   },
   methods: {
     ...mapActions([
@@ -370,6 +384,7 @@ export default {
       'updateTourTotalPrice',  
       'updateTourCorrectedPrice',
       'updateCorrectionToAll',
+      'updateCorrectedPriceValues',
     ]),
     // total() {
     //   // Calculate total price (first column)
@@ -383,7 +398,14 @@ export default {
       console.log(this.getTour)
     },
     inputCorrection() {
-      console.log('changed')
+      this.updateCorrectionToAll(this.correctionToAll)
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+    },
+    correctPrice() {
+      console.log('correctPrice')
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
     }
   },
 };

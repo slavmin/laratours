@@ -28,7 +28,7 @@
               >
                 phone
               </i>
-              {{ JSON.parse(museum.description).contacts.phone }}
+              {{ JSON.parse(museum.extra).contacts.phone }}
             </div>
           </v-flex>
           <v-layout
@@ -80,25 +80,22 @@
                       color="green"
                     />
                     <div
-                      v-for="(price, i) in JSON.parse(item.extra).prices"
+                      v-for="(price, i) in JSON.parse(item.extra).priceList"
                       :key="i"
                       row
                       justify-content-between
                       wrap
                     >
                       <span class="grey--text text--darken-1">
-                        {{ price.name }}: 
+                        {{ price.customerName }}: 
                       </span>
                       <p 
                         style="display: inline-block;"
                       >
-                        {{ price.value }}
+                        {{ price.price }}
                       </p>
                     </div>
                     <br>
-                    <span class="grey--text text--darken-1">
-                      Цена: {{ item.price }}
-                    </span>
                     <div class="mt-2">
                       Длительность: {{ JSON.parse(item.extra).duration }}ч.
                     </div>
@@ -174,6 +171,7 @@ export default {
   },
   mounted() {
     // this.fillStorageInEditMode()
+    console.log(this.getActualMuseum)
   },
   methods: {
     ...mapActions([

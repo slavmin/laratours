@@ -112,7 +112,7 @@
                     >
                     <input
                       type="hidden" 
-                      value="1"
+                      value="0"
                       name="price"
                     >
                     <v-text-field
@@ -471,7 +471,6 @@ export default {
     },
     updateScheme(scheme) {
       this.currentScheme = scheme
-      console.log('child updated')
     },
   }
 };
