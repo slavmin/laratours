@@ -210,6 +210,8 @@ export default {
   created() {
     this.fetchAllTourOptions()
   },
+  mounted() {
+  },
   methods: {
     ...mapActions([
       'fetchAllTourOptions',

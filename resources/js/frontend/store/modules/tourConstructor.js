@@ -40,8 +40,17 @@ export default {
     async updateTourHotel({ commit }) {
       commit('setTourHotel')
     },
+    async updateActualMeal({ commit }) {
+      commit('setActualMeal')
+    },
+    async updateTourMeal({ commit }) {
+      commit('setTourMeal')
+    },
     async updateActualGuide({ commit }) {
       commit('setActualGuide')
+    },
+    async updateNewMealOptions({ commit }, updData) {
+      commit('setNewMealOptions', updData) //Toggle meal objectable 'selected'
     },
     async updateNewGuideOptions({ commit }, updGuide) {
       commit('setNewGuideOptions', updGuide) // Toggle guide 'selected'
@@ -246,6 +255,53 @@ export default {
         })
       })
     },
+    setActualMeal(state) {
+      let result = []
+      console.log('setActualMeal')
+      state.tourOptions.meal_options.map((meal) => {
+          if (state.tour.options.cities.indexOf(parseInt(meal.city_id)) != -1) {
+            result.push({
+              ...meal
+            })
+          }
+        }
+      )
+      result.forEach((meal) => {
+          meal.objectables.forEach((obj) => {
+            obj.selected = false
+          })
+        }
+      )
+      state.actualMeal = result
+    },
+    setNewMealOptions(state, updData) {
+      let updMeal = updData.meal
+      let updItem = updData.item
+      let about = updData.about
+      let itemIndex = updMeal.objectables.findIndex(obj => obj.id == updItem.id)
+      if (itemIndex != -1) {
+        updMeal.objectables.splice(itemIndex, 1, updItem)
+      }
+      const index = state.actualMeal.findIndex(meal => meal.id == updMeal.id)
+      if (index != -1) {
+        state.actualMeal.splice(index, 1, updMeal)
+      }
+    },
+    setTourMeal(state) {
+      state.tour.meal = []
+      state.actualMeal.forEach((meal) => {
+        meal.objectables.forEach((obj) => {
+          if (obj.selected) {
+            state.tour.meal.push({ 
+              meal, 
+              obj,
+              correction: 0,
+              correctedPrice: 0, 
+            })
+          }
+        })
+      })
+    },
     setActualGuide(state) {
       let result = []
       state.tourOptions.guide_options.map((guide) => {
@@ -338,6 +394,9 @@ export default {
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
       })
+      state.tour.meal.forEach((meal) => {
+        summ += parseInt(meal.obj.price)
+      })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.totalPrice)
       })
@@ -360,6 +419,9 @@ export default {
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.correctedPrice)
       })
+      state.tour.meal.forEach((meal) => {
+        summ += parseInt(meal.correctedPrice)
+      })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.correctedPrice)
       })
@@ -373,19 +435,19 @@ export default {
     },
     setCorrectionToAll: (state, correction) => {
       if (correction == NaN || correction == '') {
-        console.log('correction is ', typeof correction)
         correction = 0
-        console.log('set correction = 0')
       }
       state.tour.transport.forEach((transport) => {
         transport.correction = parseInt(correction)
-        console.log('transport correction: ', transport.correction)
       })
       state.tour.museum.forEach((museum) => {
         museum.correction = correction
       })
       state.tour.hotel.forEach((hotel) => {
         hotel.correction = correction
+      })
+      state.tour.meal.forEach((meal) => {
+        meal.correction = correction
       })
       state.tour.guide.forEach((guide) => {
         guide.correction = correction
@@ -427,6 +489,16 @@ export default {
           hotel.correctedPrice = parseInt(hotel.obj.totalPrice)
         }
       })
+      // Add price-fields to Meal
+      state.tour.meal.forEach((meal) => {
+        if (meal.correction > 0) {
+          meal.correctedPrice = 
+            parseInt(meal.obj.price) + 
+            (meal.obj.price * meal.correction / 100) 
+        } else {
+          meal.correctedPrice = parseInt(meal.obj.price)
+        }
+      })
       // Add price-fields to Guide
       state.tour.guide.forEach((guide) => {
         if (guide.correction > 0) {
@@ -465,6 +537,7 @@ export default {
       transport: [],
       museum: [],
       hotel: [],
+      meal: [],
       guide: [],
       attendant: [],
       customPrice: [],
@@ -478,6 +551,7 @@ export default {
     actualCities: [],
     actualMuseum: [],
     actualHotel: [],
+    actualMeal: [],
     actualGuide: [],
     actualAttendant: [],
     actualTransport: [],
@@ -507,6 +581,9 @@ export default {
     getActualHotel(state) {
       return state.actualHotel
     },
+    getActualMeal(state) {
+      return state.actualMeal
+    },
     getActualGuide(state) {
       return state.actualGuide
     },
@@ -526,6 +603,9 @@ export default {
       })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.correctedPrice)
+      })
+      state.tour.meal.forEach((meal) => {
+        summ += parseInt(meal.correctedPrice)
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.correctedPrice)

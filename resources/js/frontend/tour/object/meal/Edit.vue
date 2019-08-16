@@ -127,7 +127,7 @@
                     <input 
                       v-model="details"
                       type="hidden" 
-                      name="description" 
+                      name="extra" 
                     > 
                     <div class="display-1 mb-3">
                       Контакты:
@@ -257,7 +257,7 @@ export default {
   created() {
     this.fetchCities()
     this.city = this.meal.city_id
-    const objectInfo = JSON.parse(this.meal.description)
+    const objectInfo = JSON.parse(this.meal.extra)
     this.about = objectInfo.about
     this.type = objectInfo.mealType
     this.site = objectInfo.contacts.site

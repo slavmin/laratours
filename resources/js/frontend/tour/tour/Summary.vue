@@ -150,6 +150,45 @@
                 />
               </td>
             </tr>
+            <tr v-if="getTour.meal.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="4"
+              >
+                Питание
+              </td>
+            </tr>
+            <tr 
+              v-for="(meal, i) in getTour.meal"
+              :key="`M-${i}`"
+            >
+              <td>
+                {{ meal.meal.name }}:
+                <br>
+                {{ meal.obj.name }}
+                <br>
+                <div class="body-1 grey--text">
+                  Описание: {{ meal.obj.description }}
+                </div>
+              </td>
+              <td class="price">
+                {{ meal.obj.price }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="meal.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  v-model="meal.correctedPrice"
+                  class="corrected-price"
+                  name="corrected"
+                />
+              </td>
+            </tr>
             <tr v-if="getTour.guide.length != 0">
               <td
                 class="text-xs-center" 
