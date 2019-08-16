@@ -131,6 +131,7 @@ export default {
       }
     }, 
     setTourTransport(state) {
+      state.tour.transport = []
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
@@ -182,6 +183,7 @@ export default {
       }
     }, 
     setTourMuseum: (state) => {
+      state.tour.museum = []
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (obj.selected) {
@@ -230,6 +232,7 @@ export default {
       }
     }, 
     setTourHotel: (state) => {
+      state.tour.hotel = []
       state.actualHotel.forEach((hotel) => {
         hotel.objectables.forEach((obj) => {
           if (obj.selected) {
@@ -266,6 +269,7 @@ export default {
       }
     },  
     setTourGuide: (state) => {
+      state.tour.guide = []
       state.actualGuide.forEach((guide) => {
         if (guide.selected) {
           state.tour.guide.push({
@@ -300,6 +304,7 @@ export default {
       }
     },   
     setTourAttendant: (state) => {
+      state.tour.attendant = []
       state.actualAttendant.forEach((attendant) => {
         if (attendant.selected) {
           state.tour.attendant.push({
