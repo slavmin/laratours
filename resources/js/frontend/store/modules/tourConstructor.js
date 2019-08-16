@@ -93,6 +93,9 @@ export default {
     },
     async updateCorrectedPriceValues({ commit }) {
       commit('setCorrectedPriceValues')
+    },
+    async updateEditTour({ commit }, tour) {
+      commit('setEditTour', tour)
     }
   },
   mutations: {
@@ -398,7 +401,7 @@ export default {
         summ += parseInt(meal.obj.price)
       })
       state.tour.guide.forEach((guide) => {
-        summ += parseInt(guide.totalPrice)
+        summ += parseInt(guide.guide.totalPrice)
       })
       state.tour.attendant.forEach((attendant) => {
         summ += parseInt(attendant.totalPrice)
@@ -503,10 +506,10 @@ export default {
       state.tour.guide.forEach((guide) => {
         if (guide.correction > 0) {
           guide.correctedPrice = 
-            guide.totalPrice + 
-            (guide.totalPrice * guide.correction / 100) 
+            guide.guide.totalPrice + 
+            (guide.guide.totalPrice * guide.correction / 100) 
         } else {
-          guide.correctedPrice = guide.totalPrice
+          guide.correctedPrice = guide.guide.totalPrice
         }
       })
       // Add price-fields to Attendant
@@ -519,6 +522,9 @@ export default {
           attendant.correctedPrice = attendant.totalPrice
         }
       })
+    },
+    setEditTour(state, tour) {
+      state.tour = tour
     }
   },
   state: {

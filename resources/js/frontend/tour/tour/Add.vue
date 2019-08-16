@@ -202,6 +202,18 @@ export default {
           disabled: false, 
         },
         { 
+          name: 'Гиды', 
+          stage: 'Meal is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Сопровождающие', 
+          stage: 'Show attendant', 
+          active: false,
+          disabled: false, 
+        },
+        { 
           name: 'Допы', 
           stage: 'Show services', 
           active: false,

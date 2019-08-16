@@ -1,139 +1,129 @@
 <template>
-  <div>
-    <v-dialog 
-      v-model="dialog" 
-      fullscreen 
-      hide-overlay 
-      lazy
-      transition="dialog-bottom-transition"
-    >
-      <template v-slot:activator="{ on }">
+  <v-dialog 
+    v-model="dialog" 
+    fullscreen 
+    hide-overlay 
+    lazy
+    transition="dialog-bottom-transition"
+  >
+    <template v-slot:activator="{ on }">
+      <v-btn 
+        color="green" 
+        fab
+        flat
+        small
+        outline
+        disabled
+        v-on="on"
+      >
+        <i class="material-icons">
+          edit
+        </i>         
+      </v-btn>
+    </template>
+    <v-card>
+      <v-toolbar 
+        dark 
+        color="green"
+      >
         <v-btn 
-          color="green"
-          flat
-          fab
-          outline
-          small
+          icon 
           dark 
-          v-on="on"
+          @click="close"
         >
-          <i class="material-icons">
-            edit
-          </i>         
+          <v-icon>
+            close
+          </v-icon>
         </v-btn>
-      </template>
-      <v-card>
-        <v-toolbar 
+        <v-toolbar-title>
+          {{ tourName == '' ? 'Редактировать тур' : getTour.options.name }}
+        </v-toolbar-title>
+        <v-spacer />
+        <v-toolbar-items>
+          <v-btn 
+            v-for="item in nav" 
+            :key="item.name"
+            dark 
+            flat
+            @click="changeConstructorStage(item.stage)"
+          >
+            {{ item.name }}
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <v-container fluid>
+        <v-layout 
+          row 
+          wrap
+          justify-center
+        >
+          <v-flex
+            v-if="showOptions"
+            xs6 
+          >
+            <Options />
+          </v-flex>
+          <v-flex 
+            v-if="showChooseTransport"
+            xs12
+          >
+            <ChooseTransport />
+          </v-flex>
+          <v-flex 
+            v-if="showChooseMuseum"
+            xs12
+          >
+            <ChooseMuseum />
+          </v-flex>
+          <v-flex 
+            v-if="showChooseHotel"
+            xs12
+          >
+            <ChooseHotel />
+          </v-flex>
+          <v-flex
+            v-if="showChooseMeal"
+            xs12
+          >
+            <ChooseMeal />
+          </v-flex>
+          <v-flex 
+            v-if="showChooseGuide"
+            xs12
+          >
+            <ChooseGuide />
+          </v-flex>
+          <v-flex 
+            v-if="showServices"
+            xs12
+          >
+            <Services />
+          </v-flex>
+          <v-flex 
+            v-if="showChooseAttendant"
+            xs12
+          >
+            <ChooseAttendant />
+          </v-flex>
+          <v-flex 
+            v-if="showSummary"
+            xs12
+          >
+            <Summary 
+              :token="token"
+            />
+          </v-flex>
+        </v-layout>
+        <!-- <v-btn 
           dark 
           color="green"
+          @click="log"
         >
-          <v-btn 
-            icon 
-            dark 
-            @click="close"
-          >
-            <v-icon>
-              close
-            </v-icon>
-          </v-btn>
-          <v-toolbar-title>
-            Редактирование тура:
-            {{ tourToEdit.name }}
-          </v-toolbar-title>
-        </v-toolbar>
-        <v-container fluid>
-          <div class="navigator">
-            <ul>
-              <li @click="changeConstructorStage('Initial stage')">
-                Настройки тура
-              </li>
-              <li @click="changeConstructorStage('Options are set')">
-                Выбор транспорта
-              </li>
-              <li @click="changeConstructorStage('Transport is set')">
-                Выбор экскурский
-              </li>
-              <li @click="changeConstructorStage('Museum is set')">
-                Выбор проживания
-              </li>
-              <li @click="changeConstructorStage('Show services')">
-                Допы
-              </li>
-            </ul>
-          </div>
-          <v-layout 
-            row 
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-if="showOptions"
-              xs6 
-            >
-              <Options 
-                :tour-to-edit="tourToEdit"
-              />
-            </v-flex>
-            <v-flex 
-              v-if="showChooseTransport"
-              xs12
-            >
-              <ChooseTransport 
-                :tour-to-edit="tourToEdit"
-              />
-            </v-flex>
-            <v-flex 
-              v-if="showChooseMuseum"
-              xs12
-            >
-              <ChooseMuseum 
-                :tour-to-edit="tourToEdit"
-              />
-            </v-flex>
-            <v-flex 
-              v-if="showChooseHotel"
-              xs12
-            >
-              <ChooseHotel />
-            </v-flex>
-            <v-flex 
-              v-if="showChooseGuide"
-              xs12
-            >
-              <ChooseGuide />
-            </v-flex>
-            <v-flex 
-              v-if="showServices"
-              xs12
-            >
-              <Services />
-            </v-flex>
-            <v-flex 
-              v-if="showChooseAttendant"
-              xs12
-            >
-              <ChooseAttendant />
-            </v-flex>
-            <v-flex 
-              v-if="showSummary"
-              xs12
-            >
-              <Summary 
-                :token="token"
-              />
-            </v-flex>
-          </v-layout>
-          <!-- <v-btn 
-            dark 
-            color="green"
-            @click="log"
-          >
-            log
-          </v-btn> -->
-        </v-container>    
-      </v-card>
-    </v-dialog>
-  </div>
+          log
+        </v-btn> -->
+      </v-container>    
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -141,6 +131,7 @@ import Options from './Options'
 import ChooseTransport from './ChooseTransport'
 import ChooseMuseum from './ChooseMuseum'
 import ChooseHotel from './ChooseHotel'
+import ChooseMeal from './ChooseMeal'
 import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
 import Services from './Services'
@@ -155,17 +146,19 @@ export default {
     ChooseTransport,
     ChooseMuseum,
     ChooseHotel,
+    ChooseMeal,
     ChooseGuide,
     ChooseAttendant,
     Services,
     Summary,
+    // DayConstructor,
   },
   props: {
     token: {
       type: String,
       default: ''
     },
-    tourToEdit: {
+    editTour: {
       type: Object,
       default: () => {
         return {}
@@ -178,6 +171,56 @@ export default {
       tourName: '',
       nameRules: [
         v => !!v || 'Введите название тура',
+      ],
+      nav: [
+        { 
+          name: 'Настройки', 
+          stage: 'Initial stage', 
+          active: false,
+          disabled: false,
+        },
+        { 
+          name: 'Транспорт', 
+          stage: 'Options are set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Экскурсии', 
+          stage: 'Transport is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Проживание', 
+          stage: 'Museum is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Питание', 
+          stage: 'Hotel is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Гиды', 
+          stage: 'Meal is set', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Сопровождающие', 
+          stage: 'Show attendant', 
+          active: false,
+          disabled: false, 
+        },
+        { 
+          name: 'Допы', 
+          stage: 'Show services', 
+          active: false,
+          disabled: false, 
+        }
       ],
       dialog: false,
       firstSlide: true,
@@ -213,32 +256,13 @@ export default {
       'allCities', 
       'allTransports',
       'allTourOptions',
-      'getConstructorCurrentStage'
+      'getConstructorCurrentStage',
+      'allState',
+      'getTour',
+      
     ]),
-    tour: function() {
-      return {
-        type: this.tourType,
-        name: this.tourName,
-        dateStart: this.dateStart,
-        dateEnd: this.dateEnd,
-        days: this.days,
-        nights: this.nights,
-        grade: this.tourGrade,
-        languages: this.tourLanguages,
-        transport: this.choosenTransport,
-      }
-    },
-    tourTypes: function() {
-      let types = []
-      for (let key in this.allTourOptions.tour_type_options) {
-        types.push({
-          id: key,
-          name: this.allTourOptions.tour_type_options[key]
-        })
-      }
-      return types
-    },
     showOptions: function() {
+      console.log()
       return this.getConstructorCurrentStage === 'Initial stage' ? true : false
     },
     showChooseTransport: function() {
@@ -250,8 +274,11 @@ export default {
     showChooseHotel: function() {
       return this.getConstructorCurrentStage == 'Museum is set' ? true : false
     },
-    showChooseGuide: function() {
+    showChooseMeal: function() {
       return this.getConstructorCurrentStage == 'Hotel is set' ? true : false
+    },
+    showChooseGuide: function() {
+      return this.getConstructorCurrentStage == 'Meal is set' ? true : false
     },
     showChooseAttendant: function() {
       return this.getConstructorCurrentStage == 'Show attendant' ? true : false
@@ -273,6 +300,11 @@ export default {
     this.fetchCities()
     this.fetchTransport()
     this.fetchAllTourOptions()
+    // this.updateEditTour(this.editTour)
+  },
+  mounted() {
+  },
+  updated() {
   },
   methods: {
     ...mapActions([
@@ -280,6 +312,7 @@ export default {
       'fetchTransport',
       'fetchAllTourOptions',
       'updateConstructorCurrentStage',
+      'updateEditTour',
     ]),
     log() {
       console.log(this.allTourOptions)
@@ -336,21 +369,19 @@ export default {
   transform: scale(0.1)
 }
 .navigator {
-  display: none;
-  position: fixed;
-  z-index: 10;
-  top: 45%;
   text-align: left;
-  color: #9c9e9c;
+  color: white;
   font-size: 14px;
-  li {
-    transform: scale(1);
-    cursor: pointer;
-  }
-  li:hover {
-    color: #3bc34d;
-    font-size: 20px;
-    transform: scale(1.1);
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    li {
+      cursor: pointer;
+    }
+    li:hover {
+      color: white;
+    }
   }
 }
 </style>

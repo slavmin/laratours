@@ -61,7 +61,7 @@
               align-top
             >
               <Edit
-                :tour-to-edit="props.item"
+                :edit-tour="props.item"
                 :token="token"
               />
               <form 

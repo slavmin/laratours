@@ -160,7 +160,7 @@
             </tr>
             <tr 
               v-for="(meal, i) in getTour.meal"
-              :key="`M-${i}`"
+              :key="`Meal-${i}`"
             >
               <td>
                 {{ meal.meal.name }}:
@@ -202,15 +202,15 @@
               :key="`G-${i}`"
             >
               <td>
-                {{ guide.name }}:
+                {{ guide.guide.name }}:
                 <div class="body-1 grey--text">
-                  Часов: {{ guide.duration }}
+                  Часов: {{ guide.guide.duration }}
                   <br>
-                  Цена: {{ guide.price }}
+                  Цена: {{ guide.guide.price }}
                 </div>
               </td>
               <td class="price">
-                {{ guide.totalPrice }}
+                {{ guide.guide.totalPrice }}
               </td>
               <td>
                 <v-text-field
