@@ -221,6 +221,7 @@ export default {
       'updateActualTransport',
       'updateActualMuseum',
       'updateActualHotel',
+      'updateActualMeal',
       'updateActualGuide',
       'updateActualAttendant',
     ]),
@@ -230,6 +231,7 @@ export default {
         this.updateActualTransport()
         this.updateActualMuseum()
         this.updateActualHotel()
+        this.updateActualMeal()
         this.updateActualGuide()
         this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')

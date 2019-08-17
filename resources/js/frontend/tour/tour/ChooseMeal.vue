@@ -162,7 +162,7 @@ export default {
     },
   },
   created() {
-    this.updateActualMeal()
+    // this.updateActualMeal()
   },
   mounted() {
   },

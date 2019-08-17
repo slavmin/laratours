@@ -77,7 +77,11 @@
                     />
                     <br>
                     <span class="grey--text text--darken-1">
-                      Цена: {{ attendant.price }}
+                      Цена за час: {{ attendant.price }}
+                    </span>
+                    <br>
+                    <span class="grey--text text--darken-1">
+                      Итого: {{ attendant.price * attendant.duration }}
                     </span>
                   </div>
                 </v-card-title>
@@ -141,7 +145,7 @@ export default {
     },
   },
   created() {
-    this.updateActualAttendant()
+    // this.updateActualAttendant()
   },
   methods: {
     ...mapActions([
