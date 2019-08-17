@@ -77,7 +77,11 @@
                     />
                     <br>
                     <span class="grey--text text--darken-1">
-                      Цена: {{ guide.price }}
+                      Цена за час: {{ guide.price }}
+                    </span>
+                    <br>
+                    <span class="grey--text text--darken-1">
+                      Итого: {{ guide.price * guide.duration }}
                     </span>
                   </div>
                 </v-card-title>
@@ -141,7 +145,7 @@ export default {
     },
   },
   created() {
-    this.updateActualGuide()
+    // this.updateActualGuide()
   },
   methods: {
     ...mapActions([

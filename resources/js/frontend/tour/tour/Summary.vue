@@ -240,16 +240,16 @@
               :key="`A-${i}`"
             >
               <td>
-                {{ attendant.name }}:
+                {{ attendant.attendant.name }}:
                 <br>
                 <div class="body-1 grey--text">
-                  Часов: {{ attendant.duration }}
+                  Часов: {{ attendant.attendant.duration }}
                   <br>
-                  Цена: {{ attendant.price }}
+                  Цена: {{ attendant.attendant.price }}
                 </div>
               </td>
               <td class="price">
-                {{ attendant.totalPrice }}
+                {{ attendant.attendant.totalPrice }}
               </td>
               <td>
                 <v-text-field
@@ -285,9 +285,15 @@
               <td class="price">
                 {{ price.value }}
               </td>
-              <td />
               <td>
-                {{ price.value }}
+                <v-text-field
+                  v-model="price.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ price.correctedPrice }}
               </td>
             </tr>
             <tr>

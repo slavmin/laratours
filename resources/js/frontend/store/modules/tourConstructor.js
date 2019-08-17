@@ -158,7 +158,6 @@ export default {
           }
         })
       })
-      console.log(state.tour.transport)
     },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage
@@ -315,6 +314,7 @@ export default {
               selected: false,
               day: NaN,
               duration: NaN,
+              totalPrice: 0,
             })
           }
         }
@@ -350,6 +350,7 @@ export default {
               day: NaN,
               duration: NaN,
               about: '',
+              totalPrice: 0,
             })
           }
         }
@@ -375,7 +376,11 @@ export default {
       })
     },
     setCustomPrice: (state, price) => {
-      state.tour.customPrice.push(price)
+      state.tour.customPrice.push({
+        ...price,
+        correction: 0,
+        correctedPrice: 0,
+      })
     },
     setMuseumInEditMode: (state, updData) => {
       state.tour.museum = updData
@@ -404,7 +409,7 @@ export default {
         summ += parseInt(guide.guide.totalPrice)
       })
       state.tour.attendant.forEach((attendant) => {
-        summ += parseInt(attendant.totalPrice)
+        summ += parseInt(attendant.attendant.totalPrice)
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.value)
@@ -432,7 +437,7 @@ export default {
         summ += parseInt(attendant.correctedPrice)
       })
       state.tour.customPrice.forEach((price) => {
-        summ += parseInt(price.value)
+        summ += parseInt(price.correctedPrice)
       })
       state.tour.correctedPrice = summ
     },
@@ -458,13 +463,14 @@ export default {
       state.tour.attendant.forEach((attendant) => {
         attendant.correction = correction
       })
+      state.tour.customPrice.forEach((price) => {
+        price.correction = correction
+      })
     },
     setCorrectedPriceValues(state) {
-      console.log('hello from setcorrected')
       // Add price-fields to Transport
       state.tour.transport.forEach((transport) => {
         if (transport.correction > 0) {
-          console.log(transport)
           transport.correctedPrice = 
             transport.obj.price + 
             (transport.obj.price * parseInt(transport.correction) / 100) 
@@ -516,10 +522,20 @@ export default {
       state.tour.attendant.forEach((attendant) => {
         if (attendant.correction > 0) {
           attendant.correctedPrice = 
-            attendant.totalPrice + 
-            (attendant.totalPrice * attendant.correction / 100) 
+            attendant.attendant.totalPrice + 
+            (attendant.attendant.totalPrice * attendant.correction / 100) 
         } else {
-          attendant.correctedPrice = attendant.totalPrice
+          attendant.correctedPrice = attendant.attendant.totalPrice
+        }
+      })
+      // Add price-fields to Custom Price (Services)
+      state.tour.customPrice.forEach((price) => {
+        if (price.correction > 0) {
+          price.correctedPrice = 
+          parseInt(price.value) + 
+            (parseInt(price.value) * parseInt(price.correction) / 100) 
+        } else {
+          price.correctedPrice = parseInt(price.value)
         }
       })
     },
@@ -620,7 +636,7 @@ export default {
         summ += parseInt(attendant.correctedPrice)
       })
       state.tour.customPrice.forEach((price) => {
-        summ += parseInt(price.value)
+        summ += parseInt(price.correctedPrice)
       })
       return summ
     },

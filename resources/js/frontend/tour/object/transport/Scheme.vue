@@ -508,28 +508,28 @@ export default {
     },
     setDriverSeats() {
       // Change previous driver seats to common seats
-      this.bus.driver.forEach(driverSeatId => {
-        this.setSeatClass(driverSeatId, this.commonSeatClass)
-      })
+      // this.bus.driver.forEach(driverSeatId => {
+      //   this.setSeatClass(driverSeatId, this.commonSeatClass)
+      // })
       // Set new driver seats
       this.choosenSeats.forEach(choosenSeatId => {
         this.removeSeatsFromAllTypes(choosenSeatId)
         this.setSeatClass(choosenSeatId, this.driverSeatClass)
       })
-      this.bus.driver = this.choosenSeats
+      this.bus.driver = _.concat(this.bus.driver, this.choosenSeats)
       this.choosenSeats = []
     },
     setGuideSeats() {
       // Change previous guide seats to common seats
-      this.bus.guide.forEach(guideSeatId => {
-        this.setSeatClass(guideSeatId, this.commonSeatClass)
-      })
+      // this.bus.guide.forEach(guideSeatId => {
+      //   this.setSeatClass(guideSeatId, this.commonSeatClass)
+      // })
       // Set new guide seats
       this.choosenSeats.forEach(choosenSeatId => {
         this.removeSeatsFromAllTypes(choosenSeatId)
         this.setSeatClass(choosenSeatId, this.guideSeatClass)
       })
-      this.bus.guide = this.choosenSeats
+      this.bus.guide = _.concat(this.bus.guide, this.choosenSeats)
       this.choosenSeats = []
     },
     setCommonSeats() {
@@ -541,41 +541,41 @@ export default {
     },
     setPass() {
       // Change previous pass to common seats
-      this.bus.pass.forEach(passId => {
-        this.setSeatClass(passId, this.commonSeatClass)
-      })
+      // this.bus.pass.forEach(passId => {
+      //   this.setSeatClass(passId, this.commonSeatClass)
+      // })
       // Set new pass
       this.choosenSeats.forEach(choosenSeatId => {
         this.removeSeatsFromAllTypes(choosenSeatId)
         this.setSeatClass(choosenSeatId, this.passClass)
       })
-      this.bus.pass = this.choosenSeats
+      this.bus.pass = _.concat(this.bus.pass, this.choosenSeats)
       this.choosenSeats = []
     },
     setDoors() {
       // Change previous doors to common seats
-      this.bus.doors.forEach(doorId => {
-        this.setSeatClass(doorId, this.commonSeatClass)
-      })
+      // this.bus.doors.forEach(doorId => {
+      //   this.setSeatClass(doorId, this.commonSeatClass)
+      // })
       // Set new doors
       this.choosenSeats.forEach(choosenSeatId => {
         this.removeSeatsFromAllTypes(choosenSeatId)
         this.setSeatClass(choosenSeatId, this.doorClass)
       })
-      this.bus.doors = this.choosenSeats
+      this.bus.doors = _.concat(this.bus.doors, this.choosenSeats)
       this.choosenSeats = []
     },
     setUnavailableSeats() {
       // Change previous unavailable seats to common seats
-      this.bus.unavailable.forEach(unavailableSeatId => {
-        this.setSeatClass(unavailableSeatId, this.commonSeatClass)
-      })
+      // this.bus.unavailable.forEach(unavailableSeatId => {
+      //   this.setSeatClass(unavailableSeatId, this.commonSeatClass)
+      // })
       // Set new unavailable seats
       this.choosenSeats.forEach(choosenSeatId => {
         this.removeSeatsFromAllTypes(choosenSeatId)
         this.setSeatClass(choosenSeatId, this.unavailableSeatClass)
       })
-      this.bus.unavailable = this.choosenSeats
+      this.bus.unavailable = _.concat(this.bus.unavailable, this.choosenSeats)
       this.choosenSeats = []
     },
     exportBusScheme() {

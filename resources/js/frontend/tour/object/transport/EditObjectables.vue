@@ -386,7 +386,7 @@ export default {
       let extra = JSON.parse(this.item.extra)
       extra.scheme = scheme
       this.item.extra = JSON.stringify(extra)
-      console.log(this.item)
+      console.log(scheme)
     }
   }
 };
