@@ -321,6 +321,9 @@ export default {
     chooseSeat(seatId) {
       if (this.bus.service.find(serviceSeat => { return serviceSeat === seatId }) !== undefined) {
         this.showError = true
+        setTimeout(() => {
+          this.showError = false
+        }, 2000)
       } else{
         this.showError = false
         if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
@@ -448,6 +451,12 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 .bus {
   /*border: 1px solid black;*/
   padding: 6px;
