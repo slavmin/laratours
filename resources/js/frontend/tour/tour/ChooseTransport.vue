@@ -515,6 +515,8 @@ export default {
       this.updateConstructorCurrentStage('Transport is set')
     },
     done() {
+      // console.log(document.getElementById('app'))
+      // document.getElementById('app').scrollTo(0,0);
       this.updateTourTransport()
       this.end()
     },
