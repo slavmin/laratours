@@ -26,6 +26,7 @@
       </template>
       <v-card>
         <v-toolbar 
+          id="toolbar"
           dark 
           color="green"
         >
@@ -70,43 +71,57 @@
               v-if="showChooseTransport"
               xs12
             >
-              <ChooseTransport />
+              <ChooseTransport 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseMuseum"
               xs12
             >
-              <ChooseMuseum />
+              <ChooseMuseum 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseHotel"
               xs12
             >
-              <ChooseHotel />
+              <ChooseHotel 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex
               v-if="showChooseMeal"
               xs12
             >
-              <ChooseMeal />
+              <ChooseMeal 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseGuide"
               xs12
             >
-              <ChooseGuide />
+              <ChooseGuide 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showServices"
               xs12
             >
-              <Services />
+              <Services 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showChooseAttendant"
               xs12
             >
-              <ChooseAttendant />
+              <ChooseAttendant 
+                @scrollme="scrollToTop"
+              />
             </v-flex>
             <v-flex 
               v-if="showSummary"
@@ -120,9 +135,9 @@
           <!-- <v-btn 
             dark 
             color="green"
-            @click="log"
+            @click="scrollToTop"
           >
-            log
+            scroll
           </v-btn> -->
         </v-container>    
       </v-card>
@@ -348,7 +363,10 @@ export default {
     },
     changeConstructorStage(stage) {
       this.updateConstructorCurrentStage(stage)
-    }
+    },
+    scrollToTop() {
+      document.getElementById('toolbar').scrollIntoView()
+    },
   }
 };
 </script>

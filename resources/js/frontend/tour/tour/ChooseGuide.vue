@@ -177,6 +177,7 @@ export default {
       this.updateNewGuideOptions(updGuide)
     },
     done() {
+      this.$emit('scrollme')
       this.updateTourGuide()
       this.end()
     },

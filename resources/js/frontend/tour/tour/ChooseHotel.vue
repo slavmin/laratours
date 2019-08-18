@@ -242,6 +242,7 @@ export default {
       this.updateNewHotelOptions(updData)
     },
     done() {
+      this.$emit('scrollme')
       this.updateTourHotel()
       this.end()
     },

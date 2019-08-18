@@ -38,34 +38,34 @@
           </td>
           <td>
             {{ 
-              item.description 
-                ? getCityName(JSON.parse(item.description).options.cities[0]) 
+              item.extra 
+                ? getCityName(JSON.parse(item.extra).options.cities[0]) 
                 : '' 
             }}
           </td>
           <td>
             {{ 
-              item.description
-                ? JSON.parse(item.description).options.dateStart
+              item.extra
+                ? JSON.parse(item.extra).options.dateStart
                 : ''  
             }}
           </td>
           <td>
             {{ 
-              item.description
-                ? JSON.parse(item.description).options.days
+              item.extra
+                ? JSON.parse(item.extra).options.days
                 : ''  
             }}
           </td>
           <td>
             <AboutTour 
-              :content="JSON.parse(item.description).editorsContent"
+              :content="JSON.parse(item.extra).editorsContent"
             />
           </td>
           <td>
             {{ 
-              item.description
-                ? JSON.parse(item.description).correctedPrice
+              item.extra
+                ? JSON.parse(item.extra).correctedPrice
                 : ''  
             }}
           </td>
@@ -115,9 +115,6 @@ export default {
         return {}
       }
     },
-  },
-  created() {
-    console.log(this.cities)
   },
   methods: {
     getCityName(id) {

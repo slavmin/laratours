@@ -472,8 +472,8 @@ export default {
       state.tour.transport.forEach((transport) => {
         if (transport.correction > 0) {
           transport.correctedPrice = 
-            transport.obj.price + 
-            (transport.obj.price * parseInt(transport.correction) / 100) 
+          parseInt(transport.obj.price) + 
+            (parseInt(transport.obj.price) * parseInt(transport.correction) / 100) 
         } else {
           transport.correctedPrice = transport.obj.price
         }
