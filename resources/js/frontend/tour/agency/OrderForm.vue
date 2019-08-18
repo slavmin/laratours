@@ -121,7 +121,7 @@ export default {
   },
   computed: {
     transport: function() {
-      return JSON.parse(this.tour.description).transport[0].item
+      return JSON.parse(this.tour.extra).transport[0].item
     }
   },
   methods: {

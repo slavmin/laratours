@@ -193,6 +193,7 @@ export default {
       this.updateNewMealOptions(updData)
     },
     done() {
+      this.$emit('scrollme')
       this.updateTourMeal()
       this.end()
     },

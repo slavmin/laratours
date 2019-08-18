@@ -235,6 +235,7 @@ export default {
       }
     },
     done() {
+      this.$emit('scrollme')
       this.updateEditorsContent(this.editorsContent)
       console.log(this.getTour)
       this.updateConstructorCurrentStage('Show summary')
