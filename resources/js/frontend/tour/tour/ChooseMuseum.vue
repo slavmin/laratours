@@ -202,6 +202,7 @@ export default {
       this.updateNewMuseumOptions(updData)
     },
     done() {
+      this.$emit('scrollme')
       this.updateTourMuseum()
       this.end()
     },

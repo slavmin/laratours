@@ -176,6 +176,7 @@ export default {
       this.updateNewAttendantOptions(updAttendant)
     },
     done() {
+      this.$emit('scrollme')
       this.updateTourAttendant()
       this.end()
     },
