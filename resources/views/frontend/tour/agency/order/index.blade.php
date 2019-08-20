@@ -1,6 +1,19 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <?php $sitems = json_encode($items); ?>
+    <?php $stour_name = json_encode($tour_names); ?>
+    <?php $soperators = json_encode($operators); ?>
+    <?php $sstatuses = json_encode($statuses); ?>
+    <agency-orders-index
+        data-app
+        :items="{{ $sitems }}"
+        :tour-names="{{ $stour_name }}"
+        :operators="{{ $soperators }}"
+        :statuses="{{ $sstatuses }}"
+        header="@lang('labels.frontend.tours.order.management')"
+        token="{{ csrf_token() }}"
+    ></agency-orders-index>
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

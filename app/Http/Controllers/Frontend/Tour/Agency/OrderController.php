@@ -32,7 +32,7 @@ class OrderController extends Controller
         $statuses = TourOrder::getStatusesAttribute();
         $tour_names = Tour::withoutGlobalScopes()->whereIn('team_id', $subscriptions)->pluck('name', 'id')->all();
 
-        $items = TourOrder::orderBy($orderBy, $sort)->paginate();
+        $items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate();
         $deleted = TourOrder::onlyTrashed()->get();
 
         return view('frontend.tour.agency.order.index', compact('items', 'deleted', 'operators', 'tour_names'))

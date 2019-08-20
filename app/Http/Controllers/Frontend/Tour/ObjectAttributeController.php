@@ -82,7 +82,7 @@ class ObjectAttributeController extends Controller
             ['id' => $item_id],
             [
                 'name' => $item['name'],
-                'qnt' => $item['qnt'] ?? null, 'price' => $item['price'] ?? null,
+                'qnt' => $item['qnt'] ?? null,
                 'description' => $item['description'] ?? null,
                 'price' => $item['price'] ?? null,
                 'extra' => $item['extra'] ?? null,

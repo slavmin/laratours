@@ -209,22 +209,21 @@ export default {
     }
   },
   created() {
-    console.log(this.object)
-    if (this.object.extra !== null) {
+    this.attribute = 'attribute[' + this.object.id + ']'
+  },
+  mounted() {
+    if (this.object.extra !== null && this.object.extra !== undefined) {
+      console.log(this.object.extra)
       this.extra = JSON.parse(this.object.extra)
       this.initialScheme = Object.assign({}, this.extra.scheme)
       this.bus = Object.assign({}, this.extra.scheme)
     } else {
       this.initialScheme = this.bus
     }
-    this.attribute = 'attribute[' + this.object.id + ']'
-  },
-  mounted() {
     this.drawScheme()
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
     this.setServiceSeats()
-    console.log(this.bus)
   },
   updated() {
     console.log('updated')
@@ -291,7 +290,6 @@ export default {
       }
     },
     drawScheme() {
-      console.log('draw scheme')
       this.setAllSeatsCommon()
       // Driver seats
       this.bus.driver.forEach(driverSeatId => {
