@@ -1,0 +1,171 @@
+<template>
+  <v-layout 
+    row 
+    wrap
+    justify-center
+  >
+    <table>
+      <thead>
+        <th>
+          №
+        </th>
+        <th>
+          Имя тура
+        </th>
+        <th>
+          Данные о туристах
+        </th>
+        <th>
+          Оператор
+        </th>
+        <th>
+          Статус
+        </th>
+        <th>
+          Действия
+        </th>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in items.data"
+          :key="item.id"
+        >
+          <td>
+            {{ item.id }}
+          </td>
+          <td>
+            {{ tourNames[item.tour_id] }}
+          </td>
+          <td>
+            Туристов: {{ item.profiles[0].content.length }}
+            <br>
+            <i
+              v-for="n in item.profiles[0].content.length"
+              :key="n" 
+              class="material-icons body-2"
+            >
+              accessibility_new
+            </i>
+            <br>
+            <Details 
+              :profiles="item.profiles"
+              :order-id="item.id"
+            />
+          </td>
+          <td>
+            {{ operators[item.operator_id] }}
+          </td>
+          <td>
+            <span 
+              :class="statuses[item.status]"
+            >
+              {{ statuses[item.status] }}
+            </span>
+          </td>
+          <td>
+            <v-layout 
+              row 
+              wrap
+            >
+              <Edit 
+                :token="token"
+              />
+              <form 
+                :action="'/agency/order/' + item.id"
+                method="POST"
+              >
+                <input 
+                  id="_method" 
+                  type="hidden" 
+                  name="_method" 
+                  value="DELETE"
+                >
+                <input 
+                  type="hidden" 
+                  name="_token" 
+                  :value="token"
+                > 
+                <v-btn 
+                  fab
+                  small
+                  outline
+                  color="red"
+                  type="submit"
+                >
+                  <i class="material-icons">
+                    delete
+                  </i>
+                </v-btn>
+              </form>
+            </v-layout>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </v-layout>
+</template>
+
+<script>
+import Edit from './Edit'
+import Details from './Details'
+export default {
+  name: 'OrderTable',
+  components:{
+    Edit,
+    Details,
+  },
+  props: {
+    token: {
+      type: String,
+      default: ''
+    },
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    tourNames: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    operators: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    statuses: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
+  mounted() {
+    console.log(this.items)
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+table {
+  td,
+  th {
+    border: 1px solid gray;
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+span {
+  &.pending {
+    display: block;
+    background-color: #FDD835;
+    padding: 6px;
+    border-radius: 6px;
+    color: white;
+  }
+}
+</style>
