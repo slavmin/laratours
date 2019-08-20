@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
-use App\Models\Tour\TourDate;
-use App\Models\Tour\TourType;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
+use App\Models\Tour\TourType;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TourController extends Controller
@@ -34,19 +33,27 @@ class TourController extends Controller
 
         if (!is_null($city_id) && !is_null($type_id)) {
 
-            $items = Tour::where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
+            $items = Tour::with(['orderprofiles' => function ($query) {
+                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+            }])->where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
 
         } elseif (!is_null($type_id)) {
 
-            $items = Tour::where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
+            $items = Tour::with(['orderprofiles' => function ($query) {
+                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+            }])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
 
         } elseif (!is_null($city_id)) {
 
-            $items = Tour::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+            $items = Tour::with(['orderprofiles' => function ($query) {
+                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+            }])->where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
 
         } else {
 
-            $items = Tour::orderBy($orderBy, $sort)->paginate();
+            $items = Tour::with(['orderprofiles' => function ($query) {
+                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+            }])->orderBy($orderBy, $sort)->paginate();
 
         }
 
@@ -58,11 +65,11 @@ class TourController extends Controller
 
         $tour_types = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.tour.index', compact('items','cities_names', 'cities_select', 'tour_types', 'deleted'))
-            ->with('city_id', (int)$city_id)
-            ->with('type_id', (int)$type_id)
-            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted'))
+            ->with('city_id', (int) $city_id)
+            ->with('type_id', (int) $type_id)
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
 
@@ -88,13 +95,12 @@ class TourController extends Controller
         return view('frontend.tour.tour.create', compact('cities_options', 'countries_cities_options', 'tour_type_options'))
             ->with('method', 'POST')
             ->with('action', 'create')
-            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('item', [])
-            ->with('city_id', (int)$city_id)
+            ->with('city_id', (int) $city_id)
             ->with('model_alias', $model_alias);
     }
-
 
     public function store(Request $request)
     {
@@ -110,7 +116,7 @@ class TourController extends Controller
             $tour->save();
 
             // Add tour dates
-            if(is_array($request->get('dates'))) {
+            if (is_array($request->get('dates'))) {
                 $tour_dates = [];
                 foreach ($request->get('dates') as $date) {
                     !empty($date) ? $tour_dates[] = ['date' => $date] : null;
@@ -170,15 +176,13 @@ class TourController extends Controller
 
         $attendant_options = Tour::getAttendantsOption();
 
-
         return view('frontend.tour.tour.edit', compact('item', 'tour_dates', 'attributes', 'countries_cities_options', 'cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
-            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -192,7 +196,7 @@ class TourController extends Controller
         $tour = Tour::findOrFail($id);
 
         // MySql empty Json fix
-        if(!$request->get('cities_list')){
+        if (!$request->get('cities_list')) {
             $tour->update(array_merge($request->all(), ['cities_list' => null]));
         } else {
             $tour->update($request->all());
@@ -200,7 +204,7 @@ class TourController extends Controller
 
         DB::transaction(function () use ($tour, $request) {
 
-            if(is_array($request->get('dates'))) {
+            if (is_array($request->get('dates'))) {
                 $tour_dates = [];
                 foreach ($request->get('dates') as $date) {
                     !empty($date) ? $tour_dates[] = ['date' => $date] : null;
@@ -209,10 +213,10 @@ class TourController extends Controller
                 $tour->dates()->createMany($tour_dates);
             }
 
-            foreach ($tour->getAllAttributes() as $k => $v){
-                $input = !empty($request->get(substr($k, 0, -1).'_id')) ? $request->get(substr($k, 0, -1).'_id') : [];
+            foreach ($tour->getAllAttributes() as $k => $v) {
+                $input = !empty($request->get(substr($k, 0, -1) . '_id')) ? $request->get(substr($k, 0, -1) . '_id') : [];
                 $output = [];
-                foreach ($input as $item){
+                foreach ($input as $item) {
                     $output[$item] = ['team_id' => $tour->team_id];
                 }
                 $tour->$k()->sync($output);
@@ -263,7 +267,6 @@ class TourController extends Controller
 
         return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
     }
-
 
     public static function getCityId(Request $request)
     {
