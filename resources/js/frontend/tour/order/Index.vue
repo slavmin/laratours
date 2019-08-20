@@ -13,6 +13,7 @@
         :agencies="agencies"
         :statuses="statuses"
         :tour-names="tourNames"
+        :token="token"
       />
     </v-layout>
   </v-container>
@@ -50,7 +51,14 @@ export default {
         return []
       }
     },
+    token: {
+      type: String,
+      default: '',
+    },
   },
+  mounted() {
+    console.log(this.items)
+  }
 }
 </script>
 

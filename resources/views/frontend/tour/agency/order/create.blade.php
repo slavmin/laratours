@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+@include('includes.partials.messages')
 
 @section('content')
     <?php $sitem = json_encode($item); ?>
