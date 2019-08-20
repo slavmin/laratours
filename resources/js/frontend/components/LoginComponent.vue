@@ -45,7 +45,7 @@
           >
           <label 
             class="form-check-label text-white" 
-            for="exampleCheck1"
+            for="remember"
           >
             Запомнить
           </label>
@@ -169,6 +169,7 @@ export default {
         this.showLoginForm = true
         this.showLoginButton = false
         this.showForgottenPasswordButton = true
+        console.log('hello')
     },
     clickForgottenPasswordButton() {
         this.showLoginForm = false
@@ -194,7 +195,7 @@ body,
   height: 100%;
   background: url('/img/frontend/bg-bridge.jpg') center center no-repeat;
   background-size: cover;
-    z-index: 1;
+  z-index: 2;
   > .row {
     width: 100%;
     height: 100%;
@@ -211,6 +212,7 @@ body,
         left: 0;
         background-image: linear-gradient(to top,#000,rgba(0,0,0,.17));
         opacity: .7;
+        z-index: 1;
     }
 }
 .slogan {
