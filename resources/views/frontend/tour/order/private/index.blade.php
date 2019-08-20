@@ -1,7 +1,8 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <!-- @if(count($items)>0)
+    <!-- Vue component -->
+    @if(count($items)>0)
         <?php $sitems = json_encode($items); ?>
         <?php $sagencies = json_encode($agencies); ?>
         <?php $sstatuses = json_encode($statuses); ?>
@@ -12,9 +13,11 @@
             :agencies="{{ $sagencies }}"
             :statuses="{{ $sstatuses }}"
             :tour-names="{{ $stour_names }}"
+            token="{{ csrf_token() }}"
         >
         </operator-orders-index>
-    @endif -->
+    @endif
+    <!-- /Vue component -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">

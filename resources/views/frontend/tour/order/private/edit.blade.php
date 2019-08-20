@@ -1,6 +1,13 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <!-- Vue component -->
+        <!-- <?php $sitems = json_encode($audits); ?>
+        <operator-order-edit
+            data-app
+            :items="{{ $sitems }}"
+        ></operator-order-edit> -->
+    <!-- /Vue component -->
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
 
