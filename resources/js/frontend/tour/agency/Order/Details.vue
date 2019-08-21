@@ -36,6 +36,9 @@
             </v-card-title>
             <v-card-text>
               <div>
+                Пол: {{ profile.gender }}
+              </div>
+              <div>
                 Место: 
                 <span class="seat">
                   {{ profile.busSeatId }}
@@ -49,6 +52,10 @@
               </div>
               <div>
                 Телефон: {{ profile.phone }}
+              </div>
+              <v-divider />
+              <div>
+                Номер: {{ parseInt(profile.room) + 1 }}
               </div>
             </v-card-text>
           </v-card>
