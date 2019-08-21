@@ -125,9 +125,15 @@
         type="hidden"
         :name="isRequired ? 'customer[' + id + '][meal]' : ''"
       >
+      <input 
+        v-model="roomId"
+        type="hidden"
+        :name="isRequired ? 'customer[' + id + '][room]' : ''"
+      >
       <div>
         <BusScheme 
           :object="transport"
+          :scheme-id="id"
           @choosen="onChoosen"
         />
         <div v-if="choosenSeat != ''">

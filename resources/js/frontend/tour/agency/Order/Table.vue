@@ -37,10 +37,10 @@
             {{ tourNames[item.tour_id] }}
           </td>
           <td>
-            Туристов: {{ item.profiles[0].content.length }}
+            Туристов: {{ touristsCount(item.profiles[0].content) }}
             <br>
             <i
-              v-for="n in item.profiles[0].content.length"
+              v-for="n in touristsCount(item.profiles[0].content)"
               :key="n" 
               class="material-icons body-2"
             >
@@ -146,6 +146,15 @@ export default {
   },
   mounted() {
     console.log(this.items)
+  },
+  methods: {
+    touristsCount(content) {
+      let count = 0
+      for (let key in content) {
+        count += 1
+      }
+      return count
+    },
   }
 }
 </script>
