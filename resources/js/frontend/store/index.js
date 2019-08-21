@@ -14,6 +14,7 @@ import languages from './modules/languages'
 import tourConstructor from './modules/tourConstructor'
 import busScheme from './modules/busScheme'
 import tourTypes from './modules/tourTypes'
+import agencyOrder from './modules/agencyOrder'
 
 Vue.use(Vuex)
 
@@ -33,5 +34,6 @@ export default new Vuex.Store({
     tourConstructor,
     busScheme,
     tourTypes,
+    agencyOrder,
 	}
 })

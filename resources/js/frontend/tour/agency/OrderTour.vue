@@ -150,6 +150,7 @@
   </v-container>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import OrderForm from './OrderForm'
 import OrderHint from './OrderHint'
 export default {
@@ -161,6 +162,12 @@ export default {
   props: {
     tour: {
       type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    profiles: {
+      type: String,
       default: () => {
         return {}
       }
@@ -186,9 +193,12 @@ export default {
     }
   },
   mounted() {
-    console.log(this.tour)
+    this.orderedSeats()
   },
   methods: {
+    ...mapActions([
+      'updateOrderedSeats',
+    ]),
     close() {
       this.dialog = false
       this.order = {}
@@ -200,6 +210,13 @@ export default {
       if (this.roomsCount > 1) {
         this.roomsCount -= 1
       }
+    },
+    orderedSeats() {
+      let result = []
+      JSON.parse(this.profiles).map(profile => profile.content.forEach((item) => {
+        result.push(item.busSeatId)
+      }))
+      this.updateOrderedSeats(result)
     }
   }
 }
