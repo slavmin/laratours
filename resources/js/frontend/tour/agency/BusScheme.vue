@@ -484,7 +484,6 @@ export default {
       this.showScheme = false
       this.bus.totalPassengersCount = 0
       this.updateSeatsInCurrentOrder(this.selectedInThisFormSeat)
-      console.log('after update: ', this.getSeatsInCurrentOrder)
       this.setTotalPassengersCount()
     },
     save() {

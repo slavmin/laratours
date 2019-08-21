@@ -8,7 +8,7 @@
         v-model="order.name"
         label="Имя"
         :rules="[v => !!v || 'Укажите имя']"
-        :name="'customer[' + id + '][first_name]'"
+        :name="isRequired ? 'customer[' + id + '][first_name]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -16,7 +16,7 @@
         v-model="order.surname"
         label="Фамилия"
         :rules="[v => !!v || 'Укажите фамилию']"
-        :name="'customer[' + id + '][last_name]'"
+        :name="isRequired ? 'customer[' + id + '][last_name]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -30,14 +30,14 @@
       <input 
         v-model="order.gender"
         type="hidden"
-        :name="'customer[' + id + '][gender]'"
+        :name="isRequired ? 'customer[' + id + '][gender]' : ''"
       >
       <v-text-field
         v-model="order.passport"
         label="Номер документа"
         placeholder="44 00-123 123"
         :rules="[v => !!v || 'Укажите данные']"
-        :name="'customer[' + id + '][passport]'"
+        :name="isRequired ? 'customer[' + id + '][passport]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -56,7 +56,7 @@
           <v-text-field
             v-model="date"
             label="Дата рождения"
-            :name="'customer[' + id + '][dob]'"
+            :name="isRequired ? 'customer[' + id + '][dob]' : ''"
             prepend-icon="event"
             readonly
             v-on="on"
@@ -85,7 +85,7 @@
         v-model="order.phone"
         label="Телефон"
         placeholder="+7 (900) 123-11-22"
-        :name="'customer[' + id + '][phone]'"
+        :name="isRequired ? 'customer[' + id + '][phone]' : ''"
         color="green lighten-3"
         :rules="[v => !!v || 'Это обязательное поле']"
         maxlength="16"
@@ -95,7 +95,7 @@
       <v-text-field
         label="Email"
         :rules="[v => !!v || 'Укажите email']"
-        :name="'customer[' + id + '][email]'"
+        :name="isRequired ? 'customer[' + id + '][email]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -103,7 +103,7 @@
         v-model="order.country"
         label="Страна"
         :rules="[v => !!v || 'Укажите страну']"
-        :name="'customer[' + id + '][country]'"
+        :name="isRequired ? 'customer[' + id + '][country]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -111,7 +111,7 @@
         v-model="order.city"
         label="Город"
         :rules="[v => !!v || 'Укажите город']"
-        :name="'customer[' + id + '][city]'"
+        :name="isRequired ? 'customer[' + id + '][city]' : ''"
         color="green lighten-3"
         :required="isRequired"
       />
@@ -123,7 +123,7 @@
       <input 
         v-model="meal"
         type="hidden"
-        :name="'customer[' + id + '][meal]'"
+        :name="isRequired ? 'customer[' + id + '][meal]' : ''"
       >
       <div>
         <BusScheme 
@@ -136,7 +136,7 @@
       </div>
       <input 
         type="hidden"
-        :name="'customer[' + id + '][busSeatId]'"
+        :name="isRequired ? 'customer[' + id + '][busSeatId]' : ''"
         :value="choosenSeat"
       >
     </v-flex>
@@ -183,7 +183,6 @@ export default {
         { id: 2, value: 'Женский'},
         { id: 3, value: 'Ребёнок'},
       ],
-      isRequired: true,
       meal: '',
       meals: ['Завтраки', 'Полупансион', 'Полный пансион']
     }
@@ -195,6 +194,18 @@ export default {
     id: function() {
       return this.profileId + (this.roomId * 3)
     },
+    isRequired: function() {
+      // If this is first form on tab. Id = 0, 3, 6, etc.
+      if (this.id == (this.roomId * 3)) {
+        return true
+      }
+      else if (this.order.name != undefined && this.order.name != '') {
+        return true
+      }
+      else {
+        return false
+      }
+    }
   },
   watch: {
     menu (val) {
