@@ -159,7 +159,7 @@ export default {
 
   name: 'BusScheme',
   props: {
-    id: {
+    schemeId: {
       type: Number,
       default: () => {
         return 0
@@ -251,6 +251,8 @@ export default {
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
     this.setServiceSeats()
+    this.bus.ordered = this.getOrderedSeats
+    this.bus.current = this.getSeatsInCurrentOrder
   },
   updated() {
     this.drawScheme()

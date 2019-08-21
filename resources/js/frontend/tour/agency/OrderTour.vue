@@ -213,9 +213,12 @@ export default {
     },
     orderedSeats() {
       let result = []
-      JSON.parse(this.profiles).map(profile => profile.content.forEach((item) => {
-        result.push(item.busSeatId)
-      }))
+      JSON.parse(this.profiles).map((profile) => {
+        let content = Object.assign({}, profile.content)
+        for (let key in content) {
+          result.push(content[key].busSeatId)
+        }
+      })
       this.updateOrderedSeats(result)
     }
   }
