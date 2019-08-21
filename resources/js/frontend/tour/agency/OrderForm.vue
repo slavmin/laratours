@@ -26,7 +26,6 @@
         item-text="value"
         item-name="value"
         label="Пол"
-        @change="log"
       />
       <input 
         v-model="order.gender"
@@ -158,6 +157,12 @@ export default {
         return {}
       }
     },
+    profiles: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     profileId: {
       type: Number,
       default: 0
@@ -196,6 +201,9 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
   },
+  mounted() {
+    // console.log(this.profiles)
+  },
   methods: {
     chooseSeat() {
       console.log(this.transport)
@@ -206,14 +214,6 @@ export default {
     save(date) {
       this.$refs.menu.save(date)
     },
-    log() {
-      console.log(this.order)
-    },
-    maskNumber() {
-      let x = this.order.phone.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      console.log(x)
-      this.order.phone = !x[2] ? x[1] : '+' + x[1] + ' ' + '(' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-    }
   }
 }
 </script>
