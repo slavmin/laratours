@@ -88,6 +88,16 @@ class Tour extends Model
         return $this->hasMany('App\Models\Tour\TourDate', 'tour_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Tour\TourOrder', 'tour_id');
+    }
+
+    public function orderprofiles()
+    {
+        return $this->hasManyThrough('App\Models\Profile', 'App\Models\Tour\TourOrder', 'tour_id', 'profileable_id')->where('profileable_type', 'App\Models\Tour\TourOrder');
+    }
+
 
     // Get Tour attributes
     public static function getTourTypeIds()
