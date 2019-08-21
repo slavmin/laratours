@@ -31,16 +31,7 @@
               row
               justify-center
             >
-              <v-flex
-                xs10
-              >
-                <v-alert
-                  :value="showError"
-                  color="red"
-                  type="error"
-                >
-                  Это не пассажирское место.
-                </v-alert>
+              <v-flex>
                 <v-spacer />
                 <!-- Bus scheme -->
                 <div class="bus">
@@ -64,6 +55,22 @@
                   </div>
                 </div>
                 <!-- /Bus scheme -->
+              </v-flex>
+              <v-flex>
+                <v-alert
+                  :value="showServiceError"
+                  color="red"
+                  type="error"
+                >
+                  Это не пассажирское место.
+                </v-alert>
+                <v-alert
+                  :value="showOrderedError"
+                  color="red"
+                  type="error"
+                >
+                  Это место занято.
+                </v-alert>
               </v-flex>
             </v-layout>
           </v-container>
@@ -147,7 +154,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'BusScheme',
@@ -173,12 +180,13 @@ export default {
     token: {
       type: String,
       default: ''
-    }
+    },
   },
   data() {
     return {
       showScheme: false,
-      showError: false,
+      showServiceError: false,
+      showOrderedError: false,
       bus: {
         rows: 10,
         cols: 4,
@@ -187,7 +195,10 @@ export default {
         guide: ['2-4'],
         pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
         unavailable: [],
-        totalPassengersCount: 0
+        ordered: [],
+        current: [],
+        seatsInCurrentOrder: [],
+        totalPassengersCount: 0,
       },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
@@ -198,14 +209,30 @@ export default {
       choosenSeatClass: 'choosen-seat',
       choosenSeats: [],
       unavailableSeatClass: 'unavailable-seat',
+      orderedSeatClass: 'ordered-seat',
+      currentSeatClass: 'current-seat',
       extra: {},
       attribute: '',
-      initialScheme: {}
+      initialScheme: {},
+      orderedSeats: [],
+      selectedInThisFormSeat: '',
     };
+  },
+  computed: {
+    ...mapGetters([
+      'getOrderedSeats',
+      'getSeatsInCurrentOrder',
+    ]),
   },
   watch: {
     choosenSeats: function() {
       this.drawScheme()
+    },
+    getOrderedSeats: function() {
+      this.bus.ordered = this.getOrderedSeats
+    },
+    getSeatsInCurrentOrder: function() {
+      this.bus.current = this.getSeatsInCurrentOrder
     }
   },
   created() {
@@ -226,7 +253,6 @@ export default {
     this.setServiceSeats()
   },
   updated() {
-    console.log('updated')
     this.drawScheme()
     this.totalPassengersCount = 0
     this.setTotalPassengersCount()
@@ -234,6 +260,10 @@ export default {
   },
   methods: {
     // ...mapMutations(['assignNewScheme']),
+    ...mapActions([
+      'updateSeatsInCurrentOrder',
+      'removeSeatFromCurrent',
+    ]),
     addRow() {
       this.bus.rows++
     },
@@ -286,7 +316,7 @@ export default {
     setSeatClass(seatId, className) {
       if (this.showScheme) {
         let seat = document.getElementById(seatId)
-        seat.className = this.defaultClasses + className
+        if (seat) seat.className = this.defaultClasses + className
       }
     },
     drawScheme() {
@@ -313,24 +343,47 @@ export default {
       })
       // Choosen
       this.choosenSeats.forEach(choosenSeatId => {
-        this.setSeatClass(choosenSeatId, this.choosenSeatClass)
+        if (choosenSeatId != null) {
+          this.setSeatClass(choosenSeatId, this.choosenSeatClass)
+        }
+      })
+      // Ordered
+      this.bus.ordered.forEach(orderedSeatId => {
+        if (orderedSeatId != null) {
+          this.setSeatClass(orderedSeatId, this.orderedSeatClass)
+        }
+      })
+      // Current order seats
+      this.bus.current.forEach(currentSeatId => {
+        if (currentSeatId != null) {
+          this.setSeatClass(currentSeatId, this.currentSeatClass)
+        }
       })
     },
     chooseSeat(seatId) {
       if (this.bus.service.find(serviceSeat => { return serviceSeat === seatId }) !== undefined) {
-        this.showError = true
+        this.showServiceError = true
         setTimeout(() => {
-          this.showError = false
+          this.showServiceError = false
         }, 2000)
-      } else{
+      } 
+      else if (this.bus.ordered.find(orderedSeat => { return orderedSeat === seatId }) !== undefined) {
+        this.showOrderedError = true
+        setTimeout(() => {
+          this.showOrderedError = false
+        }, 2000)
+      }
+      else {
         this.showError = false
         if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
+        this.choosenSeats = []
         this.choosenSeats.push(seatId)
+        this.removeSeatFromCurrent(this.selectedInThisFormSeat)
+        console.log('after remove: ', this.getSeatsInCurrentOrder)
         } else {
           this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
         }
       }
-      console.log(this.choosenSeats)
     },
     setDriverSeats() {
       // Change previous driver seats to common seats
@@ -426,23 +479,19 @@ export default {
     },
     close () {
       this.choosenSeats = []
+      // this.updateSeatsInCurrentOrder(_.concat(this.getSeatsInCurrentOrder, this.selectedInThisFormSeat))
       this.bus = Object.assign({}, this.initialScheme)
       this.showScheme = false
       this.bus.totalPassengersCount = 0
+      this.updateSeatsInCurrentOrder(this.selectedInThisFormSeat)
       this.setTotalPassengersCount()
     },
     save() {
+      this.$emit('choosen', this.choosenSeats[0])
+      this.selectedInThisFormSeat = this.choosenSeats[0]
+      this.updateSeatsInCurrentOrder(this.choosenSeats[0])
+      this.choosenSeats = []
       this.showScheme = false
-      this.$emit('choosen', this.choosenSeats)
-      // this.assignNewScheme({
-      //   id: this.id,
-      //   scheme: this.bus
-      // })
-      // this.scheme = this.bus
-      // console.log(this.bus)
-      // setTimeout(() => {
-      //   this.showScheme = false
-      // }, 2000)
     }
   }
 };
@@ -515,6 +564,13 @@ export default {
 }
 .unavailable-seat.control {
   color: white;
+}
+.ordered-seat {
+  background-color: #fa0000;
+  border-color: #fa0000;
+}
+.current-seat {
+  background-color: #00fa60;
 }
 .controls {
   max-width: 300px;
