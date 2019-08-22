@@ -115,6 +115,13 @@
         color="green lighten-3"
         :required="isRequired"
       />
+      <v-text-field
+        v-model="order.address"
+        label="Адрес"
+        :rules="[v => !!v || 'Укажите адрес']"
+        :name="isRequired ? 'customer[' + id + '][address]' : ''"
+        color="green lighten-3"
+      />
       <v-select
         v-model="meal"
         :items="meals"
