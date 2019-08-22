@@ -124,12 +124,16 @@
                 </v-card>
               </v-tab-item>
               <v-textarea
+                v-model="comment"
                 box
-                name="'customer[0][comment]'"
                 label="Комментарии"
-                :value="comment"
                 hint="Оставьте комментарий оператору"
               />
+              <input 
+                v-model="chat"
+                type="hidden"
+                name="customer[0][chat]"
+              >
             </form>
           </v-tabs-items>
         </v-tabs>
@@ -186,11 +190,21 @@ export default {
       items: [1, 2, 3, 4],
       choosenSeat: [],
       count: 1,
-      panel: [true, true, true],
+      panel: [true, false, false],
       roomsCount: 1,
       tab: null,
       comment: 'Текст комментария',
     }
+  },
+  computed: {
+    chat: function() {
+      let date = new Date().toISOString().substr(0, 10)
+      return JSON.stringify({
+        date,
+        sender: 'Агентство',
+        text: this.comment,
+      })
+    },
   },
   mounted() {
     this.orderedSeats()
