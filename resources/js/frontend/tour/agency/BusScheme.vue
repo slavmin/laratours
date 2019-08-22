@@ -381,7 +381,6 @@ export default {
         this.choosenSeats = []
         this.choosenSeats.push(seatId)
         this.removeSeatFromCurrent(this.selectedInThisFormSeat)
-        console.log('after remove: ', this.getSeatsInCurrentOrder)
         } else {
           this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
         }
