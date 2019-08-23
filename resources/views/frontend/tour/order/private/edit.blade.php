@@ -2,11 +2,35 @@
 
 @section('content')
     <!-- Vue component -->
-        <!-- <?php $sitems = json_encode($audits); ?>
+    @can('administer-tours')
+        <?php $sitems = json_encode($audits); ?>
+        <?php $sitem = json_encode($item); ?>   
+        <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
+        <?php $sprofiles = json_encode($profiles); ?>
         <operator-order-edit
             data-app
+            :order="{{ $sitem }}"
+            header-text="@lang('labels.frontend.tours.order.edit')"
+            :statuses="{{ $sstatuses }}"
             :items="{{ $sitems }}"
-        ></operator-order-edit> -->
+            profiles-raw="{{ $sprofiles }}"
+            token="{{ csrf_token() }}"
+        ></operator-order-edit>
+    @else
+    <?php $sitems = json_encode($audits); ?>
+        <?php $sitem = json_encode($item); ?>   
+        <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
+        <?php $sprofiles = json_encode($profiles); ?>
+        <agency-order-edit
+            data-app
+            :order="{{ $sitem }}"
+            header-text="@lang('labels.frontend.tours.order.edit')"
+            :statuses="{{ $sstatuses }}"
+            :items="{{ $sitems }}"
+            profiles-raw="{{ $sprofiles }}"
+            token="{{ csrf_token() }}"
+        ></agency-order-edit>
+    @endcan
     <!-- /Vue component -->
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">

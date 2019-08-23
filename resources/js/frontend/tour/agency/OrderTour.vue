@@ -132,7 +132,7 @@
               <input 
                 v-model="chat"
                 type="hidden"
-                name="customer[0][chat]"
+                :name="chat != '' ? 'customer[0][chat]' : ''"
               >
             </form>
           </v-tabs-items>
@@ -183,7 +183,7 @@ export default {
     headerText: {
       type: String,
       default: 'Создать'
-    }
+    },
   },
   data () {
     return {
@@ -193,17 +193,22 @@ export default {
       panel: [true, false, false],
       roomsCount: 1,
       tab: null,
-      comment: 'Текст комментария',
+      comment: '',
     }
   },
   computed: {
     chat: function() {
-      let date = new Date().toISOString().substr(0, 10)
-      return JSON.stringify({
-        date,
-        sender: 'Агентство',
-        text: this.comment,
-      })
+      if (this.comment != '') {
+        let date = new Date().toISOString().substr(0, 10)
+        return JSON.stringify({
+          0: {
+              date,
+              sender: 'Агентство',
+              text: this.comment,
+          }
+        })
+      }
+      return ''
     },
   },
   mounted() {

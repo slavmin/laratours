@@ -69,16 +69,19 @@
           <h3 class="title grey--text text-xs-center">
             Комментарии к заявке
           </h3>
-          <div>
+          <div
+            v-for="(message, i) in JSON.parse(profiles[0].content[0].chat)"
+            :key="i"
+          >
             <span class="sender body-2">
-              {{ JSON.parse(profiles[0].content[0].chat).sender }}:
+              {{ message.sender }}:
             </span>
             <span class="text body-1">
-              {{ JSON.parse(profiles[0].content[0].chat).text }}
+              {{ message.text }}
             </span>
             <br>
             <span class="date grey--text">
-              {{ JSON.parse(profiles[0].content[0].chat).date }}
+              {{ message.date }}
             </span>
           </div>
         </div>
