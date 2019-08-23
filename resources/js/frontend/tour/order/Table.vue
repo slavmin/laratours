@@ -2,13 +2,19 @@
   <table>
     <thead>
       <th>
-        Статус
+        №
+      </th>
+      <th>
+        Имя тура
+      </th>
+      <th>
+        Туристов
       </th>
       <th>
         Агент
       </th>
       <th>
-        Имя тура
+        Статус
       </th>
       <th>
         Действия
@@ -20,13 +26,36 @@
         :key="item.id"
       >
         <td>
-          {{ statuses[item.status] }}
+          {{ item.id }}
+        </td>
+        <td>
+          {{ tourNames[item.tour_id] }}
+        </td>
+        <td>
+          Туристов: {{ touristsCount(item.profiles[0].content) }}
+          <br>
+          <i
+            v-for="n in touristsCount(item.profiles[0].content)"
+            :key="n" 
+            class="material-icons body-2"
+          >
+            accessibility_new
+          </i>
+          <br>
+          <Details 
+            :profiles="item.profiles"
+            :order-id="item.id"
+          />
         </td>
         <td>
           {{ agencies[item.team_id] }}
         </td>
         <td>
-          {{ tourNames[item.tour_id] }}
+          <span 
+            :class="statuses[item.status]"
+          >
+            {{ statuses[item.status] }}
+          </span>
         </td>
         <td>
           <v-layout 
@@ -47,7 +76,7 @@
               </i>
             </v-btn>
             <form 
-              action="/operator/attribute/"
+              :action="'/operator/order/' + item.id"
               method="POST"
             >
               <input 
@@ -91,8 +120,12 @@
 </template>
 
 <script>
+import Details from './Details'
 export default {
   name: 'OrdersTable',
+  components: {
+    Details,
+  },
   props: {
     items: {
       type: Object,
@@ -126,6 +159,15 @@ export default {
   mounted() {
     console.log(this.items.data)
   },
+  methods: {
+    touristsCount(content) {
+      let count = 0
+      for (let key in content) {
+        count += 1
+      }
+      return count
+    },
+  }
 }
 </script>
 
@@ -136,6 +178,15 @@ table {
     border: 1px solid gray;
     font-size: 16px;
     padding: 12px;
+  }
+}
+span {
+  &.pending {
+    display: block;
+    background-color: #FDD835;
+    padding: 6px;
+    border-radius: 6px;
+    color: white;
   }
 }
 </style>

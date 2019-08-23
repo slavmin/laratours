@@ -67,9 +67,19 @@
               row 
               wrap
             >
-              <Edit 
-                :token="token"
-              />
+              <v-btn
+                :href="'/agency/order/' + item.id + '/edit'"
+                color="green"
+                dark
+                small
+                fab
+                flat
+                outline
+              >
+                <i class="material-icons">
+                  edit
+                </i>
+              </v-btn>
               <form 
                 :action="'/agency/order/' + item.id"
                 method="POST"
@@ -106,12 +116,10 @@
 </template>
 
 <script>
-import Edit from './Edit'
 import Details from './Details'
 export default {
   name: 'OrderTable',
   components:{
-    Edit,
     Details,
   },
   props: {

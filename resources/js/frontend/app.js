@@ -51,6 +51,7 @@ Vue.component('agency-order-tour', require('./tour/agency/OrderTour.vue').defaul
 Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);
 Vue.component('operator-order-edit', require('./tour/order/Edit.vue').default);
 Vue.component('agency-orders-index', require('./tour/agency/Order/Index.vue').default);
+Vue.component('agency-order-edit', require('./tour/agency/Order/Edit.vue').default);
 /**
 /**
 /**
