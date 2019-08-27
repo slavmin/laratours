@@ -58,6 +58,7 @@
         <v-text-field
           v-model="companyInfo.kpp"
           label="КПП"
+          mask="#########"
           name="profile[formal][company_kpp]"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
@@ -68,6 +69,41 @@
           v-model="companyInfo.company_email"
           label="E-mail организации"
           name="profile[formal][company_email]"
+          color="green lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.bankname"
+          label="Полное наименование банка"
+          name="profile[formal][company_bankname]"
+          color="green lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.bankaccount"
+          label="Расчётный счёт"
+          name="profile[formal][company_bankaccount]"
+          color="green lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.bankcorr"
+          label="Корреспондентский счет банка"
+          name="profile[formal][company_bankcorr]"
+          color="green lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        /><v-text-field
+          v-model="companyInfo.bankkpp"
+          label="КПП"
+          name="profile[formal][company_bankkpp]"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -95,13 +131,13 @@
         />
         <v-text-field
           v-model="companyInfo.phone"
-          label="Телефон. Знаки +, ( ), - добавляются автоматически"
+          label="Телефон"
           placeholder="+7"
           name="profile[formal][company_phone]"
           color="green lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
-          mask="+7 (###) ###-##-##"
+          mask="+N (NNN) NNN-NN-NN"
           required
         />
         <v-text-field
@@ -113,6 +149,12 @@
           outline
           required
         />
+        <span
+          v-if="tooltip"
+          class="body-1 grey--text"
+        >
+          Минимум 8 символов, заглавные, строчные буквы, и цифры.
+        </span>
         <v-text-field
           v-model="companyInfo.password"
           label="Пароль"
@@ -122,11 +164,13 @@
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
+          @input="tooltip = true"
         />
         <v-text-field
+          v-model="companyInfo.password_confirmation"
           label="Подтверждение пароля"
           name="password_confirmation"
-          color="green lighten-3"
+          :color="!error ? 'green lighten-3' : 'red'"
           type="password"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -173,6 +217,15 @@ export default {
   },
   data() {
     return {
+      tooltip: false,
+    }
+  },
+  computed: {
+    error: function() {
+      if (this.companyInfo.password != this.companyInfo.password_confirmation) {
+        return true
+      }
+      return false
     }
   },
   methods: {

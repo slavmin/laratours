@@ -5,6 +5,16 @@
       wrap
     >
       <v-flex xs12>
+        <div class="title grey--text">
+          Тур: {{ getTour.options.name }}, количество туристов: {{ getTour.qnt }}
+        </div>
+      </v-flex>  
+    </v-layout>
+    <v-layout 
+      row 
+      wrap
+    >
+      <v-flex xs12>
         <table class="summary">
           <thead>
             <th>
@@ -53,9 +63,29 @@
               <td>
                 {{ transport.transport.name }}:
                 {{ transport.obj.name }}.
+                <br>
+                <div class="body-1 grey--text">
+                  Цена: {{ transport.obj.price }}, за {{ transport.obj.duration.hours }} часов.
+                  <br>
+                  Мест: {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }}
+                </div>
               </td>
               <td class="price">
-                {{ transport.obj.price }}
+                {{ (transport.obj.price / getTour.qnt).toFixed(2) }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ transport.obj.price }} руб. / {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }} чел.
+                  </span>
+                </v-tooltip>
               </td>
               <td>
                 <v-text-field
@@ -301,11 +331,11 @@
                 Итого: 
               </td>
               <td>
-                {{ getTour.totalPrice }}
+                {{ (getTour.totalPrice).toFixed(2) }}
               </td>
               <td />
               <td>
-                {{ getTour.correctedPrice }}
+                {{ (getTour.correctedPrice).toFixed(2) }}
               </td>
             </tr>
           </tbody>

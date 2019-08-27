@@ -18,6 +18,7 @@ export default {
     },
     async updateTourTransport({ commit }, transport) {
       commit('setTourTransport', transport)
+      // commit('setTourQnt')
     },
     async updateActualMuseum({ commit }) {
       commit('setActualMuseum')
@@ -159,6 +160,20 @@ export default {
         })
       })
     },
+    // setTourQnt(state) {
+    //   let result = 0
+    //   let itemQnt = 0
+    //   state.tour.transport.forEach((item) => {
+    //     itemQnt = JSON.parse(item.obj.extra).scheme.totalPassengersCount
+    //     if (result == 0) {
+    //       result = itemQnt
+    //     }
+    //     else {
+    //       result > itemQnt ? result = itemQnt : result = result
+    //     }
+    //   })
+    //   state.tour.options.qnt = result
+    // },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage
     },
@@ -394,7 +409,7 @@ export default {
     calculateTourTotalPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.obj.price)
+        summ += parseInt(transport.obj.price) / state.tour.qnt
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(JSON.parse(museum.obj.extra).priceList[0].price)
@@ -419,7 +434,7 @@ export default {
     calculateTourCorrectedPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.correctedPrice)
+        summ += transport.correctedPrice
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
@@ -470,12 +485,13 @@ export default {
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
       state.tour.transport.forEach((transport) => {
+        const pricePerSeat = parseInt(transport.obj.price) / parseInt(state.tour.qnt)
         if (transport.correction > 0) {
           transport.correctedPrice = 
-          parseInt(transport.obj.price) + 
-            (parseInt(transport.obj.price) * parseInt(transport.correction) / 100) 
+          (pricePerSeat + 
+            pricePerSeat * parseInt(transport.correction) / 100)
         } else {
-          transport.correctedPrice = transport.obj.price
+          transport.correctedPrice = pricePerSeat
         }
       })
       // Add price-fields to Museum
@@ -555,6 +571,7 @@ export default {
         days: NaN,
         nights: NaN,
         dateStart: new Date().toISOString().substr(0, 10),
+        qnt: 0,
       },
       transport: [],
       museum: [],
