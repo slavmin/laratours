@@ -117,6 +117,14 @@
                       </i>
                     </div>
                     <v-divider />
+                    <v-select
+                      v-model="item.day"
+                      :items="days"
+                      :dark="item.selected"
+                      :disabled="item.selected"
+                      label="День тура"
+                      outline
+                    />
                     <div>
                       <v-layout
                         row
@@ -293,6 +301,13 @@ export default {
       'getActualTransport',
       'getTour',
     ]),
+    days: function() {
+      let result = []
+      for (let i = 1; i <= this.getTour.options.days; i++) {
+        result.push(i)
+      } 
+      return result
+    },
   },
   methods: {
     ...mapActions([
@@ -346,7 +361,7 @@ export default {
       }
       if (flag === 'manual') {
         item.duration.kilometers = 0
-        item.duration.hourd = 0
+        item.duration.hours = 0
         item.price = item.manualPrice
       }
     },

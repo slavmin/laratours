@@ -18,7 +18,6 @@ export default {
     },
     async updateTourTransport({ commit }, transport) {
       commit('setTourTransport', transport)
-      // commit('setTourQnt')
     },
     async updateActualMuseum({ commit }) {
       commit('setActualMuseum')
@@ -97,7 +96,13 @@ export default {
     },
     async updateEditTour({ commit }, tour) {
       commit('setEditTour', tour)
-    }
+    },
+    async updateCurrentCustomerType({ commit }, value) {
+      commit('setCurrentCustomerType', value)
+    },
+    async generateTourCalcCustomerTypes({ commit }, customerTypes) {
+      commit('setTourCalcCustomerTypes', customerTypes)
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -153,27 +158,13 @@ export default {
               obj,
               correction: 0,
               correctedPrice: 0,
+              pricePerSeat: parseInt(obj.price / state.tour.qnt),
+              correctedPricePerSeat: 0,
             })
-            const objQnt = JSON.parse(obj.extra).scheme.totalPassengersCount
-            state.tour.qnt = objQnt 
           }
         })
       })
     },
-    // setTourQnt(state) {
-    //   let result = 0
-    //   let itemQnt = 0
-    //   state.tour.transport.forEach((item) => {
-    //     itemQnt = JSON.parse(item.obj.extra).scheme.totalPassengersCount
-    //     if (result == 0) {
-    //       result = itemQnt
-    //     }
-    //     else {
-    //       result > itemQnt ? result = itemQnt : result = result
-    //     }
-    //   })
-    //   state.tour.options.qnt = result
-    // },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage
     },
@@ -409,10 +400,16 @@ export default {
     calculateTourTotalPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.obj.price) / state.tour.qnt
+        summ += parseInt(transport.pricePerSeat)
       })
       state.tour.museum.forEach((museum) => {
-        summ += parseInt(JSON.parse(museum.obj.extra).priceList[0].price)
+        // Search price by current customer Id
+        let price = JSON.parse(museum.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        summ += parseInt(price.price)
       })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
@@ -433,14 +430,15 @@ export default {
     },
     calculateTourCorrectedPrice: (state) => {
       let summ = 0
+      let standardHotel = 0
+      let singleHotel = 0
+      let addHotel = 0
+      let isChildren = false
       state.tour.transport.forEach((transport) => {
-        summ += transport.correctedPrice
+        summ += transport.correctedPricePerSeat
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
-      })
-      state.tour.hotel.forEach((hotel) => {
-        summ += parseInt(hotel.correctedPrice)
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
@@ -454,7 +452,40 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPrice)
       })
-      state.tour.correctedPrice = summ
+      state.tour.hotel.forEach((hotel) => {
+        standardHotel += parseInt(hotel.correctedPrice)
+        const data = JSON.parse(hotel.obj.extra)
+        const singlePrice = parseInt(data.priceList.single)
+        singleHotel += parseInt(
+          (singlePrice * hotel.obj.day)
+          +
+          (singlePrice * hotel.obj.day * hotel.correction) / 100
+        )
+        // Hardcoded!! :-(( Цена за взрослого
+        const addPrice = parseInt(data.priceList.additionalPrices[0][1].price)
+        addHotel += parseInt(
+          (addPrice * hotel.obj.day)
+          + 
+          (addPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        // Children prices
+        if (isChildren) {
+          // Hardcoded!! :-(( Цена за ребёнка
+          const addPrice = parseInt(data.priceList.additionalPrices[0][0].price)
+          addHotel += parseInt(
+          (addPrice * hotel.obj.day)
+          + 
+          (addPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        }
+      })
+      let calcCustomer = state.tour.calc.priceList.find((item) => {
+        return item.id == state.tour.calc.currentCustomer
+      })
+      calcCustomer.standardPrice = summ + standardHotel
+      calcCustomer.singlePrice = summ + singleHotel
+      calcCustomer.addPrice = summ + addHotel
+      state.tour.correctedPrice = summ + standardHotel
     },
     setCorrectionToAll: (state, correction) => {
       if (correction == NaN || correction == '') {
@@ -485,23 +516,31 @@ export default {
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
       state.tour.transport.forEach((transport) => {
-        const pricePerSeat = parseInt(transport.obj.price) / parseInt(state.tour.qnt)
         if (transport.correction > 0) {
-          transport.correctedPrice = 
-          (pricePerSeat + 
-            pricePerSeat * parseInt(transport.correction) / 100)
+          transport.correctedPricePerSeat = 
+          parseInt(
+            (transport.pricePerSeat + 
+              transport.pricePerSeat * parseInt(transport.correction) / 100)
+          )
         } else {
-          transport.correctedPrice = pricePerSeat
+          transport.correctedPricePerSeat = parseInt(transport.pricePerSeat)
         }
       })
       // Add price-fields to Museum
       state.tour.museum.forEach((museum) => {
+        // Search price by current customer Id
+        let price = JSON.parse(museum.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        // Calculate corrected price
         if (museum.correction > 0) {
           museum.correctedPrice = 
-            JSON.parse(museum.obj.extra).priceList[0].price + 
-            (JSON.parse(museum.obj.extra).priceList[0].price * museum.correction / 100) 
+            price.price + 
+            (price.price * museum.correction / 100) 
         } else {
-          museum.correctedPrice = JSON.parse(museum.obj.extra).priceList[0].price
+          museum.correctedPrice = price.price
         }
       })
       // Add price-fields to Hotel
@@ -557,6 +596,19 @@ export default {
     },
     setEditTour(state, tour) {
       state.tour = tour
+    },
+    setCurrentCustomerType(state, value) {
+      state.tour.calc.currentCustomer = value
+    },
+    setTourCalcCustomerTypes(state, customerTypes) {
+      customerTypes.forEach((customer) => {
+        state.tour.calc.priceList.push({
+          ...customer,
+          standardPrice: 0,
+          singlePrice: 0,
+          addPrice: 0,
+        })
+      })
     }
   },
   state: {
@@ -584,6 +636,10 @@ export default {
       totalPrice: NaN,
       ordered: 0,
       qnt: 0,
+      calc: {
+        currentCustomer: 1,
+        priceList: [],
+      },
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',
@@ -635,7 +691,7 @@ export default {
     getCorrectedPrice(state) {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.correctedPrice)
+        summ += parseInt(transport.correctedPricePerSeat)
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
@@ -659,6 +715,21 @@ export default {
     },
     getTourName(state) {
       return state.tour.options.name
+    },
+    getCurrentTourCustomers(state) {
+      let result = []
+      state.tour.museum.forEach((museum) => {
+        JSON.parse(museum.obj.extra).priceList.forEach((price) => {
+          result.push({
+            id: price.customerId,
+            name: price.customerName,
+          })
+        })
+      })
+      return _.uniqWith(result, _.isEqual)
+    },
+    getTourCalc(state) {
+      return state.tour.calc
     }
   }
 }

@@ -135,6 +135,20 @@
       <v-layout 
         row 
         wrap
+      >
+        <v-flex xs12>
+          <v-text-field
+            v-model="getTour.qnt"
+            label="Количество туристов"
+            name="qnt"
+            mask="###"
+            color="green lighten-3"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout 
+        row 
+        wrap
         justify-content-end
       >
         <v-btn
