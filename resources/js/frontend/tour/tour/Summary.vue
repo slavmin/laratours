@@ -92,7 +92,7 @@
                   </template>
                   <span>
                     Стоимость за одного человека:
-                    {{ transport.obj.price }} руб. / {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }} чел.
+                    {{ transport.obj.price }} руб. / {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
@@ -246,11 +246,11 @@
             >
               <td>
                 {{ guide.guide.name }}:
-                <div class="body-1 grey--text">
+                <!-- <div class="body-1 grey--text">
                   Часов: {{ guide.guide.duration }}
                   <br>
                   Цена: {{ guide.guide.price }}
-                </div>
+                </div> -->
               </td>
               <td class="price">
                 {{ guide.guide.totalPrice }}
@@ -285,12 +285,12 @@
             >
               <td>
                 {{ attendant.attendant.name }}:
-                <br>
+                <!-- <br>
                 <div class="body-1 grey--text">
                   Часов: {{ attendant.attendant.duration }}
                   <br>
                   Цена: {{ attendant.attendant.price }}
-                </div>
+                </div> -->
               </td>
               <td class="price">
                 {{ attendant.attendant.totalPrice }}

@@ -49,19 +49,11 @@
                       </i>
                     </div>
                     <v-divider />
-                    <!-- <v-select
-                      v-model="guide.day"
-                      :items="days"
-                      :dark="guide.selected"
-                      :disabled="guide.selected"
-                      label="Количество дней"
-                      outline
-                    /> -->
                     <v-text-field
-                      v-model="guide.duration"
+                      v-model="guide.totalPrice"
                       :dark="guide.selected"
                       :disabled="guide.selected"
-                      label="Количество часов"
+                      label="Стоимость"
                       mask="####"
                       class="mt-3"
                       color="green"
@@ -75,14 +67,14 @@
                       class="mt-3"
                       color="green"
                     />
-                    <br>
+                    <!-- <br>
                     <span class="grey--text text--darken-1">
                       Цена за час: {{ guide.price }}
                     </span>
                     <br>
                     <span class="grey--text text--darken-1">
                       Итого: {{ guide.price * guide.duration }}
-                    </span>
+                    </span> -->
                   </div>
                 </v-card-title>
                 <v-card-actions>

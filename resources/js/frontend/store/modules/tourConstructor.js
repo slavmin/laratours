@@ -18,7 +18,6 @@ export default {
     },
     async updateTourTransport({ commit }, transport) {
       commit('setTourTransport', transport)
-      // commit('setTourQnt')
     },
     async updateActualMuseum({ commit }) {
       commit('setActualMuseum')
@@ -154,8 +153,6 @@ export default {
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
-            const objQnt = JSON.parse(obj.extra).scheme.totalPassengersCount
-            state.tour.qnt = objQnt 
             state.tour.transport.push({ 
               transport, 
               obj,
