@@ -22,6 +22,14 @@
             </th>
             <th>
               Стоимость
+              <br>
+              <v-select
+                v-model="currentCustomerType"
+                :items="getCurrentTourCustomers"
+                item-value="id"
+                item-text="name"
+                label="Тип туриста"
+              />
             </th>
             <th>
               <v-layout 
@@ -119,10 +127,10 @@
                 <br>
                 {{ event.obj.name }}
                 <br>
-                {{ JSON.parse(event.obj.extra).priceList[0].customerName }}
+                {{ customerName(event) }}
               </td>
               <td class="price">
-                {{ JSON.parse(event.obj.extra).priceList[0].price }}
+                {{ eventPrice(event) }}
               </td>
               <td>
                 <v-text-field
@@ -416,12 +424,14 @@ export default {
       totalPrice: 0,
       correctedPrice: 0,
       correctionToAll: 0,
+      currentCustomerType: 1,
     };
   },
   computed: {
     ...mapGetters([
       'getTour',
       'getCorrectedPrice',
+      'getCurrentTourCustomers',
     ]),
     tourExtra: function() {
       return {
@@ -434,10 +444,17 @@ export default {
     getTour: {
       handler(value) {
         console.log(this.getTour)
+        this.updateTourTotalPrice()
         this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
       },
       deep: true,
+    },
+    currentCustomerType: {
+      handler(value) {
+        console.log('customer changed to: ', value)
+        this.updateCurrentCustomerType(value)
+      }
     },
     // correctionToAll: {
     //   handler(value) {
@@ -460,6 +477,7 @@ export default {
       'updateTourCorrectedPrice',
       'updateCorrectionToAll',
       'updateCorrectedPriceValues',
+      'updateCurrentCustomerType',
     ]),
     // total() {
     //   // Calculate total price (first column)
@@ -481,6 +499,27 @@ export default {
       console.log('correctPrice')
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
+    },
+    customerName(event) {
+      const data = JSON.parse(event.obj.extra)
+      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      if (currentPrice) {
+        return currentPrice.customerName
+      }
+      else {
+        const defaultPrice = data.priceList.find(price => price.customerId == 1) // Взрослый
+        return defaultPrice.customerName
+      }
+    },
+    eventPrice(event) {
+      const data = JSON.parse(event.obj.extra)
+      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      if (currentPrice) {
+        return currentPrice.price
+      }
+      else {
+        return data.priceList.find(price => price.customerId == 1).price // Цена за взрослого
+      }
     }
   },
 };

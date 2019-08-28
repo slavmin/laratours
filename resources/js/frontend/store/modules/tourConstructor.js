@@ -97,7 +97,10 @@ export default {
     },
     async updateEditTour({ commit }, tour) {
       commit('setEditTour', tour)
-    }
+    },
+    async updateCurrentCustomerType({ commit }, value) {
+      commit('setCurrentCustomerType', value)
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -396,11 +399,18 @@ export default {
     },
     calculateTourTotalPrice: (state) => {
       let summ = 0
+      console.log('calculateTourTotalPrice')
       state.tour.transport.forEach((transport) => {
         summ += parseInt(transport.pricePerSeat)
       })
       state.tour.museum.forEach((museum) => {
-        summ += parseInt(JSON.parse(museum.obj.extra).priceList[0].price)
+        // Search price by current customer Id
+        let price = JSON.parse(museum.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        summ += parseInt(price.price)
       })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
@@ -485,12 +495,19 @@ export default {
       })
       // Add price-fields to Museum
       state.tour.museum.forEach((museum) => {
+        // Search price by current customer Id
+        let price = JSON.parse(museum.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        // Calculate corrected price
         if (museum.correction > 0) {
           museum.correctedPrice = 
-            JSON.parse(museum.obj.extra).priceList[0].price + 
-            (JSON.parse(museum.obj.extra).priceList[0].price * museum.correction / 100) 
+            price.price + 
+            (price.price * museum.correction / 100) 
         } else {
-          museum.correctedPrice = JSON.parse(museum.obj.extra).priceList[0].price
+          museum.correctedPrice = price.price
         }
       })
       // Add price-fields to Hotel
@@ -546,7 +563,10 @@ export default {
     },
     setEditTour(state, tour) {
       state.tour = tour
-    }
+    },
+    setCurrentCustomerType(state, value) {
+      state.tour.calc.currentCustomer = value
+    },
   },
   state: {
     tourOptions: [],
@@ -573,6 +593,9 @@ export default {
       totalPrice: NaN,
       ordered: 0,
       qnt: 0,
+      calc: {
+        currentCustomer: 1,
+      },
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',
@@ -648,6 +671,18 @@ export default {
     },
     getTourName(state) {
       return state.tour.options.name
+    },
+    getCurrentTourCustomers(state) {
+      let result = []
+      state.tour.museum.forEach((museum) => {
+        JSON.parse(museum.obj.extra).priceList.forEach((price) => {
+          result.push({
+            id: price.customerId,
+            name: price.customerName,
+          })
+        })
+      })
+      return _.uniqWith(result, _.isEqual)
     }
   }
 }
