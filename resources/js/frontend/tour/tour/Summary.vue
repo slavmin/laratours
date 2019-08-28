@@ -53,6 +53,7 @@
             </th>
             <th>
               Итого
+              <br>
             </th>
           </thead>
           <tbody>
@@ -107,6 +108,7 @@
                   v-model="transport.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -144,6 +146,7 @@
                   v-model="event.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -185,6 +188,7 @@
                   v-model="hotel.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -224,6 +228,7 @@
                   v-model="meal.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -262,6 +267,7 @@
                   v-model="guide.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -301,7 +307,7 @@
                   v-model="attendant.correctedPrice"
                   class="corrected-price"
                   name="corrected"
-                  @input="correctPrice"
+                  disabled
                 />
               </td>
             </tr>
@@ -337,6 +343,9 @@
             <tr>
               <td>
                 Итого: 
+                <div class="body-1 grey--text">
+                  Тип туриста: {{ (getCurrentTourCustomers.find(c => c.id == currentCustomerType)).name }}
+                </div>
               </td>
               <td>
                 {{ getTour.totalPrice }}
@@ -349,6 +358,45 @@
           </tbody>
         </table>
       </v-flex>
+    </v-layout>
+    <v-layout 
+      row 
+      wrap
+    >
+      <v-flex xs12>
+        <v-btn 
+          v-if="showPriceForEveryCustomer"
+          dark
+          color="green"
+          @click="calculatePriceForEveryCustomer"
+        >
+          Рассчитать цены для всех типов туристов
+        </v-btn>
+        <table class="total">
+          <thead>
+            <th>
+              Тип туриста
+            </th>
+            <th>
+              Общая стоимость
+            </th>
+          </thead>
+          <tbody>
+            <tr
+              v-for="price in getTourCalc.priceList"
+              :key="price.customerId"
+              class="text-xs-left subheading"
+            >
+              <td>
+                {{ price.name }}
+              </td>
+              <td>
+                {{ price.price }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </v-flex>  
     </v-layout>
     <v-layout 
       row 
@@ -410,6 +458,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { setTimeout } from 'timers';
 export default {
 
   name: 'Summary',
@@ -425,6 +474,7 @@ export default {
       correctedPrice: 0,
       correctionToAll: 0,
       currentCustomerType: 1,
+      showPriceForEveryCustomer: true,
     };
   },
   computed: {
@@ -432,6 +482,7 @@ export default {
       'getTour',
       'getCorrectedPrice',
       'getCurrentTourCustomers',
+      'getTourCalc',
     ]),
     tourExtra: function() {
       return {
@@ -454,18 +505,11 @@ export default {
       handler(value) {
         console.log('customer changed to: ', value)
         this.updateCurrentCustomerType(value)
-      }
+      },
     },
-    // correctionToAll: {
-    //   handler(value) {
-    //     this.updateCorrectionToAll(value)
-    //     this.updateCorrectedPriceValues()
-    //     this.updateTourCorrectedPrice()
-    //   },
-    //   deep: true,
-    // }
   },
   mounted() {
+    this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
@@ -478,15 +522,8 @@ export default {
       'updateCorrectionToAll',
       'updateCorrectedPriceValues',
       'updateCurrentCustomerType',
+      'generateTourCalcCustomerTypes',
     ]),
-    // total() {
-    //   // Calculate total price (first column)
-    //   let summ = 0
-    //   Array.from(document.getElementsByClassName('price')).forEach((item) => {
-    //     summ += parseInt(item.innerText)
-    //   })
-    //   this.totalPrice = summ
-    // },
     saveTour() {
       console.log(this.getTour)
     },
@@ -520,13 +557,21 @@ export default {
       else {
         return data.priceList.find(price => price.customerId == 1).price // Цена за взрослого
       }
+    },
+    calculatePriceForEveryCustomer() {
+      let prevCustomer = this.currentCustomerType
+      this.getCurrentTourCustomers.forEach((customer) => {
+        setTimeout(() => { this.currentCustomerType = customer.id }, 10)
+      })
+      setTimeout(() => {this.currentCustomerType = prevCustomer}, 500)
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.summary {
+.summary,
+.total {
   margin: 0 auto;
   td,
   th {

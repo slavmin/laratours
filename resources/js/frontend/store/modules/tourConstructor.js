@@ -101,6 +101,9 @@ export default {
     async updateCurrentCustomerType({ commit }, value) {
       commit('setCurrentCustomerType', value)
     },
+    async generateTourCalcCustomerTypes({ commit }, customerTypes) {
+      commit('setTourCalcCustomerTypes', customerTypes)
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -399,7 +402,6 @@ export default {
     },
     calculateTourTotalPrice: (state) => {
       let summ = 0
-      console.log('calculateTourTotalPrice')
       state.tour.transport.forEach((transport) => {
         summ += parseInt(transport.pricePerSeat)
       })
@@ -452,6 +454,10 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPrice)
       })
+      let calcCustomer = state.tour.calc.priceList.find((item) => {
+        return item.id == state.tour.calc.currentCustomer
+      })
+      calcCustomer.price = summ
       state.tour.correctedPrice = summ
     },
     setCorrectionToAll: (state, correction) => {
@@ -567,6 +573,14 @@ export default {
     setCurrentCustomerType(state, value) {
       state.tour.calc.currentCustomer = value
     },
+    setTourCalcCustomerTypes(state, customerTypes) {
+      customerTypes.forEach((customer) => {
+        state.tour.calc.priceList.push({
+          ...customer,
+          price: 0,
+        })
+      })
+    }
   },
   state: {
     tourOptions: [],
@@ -595,6 +609,7 @@ export default {
       qnt: 0,
       calc: {
         currentCustomer: 1,
+        priceList: [],
       },
     },
     constructorCurrentStage: 'Initial stage',
@@ -683,6 +698,9 @@ export default {
         })
       })
       return _.uniqWith(result, _.isEqual)
+    },
+    getTourCalc(state) {
+      return state.tour.calc
     }
   }
 }
