@@ -71,7 +71,7 @@
                 </div>
               </td>
               <td class="price">
-                {{ (transport.obj.price / getTour.qnt).toFixed(2) }}
+                {{ transport.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon 
@@ -96,7 +96,7 @@
               </td>
               <td>
                 <v-text-field
-                  v-model="transport.correctedPrice"
+                  v-model="transport.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
                 />
@@ -331,11 +331,11 @@
                 Итого: 
               </td>
               <td>
-                {{ (getTour.totalPrice).toFixed(2) }}
+                {{ getTour.totalPrice }}
               </td>
               <td />
               <td>
-                {{ (getTour.correctedPrice).toFixed(2) }}
+                {{ getTour.correctedPrice }}
               </td>
             </tr>
           </tbody>

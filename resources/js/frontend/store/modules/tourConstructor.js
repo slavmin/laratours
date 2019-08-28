@@ -148,32 +148,20 @@ export default {
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
+            const objQnt = JSON.parse(obj.extra).scheme.totalPassengersCount
+            state.tour.qnt = objQnt 
             state.tour.transport.push({ 
               transport, 
               obj,
               correction: 0,
               correctedPrice: 0,
+              pricePerSeat: parseInt(obj.price / state.tour.qnt),
+              correctedPricePerSeat: 0,
             })
-            const objQnt = JSON.parse(obj.extra).scheme.totalPassengersCount
-            state.tour.qnt = objQnt 
           }
         })
       })
     },
-    // setTourQnt(state) {
-    //   let result = 0
-    //   let itemQnt = 0
-    //   state.tour.transport.forEach((item) => {
-    //     itemQnt = JSON.parse(item.obj.extra).scheme.totalPassengersCount
-    //     if (result == 0) {
-    //       result = itemQnt
-    //     }
-    //     else {
-    //       result > itemQnt ? result = itemQnt : result = result
-    //     }
-    //   })
-    //   state.tour.options.qnt = result
-    // },
     setConstructorCurrentStage(state, stage) {
       state.constructorCurrentStage = stage
     },
@@ -409,7 +397,7 @@ export default {
     calculateTourTotalPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.obj.price) / state.tour.qnt
+        summ += parseInt(transport.pricePerSeat)
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(JSON.parse(museum.obj.extra).priceList[0].price)
@@ -434,7 +422,7 @@ export default {
     calculateTourCorrectedPrice: (state) => {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += transport.correctedPrice
+        summ += transport.correctedPricePerSeat
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
@@ -485,13 +473,14 @@ export default {
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
       state.tour.transport.forEach((transport) => {
-        const pricePerSeat = parseInt(transport.obj.price) / parseInt(state.tour.qnt)
         if (transport.correction > 0) {
-          transport.correctedPrice = 
-          (pricePerSeat + 
-            pricePerSeat * parseInt(transport.correction) / 100)
+          transport.correctedPricePerSeat = 
+          parseInt(
+            (transport.pricePerSeat + 
+              transport.pricePerSeat * parseInt(transport.correction) / 100)
+          )
         } else {
-          transport.correctedPrice = pricePerSeat
+          transport.correctedPricePerSeat = parseInt(transport.pricePerSeat)
         }
       })
       // Add price-fields to Museum
@@ -635,7 +624,7 @@ export default {
     getCorrectedPrice(state) {
       let summ = 0
       state.tour.transport.forEach((transport) => {
-        summ += parseInt(transport.correctedPrice)
+        summ += parseInt(transport.correctedPricePerSeat)
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
