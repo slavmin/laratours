@@ -22,6 +22,14 @@
             </th>
             <th>
               Стоимость
+              <br>
+              <v-select
+                v-model="currentCustomerType"
+                :items="getCurrentTourCustomers"
+                item-value="id"
+                item-text="name"
+                label="Тип туриста"
+              />
             </th>
             <th>
               <v-layout 
@@ -45,6 +53,7 @@
             </th>
             <th>
               Итого
+              <br>
             </th>
           </thead>
           <tbody>
@@ -71,7 +80,7 @@
                 </div>
               </td>
               <td class="price">
-                {{ (transport.obj.price / getTour.qnt).toFixed(2) }}
+                {{ transport.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon 
@@ -83,7 +92,7 @@
                   </template>
                   <span>
                     Стоимость за одного человека:
-                    {{ transport.obj.price }} руб. / {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }} чел.
+                    {{ transport.obj.price }} руб. / {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
@@ -96,9 +105,10 @@
               </td>
               <td>
                 <v-text-field
-                  v-model="transport.correctedPrice"
+                  v-model="transport.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -119,10 +129,10 @@
                 <br>
                 {{ event.obj.name }}
                 <br>
-                {{ JSON.parse(event.obj.extra).priceList[0].customerName }}
+                {{ customerName(event) }}
               </td>
               <td class="price">
-                {{ JSON.parse(event.obj.extra).priceList[0].price }}
+                {{ eventPrice(event) }}
               </td>
               <td>
                 <v-text-field
@@ -136,6 +146,7 @@
                   v-model="event.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -177,6 +188,7 @@
                   v-model="hotel.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -216,6 +228,7 @@
                   v-model="meal.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -233,11 +246,11 @@
             >
               <td>
                 {{ guide.guide.name }}:
-                <div class="body-1 grey--text">
+                <!-- <div class="body-1 grey--text">
                   Часов: {{ guide.guide.duration }}
                   <br>
                   Цена: {{ guide.guide.price }}
-                </div>
+                </div> -->
               </td>
               <td class="price">
                 {{ guide.guide.totalPrice }}
@@ -254,6 +267,7 @@
                   v-model="guide.correctedPrice"
                   class="corrected-price"
                   name="corrected"
+                  disabled
                 />
               </td>
             </tr>
@@ -271,12 +285,12 @@
             >
               <td>
                 {{ attendant.attendant.name }}:
-                <br>
+                <!-- <br>
                 <div class="body-1 grey--text">
                   Часов: {{ attendant.attendant.duration }}
                   <br>
                   Цена: {{ attendant.attendant.price }}
-                </div>
+                </div> -->
               </td>
               <td class="price">
                 {{ attendant.attendant.totalPrice }}
@@ -293,7 +307,7 @@
                   v-model="attendant.correctedPrice"
                   class="corrected-price"
                   name="corrected"
-                  @input="correctPrice"
+                  disabled
                 />
               </td>
             </tr>
@@ -329,18 +343,72 @@
             <tr>
               <td>
                 Итого: 
+                <div class="body-1 grey--text">
+                  Тип туриста: {{ (getCurrentTourCustomers.find(c => c.id == currentCustomerType)).name }}
+                </div>
               </td>
               <td>
-                {{ (getTour.totalPrice).toFixed(2) }}
+                {{ getTour.totalPrice }}
               </td>
               <td />
               <td>
-                {{ (getTour.correctedPrice).toFixed(2) }}
+                {{ getTour.correctedPrice }}
               </td>
             </tr>
           </tbody>
         </table>
       </v-flex>
+    </v-layout>
+    <v-layout 
+      row 
+      wrap
+    >
+      <v-flex xs12>
+        <v-btn 
+          v-if="showPriceForEveryCustomer"
+          dark
+          color="green"
+          @click="calculatePriceForEveryCustomer"
+        >
+          Рассчитать цены для всех типов туристов
+        </v-btn>
+        <table class="total">
+          <thead>
+            <th>
+              Тип туриста
+            </th>
+            <th>
+              Обычное
+            </th>
+            <th>
+              Single
+            </th>
+            <th>
+              Дополнительное
+            </th>
+          </thead>
+          <tbody>
+            <tr
+              v-for="price in getTourCalc.priceList"
+              :key="price.customerId"
+              class="text-xs-left subheading"
+            >
+              <td>
+                {{ price.name }}
+              </td>
+              <td>
+                {{ price.standardPrice }}
+              </td>
+              <td>
+                {{ price.singlePrice }}
+              </td>
+              <td>
+                {{ price.addPrice }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </v-flex>  
     </v-layout>
     <v-layout 
       row 
@@ -402,6 +470,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { setTimeout } from 'timers';
 export default {
 
   name: 'Summary',
@@ -416,12 +485,16 @@ export default {
       totalPrice: 0,
       correctedPrice: 0,
       correctionToAll: 0,
+      currentCustomerType: 1,
+      showPriceForEveryCustomer: true,
     };
   },
   computed: {
     ...mapGetters([
       'getTour',
       'getCorrectedPrice',
+      'getCurrentTourCustomers',
+      'getTourCalc',
     ]),
     tourExtra: function() {
       return {
@@ -433,22 +506,20 @@ export default {
   watch: {
     getTour: {
       handler(value) {
-        console.log(this.getTour)
+        this.updateTourTotalPrice()
         this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
       },
       deep: true,
     },
-    // correctionToAll: {
-    //   handler(value) {
-    //     this.updateCorrectionToAll(value)
-    //     this.updateCorrectedPriceValues()
-    //     this.updateTourCorrectedPrice()
-    //   },
-    //   deep: true,
-    // }
+    currentCustomerType: {
+      handler(value) {
+        this.updateCurrentCustomerType(value)
+      },
+    },
   },
   mounted() {
+    this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
@@ -460,15 +531,9 @@ export default {
       'updateTourCorrectedPrice',
       'updateCorrectionToAll',
       'updateCorrectedPriceValues',
+      'updateCurrentCustomerType',
+      'generateTourCalcCustomerTypes',
     ]),
-    // total() {
-    //   // Calculate total price (first column)
-    //   let summ = 0
-    //   Array.from(document.getElementsByClassName('price')).forEach((item) => {
-    //     summ += parseInt(item.innerText)
-    //   })
-    //   this.totalPrice = summ
-    // },
     saveTour() {
       console.log(this.getTour)
     },
@@ -481,13 +546,42 @@ export default {
       console.log('correctPrice')
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
+    },
+    customerName(event) {
+      const data = JSON.parse(event.obj.extra)
+      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      if (currentPrice) {
+        return currentPrice.customerName
+      }
+      else {
+        const defaultPrice = data.priceList.find(price => price.customerId == 1) // Взрослый
+        return defaultPrice.customerName
+      }
+    },
+    eventPrice(event) {
+      const data = JSON.parse(event.obj.extra)
+      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      if (currentPrice) {
+        return currentPrice.price
+      }
+      else {
+        return data.priceList.find(price => price.customerId == 1).price // Цена за взрослого
+      }
+    },
+    calculatePriceForEveryCustomer() {
+      let prevCustomer = this.currentCustomerType
+      this.getCurrentTourCustomers.forEach((customer) => {
+        setTimeout(() => { this.currentCustomerType = customer.id }, 10)
+      })
+      setTimeout(() => {this.currentCustomerType = prevCustomer}, 500)
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.summary {
+.summary,
+.total {
   margin: 0 auto;
   td,
   th {
