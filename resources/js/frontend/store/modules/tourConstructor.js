@@ -433,14 +433,15 @@ export default {
     },
     calculateTourCorrectedPrice: (state) => {
       let summ = 0
+      let standardHotel = 0
+      let singleHotel = 0
+      let addHotel = 0
+      let isChildren = false
       state.tour.transport.forEach((transport) => {
         summ += transport.correctedPricePerSeat
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
-      })
-      state.tour.hotel.forEach((hotel) => {
-        summ += parseInt(hotel.correctedPrice)
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
@@ -454,11 +455,40 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPrice)
       })
+      state.tour.hotel.forEach((hotel) => {
+        standardHotel += parseInt(hotel.correctedPrice)
+        const data = JSON.parse(hotel.obj.extra)
+        const singlePrice = parseInt(data.priceList.single)
+        singleHotel += parseInt(
+          (singlePrice * hotel.obj.day)
+          +
+          (singlePrice * hotel.obj.day * hotel.correction) / 100
+        )
+        // Hardcoded!! :-(( Цена за взрослого
+        const addPrice = parseInt(data.priceList.additionalPrices[0][1].price)
+        addHotel += parseInt(
+          (addPrice * hotel.obj.day)
+          + 
+          (addPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        // Children prices
+        if (isChildren) {
+          // Hardcoded!! :-(( Цена за ребёнка
+          const addPrice = parseInt(data.priceList.additionalPrices[0][0].price)
+          addHotel += parseInt(
+          (addPrice * hotel.obj.day)
+          + 
+          (addPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        }
+      })
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
-      calcCustomer.price = summ
-      state.tour.correctedPrice = summ
+      calcCustomer.standardPrice = summ + standardHotel
+      calcCustomer.singlePrice = summ + singleHotel
+      calcCustomer.addPrice = summ + addHotel
+      state.tour.correctedPrice = summ + standardHotel
     },
     setCorrectionToAll: (state, correction) => {
       if (correction == NaN || correction == '') {
@@ -577,7 +607,9 @@ export default {
       customerTypes.forEach((customer) => {
         state.tour.calc.priceList.push({
           ...customer,
-          price: 0,
+          standardPrice: 0,
+          singlePrice: 0,
+          addPrice: 0,
         })
       })
     }

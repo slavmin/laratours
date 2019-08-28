@@ -378,7 +378,13 @@
               Тип туриста
             </th>
             <th>
-              Общая стоимость
+              Обычное
+            </th>
+            <th>
+              Single
+            </th>
+            <th>
+              Дополнительное
             </th>
           </thead>
           <tbody>
@@ -391,7 +397,13 @@
                 {{ price.name }}
               </td>
               <td>
-                {{ price.price }}
+                {{ price.standardPrice }}
+              </td>
+              <td>
+                {{ price.singlePrice }}
+              </td>
+              <td>
+                {{ price.addPrice }}
               </td>
             </tr>
           </tbody>
@@ -494,7 +506,6 @@ export default {
   watch: {
     getTour: {
       handler(value) {
-        console.log(this.getTour)
         this.updateTourTotalPrice()
         this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
@@ -503,7 +514,6 @@ export default {
     },
     currentCustomerType: {
       handler(value) {
-        console.log('customer changed to: ', value)
         this.updateCurrentCustomerType(value)
       },
     },
