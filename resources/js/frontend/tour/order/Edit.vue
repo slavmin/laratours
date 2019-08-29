@@ -20,14 +20,21 @@
       >
         {{ headerText }} №{{ order.id }}.
         <v-spacer />
-        <v-select
-          v-model="status"
-          :items="statusesFormatted"
-          item-value="id"
-          item-text="text"
-          label="Статус"
-          solo
-        />
+        <v-layout 
+          column
+          wrap
+        >
+          Статус агентства: {{ profiles[0].orderStatus }}
+          <v-spacer />
+          <v-select
+            v-model="status"
+            :items="statusesFormatted"
+            item-value="id"
+            item-text="text"
+            label="Статус"
+            solo
+          />
+        </v-layout>
       </v-card-title>
       <v-card-text>
         <v-tabs
@@ -134,6 +141,13 @@
                 type="hidden"
                 name="customer[0][chat]"
               >
+              <!-- Agency status -->
+              <input
+                v-model="profiles[0].orderStatus"
+                type="hidden"
+                name="customer[0][orderStatus]"
+              >
+              <!-- Operator status -->
               <input
                 v-model="status"
                 type="hidden"
@@ -204,6 +218,7 @@ export default {
       comment: '',
       profiles: {},
       status: 2,
+      agencyStatus: '',
     }
   },
   computed: {

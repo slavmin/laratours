@@ -7,7 +7,20 @@
       >
         {{ headerText }} №{{ order.id }}.
         <v-spacer />
-        Статус: {{ statuses[status] }}
+        <v-layout 
+          column
+          wrap
+        >
+          <v-select
+            v-model="agencyStatus"
+            :items="agencyStatuses"
+            label="Статус агентства"
+            color="green"
+            dark
+          />
+          <v-spacer />
+          Статус оператора: {{ statuses[status] }}
+        </v-layout>
       </v-card-title>
       <v-card-text>
         <v-tabs
@@ -146,9 +159,9 @@
                 name="customer[0][chat]"
               >
               <input
-                v-model="status"
+                v-model="agencyStatus"
                 type="hidden"
-                name="status"
+                name="customer[0][orderStatus]"
               >
             </form>
           </v-tabs-items>
@@ -216,6 +229,8 @@ export default {
       profiles: {},
       status: 2,
       roomsCount: 1,
+      agencyStatuses: ['Принят', 'Отменён'],
+      agencyStatus: '',
     }
   },
   computed: {
@@ -259,6 +274,7 @@ export default {
   mounted() {
     // this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
+    this.agencyStatus = this.profiles[0].orderStatus
     this.updateProfiles(this.profiles)
     this.status = this.order.status
     this.initialRoomsCount()

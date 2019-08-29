@@ -14,7 +14,10 @@
         Агент
       </th>
       <th>
-        Статус
+        Статус агентства
+      </th>
+      <th>
+        Статус оператора
       </th>
       <th>
         Действия
@@ -49,6 +52,9 @@
         </td>
         <td>
           {{ agencies[item.team_id] }}
+        </td>
+        <td>
+          {{ item.profiles[0].content[0].orderStatus }}
         </td>
         <td>
           <span 
