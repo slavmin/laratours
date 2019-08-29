@@ -341,6 +341,7 @@ export default {
             guide,
             correction: 0,
             correctedPrice: 0,
+            pricePerSeat: parseInt(guide.totalPrice / state.tour.qnt)
           })
         }
       })
@@ -377,6 +378,7 @@ export default {
             attendant,
             correction: 0,
             correctedPrice: 0,
+            pricePerSeat: parseInt(attendant.totalPrice / state.tour.qnt)
           })
         }
       })
@@ -386,6 +388,7 @@ export default {
         ...price,
         correction: 0,
         correctedPrice: 0,
+        pricePerSeat: parseInt(price.value / state.tour.qnt)
       })
     },
     setMuseumInEditMode: (state, updData) => {
@@ -413,18 +416,30 @@ export default {
       })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
+        // CHD prices
+        let isChd = false
+        let currentPrice = state.tour.calc.priceList.find((item) => {
+          return item.id == state.tour.calc.currentCustomer
+        })
+        isChd = currentPrice.isChd
+        if (isChd) {
+          summ -= parseInt(hotel.obj.totalPrice)
+          const data = JSON.parse(hotel.obj.extra)
+          const stdPrice = parseInt(data.priceList.chd.std)
+          summ += (stdPrice * hotel.obj.day)
+        }
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.obj.price)
       })
       state.tour.guide.forEach((guide) => {
-        summ += parseInt(guide.guide.totalPrice)
+        summ += parseInt(guide.pricePerSeat)
       })
       state.tour.attendant.forEach((attendant) => {
-        summ += parseInt(attendant.attendant.totalPrice)
+        summ += parseInt(attendant.pricePerSeat)
       })
       state.tour.customPrice.forEach((price) => {
-        summ += parseInt(price.value)
+        summ += parseInt(price.pricePerSeat)
       })
       state.tour.totalPrice = summ
     },
@@ -432,8 +447,7 @@ export default {
       let summ = 0
       let standardHotel = 0
       let singleHotel = 0
-      let addHotel = 0
-      let isChildren = false
+      let extraHotel = 0
       state.tour.transport.forEach((transport) => {
         summ += transport.correctedPricePerSeat
       })
@@ -444,38 +458,56 @@ export default {
         summ += parseInt(meal.correctedPrice)
       })
       state.tour.guide.forEach((guide) => {
-        summ += parseInt(guide.correctedPrice)
+        summ += parseInt(guide.correctedPricePerSeat)
       })
       state.tour.attendant.forEach((attendant) => {
-        summ += parseInt(attendant.correctedPrice)
+        summ += parseInt(attendant.correctedPricePerSeat)
       })
       state.tour.customPrice.forEach((price) => {
-        summ += parseInt(price.correctedPrice)
+        summ += parseInt(price.correctedPricePerSeat)
       })
       state.tour.hotel.forEach((hotel) => {
-        standardHotel += parseInt(hotel.correctedPrice)
+        // ADL prices
         const data = JSON.parse(hotel.obj.extra)
-        const singlePrice = parseInt(data.priceList.single)
+        const stdPrice = parseInt(data.priceList.adl.std)
+        standardHotel += parseInt(
+          (stdPrice * hotel.obj.day)
+          +
+          (stdPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        const singlePrice = parseInt(data.priceList.adl.sngl)
         singleHotel += parseInt(
           (singlePrice * hotel.obj.day)
           +
           (singlePrice * hotel.obj.day * hotel.correction) / 100
         )
-        // Hardcoded!! :-(( Цена за взрослого
-        const addPrice = parseInt(data.priceList.additionalPrices[0][1].price)
-        addHotel += parseInt(
-          (addPrice * hotel.obj.day)
+        const extraPrice = parseInt(data.priceList.adl.extra)
+        extraHotel += parseInt(
+          (extraPrice * hotel.obj.day)
           + 
-          (addPrice * hotel.obj.day * hotel.correction) / 100
+          (extraPrice * hotel.obj.day * hotel.correction) / 100
         )
-        // Children prices
-        if (isChildren) {
-          // Hardcoded!! :-(( Цена за ребёнка
-          const addPrice = parseInt(data.priceList.additionalPrices[0][0].price)
-          addHotel += parseInt(
-          (addPrice * hotel.obj.day)
+        // CHD prices
+        let isChd = false
+        let currentPrice = state.tour.calc.priceList.find((item) => {
+          return item.id == state.tour.calc.currentCustomer
+        })
+        isChd = currentPrice.isChd
+        if (isChd) {
+          standardHotel = 0
+          extraHotel = 0
+          console.log('chd mode')
+          const stdPrice = parseInt(data.priceList.chd.std)
+          standardHotel += parseInt(
+            (stdPrice * hotel.obj.day)
+            +
+            (stdPrice * hotel.obj.day * hotel.correction) / 100
+          )
+          const extraPrice = parseInt(data.priceList.chd.extra)
+          extraHotel += parseInt(
+          (extraPrice * hotel.obj.day)
           + 
-          (addPrice * hotel.obj.day * hotel.correction) / 100
+          (extraPrice * hotel.obj.day * hotel.correction) / 100
         )
         }
       })
@@ -484,7 +516,7 @@ export default {
       })
       calcCustomer.standardPrice = summ + standardHotel
       calcCustomer.singlePrice = summ + singleHotel
-      calcCustomer.addPrice = summ + addHotel
+      calcCustomer.addPrice = summ + extraHotel
       state.tour.correctedPrice = summ + standardHotel
     },
     setCorrectionToAll: (state, correction) => {
@@ -566,31 +598,31 @@ export default {
       // Add price-fields to Guide
       state.tour.guide.forEach((guide) => {
         if (guide.correction > 0) {
-          guide.correctedPrice = 
-            guide.guide.totalPrice + 
-            (guide.guide.totalPrice * guide.correction / 100) 
+          guide.correctedPricePerSeat = 
+            guide.pricePerSeat + 
+            (guide.pricePerSeat * guide.correction / 100) 
         } else {
-          guide.correctedPrice = guide.guide.totalPrice
+          guide.correctedPricePerSeat = guide.pricePerSeat
         }
       })
       // Add price-fields to Attendant
       state.tour.attendant.forEach((attendant) => {
         if (attendant.correction > 0) {
-          attendant.correctedPrice = 
-            attendant.attendant.totalPrice + 
-            (attendant.attendant.totalPrice * attendant.correction / 100) 
+          attendant.correctedPricePerSeat = 
+            attendant.pricePerSeat + 
+            (attendant.pricePerSeat * attendant.correction / 100) 
         } else {
-          attendant.correctedPrice = attendant.attendant.totalPrice
+          attendant.correctedPricePerSeat = attendant.pricePerSeat
         }
       })
       // Add price-fields to Custom Price (Services)
       state.tour.customPrice.forEach((price) => {
         if (price.correction > 0) {
-          price.correctedPrice = 
-          parseInt(price.value) + 
-            (parseInt(price.value) * parseInt(price.correction) / 100) 
+          price.correctedPricePerSeat = 
+          parseInt(price.pricePerSeat) + 
+            (parseInt(price.pricePerSeat) * parseInt(price.correction) / 100) 
         } else {
-          price.correctedPrice = parseInt(price.value)
+          price.correctedPricePerSeat = parseInt(price.pricePerSeat)
         }
       })
     },
@@ -607,6 +639,8 @@ export default {
           standardPrice: 0,
           singlePrice: 0,
           addPrice: 0,
+          isChd: false,
+          isInf: false,
         })
       })
     }
@@ -709,7 +743,7 @@ export default {
         summ += parseInt(attendant.correctedPrice)
       })
       state.tour.customPrice.forEach((price) => {
-        summ += parseInt(price.correctedPrice)
+        summ += parseInt(price.correctedPricePerSeat)
       })
       return summ
     },

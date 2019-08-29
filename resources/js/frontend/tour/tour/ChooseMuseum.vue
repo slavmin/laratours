@@ -171,7 +171,6 @@ export default {
   },
   mounted() {
     // this.fillStorageInEditMode()
-    console.log(this.getActualMuseum)
   },
   methods: {
     ...mapActions([

@@ -170,11 +170,13 @@
                 <div class="body-1 grey--text">
                   Ночей: {{ hotel.obj.day }}
                   <br>
-                  Цена: {{ JSON.parse(hotel.obj.extra).priceList.standard }}
+                  Стандартное размещение
+                  <!-- <br>
+                  Цена: {{ JSON.parse(hotel.obj.extra).priceList.standard }} -->
                 </div>
               </td>
               <td class="price">
-                {{ hotel.obj.totalPrice }}
+                {{ getHotelPrice(hotel) }}
               </td>
               <td>
                 <v-text-field
@@ -253,7 +255,21 @@
                 </div> -->
               </td>
               <td class="price">
-                {{ guide.guide.totalPrice }}
+                {{ guide.pricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ guide.guide.totalPrice }} руб. / {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
               </td>
               <td>
                 <v-text-field
@@ -264,7 +280,7 @@
               </td>
               <td>
                 <v-text-field
-                  v-model="guide.correctedPrice"
+                  v-model="guide.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
                   disabled
@@ -293,7 +309,21 @@
                 </div> -->
               </td>
               <td class="price">
-                {{ attendant.attendant.totalPrice }}
+                {{ attendant.pricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ attendant.attendant.totalPrice }} руб. / {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
               </td>
               <td>
                 <v-text-field
@@ -304,7 +334,7 @@
               </td>
               <td>
                 <v-text-field
-                  v-model="attendant.correctedPrice"
+                  v-model="attendant.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
                   disabled
@@ -327,7 +357,21 @@
                 {{ price.name }}
               </td>
               <td class="price">
-                {{ price.value }}
+                {{ price.pricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ price.value }} руб. / {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
               </td>
               <td>
                 <v-text-field
@@ -386,6 +430,9 @@
             <th>
               Дополнительное
             </th>
+            <th>
+              Размещение ребёнка
+            </th>
           </thead>
           <tbody>
             <tr
@@ -404,6 +451,13 @@
               </td>
               <td>
                 {{ price.addPrice }}
+              </td>
+              <td>
+                <v-checkbox 
+                  v-model="price.isChd" 
+                  color="green"
+                  name="is-chd"
+                />
               </td>
             </tr>
           </tbody>
@@ -523,6 +577,7 @@ export default {
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
+    console.log(this.getCurrentTourCustomers)
   },
   methods: {
     ...mapActions([
@@ -574,7 +629,19 @@ export default {
         setTimeout(() => { this.currentCustomerType = customer.id }, 10)
       })
       setTimeout(() => {this.currentCustomerType = prevCustomer}, 500)
-    }
+    },
+    getHotelPrice(hotel) {
+      let customer = this.getTour.calc.priceList.find((item) => {
+        return item.id == this.currentCustomerType
+      })
+      console.log(customer)
+      if (customer.isChd) {
+        return JSON.parse(hotel.obj.extra).priceList.chd.std * hotel.obj.day
+      }
+      else {
+        return JSON.parse(hotel.obj.extra).priceList.adl.std * hotel.obj.day
+      }
+    },
   },
 };
 </script>
