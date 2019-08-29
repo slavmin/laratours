@@ -109,24 +109,37 @@
                       color="green"
                       required
                     />
+                    <h3 class="grey--text">
+                      Взрослый
+                    </h3>
                     <v-layout 
                       row 
                       wrap
                     >
-                      <v-flex>
+                      <v-flex md4>
                         <v-text-field 
-                          v-model="priceList.standard"
-                          label="Цена стандартного размещения" 
+                          v-model="priceList.adl.std"
+                          label="Основное размещение" 
                           mask="#####"
                           outline
                           color="green"
                           required
                         />
                       </v-flex>
-                      <v-flex>
+                      <v-flex md4>
                         <v-text-field
-                          v-model="priceList.single" 
-                          label="Цена single размещения" 
+                          v-model="priceList.adl.sngl" 
+                          label="Single" 
+                          mask="#####"
+                          outline
+                          color="green"
+                          required
+                        />
+                      </v-flex>
+                      <v-flex md4>
+                        <v-text-field
+                          v-model="priceList.adl.extra" 
+                          label="Дополнительное" 
                           mask="#####"
                           outline
                           color="green"
@@ -135,7 +148,72 @@
                       </v-flex>
                     </v-layout>
                     <v-divider />
-                    <h5 class="subheading grey--text text-xs-center mb-2">
+                    <h3 class="grey--text">
+                      Ребёнок до
+                      <input 
+                        v-model="priceList.chd.age"
+                        type="text" 
+                        class="chd-age"
+                      >
+                    </h3>
+                    <v-layout 
+                      row 
+                      wrap
+                    >
+                      <v-flex>
+                        <v-text-field 
+                          v-model="priceList.chd.std"
+                          label="Основное размещение" 
+                          mask="#####"
+                          outline
+                          color="green"
+                          required
+                        />
+                      </v-flex>
+                      <v-flex>
+                        <v-text-field
+                          v-model="priceList.chd.extra" 
+                          label="Дополнительное" 
+                          mask="#####"
+                          outline
+                          color="green"
+                          required
+                        />
+                      </v-flex>
+                    </v-layout>
+                    <h3 class="grey--text">
+                      Инфант до
+                      <input 
+                        v-model="priceList.inf.age"
+                        type="text" 
+                        class="inf-age"
+                      >
+                    </h3>
+                    <v-layout 
+                      row 
+                      wrap
+                    >
+                      <v-flex>
+                        <v-text-field 
+                          v-if="!priceList.inf.isFree"
+                          v-model="priceList.inf.std"
+                          label="Размещение" 
+                          mask="#####"
+                          outline
+                          color="green"
+                          required
+                        />
+                      </v-flex>
+                      <v-spacer />
+                      <v-flex>
+                        <v-checkbox
+                          v-model="priceList.inf.isFree"
+                          color="green"
+                          label="Бесплатно"
+                        />
+                      </v-flex>
+                    </v-layout>
+                    <!-- <h5 class="subheading grey--text text-xs-center mb-2">
                       Дополнительные места: {{ additionalCount }}
                       <i 
                         class="material-icons green--text"
@@ -184,7 +262,7 @@
                           />
                         </v-flex>
                       </v-layout>
-                    </div>
+                    </div> -->
                   </v-flex>
                 </v-layout>
               </v-form>
@@ -257,8 +335,21 @@ export default {
       customerId: 15,
       roomType: 0,
       priceList: {
-        standard: 0,
-        single: 0,
+        adl: {
+          std: 0,
+          sngl: 0,
+          extra: 0,
+        },
+        chd: {
+          age: 7,
+          std: 0,
+          extra: 0,
+        },
+        inf: {
+          age: 2,
+          std: 0,
+          isFree: true,
+        },
       },
       additionalCount: 1,
       additionalPrices: [
@@ -277,7 +368,7 @@ export default {
       return JSON.stringify({
         priceList: {
           ...this.priceList,
-          additionalPrices: this.additionalPrices,
+          // additionalPrices: this.additionalPrices,
         }
       })
     },
@@ -322,9 +413,22 @@ export default {
       this.name = ''
       this.qnt = 0
       this.priceList = {
-        standard: 0,
-        single: 0,
-      }
+        adl: {
+          std: 0,
+          sngl: 0,
+          extra: 0,
+        },
+        chd: {
+          age: 7,
+          std: 0,
+          extra: 0,
+        },
+        inf: {
+          age: 2,
+          std: 0,
+          isFree: true,
+        },
+      },
       this.additionalCount = 1
       this.additionalPrices = [
         [
@@ -340,4 +444,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.chd-age,
+.inf-age {
+  border-bottom: 1px solid grey;
+  width: 36px;
+  text-align: center;
+}
 </style>

@@ -54,7 +54,7 @@
                       :dark="guide.selected"
                       :disabled="guide.selected"
                       label="Стоимость"
-                      mask="####"
+                      mask="######"
                       class="mt-3"
                       color="green"
                     />
@@ -156,11 +156,11 @@ export default {
       return cityName
     },
     choose(guide) {
-      if (guide.duration) {
-        guide.totalPrice = guide.price * guide.duration
-      } else {
-        guide.totalPrice = guide.price
-      }
+      // if (guide.duration) {
+      //   guide.totalPrice = guide.price * guide.duration
+      // } else {
+      //   guide.totalPrice = guide.price
+      // }
       let updGuide = {
         ...guide,
         selected: !guide.selected,
