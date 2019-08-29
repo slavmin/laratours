@@ -19,7 +19,10 @@
           Оператор
         </th>
         <th>
-          Статус
+          Статус агентства
+        </th>
+        <th>
+          Статус оператора
         </th>
         <th>
           Действия
@@ -54,6 +57,9 @@
           </td>
           <td>
             {{ operators[item.operator_id] }}
+          </td>
+          <td>
+            {{ item.profiles[0].content[0].orderStatus }}
           </td>
           <td>
             <span 

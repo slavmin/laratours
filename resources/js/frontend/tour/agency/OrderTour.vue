@@ -134,6 +134,11 @@
                 type="hidden"
                 :name="chat != '' ? 'customer[0][chat]' : ''"
               >
+              <input
+                value="Принят"
+                type="hidden"
+                name="customer[0][orderStatus]"
+              >
             </form>
           </v-tabs-items>
         </v-tabs>
@@ -205,7 +210,7 @@ export default {
               date,
               sender: 'Агентство',
               text: this.comment,
-          }
+          },
         })
       }
       return ''
