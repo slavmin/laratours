@@ -54,7 +54,7 @@
                       :dark="attendant.selected"
                       :disabled="attendant.selected"
                       label="Стоимость"
-                      mask="####"
+                      mask="######"
                       class="mt-3"
                       color="green"
                     />
@@ -156,11 +156,11 @@ export default {
       return cityName
     },
     choose(attendant) {
-      if (attendant.duration) {
-        attendant.totalPrice = attendant.price * attendant.duration
-      } else {
-        attendant.totalPrice = attendant.price
-      }
+      // if (attendant.duration) {
+      //   attendant.totalPrice = attendant.price * attendant.duration
+      // } else {
+      //   attendant.totalPrice = attendant.price
+      // }
       let updAttendant = {
         ...attendant,
         selected: !attendant.selected,

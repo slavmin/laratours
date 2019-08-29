@@ -156,6 +156,7 @@
               {{ props.item.name }}
             </td>
             <td class="text-xs-center">
+              Взрослый
               <v-layout 
                 row 
                 wrap
@@ -171,7 +172,7 @@
                 <div
                   d-flex
                 >
-                  {{ JSON.parse(props.item.extra).priceList.standard }}
+                  {{ JSON.parse(props.item.extra).priceList.adl.std }}
                 </div>
               </v-layout>
               <v-layout 
@@ -189,10 +190,87 @@
                 <div
                   d-flex
                 >
-                  {{ JSON.parse(props.item.extra).priceList.single }}
+                  {{ JSON.parse(props.item.extra).priceList.adl.sngl }}
                 </div>
               </v-layout>
-              <div v-if="JSON.parse(props.item.extra).priceList.additionalPrices.length > 0">
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Дополнительное:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.adl.extra }}
+                </div>
+              </v-layout>
+              Ребёнок до {{ JSON.parse(props.item.extra).priceList.chd.age }}
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Обычное размещение:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.chd.std }}
+                </div>
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Дополнительное:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.chd.extra }}
+                </div>
+              </v-layout>
+              Инфант до {{ JSON.parse(props.item.extra).priceList.inf.age }}
+              <v-layout 
+                row 
+                wrap
+                justify-space-between
+                my-2
+              >
+                <div
+                  d-flex
+                  class="grey--text"
+                >
+                  Обычное размещение:
+                </div>
+                <div
+                  d-flex
+                >
+                  {{ JSON.parse(props.item.extra).priceList.inf.isFree 
+                    ? 'Бесплатно' 
+                    : JSON.parse(props.item.extra).priceList.inf.std 
+                  }}
+                </div>
+              </v-layout>
+              <!-- <div v-if="JSON.parse(props.item.extra).priceList.additionalPrices.length > 0">
                 <h6 class="grey--text body-1">
                   Доп. места:
                 </h6>
@@ -224,7 +302,7 @@
                     {{ price[1].price }}
                   </div>
                 </v-layout>
-              </div>
+              </div> -->
             </td>
             <td class="text-xs-center">
               {{ props.item.qnt }}

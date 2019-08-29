@@ -87,6 +87,7 @@
                       class="mt-3"
                       color="green"
                     />
+                    Взрослый
                     <v-layout 
                       row 
                       wrap
@@ -98,7 +99,7 @@
                       <p 
                         style="display: inline-block;"
                       >
-                        {{ JSON.parse(item.extra).priceList.standard }}
+                        {{ JSON.parse(item.extra).priceList.adl.std }}
                       </p>            
                     </v-layout>
                     <v-layout 
@@ -112,10 +113,71 @@
                       <p 
                         style="display: inline-block;"
                       >
-                        {{ JSON.parse(item.extra).priceList.single }}
+                        {{ JSON.parse(item.extra).priceList.adl.sngl }}
                       </p>            
                     </v-layout>
-                    <div v-if="JSON.parse(item.extra).priceList.additionalPrices.length > 0">
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <span class="grey--text text--darken-1">
+                        Дополнительное:
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ JSON.parse(item.extra).priceList.adl.extra }}
+                      </p>            
+                    </v-layout>
+                    Ребёнок до {{ JSON.parse(item.extra).priceList.chd.age }}
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <span class="grey--text text--darken-1">
+                        Обычное размещение:
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ JSON.parse(item.extra).priceList.chd.std }}
+                      </p>            
+                    </v-layout>
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <span class="grey--text text--darken-1">
+                        Дополнительное:
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ JSON.parse(item.extra).priceList.chd.extra }}
+                      </p>            
+                    </v-layout>
+                    Инфант до {{ JSON.parse(item.extra).priceList.inf.age }}
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-space-between
+                    >
+                      <span class="grey--text text--darken-1">
+                        Обычное размещение:
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ JSON.parse(item.extra).priceList.inf.isFree
+                          ? 'Бесплатно'
+                          : JSON.parse(item.extra).priceList.inf.std 
+                        }}
+                      </p>            
+                    </v-layout>
+                    <!-- <div v-if="JSON.parse(item.extra).priceList.additionalPrices.length > 0">
                       <p>
                         Доп. места:
                       </p>
@@ -144,7 +206,7 @@
                           {{ price[1].price }}
                         </p>
                       </v-layout>
-                    </div>
+                    </div> -->
                   </div>
                 </v-card-title>
                 <v-card-actions>
@@ -227,9 +289,9 @@ export default {
     },
     choose(hotel, item) {
       if (item.day != 0) {
-        item.totalPrice = JSON.parse(item.extra).priceList.standard * item.day
+        item.totalPrice = JSON.parse(item.extra).priceList.adl.std * item.day
       } else {
-        item.totalPrice = JSON.parse(item.extra).priceList.standard
+        item.totalPrice = JSON.parse(item.extra).priceList.adl.std
       }
       let updData = {
         'hotel': hotel,
