@@ -446,7 +446,36 @@
               Дополнительное
             </th>
             <th>
-              Размещение ребёнка
+              Ребёнок
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-icon 
+                    color="grey"
+                    v-on="on"
+                  >
+                    info
+                  </v-icon>
+                </template>
+                <span>
+                  Учитывать размещение в отелях по детскому тарифу.
+                </span>
+              </v-tooltip>
+            </th>
+            <th>
+              Пенсионер
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-icon 
+                    color="grey"
+                    v-on="on"
+                  >
+                    info
+                  </v-icon>
+                </template>
+                <span>
+                  Для применения тарифа при заказе тура.
+                </span>
+              </v-tooltip>
             </th>
           </thead>
           <tbody>
@@ -472,6 +501,13 @@
                   v-model="price.isChd" 
                   color="green"
                   name="is-chd"
+                />
+              </td>
+              <td>
+                <v-checkbox 
+                  v-model="price.isPens" 
+                  color="green"
+                  name="is-pens"
                 />
               </td>
             </tr>

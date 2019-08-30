@@ -639,6 +639,7 @@ export default {
           standardPrice: 0,
           singlePrice: 0,
           addPrice: 0,
+          isPens: false,
           isChd: false,
           isInf: false,
         })
