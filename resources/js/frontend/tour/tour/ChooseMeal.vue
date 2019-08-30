@@ -67,8 +67,9 @@
                       :items="days"
                       :dark="item.selected"
                       :disabled="item.selected"
-                      label="День тура"
+                      label="Количество дней"
                       outline
+                      @change="calcTotalPrice(item)"
                     />
                     <v-text-field
                       :id="'about' + [item.id]"
@@ -94,6 +95,21 @@
                       </p>
                     </v-layout>
                     <br>
+                    <v-layout
+                      v-if="item.totalPrice"
+                      row
+                      justify-content-between
+                      wrap
+                    >
+                      <span class="grey--text text--darken-1">
+                        Итого: 
+                      </span>
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ item.totalPrice }}
+                      </p>
+                    </v-layout>
                   </div>
                 </v-card-title>
                 <v-card-actions>
@@ -182,7 +198,15 @@ export default {
       })
       return cityName
     },
+    calcTotalPrice(item) {
+      if (item.day != 0) {
+        item.totalPrice = item.price * item.day
+      } else {
+        item.totalPrice = item.price
+      }
+    },
     choose(meal, item) {
+      if (!item.day) item.totalPrice = item.price
       let updData = {
         'meal': meal,
         'item': {
