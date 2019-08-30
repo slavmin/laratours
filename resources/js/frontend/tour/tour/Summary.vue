@@ -212,11 +212,26 @@
                 {{ meal.obj.name }}
                 <br>
                 <div class="body-1 grey--text">
-                  Описание: {{ meal.obj.description }}
+                  Описание: {{ meal.obj.description }}, {{ meal.obj.price }} руб.
+                  <br>
+                  Дней: {{ meal.obj.day }}
                 </div>
               </td>
               <td class="price">
-                {{ meal.obj.price }}
+                {{ meal.obj.totalPrice }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ meal.obj.price }} руб. * {{ meal.obj.day }} дн.
+                  </span>
+                </v-tooltip>
               </td>
               <td>
                 <v-text-field

@@ -430,7 +430,7 @@ export default {
         }
       })
       state.tour.meal.forEach((meal) => {
-        summ += parseInt(meal.obj.price)
+        summ += parseInt(meal.obj.totalPrice)
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.pricePerSeat)
@@ -589,10 +589,10 @@ export default {
       state.tour.meal.forEach((meal) => {
         if (meal.correction > 0) {
           meal.correctedPrice = 
-            parseInt(meal.obj.price) + 
-            (meal.obj.price * meal.correction / 100) 
+            parseInt(meal.obj.totalPrice) + 
+            (meal.obj.totalPrice * meal.correction / 100) 
         } else {
-          meal.correctedPrice = parseInt(meal.obj.price)
+          meal.correctedPrice = parseInt(meal.obj.totalPrice)
         }
       })
       // Add price-fields to Guide
