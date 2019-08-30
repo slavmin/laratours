@@ -72,6 +72,9 @@
           @change="save"
         />
       </v-menu>
+      <div>
+        Возраст: {{ age }}
+      </div>
       <v-checkbox
         label="Квота"
         disabled
@@ -152,11 +155,21 @@
         :name="isRequired ? 'customer[' + id + '][busSeatId]' : ''"
         :value="choosenSeat"
       >
+      <div
+        v-if="age > 0" 
+        class="subheading"
+      >
+        <span class="grey--text">
+          Цена:
+        </span> 
+        {{ getPrice() }}
+      </div>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+import moment from 'moment'
 import BusScheme from './BusScheme'
 export default {
   name: 'OrderFrom',
@@ -197,7 +210,9 @@ export default {
         { id: 3, value: 'Ребёнок'},
       ],
       meal: '',
-      meals: ['Завтраки', 'Полупансион', 'Полный пансион']
+      meals: ['Завтраки', 'Полупансион', 'Полный пансион'],
+      age: 0,
+      priceList: [],
     }
   },
   computed: {
@@ -218,7 +233,15 @@ export default {
       else {
         return false
       }
-    }
+    },
+    isChd: function() {
+      if (this.age < 8) return true
+      return false
+    },
+    isPens: function() {
+      if (this.age > 55) return true
+      return false
+    },
   },
   watch: {
     menu (val) {
@@ -226,7 +249,8 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.profiles)
+    this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    console.log(this.priceList)
   },
   methods: {
     chooseSeat() {
@@ -237,6 +261,26 @@ export default {
     },
     save(date) {
       this.$refs.menu.save(date)
+      this.age = moment().diff(date, 'years')
+    },
+    getPrice() {
+      if (this.isChd) {
+        const price = this.priceList.find(item => item.isChd)
+        // If additional form (extra in hotel)
+        if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        return price.standardPrice + ' стандартное размещение ' + price.name
+      }
+      if (this.isPens) {
+        const price = this.priceList.find(item => item.isPens)
+        // If additional form (extra in hotel)
+        if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        return price.standardPrice + ' стандартное размещение ' + price.name
+      }
+      // Default. ADL price
+      const price = this.priceList.find(item => !item.isPens && !item.isChd)
+      // If additional form (extra in hotel)
+      if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+      return price.standardPrice + ' стандартное размещение ' + price.name
     },
   }
 }
