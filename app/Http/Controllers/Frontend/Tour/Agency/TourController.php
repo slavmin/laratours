@@ -25,6 +25,7 @@ class TourController extends Controller
         $subscriptions = array_keys($operators);
 
         $operator_id = $this->getOperatorId($request, $subscriptions);
+        $agent_id = auth()->user()->currentTeam->getKey();
         $city_id = $this->getCityId($request, $subscriptions);
         $type_id = $this->getTourTypeId($request, $subscriptions);
 
