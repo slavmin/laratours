@@ -261,7 +261,9 @@ export default {
     },
     save(date) {
       this.$refs.menu.save(date)
+      console.log('calc age before: ', this.age)
       this.age = moment().diff(date, 'years')
+      console.log('calc age after : ', this.age)
     },
     getPrice() {
       if (this.isChd) {
