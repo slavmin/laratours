@@ -45,10 +45,18 @@ class TourOptionsController extends Controller
         $attendant_options = TourAttendant::all();
         $attendant_options = $this->hideFields($attendant_options);
 
-        $subscribers = Team::getTeamSubscriptions();
+        $team = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
+        $subscriptions = [];
+        $subscribers = [];
+
+        if($team && $team->roles->contains('name', config('access.teams.agent_role'))){
+            $subscriptions = $team->subscriptions->pluck('name','id')->toArray();
+        } elseif($team && $team->roles->contains('name', config('access.teams.operator_role'))){
+            $subscribers = $team->subscribers->pluck('name','id')->toArray();
+        }
 
         return response()->json([
-            compact('countries_cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options', 'subscribers')
+            compact('countries_cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options', 'subscribers', 'subscriptions')
         ]);
     }
 
