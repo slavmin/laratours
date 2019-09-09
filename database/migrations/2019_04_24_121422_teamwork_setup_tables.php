@@ -27,6 +27,7 @@ class TeamworkSetupTables extends Migration
             $table->string('name')->unique();
             $table->string( 'slug' )->unique();
             $table->timestamps();
+            $table->softDeletes();
         } );
 
         Schema::create( \Config::get( 'teamwork.team_user_table' ), function ( Blueprint $table )

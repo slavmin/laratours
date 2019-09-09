@@ -18,12 +18,14 @@ class CreateToursTable extends Migration
             $table->uuid('uuid');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('city_id')->nullable()->index();
+            $table->json('cities_list')->nullable();
             $table->unsignedBigInteger('tour_type_id')->nullable()->index();
             $table->unsignedInteger('duration')->nullable()->index();
             $table->unsignedInteger('commission')->nullable();
             $table->json('extra')->nullable();
             $table->unsignedBigInteger('team_id')->nullable()->index();
+            $table->dateTime('expire_at')->nullable();
+            $table->boolean('published')->default(0);
             $table->timestamps();
             $table->softDeletes();
 
