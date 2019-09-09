@@ -42,28 +42,40 @@
               name="_token"
               :value="token"  
             >
-            <v-layout wrap>
-              <v-flex 
-                xs12 
-                sm6 
-              >
+            <input 
+              type="hidden"
+              name="description"
+              :value="description"
+            >
+            <v-text-field 
+              v-model="name"
+              name="name"
+              label="Название" 
+              color="green"
+              outline
+              required
+            />
+            <h4>Возраст</h4>
+            <v-layout 
+              row 
+              wrap
+            >
+              <v-flex xs6>
                 <v-text-field 
-                  v-model="name"
-                  label="Название" 
-                  color="green"
+                  v-model="ageFrom"
+                  label="От" 
+                  mask="##"
                   outline
-                  required
+                  color="green"
                 />
               </v-flex>
-              <v-flex 
-                xs12 
-                sm6
-              >
+              <v-flex xs6>
                 <v-text-field 
-                  v-model="description"
-                  label="Описание" 
-                  color="green"
+                  v-model="ageTo"
+                  label="До" 
+                  mask="##" 
                   outline
+                  color="green"
                 />
               </v-flex>
             </v-layout>
@@ -75,7 +87,7 @@
         <v-btn 
           color="green" 
           flat 
-          @click="dialog = false"
+          @click="close"
         >
           Закрыть
         </v-btn>
@@ -120,34 +132,42 @@ export default {
     return {
       dialog: false,
       name: '',
-      description: '',
-      url: '/operator/customer-type/' + this.item.id,
+      ageFrom: 0,
+      ageTo: 0,
     };
   },
-  created() {
+  computed: {
+    description: function() {
+      let result = {
+        ageFrom: parseInt(this.ageFrom),
+        ageTo: parseInt(this.ageTo)
+      }
+      if (this.ageFrom == 0 && this.ageTo == 0) {
+        return null
+      }
+      return JSON.stringify(result)
+    }
   },
   mounted() {
     this.fillValues()
   },
   methods: {
-    save() {
-      let result = {
-        '_token': this.token,
-        '_method': 'PATCH',
-        name: this.name,
-        description: this.description
-
-      }
-      console.log(result)
-      axios.post(this.url, result)
-        .then(r => console.log(r))
-        .catch(e => console.log(e))
-      this.dialog = false
-    },
     fillValues() {
       this.name = this.item.name
-      this.description = this.item.description
-    }
+      const description = JSON.parse(this.item.description)
+      if (description) {
+        this.ageFrom = description.ageFrom
+        this.ageTo = description.ageTo
+      }
+      else {
+        this.ageFrom = 0
+        this.ageTo = 0
+      }
+    },
+    close() {
+      this.fillValues()
+      this.dialog = false
+    },
   }
 };
 </script>

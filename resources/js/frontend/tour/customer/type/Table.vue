@@ -18,7 +18,7 @@
               {{ props.item.name }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.description }}
+              {{ getDescription(props.item.description) }}
             </td>
             <td class="text-xs-right">
               <v-layout 
@@ -72,7 +72,7 @@ export default {
           value: 'name'
         },
         {
-          text: 'Описание',
+          text: 'Возраст',
           align: 'center',
           value: 'description'
         },
@@ -86,6 +86,16 @@ export default {
         rowsPerPage: -1 // -1 for All",
       }
     };
+  },
+  methods: {
+    getDescription(item) {
+      const data = JSON.parse(item)
+      if (data) {
+        return data.ageFrom 
+                ? `от ${data.ageFrom} до ${data.ageTo}` 
+                : `до ${data.ageTo}` 
+      }
+    }
   },
 };
 </script>
