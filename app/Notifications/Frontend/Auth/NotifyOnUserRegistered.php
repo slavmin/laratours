@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\MailMessage;
  * Class NotifyOnUserRegistered
  * @package App\Notifications\Frontend\Auth
  */
-class NotifyOnUserRegistered extends Notification
+class NotifyOnUserRegistered extends Notification implements ShouldQueue
 {
     use Queueable;
 
