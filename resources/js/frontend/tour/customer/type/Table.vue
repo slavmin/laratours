@@ -21,7 +21,11 @@
               {{ props.item.description }}
             </td>
             <td class="text-xs-right">
-              <div>
+              <v-layout 
+                row 
+                wrap
+                justify-end
+              >
                 <customer-type-edit 
                   :item="props.item"
                   :token="token"
@@ -30,7 +34,7 @@
                   :item="props.item"
                   :token="token"
                 />
-              </div>
+              </v-layout>
             </td>
           </template>
         </v-data-table>
@@ -40,7 +44,6 @@
 </template>
 
 <script>
-// import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'CustomerTable',
@@ -84,20 +87,6 @@ export default {
       }
     };
   },
-  // computed: mapGetters(['refreshToken', 'allCustomerTypes']),
-  // created() {
-  //   console.log('-- Created:')
-  //   console.log(this.allCustomerTypes)
-  // },
-  // updated() {
-  //   console.log(this.allCustomerTypes)
-  // },
-  // async mounted() {
-  //   this.fetchCustomerTypes()
-  // },
-  // methods: {
-  //   ...mapActions(['fetchCustomerTypes'])
-  // }
 };
 </script>
 

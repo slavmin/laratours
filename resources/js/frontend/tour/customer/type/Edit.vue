@@ -27,31 +27,47 @@
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
-          <v-layout wrap>
-            <v-flex 
-              xs12 
-              sm6 
+          <form 
+            :id="'form' + item.id"
+            :action="'/operator/customer-type/' + item.id"
+            method="POST"
+          >
+            <input 
+              type="hidden"
+              name="_method"
+              value="PATCH"
             >
-              <v-text-field 
-                v-model="name"
-                label="Название" 
-                color="green"
-                outline
-                required
-              />
-            </v-flex>
-            <v-flex 
-              xs12 
-              sm6
+            <input 
+              type="hidden"
+              name="_token"
+              :value="token"  
             >
-              <v-text-field 
-                v-model="description"
-                label="Описание" 
-                color="green"
-                outline
-              />
-            </v-flex>
-          </v-layout>
+            <v-layout wrap>
+              <v-flex 
+                xs12 
+                sm6 
+              >
+                <v-text-field 
+                  v-model="name"
+                  label="Название" 
+                  color="green"
+                  outline
+                  required
+                />
+              </v-flex>
+              <v-flex 
+                xs12 
+                sm6
+              >
+                <v-text-field 
+                  v-model="description"
+                  label="Описание" 
+                  color="green"
+                  outline
+                />
+              </v-flex>
+            </v-layout>
+          </form>
         </v-container>
       </v-card-text>
       <v-card-actions>
@@ -66,7 +82,8 @@
         <v-btn 
           color="green" 
           flat 
-          @click="save"
+          :form="'form' + item.id"
+          type="submit"
         >
           Сохранить
         </v-btn>
