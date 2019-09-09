@@ -17,12 +17,11 @@ class Tour extends Model
 {
     use Uuid, SoftDeletes, UsedByTeams, HasPagination, UsedByCity, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'cities_list', 'city_id', 'tour_type_id', 'description', 'duration', 'commission', 'extra', 'published'];
+    protected $fillable = ['name', 'cities_list', 'city_id', 'tour_type_id', 'description', 'duration', 'commission', 'extra'];
 
     protected $casts = [
         'extra' => 'array',
-        'cities_list' => 'array',
-        'published' => 'boolean',
+        'cities_list' => 'array'
     ];
 
     protected $supportedRelations = ['dates', 'hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];

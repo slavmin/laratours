@@ -25,7 +25,6 @@ class TourController extends Controller
         $subscriptions = array_keys($operators);
 
         $operator_id = $this->getOperatorId($request, $subscriptions);
-        $agent_id = auth()->user()->currentTeam->getKey();
         $city_id = $this->getCityId($request, $subscriptions);
         $type_id = $this->getTourTypeId($request, $subscriptions);
 
@@ -38,7 +37,7 @@ class TourController extends Controller
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->where('city_id', $city_id)
+            }])->whereIn('team_id', [$operator_id])->where('city_id', $city_id)
                 ->where('tour_type_id', $type_id)
                 ->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
@@ -46,14 +45,14 @@ class TourController extends Controller
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->where('tour_type_id', $type_id)
+            }])->whereIn('team_id', [$operator_id])->where('tour_type_id', $type_id)
                 ->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         } else {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->orderBy($orderBy, $sort)->AllTeams()->paginate();
+            }])->whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         }
 
