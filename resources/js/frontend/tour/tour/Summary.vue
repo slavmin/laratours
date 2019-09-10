@@ -418,19 +418,22 @@
         </table>
       </v-flex>
     </v-layout>
+    <v-divider />
     <v-layout 
       row 
       wrap
     >
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-flex xs12>
+          <h4 class="title grey--text">
+            Итог по каждому типу туриста:
+          </h4>
+        </v-flex>  
+      </v-layout>
       <v-flex xs12>
-        <v-btn 
-          v-if="showPriceForEveryCustomer"
-          dark
-          color="green"
-          @click="calculatePriceForEveryCustomer"
-        >
-          Рассчитать цены для всех типов туристов
-        </v-btn>
         <table class="total">
           <thead>
             <th>
@@ -461,22 +464,6 @@
                 </span>
               </v-tooltip>
             </th>
-            <th>
-              Пенсионер
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-icon 
-                    color="grey"
-                    v-on="on"
-                  >
-                    info
-                  </v-icon>
-                </template>
-                <span>
-                  Для применения тарифа при заказе тура.
-                </span>
-              </v-tooltip>
-            </th>
           </thead>
           <tbody>
             <tr
@@ -503,16 +490,17 @@
                   name="is-chd"
                 />
               </td>
-              <td>
-                <v-checkbox 
-                  v-model="price.isPens" 
-                  color="green"
-                  name="is-pens"
-                />
-              </td>
             </tr>
           </tbody>
         </table>
+        <v-btn 
+          v-if="showPriceForEveryCustomer"
+          dark
+          color="green"
+          @click="calculatePriceForEveryCustomer"
+        >
+          Рассчитать цены для всех типов туристов
+        </v-btn>
       </v-flex>  
     </v-layout>
     <v-layout 
@@ -555,11 +543,6 @@
             :value="JSON.stringify(tourExtra)"
             name="extra"
           > 
-          <!-- <input 
-            type="hidden"
-            :value="JSON.stringify(tourExtra)"
-            name="description"
-          >  -->
           <v-btn 
             dark
             color="green"
@@ -628,7 +611,6 @@ export default {
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
-    console.log(this.getCurrentTourCustomers)
   },
   methods: {
     ...mapActions([
@@ -649,7 +631,6 @@ export default {
       this.updateTourCorrectedPrice()
     },
     correctPrice() {
-      console.log('correctPrice')
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
     },
