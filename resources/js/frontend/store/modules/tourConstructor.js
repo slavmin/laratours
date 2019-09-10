@@ -45,6 +45,7 @@ export default {
     },
     async updateTourMeal({ commit }) {
       commit('setTourMeal')
+      commit('setTourAlternativeMeal')
     },
     async updateActualGuide({ commit }) {
       commit('setActualGuide')
@@ -309,6 +310,9 @@ export default {
           }
         })
       })
+    },
+    setTourAlternativeMeal(state) {
+      state.tour.alternativeMeal = state.actualMeal
     },
     setActualGuide(state) {
       let result = []
@@ -663,6 +667,7 @@ export default {
       museum: [],
       hotel: [],
       meal: [],
+      alternativeMeal: [],
       guide: [],
       attendant: [],
       customPrice: [],

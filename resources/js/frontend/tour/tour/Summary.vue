@@ -666,7 +666,6 @@ export default {
       let customer = this.getTour.calc.priceList.find((item) => {
         return item.id == this.currentCustomerType
       })
-      console.log(customer)
       if (customer.isChd) {
         return JSON.parse(hotel.obj.extra).priceList.chd.std * hotel.obj.day
       }
