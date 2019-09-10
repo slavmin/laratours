@@ -21,7 +21,7 @@
         ></museum-index>
     @endif
     @if ($model_alias == 'hotel')
-    <?php $scustomers = json_encode($customer_type_options); ?>
+    <?php $scustomers = json_encode($customer_type_options_arrays); ?>
         <hotel-index 
             data-app
             :customers="{{ $scustomers }}"
