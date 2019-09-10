@@ -6,7 +6,6 @@
     >
       <v-dialog 
         v-model="dialog" 
-        persistent 
         max-width="600px"
       >
         <template v-slot:activator="{ on }">
@@ -54,6 +53,7 @@
                 />
                 <h4>Возраст</h4>
                 <v-layout 
+                  v-if="!isPens"
                   row 
                   wrap
                 >
@@ -75,6 +75,44 @@
                       color="green"
                     />
                   </v-flex>
+                </v-layout>
+                <v-layout 
+                  v-if="isPens"
+                  row 
+                  wrap
+                >
+                  <v-flex xs6>
+                    <h5>Мужчины</h5>
+                    <v-text-field 
+                      v-model="agePensMale"
+                      label="От" 
+                      mask="##"
+                      outline
+                      color="green"
+                    />
+                  </v-flex>
+                  <v-flex xs6>
+                    <h5>Женщины</h5>
+                    <v-text-field 
+                      v-model="agePensFemale"
+                      label="От" 
+                      mask="##" 
+                      outline
+                      color="green"
+                    />
+                  </v-flex>
+                </v-layout>
+                <v-layout 
+                  row 
+                  wrap
+                >
+                  <v-flex xs12>
+                    <v-checkbox
+                      v-model="isPens"
+                      color="green"
+                      label="Пенсионер"
+                    />
+                  </v-flex>  
                 </v-layout>
               </form>
             </v-container>
@@ -127,25 +165,45 @@ export default {
       name: '',
       ageFrom: 0,
       ageTo: 0,
+      isPens: false,
+      agePensMale: 0,
+      agePensFemale: 0,
     };
   },
   computed: {
-    description: function() {
-      let result = {
-        ageFrom: parseInt(this.ageFrom),
-        ageTo: parseInt(this.ageTo)
+    customerAgeRange: function() {
+      let result = {}
+      if (!this.isPens) {
+        return {
+          ageFrom: parseInt(this.ageFrom),
+          ageTo: parseInt(this.ageTo),
+          isPens: this.isPens,
+        }
       }
-      if (this.ageFrom == 0 && this.ageTo == 0) {
+      if (this.isPens) {
+        return {
+          isPens: true,
+          agePensMale: parseInt(this.agePensMale),
+          agePensFemale: parseInt(this.agePensFemale),
+        }
+      }
+      return result
+    },
+    description: function() {
+      if (this.ageFrom == 0 && this.ageTo == 0 && !this.isPens) {
         return null
       }
-      return JSON.stringify(result)
-    }
+      return JSON.stringify(this.customerAgeRange)
+    },
   },
   methods: {
     close() {
       this.name = ''
       this.ageFrom = 0 
       this.ageTo = 0
+      this.isPens =  false
+      this.agePensMale =  0
+      this.agePensFemale = 0
       this.dialog = false
     },
   }

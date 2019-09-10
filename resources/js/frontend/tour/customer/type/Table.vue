@@ -91,9 +91,14 @@ export default {
     getDescription(item) {
       const data = JSON.parse(item)
       if (data) {
-        return data.ageFrom 
-                ? `от ${data.ageFrom} до ${data.ageTo}` 
-                : `до ${data.ageTo}` 
+        if (!data.isPens){
+          return data.ageFrom 
+                  ? `от ${data.ageFrom} до ${data.ageTo}` 
+                  : `до ${data.ageTo}` 
+        }
+        if (data.isPens) {
+          return `Мужчины от ${data.agePensMale}, женщины от ${data.agePensFemale}`
+        }
       }
     }
   },
