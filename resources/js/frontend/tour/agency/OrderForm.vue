@@ -20,6 +20,22 @@
         color="green lighten-3"
         :required="isRequired"
       />
+      <v-text-field
+        label="Email"
+        :rules="[v => !!v || 'Укажите email']"
+        :name="isRequired ? 'customer[' + id + '][email]' : ''"
+        color="green lighten-3"
+        :required="isRequired"
+      />
+      <v-checkbox
+        label="Квота"
+        disabled
+      />
+    </v-flex>
+    <v-flex 
+      xs5
+      offset-xs2
+    >
       <v-select
         v-model="order.gender"
         :items="genders"
@@ -75,49 +91,6 @@
       <div>
         Возраст: {{ age }}
       </div>
-      <v-checkbox
-        label="Квота"
-        disabled
-      />
-    </v-flex>
-    <v-flex 
-      xs5
-      offset-xs2
-    >
-      <v-text-field
-        v-model="order.phone"
-        label="Телефон"
-        placeholder="+7 (900) 123-11-22"
-        :name="isRequired ? 'customer[' + id + '][phone]' : ''"
-        color="green lighten-3"
-        :rules="[v => !!v || 'Это обязательное поле']"
-        maxlength="16"
-        mask="+N (NNN) NNN-NN-NN"
-        :required="isRequired"
-      />
-      <v-text-field
-        label="Email"
-        :rules="[v => !!v || 'Укажите email']"
-        :name="isRequired ? 'customer[' + id + '][email]' : ''"
-        color="green lighten-3"
-        :required="isRequired"
-      />
-      <v-text-field
-        v-model="order.country"
-        label="Страна"
-        :rules="[v => !!v || 'Укажите страну']"
-        :name="isRequired ? 'customer[' + id + '][country]' : ''"
-        color="green lighten-3"
-        :required="isRequired"
-      />
-      <v-text-field
-        v-model="order.city"
-        label="Город"
-        :rules="[v => !!v || 'Укажите город']"
-        :name="isRequired ? 'customer[' + id + '][city]' : ''"
-        color="green lighten-3"
-        :required="isRequired"
-      />
       <v-text-field
         v-model="order.address"
         label="Адрес"
