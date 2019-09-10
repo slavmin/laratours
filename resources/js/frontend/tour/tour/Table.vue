@@ -64,6 +64,10 @@
                 :edit-tour="props.item"
                 :token="token"
               />
+              <Publish 
+                :tour="props.item"
+                :token="token"
+              />  
               <form 
                 :action="'/operator/tour/' + props.item.id"
                 method="POST"
@@ -103,6 +107,7 @@
 <script>
 import About from './About'
 import Edit from './Edit'
+import Publish from './Publish'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
@@ -110,6 +115,7 @@ export default {
   components: {
     About,
     Edit,
+    Publish,
   },
   props: {
     token: {

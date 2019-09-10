@@ -27,6 +27,7 @@
         <div id="app">
             @include('includes.partials.logged-in-as')
             @include('frontend.includes.nav')
+            @include('includes.partials.messages')
 
             <div class="root-wrap">
                 @yield('content')
