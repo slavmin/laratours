@@ -473,6 +473,24 @@
             >
               <td>
                 {{ price.name }}
+                <div
+                  v-if="price.age"
+                  class="grey--text body-1"
+                >
+                  <div
+                    v-if="JSON.parse(price.age).isPens"
+                  >
+                    Мужчины от {{ JSON.parse(price.age).agePensMale }}
+                    <br>
+                    Женщины от {{ JSON.parse(price.age).agePensFemale }}
+                  </div>
+                  <div
+                    v-if="!JSON.parse(price.age).isPens"
+                  >
+                    От {{ JSON.parse(price.age).ageFrom }}
+                    до {{ JSON.parse(price.age).ageTo }}
+                  </div>
+                </div>
               </td>
               <td>
                 {{ price.standardPrice }}
@@ -573,7 +591,7 @@ export default {
       totalPrice: 0,
       correctedPrice: 0,
       correctionToAll: 0,
-      currentCustomerType: 1,
+      currentCustomerType: 0,
       showPriceForEveryCustomer: true,
     };
   },

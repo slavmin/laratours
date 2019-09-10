@@ -415,7 +415,7 @@ export default {
           return item.customerId == state.tour.calc.currentCustomer
         })
         // If event have no price with current customer Id set default customer
-        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         summ += parseInt(price.price)
       })
       state.tour.hotel.forEach((hotel) => {
@@ -569,7 +569,7 @@ export default {
           return item.customerId == state.tour.calc.currentCustomer
         })
         // If event have no price with current customer Id set default customer
-        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         // Calculate corrected price
         if (museum.correction > 0) {
           museum.correctedPrice = 
@@ -638,6 +638,10 @@ export default {
     },
     setTourCalcCustomerTypes(state, customerTypes) {
       customerTypes.forEach((customer) => {
+        if (customer.name.includes("Взрослый")) {
+          state.tour.calc.defaultCustomer = customer.id
+          state.tour.calc.currentCustomer = customer.id
+        }
         state.tour.calc.priceList.push({
           ...customer,
           standardPrice: 0,
@@ -676,7 +680,7 @@ export default {
       ordered: 0,
       qnt: 0,
       calc: {
-        currentCustomer: 1,
+        currentCustomer: 0,
         priceList: [],
       },
     },
@@ -762,6 +766,7 @@ export default {
           result.push({
             id: price.customerId,
             name: price.customerName,
+            age: price.customerAge,
           })
         })
       })
