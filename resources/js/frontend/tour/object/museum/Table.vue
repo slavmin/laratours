@@ -305,7 +305,8 @@ export default {
         if (key != '') {
           result.push({
             id: key,
-            name: this.customers[key]
+            name: this.customers[key].name,
+            description: this.customers[key].description,
           })
         }
       })
@@ -315,7 +316,7 @@ export default {
   mounted() {
     this.fetchMuseum()
     this.fetchCities()
-    console.log(this.allMuseum)
+    console.log(this.customerTypes)
   },
   methods: {
     ...mapActions([
