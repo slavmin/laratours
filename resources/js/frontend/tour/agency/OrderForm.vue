@@ -39,7 +39,7 @@
       <v-select
         v-model="order.gender"
         :items="genders"
-        item-text="value"
+        item-text="text"
         item-name="value"
         label="Пол"
       />
@@ -57,39 +57,53 @@
         color="green lighten-3"
         :required="isRequired"
       />
-      <v-menu
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        lazy
-        transition="scale-transition"
-        offset-y
-        full-width
-        min-width="290px"
+      <v-layout 
+        row 
+        wrap
       >
-        <template v-slot:activator="{ on }">
-          <v-text-field
+        <v-menu
+          ref="menu"
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          lazy
+          transition="scale-transition"
+          offset-y
+          full-width
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              v-model="date"
+              label="Дата рождения"
+              :name="isRequired ? 'customer[' + id + '][dob]' : ''"
+              prepend-icon="event"
+              readonly
+              v-on="on"
+            />
+          </template>
+          <v-date-picker
+            ref="picker"
             v-model="date"
-            label="Дата рождения"
-            :name="isRequired ? 'customer[' + id + '][dob]' : ''"
-            prepend-icon="event"
-            readonly
-            v-on="on"
+            color="green"
+            locale="ru-ru"
+            :max="new Date().toISOString().substr(0, 10)"
+            min="1920-01-01"
+            @change="save"
           />
-        </template>
-        <v-date-picker
-          ref="picker"
-          v-model="date"
+        </v-menu>
+        <v-checkbox 
+          v-model="manualPens"
+          label="Пенсионер"
           color="green"
-          locale="ru-ru"
-          :max="new Date().toISOString().substr(0, 10)"
-          min="1920-01-01"
-          @change="save"
         />
-      </v-menu>
+      </v-layout>
       <div>
         Возраст: {{ age }}
+        <br>
+        Пенсионер: {{ isPens }}
+        <br>
+        Ребёнок: {{ isChd }}
       </div>
       <v-text-field
         v-model="order.address"
@@ -142,6 +156,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from './BusScheme'
 export default {
@@ -173,22 +188,32 @@ export default {
   },
   data() {
     return {
-      order: {},
+      order: {
+        gender: '',
+      },
       choosenSeat: [],
       date: null,
       menu: false,
       genders: [
-        { id: 1, value: 'Мужской'},
-        { id: 2, value: 'Женский'},
-        { id: 3, value: 'Ребёнок'},
+        { id: 1, value: 'male', text: 'Мужской' },
+        { id: 2, value: 'female', text: 'Женский' },
       ],
       meal: '',
       meals: ['Завтраки', 'Полупансион', 'Полный пансион'],
       age: 0,
       priceList: [],
+      pensRange: {
+        male: 55,
+        female: 50,
+      },
+      manualPens: false,
     }
   },
   computed: {
+    ...mapGetters([
+      'getChdRange',
+      'getPensRange',  
+    ]),
     transport: function() {
       return JSON.parse(this.tour.extra).transport[0].item
     },
@@ -208,13 +233,24 @@ export default {
       }
     },
     isChd: function() {
-      if (this.age < 8) return true
+      if (this.age < this.getChdRange.to && !this.manualPens) {
+        return true
+      }
       return false
     },
     isPens: function() {
-      if (this.age > 55) return true
+      if (this.order.gender == 'male' && this.age >= this.getPensRange.maleFrom) {
+        return true
+      }
+      if (this.order.gender == 'female' && this.age >= this.getPensRange.femaleFrom) {
+        return true
+      }
+      if (this.manualPens) {
+        return true
+      }
       return false
     },
+
   },
   watch: {
     menu (val) {
@@ -223,9 +259,23 @@ export default {
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    this.updatePriceList(this.priceList)
+    this.updateChdRange(this.priceList)
+    this.updatePensRange(this.priceList)
     console.log(this.priceList)
   },
+  updated() {
+  },
   methods: {
+    ...mapActions([
+      'updateChdRange',
+      'updatePensRange',
+      'updatePriceList',
+    ]),
+    ...mapGetters([
+      'getChdPrice',
+      'getPensPrice',
+    ]),
     chooseSeat() {
       console.log(this.transport)
     },
@@ -234,28 +284,32 @@ export default {
     },
     save(date) {
       this.$refs.menu.save(date)
-      console.log('calc age before: ', this.age)
       this.age = moment().diff(date, 'years')
-      console.log('calc age after : ', this.age)
     },
     getPrice() {
+      let defaultPrice = true
+      // CHD price
       if (this.isChd) {
-        const price = this.priceList.find(item => item.isChd)
-        // If additional form (extra in hotel)
+        const price = this.$store.getters.getChdPrice(this.age)
         if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        defaultPrice = false
         return price.standardPrice + ' стандартное размещение ' + price.name
       }
+      // Pens price
       if (this.isPens) {
-        const price = this.priceList.find(item => item.isPens)
+        const price = this.getPensPrice()
         // If additional form (extra in hotel)
         if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        defaultPrice = false
         return price.standardPrice + ' стандартное размещение ' + price.name
       }
       // Default. ADL price
-      const price = this.priceList.find(item => !item.isPens && !item.isChd)
-      // If additional form (extra in hotel)
-      if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
-      return price.standardPrice + ' стандартное размещение ' + price.name
+      if (defaultPrice) {
+        const price = this.priceList.find(item => !item.isPens && !item.isChd)
+        // If additional form (extra in hotel)
+        if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        return price.standardPrice + ' стандартное размещение ' + price.name
+      }
     },
   }
 }
