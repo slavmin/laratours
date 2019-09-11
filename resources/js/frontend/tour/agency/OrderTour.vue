@@ -217,6 +217,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.tour)
     this.orderedSeats()
   },
   methods: {

@@ -18,10 +18,14 @@
               {{ props.item.name }}
             </td>
             <td class="text-xs-center">
-              {{ props.item.description }}
+              {{ getDescription(props.item.description) }}
             </td>
             <td class="text-xs-right">
-              <div>
+              <v-layout 
+                row 
+                wrap
+                justify-end
+              >
                 <customer-type-edit 
                   :item="props.item"
                   :token="token"
@@ -30,7 +34,7 @@
                   :item="props.item"
                   :token="token"
                 />
-              </div>
+              </v-layout>
             </td>
           </template>
         </v-data-table>
@@ -40,7 +44,6 @@
 </template>
 
 <script>
-// import { mapActions, mapGetters } from 'vuex'
 export default {
 
   name: 'CustomerTable',
@@ -69,7 +72,7 @@ export default {
           value: 'name'
         },
         {
-          text: 'Описание',
+          text: 'Возраст',
           align: 'center',
           value: 'description'
         },
@@ -84,20 +87,21 @@ export default {
       }
     };
   },
-  // computed: mapGetters(['refreshToken', 'allCustomerTypes']),
-  // created() {
-  //   console.log('-- Created:')
-  //   console.log(this.allCustomerTypes)
-  // },
-  // updated() {
-  //   console.log(this.allCustomerTypes)
-  // },
-  // async mounted() {
-  //   this.fetchCustomerTypes()
-  // },
-  // methods: {
-  //   ...mapActions(['fetchCustomerTypes'])
-  // }
+  methods: {
+    getDescription(item) {
+      const data = JSON.parse(item)
+      if (data) {
+        if (!data.isPens){
+          return data.ageFrom 
+                  ? `от ${data.ageFrom} до ${data.ageTo}` 
+                  : `до ${data.ageTo}` 
+        }
+        if (data.isPens) {
+          return `Мужчины от ${data.agePensMale}, женщины от ${data.agePensFemale}`
+        }
+      }
+    }
+  },
 };
 </script>
 

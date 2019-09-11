@@ -224,7 +224,8 @@ export default {
         if (key != '') {
           result.push({
             id: key,
-            name: this.customers[key]
+            name: this.customers[key].name,
+            description: this.customers[key].description,
           })
         }
       })
@@ -253,11 +254,12 @@ export default {
     getPriceList() {
       let result = []
       this.customerTypes.forEach((customer) => {
-        if (this.priceArray[customer.id - 1]) {
+        if (this.priceArray[customer.id]) {
           result.push({
             customerId: customer.id,
             customerName: customer.name,
-            price: parseInt(this.priceArray[customer.id - 1])
+            customerAge: customer.description,
+            price: parseInt(this.priceArray[customer.id])
           })
         }
       })

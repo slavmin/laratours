@@ -12,7 +12,7 @@
         ></transport-index>
     @endif
     @if ($model_alias == 'museum')
-    <?php $scustomers = json_encode($customer_type_options); ?>
+    <?php $scustomers = json_encode($customer_type_options_arrays); ?>
         <museum-index 
             data-app
             :cities="{{ $scities }}" 

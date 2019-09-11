@@ -45,6 +45,7 @@ export default {
     },
     async updateTourMeal({ commit }) {
       commit('setTourMeal')
+      commit('setTourAlternativeMeal')
     },
     async updateActualGuide({ commit }) {
       commit('setActualGuide')
@@ -310,6 +311,9 @@ export default {
         })
       })
     },
+    setTourAlternativeMeal(state) {
+      state.tour.alternativeMeal = state.actualMeal
+    },
     setActualGuide(state) {
       let result = []
       state.tourOptions.guide_options.map((guide) => {
@@ -411,7 +415,7 @@ export default {
           return item.customerId == state.tour.calc.currentCustomer
         })
         // If event have no price with current customer Id set default customer
-        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         summ += parseInt(price.price)
       })
       state.tour.hotel.forEach((hotel) => {
@@ -565,7 +569,7 @@ export default {
           return item.customerId == state.tour.calc.currentCustomer
         })
         // If event have no price with current customer Id set default customer
-        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[0]
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         // Calculate corrected price
         if (museum.correction > 0) {
           museum.correctedPrice = 
@@ -634,12 +638,15 @@ export default {
     },
     setTourCalcCustomerTypes(state, customerTypes) {
       customerTypes.forEach((customer) => {
+        if (customer.name.includes("Взрослый")) {
+          state.tour.calc.defaultCustomer = customer.id
+          state.tour.calc.currentCustomer = customer.id
+        }
         state.tour.calc.priceList.push({
           ...customer,
           standardPrice: 0,
           singlePrice: 0,
           addPrice: 0,
-          isPens: false,
           isChd: false,
           isInf: false,
         })
@@ -664,6 +671,7 @@ export default {
       museum: [],
       hotel: [],
       meal: [],
+      alternativeMeal: [],
       guide: [],
       attendant: [],
       customPrice: [],
@@ -672,7 +680,7 @@ export default {
       ordered: 0,
       qnt: 0,
       calc: {
-        currentCustomer: 1,
+        currentCustomer: 0,
         priceList: [],
       },
     },
@@ -758,6 +766,7 @@ export default {
           result.push({
             id: price.customerId,
             name: price.customerName,
+            age: price.customerAge,
           })
         })
       })
