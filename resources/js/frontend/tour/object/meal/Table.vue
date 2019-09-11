@@ -59,16 +59,16 @@
             </v-btn>
           </form>
         </v-layout>
-        <v-layout 
+        <!-- <v-layout 
           row 
           wrap
           mb-3
           align-center
         >
           <div>
-            {{ JSON.parse(meal.description).mealType }}
+            {{ JSON.parse(meal.extra).mealType }}
           </div>
-        </v-layout>
+        </v-layout> -->
         <v-layout 
           row 
           wrap
@@ -82,10 +82,10 @@
               web
             </i>
             <a 
-              :href="JSON.parse(meal.description).contacts.site"
+              :href="JSON.parse(meal.extra).contacts.site"
               target="_blank"
             >
-              {{ JSON.parse(meal.description).contacts.site }}
+              {{ JSON.parse(meal.extra).contacts.site }}
             </a>
           </div>
           <div class="mr-3">
@@ -96,9 +96,9 @@
               email
             </i>
             <a 
-              :href="'mailto:' + JSON.parse(meal.description).contacts.email"
+              :href="'mailto:' + JSON.parse(meal.extra).contacts.email"
             >
-              {{ JSON.parse(meal.description).contacts.email }}
+              {{ JSON.parse(meal.extra).contacts.email }}
             </a>
           </div>
           <div>
@@ -108,7 +108,7 @@
             >
               phone
             </i>
-            {{ JSON.parse(meal.description).contacts.phone }}
+            {{ JSON.parse(meal.extra).contacts.phone }}
           </div>
         </v-layout>
         <v-layout 
@@ -123,7 +123,7 @@
             >
               person
             </i>
-            {{ JSON.parse(meal.description).staff.name }}
+            {{ JSON.parse(meal.extra).staff.name }}
           </div>
           <div>
             <i 
@@ -132,11 +132,11 @@
             >
               phone
             </i>
-            {{ JSON.parse(meal.description).staff.phone }}
+            {{ JSON.parse(meal.extra).staff.phone }}
           </div>
         </v-layout>
         <div class="heading text-xs-left mb-3">
-          {{ JSON.parse(meal.description).about }}
+          {{ JSON.parse(meal.extra).about }}
         </div> 
         <v-data-table
           :headers="headers"
@@ -155,48 +155,54 @@
               {{ props.item.description }}
             </td>
             <td>
-              <EditObjectables
-                :meal="meal" 
-                :event="props.item"
-                :token="token"
-              />
-              <form 
-                :action="'/operator/attribute/' + props.item.id"
-                method="POST"
+              <v-layout 
+                row 
+                wrap
+                justify-end
               >
-                <input 
-                  id="_method" 
-                  type="hidden" 
-                  name="_method" 
-                  value="DELETE"
+                <EditObjectables
+                  :meal="meal" 
+                  :event="props.item"
+                  :token="token"
+                />
+                <form 
+                  :action="'/operator/attribute/' + props.item.id"
+                  method="POST"
                 >
-                <input 
-                  type="hidden" 
-                  name="_token" 
-                  :value="token"
-                > 
-                <input 
-                  type="hidden" 
-                  name="parent_model_id" 
-                  :value="meal.id"
-                >
-                <input 
-                  type="hidden" 
-                  name="parent_model_alias" 
-                  value="meal"
-                >  
-                <v-btn 
-                  fab
-                  small
-                  outline
-                  color="red"
-                  type="submit"
-                >
-                  <i class="material-icons">
-                    delete
-                  </i>
-                </v-btn>
-              </form>
+                  <input 
+                    id="_method" 
+                    type="hidden" 
+                    name="_method" 
+                    value="DELETE"
+                  >
+                  <input 
+                    type="hidden" 
+                    name="_token" 
+                    :value="token"
+                  > 
+                  <input 
+                    type="hidden" 
+                    name="parent_model_id" 
+                    :value="meal.id"
+                  >
+                  <input 
+                    type="hidden" 
+                    name="parent_model_alias" 
+                    value="meal"
+                  >  
+                  <v-btn 
+                    fab
+                    small
+                    outline
+                    color="red"
+                    type="submit"
+                  >
+                    <i class="material-icons">
+                      delete
+                    </i>
+                  </v-btn>
+                </form>
+              </v-layout>
             </td>
           </template>
         </v-data-table>

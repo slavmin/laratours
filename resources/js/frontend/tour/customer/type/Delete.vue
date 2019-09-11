@@ -1,17 +1,32 @@
 <template>
-  <v-btn  
-    small
-    fab
-    outline
-    color="red"
-    dark
-    ma-3
-    @click="del"
+  <form 
+    :action="'/operator/customer-type/' + item.id"
+    method="POST"
   >
-    <i class="material-icons">
-      delete
-    </i>
-  </v-btn>
+    <input 
+      type="hidden"
+      name="_method"
+      value="DELETE"
+    >
+    <input 
+      type="hidden"
+      name="_token"
+      :value="token"
+    >
+    <v-btn  
+      small
+      fab
+      outline
+      color="red"
+      dark
+      ma-3
+      type="submit"
+    >
+      <i class="material-icons">
+        delete
+      </i>
+    </v-btn>
+  </form>
 </template>
 
 <script>
@@ -32,23 +47,6 @@ export default {
       }
     }
   },
-
-  data() {
-    return {
-      url: '/operator/customer-type/' + this.item.id,
-    };
-  },
-  methods: {
-    del() {
-      let result = {
-        '_token': this.token,
-        '_method': 'DELETE'
-      }
-      axios.post(this.url, result)
-        .then(r => console.log(r))
-        .catch(e => console.log(e))
-    }
-  } 
 };
 </script>
 

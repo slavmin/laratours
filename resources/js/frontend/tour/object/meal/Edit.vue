@@ -256,7 +256,7 @@ export default {
   },
   created() {
     this.fetchCities()
-    this.city = this.meal.city_id
+    this.city = parseInt(this.meal.city_id)
     const objectInfo = JSON.parse(this.meal.extra)
     this.about = objectInfo.about
     this.type = objectInfo.mealType
