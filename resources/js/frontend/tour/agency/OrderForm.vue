@@ -112,11 +112,12 @@
         :name="isRequired ? 'customer[' + id + '][address]' : ''"
         color="green lighten-3"
       />
-      <v-select
+      <ChangeMeal />
+      <!-- <v-select
         v-model="meal"
         :items="meals"
         label="Тип питания"
-      />
+      /> -->
       <input 
         v-model="meal"
         type="hidden"
@@ -159,10 +160,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from './BusScheme'
+import ChangeMeal from './ChangeMeal'
 export default {
   name: 'OrderFrom',
   components: {
     BusScheme,
+    ChangeMeal,
   },
   props: {
     tour: {
