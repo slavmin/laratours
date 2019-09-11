@@ -363,6 +363,7 @@ export default {
       })
     },
     chooseSeat(seatId) {
+      console.log(this.bus)
       if (this.bus.service.find(serviceSeat => { return serviceSeat === seatId }) !== undefined) {
         this.showServiceError = true
         setTimeout(() => {

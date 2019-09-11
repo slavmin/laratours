@@ -218,7 +218,7 @@ export default {
       'getPensRange',  
     ]),
     transport: function() {
-      return JSON.parse(this.tour.extra).transport[0].item
+      return JSON.parse(this.tour.extra).transport[0].obj
     },
     id: function() {
       return this.profileId + (this.roomId * 3)
