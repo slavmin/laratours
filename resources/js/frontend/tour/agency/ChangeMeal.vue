@@ -18,8 +18,6 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-    console.log(JSON.parse(this.tour.extra))
-  }
+  mounted() {}
 }
 </script>
