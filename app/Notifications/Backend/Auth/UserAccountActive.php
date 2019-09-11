@@ -3,15 +3,17 @@
 namespace App\Notifications\Backend\Auth;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Class UserAccountActive.
  */
-class UserAccountActive extends Notification
+class UserAccountActive extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * Get the notification's delivery channels.
