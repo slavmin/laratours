@@ -5,22 +5,8 @@
     "/js/vendor.js.map": "/js/vendor.js.map?id=1875219b265f6c69b007",
     "/js/backend.js": "/js/backend.js?id=17e2097676f8b301c378",
     "/js/backend.js.map": "/js/backend.js.map?id=26dc1e27ccf0b07d95c6",
-<<<<<<< HEAD
-    "/js/frontend.js": "/js/frontend.js?id=705fc336ffc4fd612318",
+    "/js/frontend.js": "/js/frontend.js?id=c8699351cdf1e606f427",
     "/css/frontend.css": "/css/frontend.css?id=d1a8f6ff4ea61bc85d29",
     "/css/backend.css": "/css/backend.css?id=bf1ebf69e850855528bc",
-    "/js/frontend.js.map": "/js/frontend.js.map?id=a826b139e03150e6077e"
-=======
-<<<<<<< HEAD
-    "/js/frontend.js": "/js/frontend.js?id=bb75c8ad2e82a693567b",
-    "/css/frontend.css": "/css/frontend.css?id=d1a8f6ff4ea61bc85d29",
-    "/css/backend.css": "/css/backend.css?id=bf1ebf69e850855528bc",
-    "/js/frontend.js.map": "/js/frontend.js.map?id=de70300d68d805eed843"
-=======
-    "/js/frontend.js": "/js/frontend.js?id=ac0861f6eb92118241db",
-    "/css/frontend.css": "/css/frontend.css?id=d1a8f6ff4ea61bc85d29",
-    "/css/backend.css": "/css/backend.css?id=bf1ebf69e850855528bc",
-    "/js/frontend.js.map": "/js/frontend.js.map?id=decb2f57a33d2e922f6b"
->>>>>>> 03e14fa55ec59d4e9f13ec62510e84c7d20ddd3e
->>>>>>> shoom1337
+    "/js/frontend.js.map": "/js/frontend.js.map?id=502f9659ab0840fffa38"
 }
