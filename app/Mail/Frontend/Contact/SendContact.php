@@ -11,33 +11,23 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class SendContact.
  */
-class SendContact extends Mailable // implements ShouldQueue
+class SendContact extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * @var Request
      */
-    public $request;
-    /**
-     * @var mixed
-     */
-    protected $email;
-    protected $name;
-    protected $phone;
-    protected $body;
+    protected $data;
 
     /**
      * SendContact constructor.
      *
-     * @param Request $request
+     * @param $data
      */
-    public function __construct(Request $request)
+    public function __construct($data)
     {
-        $this->email = $request->get('email');
-        $this->name = $request->get('name');
-        $this->phone = $request->get('phone');
-        $this->body = $request->get('message');
+        $this->data = $data;
     }
 
     /**
@@ -48,15 +38,15 @@ class SendContact extends Mailable // implements ShouldQueue
     public function build()
     {
         return $this->to(config('contacts.contact.address'), config('contacts.contact.name'))
+            ->markdown('frontend.mail.contact')
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->replyTo($this->email, $this->name)
-            ->markdown('frontend.mail.contact')
+            ->replyTo($this->data['email'], $this->data['name'])
             ->with([
-                'email' => $this->email,
-                'name' => $this->name,
-                'phone' => $this->phone,
-                'body' => $this->body,
+                'email' => $this->data['email'],
+                'name' => $this->data['name'],
+                'phone' => $this->data['phone'],
+                'body' => $this->data['message'],
             ]);
     }
 }
