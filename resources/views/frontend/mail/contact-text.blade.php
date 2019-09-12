@@ -3,4 +3,4 @@
 @lang('validation.attributes.frontend.name'): {{ $name }}
 @lang('validation.attributes.frontend.email'): {{ $email }}
 @lang('validation.attributes.frontend.phone'): {{ $phone ?? 'N/A' }}
-@lang('validation.attributes.frontend.message'): {{ $message }}
+@lang('validation.attributes.frontend.message'): {{ $body }}
