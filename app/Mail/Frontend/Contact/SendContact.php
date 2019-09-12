@@ -2,7 +2,7 @@
 
 namespace App\Mail\Frontend\Contact;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+// use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class SendContact.
  */
-class SendContact extends Mailable implements ShouldQueue
+class SendContact extends Mailable
 {
     use Queueable, SerializesModels;
 
