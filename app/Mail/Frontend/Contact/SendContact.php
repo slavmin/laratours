@@ -11,14 +11,14 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class SendContact.
  */
-class SendContact extends Mailable implements ShouldQueue
+class SendContact extends Mailable // implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * @var Request
      */
-    protected $request;
+    public $request;
     /**
      * @var mixed
      */
@@ -51,8 +51,7 @@ class SendContact extends Mailable implements ShouldQueue
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->replyTo($this->email, $this->name)
-            ->view('frontend.mail.contact')
-            ->text('frontend.mail.contact-text')
+            ->markdown('frontend.mail.contact')
             ->with([
                 'email' => $this->email,
                 'name' => $this->name,

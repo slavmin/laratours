@@ -1,6 +1,12 @@
-<p>@lang('strings.emails.contact.email_body_title')</p>
+@component('mail::message')
+ # @lang('strings.emails.contact.email_body_title')
 
-<p><strong>@lang('validation.attributes.frontend.name'):</strong> {{ $name }}</p>
-<p><strong>@lang('validation.attributes.frontend.email'):</strong> {{ $email }}</p>
-<p><strong>@lang('validation.attributes.frontend.phone'):</strong> {{ $phone ?? 'N/A' }}</p>
-<p><strong>@lang('validation.attributes.frontend.message'):</strong> {{ $body }}</p>
+ ** @lang('validation.attributes.frontend.name'): ** {{ $name }}
+
+ ** @lang('validation.attributes.frontend.email'): ** {{ $email }}
+
+ ** @lang('validation.attributes.frontend.phone'): ** {{ $phone ?? 'N/A' }}
+
+ ** @lang('validation.attributes.frontend.message'): ** {{ $body }}
+
+@endcomponent
