@@ -320,16 +320,16 @@ export default {
       if (this.isPens) {
         const price = this.getPensPrice()
         // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
+        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice) + ' дополнительное размещение ' + price.name
         defaultPrice = false
-        return price.standardPrice + ' стандартное размещение ' + price.name
+        return (price.standardPrice + this.getChoosenMealPrice) + ' стандартное размещение ' + price.name
       }
       // Default. ADL price
       if (defaultPrice) {
         const price = this.priceList.find(item => !item.isPens && !item.isChd)
         // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return price.addPrice + ' дополнительное размещение ' + price.name
-        return price.standardPrice + ' стандартное размещение ' + price.name
+        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice) + ' дополнительное размещение ' + price.name
+        return (price.standardPrice + this.getChoosenMealPrice) + ' стандартное размещение ' + price.name
       }
     },
   }
