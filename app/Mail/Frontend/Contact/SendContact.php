@@ -34,10 +34,10 @@ class SendContact extends Mailable implements ShouldQueue
      */
     public function __construct(Request $request)
     {
-        $this->email = $this->request->get('email');
-        $this->name = $this->request->get('name');
-        $this->phone = $this->request->get('phone');
-        $this->message = $this->request->get('message');
+        $this->email = $request->get('email');
+        $this->name = $request->get('name');
+        $this->phone = $request->get('phone');
+        $this->message = $request->get('message');
     }
 
     /**
