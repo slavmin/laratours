@@ -90,7 +90,13 @@ export default {
         console.log(state, choosenMeal)
         const meal = state.alternativeMeal.find(item => item.id == choosenMeal.mealId)
         const obj = meal.objectables.find(item => item.id == choosenMeal.objId)
-        state.choosenMealPrice = 0 - state.defaultMealPrice + obj.price
+        const days = state.defaultMeal[0].obj.day
+        const correction = parseInt(state.defaultMeal[0].correction) / 100
+        state.choosenMealPrice = 
+          0 
+          - state.defaultMealPrice 
+          + (obj.price * days)
+          + (obj.price * days) * correction
       }
     }
   },
