@@ -22,10 +22,10 @@ class SendContact extends Mailable implements ShouldQueue
     /**
      * @var mixed
      */
-    private $email;
-    private $name;
-    private $phone;
-    private $message;
+    public $email;
+    public $name;
+    public $phone;
+    public $message;
 
     /**
      * SendContact constructor.
