@@ -48,9 +48,15 @@ class SendContact extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->to(config('contacts.contact.address'), config('contacts.contact.name'))
-            ->view('frontend.mail.contact', ['email' => $this->email, 'name' => $this->name, 'phone' => $this->phone, 'message' => $this->message])
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->replyTo($this->email, $this->name);
+            ->replyTo($this->email, $this->name)
+            ->view('frontend.mail.contact')
+            ->with([
+                'email' => $this->email,
+                'name' => $this->name,
+                'phone' => $this->phone,
+                'message' => $this->message,
+            ]);
     }
 }
