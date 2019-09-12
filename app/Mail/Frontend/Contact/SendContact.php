@@ -18,14 +18,14 @@ class SendContact extends Mailable implements ShouldQueue
     /**
      * @var Request
      */
-    public $request;
+    protected $request;
     /**
      * @var mixed
      */
-    public $email;
-    public $name;
-    public $phone;
-    public $message;
+    protected $email;
+    protected $name;
+    protected $phone;
+    protected $body;
 
     /**
      * SendContact constructor.
@@ -37,7 +37,7 @@ class SendContact extends Mailable implements ShouldQueue
         $this->email = $request->get('email');
         $this->name = $request->get('name');
         $this->phone = $request->get('phone');
-        $this->message = $request->get('message');
+        $this->body = $request->get('message');
     }
 
     /**
@@ -52,11 +52,12 @@ class SendContact extends Mailable implements ShouldQueue
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->replyTo($this->email, $this->name)
             ->view('frontend.mail.contact')
+            ->text('frontend.mail.contact-text')
             ->with([
                 'email' => $this->email,
                 'name' => $this->name,
                 'phone' => $this->phone,
-                'message' => $this->message,
+                'body' => $this->body,
             ]);
     }
 }
