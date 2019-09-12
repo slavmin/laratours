@@ -18,6 +18,15 @@ export default {
     async updatePensRange({ commit }, priceList) {
       commit('setPensRange', priceList)
     },
+    async updateDefaultMeal({ commit }, tour) {
+      commit('setDefaultMeal', tour)
+    },
+    async updateAlternativeMeal({ commit }, tour) {
+      commit('setAlternativeMeal', tour)
+    },
+    async updateChoosenMeal({ commit }, choosenMeal) {
+      commit('setChoosenMeal', choosenMeal)
+    }
   },
   mutations: {
     setOrderedSeats(state, seats) {
@@ -54,6 +63,35 @@ export default {
           }
         }
       })
+    },
+    setDefaultMeal(state, tour) {
+      state.defaultMeal = []
+      JSON.parse(tour.extra).meal.forEach((item) => {
+        state.defaultMeal.push(item)
+      })
+      let defaultMealPrice = 0
+      state.defaultMeal.forEach((item) => {
+        defaultMealPrice += item.correctedPrice
+      })
+      state.defaultMealPrice = defaultMealPrice
+    },
+    setAlternativeMeal(state, tour) {
+      let result = []
+      JSON.parse(tour.extra).alternativeMeal.forEach((meal) => {
+        result.push({...meal})
+      })
+      state.alternativeMeal = result
+    },
+    setChoosenMeal(state, choosenMeal) {
+      if (choosenMeal.noMeal) {
+        state.choosenMealPrice = 0 - state.defaultMealPrice
+      }
+      else {
+        console.log(state, choosenMeal)
+        const meal = state.alternativeMeal.find(item => item.id == choosenMeal.mealId)
+        const obj = meal.objectables.find(item => item.id == choosenMeal.objId)
+        state.choosenMealPrice = 0 - state.defaultMealPrice + obj.price
+      }
     }
   },
   state: {
@@ -67,7 +105,16 @@ export default {
       maleFrom: 60,
       femaleFrom: 55,
     },
-    priceList: {},
+    priceList: [],
+    defaultMeal: [{
+      meal: { name: '' },
+      obj: { name: ''},
+      price: 0,
+      correct: 0,
+    }],
+    defaultMealPrice: 0,
+    alternativeMeal: [],
+    choosenMealPrice: 0,
   },
   getters: {
     getOrderedSeats(state) {
@@ -99,6 +146,15 @@ export default {
         return item.age && JSON.parse(item.age).isPens
       })
       return price
+    },
+    getDefaultMeal(state) {
+      return state.defaultMeal
+    },
+    getAlternativeMeal(state) {
+      return state.alternativeMeal
+    },
+    getChoosenMealPrice(state) {
+      return state.choosenMealPrice
     }
   },
 }
