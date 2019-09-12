@@ -27,8 +27,7 @@ class ContactController extends Controller
      */
     public function send(SendContactRequest $request)
     {
-        $outData = $request->all();
-        unset($outData['_token']);
+        $outData = $request->only(['email', 'name', 'phone', 'message']);
         Mail::queue(new SendContact($outData));
 
         return redirect()->back()->withFlashSuccess(__('alerts.frontend.contact.sent'));
