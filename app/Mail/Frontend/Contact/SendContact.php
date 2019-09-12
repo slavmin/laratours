@@ -2,6 +2,7 @@
 
 namespace App\Mail\Frontend\Contact;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -10,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Class SendContact.
  */
-class SendContact extends Mailable
+class SendContact extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -26,7 +27,7 @@ class SendContact extends Mailable
      */
     public function __construct(Request $request)
     {
-        $this->request = $request;
+        $this->request = $request->all();
     }
 
     /**
@@ -41,6 +42,6 @@ class SendContact extends Mailable
             ->text('frontend.mail.contact-text')
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->replyTo($this->request->email, $this->request->name);
+            ->replyTo($this->request['email'], $this->request['name']);
     }
 }
