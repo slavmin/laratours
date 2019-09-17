@@ -2,7 +2,19 @@
   <v-container 
     grid-list-xs
     fluid  
+    text-xs-center
   >
+    <h1
+      class="display-3 mb-5"
+    >
+      <i 
+        class="material-icons"
+        style="font-size: 42px;"
+      >
+        local_grocery_store
+      </i>
+      {{ header }}
+    </h1>
     <v-layout 
       row 
       wrap
@@ -55,6 +67,10 @@ export default {
       type: String,
       default: '',
     },
+    header: {
+      type: String,
+      default: '',
+    }
   },
   mounted() {
     console.log(this.items)

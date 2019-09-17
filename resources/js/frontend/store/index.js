@@ -16,6 +16,7 @@ import busScheme from './modules/busScheme'
 import tourTypes from './modules/tourTypes'
 import agencyOrder from './modules/agencyOrder'
 import operatorOrder from './modules/operatorOrder'
+import orderList from './modules/orderList'
 
 Vue.use(Vuex)
 
@@ -37,5 +38,6 @@ export default new Vuex.Store({
     tourTypes,
     agencyOrder,
     operatorOrder,
+    orderList,
 	}
 })
