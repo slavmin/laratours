@@ -31,11 +31,17 @@ class OrderController extends Controller
         $tour_names = TourOrder::getTourNames();
 
         $items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate();
+        // shoom
+        // vvvvvvvv
+        $all_items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate(100);
+        // ^^^^^^^^
+        // /shoom
         $deleted = TourOrder::where('team_id', auth()->user()->current_team_id)->onlyTrashed()->get();
 
         return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names'))
             ->with('statuses', $statuses)
-            ->with('model_alias', $model_alias);
+            ->with('model_alias', $model_alias)
+            ->with('all_items', $all_items);
     }
 
 
