@@ -3,6 +3,7 @@
     <v-layout 
       row 
       wrap
+      class="wrap"
     >
       <v-flex xs12>
         <v-layout 
@@ -149,22 +150,18 @@
             </v-expansion-panel>
           </v-flex>
         </v-layout>
-        <v-layout 
-          row 
-          wrap
-          justify-end
-        >
-          <v-flex xs2> 
-            <v-btn 
-              dark
-              color="green"
-              @click="done"
-            >
-              OK
-            </v-btn>
-          </v-flex>
-        </v-layout>
       </v-flex>
+      <v-btn 
+        dark
+        fab
+        class="done-btn"
+        color="green"
+        @click="done"
+      >
+        <i class="material-icons">
+          arrow_forward
+        </i>
+      </v-btn>
     </v-layout>
   </div>
 </template>
@@ -253,5 +250,13 @@ export default {
     padding: 16px;
     font-size: 24px;
   }
+}
+.wrap {
+  position: relative;
+}
+.done-btn {
+  position: fixed;
+  top: 50%;
+  right: 24px;
 }
 </style>
