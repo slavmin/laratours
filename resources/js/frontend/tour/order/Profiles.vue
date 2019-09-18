@@ -17,6 +17,9 @@
         Статус оператора
       </th>
       <th>
+        Документы
+      </th>
+      <th>
         Действия
       </th>
     </thead>
@@ -56,6 +59,15 @@
           >
             {{ statuses[order.status] }}
           </span>
+        </td>
+        <td>
+          <v-btn 
+            color="green"
+            dark
+            @click="getPdf(order)"
+          >
+            pdf
+          </v-btn>
         </td>
         <td>
           <v-layout 
@@ -109,6 +121,9 @@
   </table>
 </template>
 <script>
+import pdfMake from "pdfmake/build/pdfmake"
+import pdfFonts from "pdfmake/build/vfs_fonts"
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 import Details from './Details'
 export default {
   name: 'Profiles',
@@ -148,6 +163,8 @@ export default {
   data() {
     return {}
   },
+  mounted() {
+  },
   methods: {
     touristsCount(content) {
       let count = 0
@@ -155,6 +172,16 @@ export default {
         count += 1
       }
       return count
+    },
+    getPdf(order) {
+      console.log(order)
+      let dd = {
+        content: [
+          order.profiles[0].content[0].first_name,
+          order.profiles[0].content[0].last_name,
+        ]   
+      }
+      pdfMake.createPdf(dd).open();
     },
   },
 }
