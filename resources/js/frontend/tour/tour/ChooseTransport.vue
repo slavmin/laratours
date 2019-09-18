@@ -3,6 +3,7 @@
     <v-layout
       row
       wrap
+      class="wrap"
     >
       <!-- Choose transport -->
       <v-flex>
@@ -243,23 +244,19 @@
             </v-flex>
           </v-layout>
         </v-layout>
-        <v-layout 
-          row 
-          wrap
-          justify-end
-        >
-          <v-flex xs2> 
-            <v-btn 
-              dark
-              color="green"
-              @click="done"
-            >
-              OK
-            </v-btn>
-          </v-flex>
-        </v-layout>
       </v-flex>
       <!-- /Choose transport -->
+      <v-btn 
+        dark
+        fab
+        class="done-btn"
+        color="green"
+        @click="done"
+      >
+        <i class="material-icons">
+          arrow_forward
+        </i>
+      </v-btn>
     </v-layout>
   </div>
 </template>
@@ -377,5 +374,13 @@ export default {
   background-color: #FFAB16;
   color: white;
   transform: scale(0.9);
+}
+.wrap {
+  position: relative;
+}
+.done-btn {
+  position: fixed;
+  top: 50%;
+  right: 24px;
 }
 </style>

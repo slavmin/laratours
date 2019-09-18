@@ -3,6 +3,7 @@
     <v-layout 
       row 
       wrap
+      class="wrap"
     >
       <v-flex xs12>
         <v-layout 
@@ -149,22 +150,18 @@
             </v-expansion-panel>
           </v-flex>
         </v-layout>
-        <v-layout 
-          row 
-          wrap
-          justify-end
-        >
-          <v-flex xs2> 
-            <v-btn 
-              dark
-              color="green"
-              @click="done"
-            >
-              OK
-            </v-btn>
-          </v-flex>
-        </v-layout>
       </v-flex>
+      <v-btn 
+        dark
+        fab
+        class="done-btn"
+        color="green"
+        @click="done"
+      >
+        <i class="material-icons">
+          arrow_forward
+        </i>
+      </v-btn>
     </v-layout>
   </div>
 </template>
@@ -192,7 +189,6 @@ export default {
           branding: false, 
         }
       },
-      editorsContent: [], 
     };
   },
   computed: {
@@ -206,11 +202,72 @@ export default {
     editorsCount: function() {
       return parseInt(this.getTour.options.days)
     },
+    editorsContent: function() {
+      let result = []
+      let days = []
+      let string = ''
+      for (let i = 0; i < this.editorsCount; i++) {
+        string = `<h2>День ${i + 1}:<h2>`
+        if (this.getTour.transport.length > 0) {
+          string += '<h3>Транспорт:</h3><p>'
+          this.getTour.transport.forEach((transport) => {
+            if (transport.obj.day == (i + 1)) {
+              string += transport.obj.name
+            }
+          })
+          string += '</p>'
+        }
+        if (this.getTour.museum.length > 0) {
+          string += '<h3>Экскурсии:</h3><p>'
+          this.getTour.museum.forEach((museum) => {
+            if (museum.obj.day == (i + 1)) {
+              string += `${museum.museum.name}: ${museum.obj.name}`
+            }
+          })
+          string += '</p>'
+        }
+        if (this.getTour.hotel.length > 0) {
+          string += '<h3>Проживание:</h3><p>'
+          this.getTour.hotel.forEach((hotel) => {
+            if (hotel.obj.day == (i + 1)) {
+              string += `${hotel.hotel.name}: ${hotel.obj.name}`
+            }
+          })
+          string += '</p>'
+        }
+        if (this.getTour.meal.length > 0) {
+          string += '<h3>Питание:</h3><p>'
+          this.getTour.meal.forEach((meal) => {
+            if (meal.obj.day == (i + 1)) {
+              string += `${meal.meal.name}: ${meal.obj.name}`
+            }
+          })
+          string += '</p>'
+        }
+        if (this.getTour.guide.length > 0) {
+          string += '<h3>Гид:</h3><p>'
+          this.getTour.guide.forEach((guide) => {
+            string += `${guide.guide.name} `
+          })
+          string += '</p>'
+        }
+        string += '<hr>'
+        result.push(string)
+      }
+      console.log('editors content: ', result)
+      return result
+    },
   },
   created() {
   },
   updated() {
     this.getCustomPrice
+    console.log(this.editorsContent)
+  },
+  mounted() {
+    console.log('services mounted')
+    // this.fillEditorsContent()
+    console.log(this.editorsContent)
   },
   methods: {
     ...mapActions([
@@ -239,7 +296,12 @@ export default {
       this.updateEditorsContent(this.editorsContent)
       console.log(this.getTour)
       this.updateConstructorCurrentStage('Show summary')
-    }
+    },
+    // fillEditorsContent() {
+    //   for (let i = 0; i < 2; i++) {
+    //     this.editorsContent[i] = 'test' + i
+    //   }
+    // },
   },
 };
 </script>
@@ -253,5 +315,13 @@ export default {
     padding: 16px;
     font-size: 24px;
   }
+}
+.wrap {
+  position: relative;
+}
+.done-btn {
+  position: fixed;
+  top: 50%;
+  right: 24px;
 }
 </style>
