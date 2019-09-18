@@ -68,6 +68,13 @@
           >
             pdf
           </v-btn>
+          <v-btn 
+            color="green"
+            dark
+            @click="getWord(order)"
+          >
+            word
+          </v-btn>
         </td>
         <td>
           <v-layout 
@@ -124,6 +131,8 @@
 import pdfMake from "pdfmake/build/pdfmake"
 import pdfFonts from "pdfmake/build/vfs_fonts"
 pdfMake.vfs = pdfFonts.pdfMake.vfs
+import { Document, Paragraph, Packer, TextRun } from "docx"
+import { saveAs } from 'file-saver'
 import Details from './Details'
 export default {
   name: 'Profiles',
@@ -161,7 +170,21 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      state: {
+        name: 'San Luis Potosi',
+        map: 'data:image/png;base64',
+        municipalities: [
+          {name:'San Luis Potosi', population: 824000}, 
+          {name:'Rio Verde', population: 160000},
+          {name:'Cd Valles', population: 176000},
+          {name:'Matehuala', population:82726}
+        ],
+        tourist_attractions: [
+          'Tamtoc', 'Sótano de las Golondrinas', 'Cascada de Tamul' 
+        ]
+      }
+    }
   },
   mounted() {
   },
@@ -182,6 +205,27 @@ export default {
         ]   
       }
       pdfMake.createPdf(dd).open();
+    },
+    getWord(order) {
+      const doc = new Document();
+      doc.addSection({
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({
+                  text: order.profiles[0].content[0].first_name,
+              }),
+              new TextRun({
+                  text: order.profiles[0].content[0].last_name,
+              }).tab(),
+            ],
+          }),
+        ],
+      });
+      Packer.toBlob(doc).then((blob) => {
+        saveAs(blob, "word.docx");
+      });
     },
   },
 }
