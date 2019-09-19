@@ -178,6 +178,7 @@ export default {
     getPrice(profiles) {
       console.log(profiles)
       let result = 0
+      if (profiles)
       profiles.forEach((profile) => {
         result += parseInt(profile.price)
       })
