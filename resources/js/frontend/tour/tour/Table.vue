@@ -61,7 +61,7 @@
               align-top
             >
               <Edit
-                :edit-tour="props.item"
+                :tour="props.item"
                 :token="token"
               />
               <Publish 

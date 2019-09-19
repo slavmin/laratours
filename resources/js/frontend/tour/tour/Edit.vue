@@ -5,15 +5,16 @@
     hide-overlay 
     lazy
     transition="dialog-bottom-transition"
+    @input="fillStore"
   >
     <template v-slot:activator="{ on }">
       <v-btn 
         color="green" 
         fab
-        flat
         small
+        flat
         outline
-        disabled
+        dark 
         v-on="on"
       >
         <i class="material-icons">
@@ -23,6 +24,7 @@
     </template>
     <v-card>
       <v-toolbar 
+        id="toolbar"
         dark 
         color="green"
       >
@@ -36,7 +38,7 @@
           </v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ tourName == '' ? 'Редактировать тур' : getTour.options.name }}
+          Редактирование
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
@@ -67,43 +69,57 @@
             v-if="showChooseTransport"
             xs12
           >
-            <ChooseTransport />
+            <ChooseTransport 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showChooseMuseum"
             xs12
           >
-            <ChooseMuseum />
+            <ChooseMuseum 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showChooseHotel"
             xs12
           >
-            <ChooseHotel />
+            <ChooseHotel 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex
             v-if="showChooseMeal"
             xs12
           >
-            <ChooseMeal />
+            <ChooseMeal 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showChooseGuide"
             xs12
           >
-            <ChooseGuide />
+            <ChooseGuide 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showServices"
             xs12
           >
-            <Services />
+            <Services 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showChooseAttendant"
             xs12
           >
-            <ChooseAttendant />
+            <ChooseAttendant 
+              @scrollme="scrollToTop"
+            />
           </v-flex>
           <v-flex 
             v-if="showSummary"
@@ -114,13 +130,6 @@
             />
           </v-flex>
         </v-layout>
-        <!-- <v-btn 
-          dark 
-          color="green"
-          @click="log"
-        >
-          log
-        </v-btn> -->
       </v-container>    
     </v-card>
   </v-dialog>
@@ -136,11 +145,10 @@ import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
 import Services from './Services'
 import Summary from './Summary'
-// import DayConstructor from './DayConstructor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'TourEdit',
+  name: 'TourAdd',
   components: {
     Options,
     ChooseTransport,
@@ -158,7 +166,7 @@ export default {
       type: String,
       default: ''
     },
-    editTour: {
+    tour: {
       type: Object,
       default: () => {
         return {}
@@ -262,7 +270,7 @@ export default {
       
     ]),
     showOptions: function() {
-      console.log()
+      // return false
       return this.getConstructorCurrentStage === 'Initial stage' ? true : false
     },
     showChooseTransport: function() {
@@ -300,26 +308,28 @@ export default {
     this.fetchCities()
     this.fetchTransport()
     this.fetchAllTourOptions()
-    // this.updateEditTour(this.editTour)
-  },
-  mounted() {
   },
   updated() {
   },
   methods: {
     ...mapActions([
+      'updateEditTour',
       'fetchCities',
       'fetchTransport',
       'fetchAllTourOptions',
       'updateConstructorCurrentStage',
-      'updateEditTour',
+      'updateActualTransport',
+      'updateActualMuseum',
+      'updateActualHotel',
+      'updateActualMeal',
+      'updateActualGuide',
     ]),
     log() {
       console.log(this.allTourOptions)
     },
     close() {
       this.dialog = false
-      this.reset()
+      // this.reset()
     },
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
@@ -354,7 +364,19 @@ export default {
     },
     changeConstructorStage(stage) {
       this.updateConstructorCurrentStage(stage)
-    }
+    },
+    scrollToTop() {
+      document.getElementById('toolbar').scrollIntoView()
+    },
+    fillStore() {
+      this.updateEditTour(this.tour)
+      this.updateActualTransport()
+      this.updateActualMuseum()
+      this.updateActualHotel()
+      this.updateActualMeal()
+      this.updateActualGuide()
+      console.log(this.getTour)
+    },
   }
 };
 </script>

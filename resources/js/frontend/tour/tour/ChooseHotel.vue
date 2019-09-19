@@ -63,22 +63,16 @@
                     </div>
                     <v-divider />
                     <v-select
-                      v-model="item.day"
+                      v-model="item.daysArray"
                       :items="days"
+                      multiple
+                      color="green"
                       :dark="item.selected"
                       :disabled="item.selected"
                       label="Количество ночей"
                       outline
+                      @change="daysSelected(item)"
                     />
-                    <!-- <v-text-field
-                      v-model="item.roomsCount"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="Количество номеров"
-                      mask="###"
-                      class="mt-3"
-                      color="green"
-                    /> -->
                     <v-text-field
                       :id="'about' + item.id"
                       :dark="item.selected"
@@ -178,36 +172,6 @@
                         }}
                       </p>            
                     </v-layout>
-                    <!-- <div v-if="JSON.parse(item.extra).priceList.additionalPrices.length > 0">
-                      <p>
-                        Доп. места:
-                      </p>
-                      <v-layout
-                        v-for="(price, i) in JSON.parse(item.extra).priceList.additionalPrices"
-                        :key="i"
-                        row
-                        justify-content-between
-                        wrap
-                      >
-                        <span class="grey--text text--darken-1">
-                          {{ price[0].name }}: 
-                        </span>
-                        <p 
-                          style="display: inline-block;"
-                        >
-                          {{ price[0].price }}
-                        </p>
-                        <br>
-                        <span class="grey--text text--darken-1">
-                          {{ price[1].name }}: 
-                        </span>
-                        <p 
-                          style="display: inline-block;"
-                        >
-                          {{ price[1].price }}
-                        </p>
-                      </v-layout>
-                    </div> -->
                   </div>
                 </v-card-title>
                 <v-card-actions>
@@ -307,6 +271,10 @@ export default {
     },
     end() {
       this.updateConstructorCurrentStage('Hotel is set')
+    },
+    daysSelected(item) {
+      item.day = item.daysArray.length
+      console.log(item.daysArray)
     },
   }
 };

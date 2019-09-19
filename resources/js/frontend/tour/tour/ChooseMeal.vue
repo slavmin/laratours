@@ -64,8 +64,10 @@
                     </div>
                     <v-divider />
                     <v-select
-                      v-model="item.day"
+                      v-model="item.daysArray"
                       :items="days"
+                      multiple
+                      color="green"
                       :dark="item.selected"
                       :disabled="item.selected"
                       label="Количество дней"
@@ -196,11 +198,14 @@ export default {
       return cityName
     },
     calcTotalPrice(item) {
-      if (item.day != 0) {
-        item.totalPrice = item.price * item.day
-      } else {
-        item.totalPrice = item.price
-      }
+      item.day = item.daysArray.length
+      console.log(item)
+      item.totalPrice = item.price * item.day
+      // if (item.day != 0) {
+      //   item.totalPrice = item.price * item.day
+      // } else {
+      //   item.totalPrice = item.price
+      // }
     },
     choose(meal, item) {
       if (!item.day) item.totalPrice = item.price

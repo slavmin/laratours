@@ -529,8 +529,13 @@
       <v-flex xs2> 
         <form
           method="POST" 
-          action="/operator/tour"
+          :action="getEditMode ? `/operator/tour/${getTour.id}` :'/operator/tour'"
         >
+          <input
+            type="hidden"
+            name="_method"
+            :value="getEditMode ? 'PATCH' : 'POST'"
+          >
           <input 
             type="hidden" 
             name="_token" 
@@ -601,6 +606,7 @@ export default {
       'getCorrectedPrice',
       'getCurrentTourCustomers',
       'getTourCalc',
+      'getEditMode',
     ]),
     tourExtra: function() {
       return {

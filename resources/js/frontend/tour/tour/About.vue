@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center>
+  <v-layout>
     <v-dialog 
       v-model="dialog" 
       scrollable 
@@ -26,8 +26,9 @@
           Информация о туре: {{ tour.name }}
         </v-card-title>
         <v-divider />
-        <v-card-text style="height: 300px;">
+        <v-card-text>
           <v-card-text 
+            class="text-xs-left"
             v-html="contentString" 
           />
         </v-card-text>
