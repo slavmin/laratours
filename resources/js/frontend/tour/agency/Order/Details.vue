@@ -61,6 +61,9 @@
                 <div>
                   Номер: {{ parseInt(profile.room) + 1 }}
                 </div>
+                <div>
+                  Цена: {{ parseInt(profile.price) }}
+                </div>
               </v-card-text>
             </v-card>
           </v-layout>
