@@ -119,12 +119,15 @@
                     </div>
                     <v-divider />
                     <v-select
-                      v-model="item.day"
+                      v-model="item.daysArray"
                       :items="days"
+                      multiple
+                      color="green"
                       :dark="item.selected"
                       :disabled="item.selected"
                       label="День тура"
                       outline
+                      @change="daysSelected(item)"
                     />
                     <div>
                       <v-layout
@@ -289,6 +292,7 @@ export default {
         'Ввести вручную'
       ],
       currentPriceType: '',
+      daysArray: [],
     };
   },
   computed: {
@@ -361,6 +365,10 @@ export default {
         item.duration.hours = 0
         item.price = item.manualPrice
       }
+    },
+    daysSelected(item) {
+      item.day = item.daysArray.length
+      console.log(item.daysArray)
     },
   },
 };

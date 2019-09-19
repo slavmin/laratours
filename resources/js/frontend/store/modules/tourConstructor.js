@@ -114,7 +114,6 @@ export default {
     },
     setActualTransport(state) {
       let result = []
-      console.log('setActualTransport')
       if (state.tourOptions.transport_options != undefined) {
           state.tourOptions.transport_options.map((item) => {
             if (state.tour.options.cities.indexOf(parseInt(item.city_id)) != -1) {
@@ -134,8 +133,21 @@ export default {
           obj.manualPrice = 0
         })
       })
-      console.log('actual transport: ', result)
       state.actualTransport = result
+      state.tour.transport.forEach((selectedTransport) => {
+        state.actualTransport.forEach((actualTransport) => {
+          actualTransport.objectables.forEach((obj) => {
+            if (obj.id == selectedTransport.obj.id) {
+              obj.day = selectedTransport.obj.day
+              obj.daysArray = selectedTransport.obj.daysArray
+              obj.duration = selectedTransport.obj.duration
+              obj.manualPrice = selectedTransport.obj.manualPrice
+              obj.price = selectedTransport.obj.price
+              obj.selected = selectedTransport.obj.selected
+            }
+          })
+        })
+      })
     },
     setNewTransportOptions: (state, updData) => {
       let updTransport = updData.company
@@ -187,6 +199,18 @@ export default {
         }
       )
       state.actualMuseum = result
+      state.tour.museum.forEach((selectedMuseum) => {
+        state.actualMuseum.forEach((actualMuseum) => {
+          actualMuseum.objectables.forEach((obj) => {
+            if (obj.id == selectedMuseum.obj.id) {
+              obj.day = selectedMuseum.obj.day
+              obj.price = selectedMuseum.obj.price
+              obj.selected = selectedMuseum.obj.selected
+              console.log(selectedMuseum.obj, obj)
+            }
+          })
+        })
+      })
     },
     setNewMuseumOptions: (state, updData) => {
       let updMuseum = updData.museum
@@ -235,6 +259,18 @@ export default {
         }
       )
       state.actualHotel = result
+      state.tour.hotel.forEach((selectedHotel) => {
+        state.actualHotel.forEach((actualHotel) => {
+          actualHotel.objectables.forEach((obj) => {
+            if (obj.id == selectedHotel.obj.id) {
+              obj.day = selectedHotel.obj.day
+              obj.daysArray = selectedHotel.obj.daysArray
+              obj.totalPrice = selectedHotel.obj.totalPrice
+              obj.selected = selectedHotel.obj.selected
+            }
+          })
+        })
+      })
     },
     setNewHotelOptions: (state, updData) => {
       let updHotel = updData.hotel
@@ -282,6 +318,18 @@ export default {
         }
       )
       state.actualMeal = result
+      state.tour.meal.forEach((selectedMeal) => {
+        state.actualMeal.forEach((actualMeal) => {
+          actualMeal.objectables.forEach((obj) => {
+            if (obj.id == selectedMeal.obj.id) {
+              obj.day = selectedMeal.obj.day
+              obj.daysArray = selectedMeal.obj.daysArray
+              obj.totalPrice = selectedMeal.obj.totalPrice
+              obj.selected = selectedMeal.obj.selected
+            }
+          })
+        })
+      })
     },
     setNewMealOptions(state, updData) {
       let updMeal = updData.meal
@@ -631,7 +679,10 @@ export default {
       })
     },
     setEditTour(state, tour) {
-      state.tour = tour
+      state.tour = JSON.parse(tour.extra)
+      state.editMode = true
+      state.tour.id = tour.id
+      console.log('edit tour: ',state.tour)
     },
     setCurrentCustomerType(state, value) {
       state.tour.calc.currentCustomer = value
@@ -654,8 +705,10 @@ export default {
     }
   },
   state: {
+    editMode: false,
     tourOptions: [],
     tour: {
+      id: NaN,
       options: {
         name: '',
         tourType: 0,
@@ -774,6 +827,9 @@ export default {
     },
     getTourCalc(state) {
       return state.tour.calc
+    },
+    getEditMode(state) {
+      return state.editMode
     }
   }
 }

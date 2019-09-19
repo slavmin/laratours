@@ -184,9 +184,10 @@ export default {
       tiny: {
         apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
         init: {
-          // plugins: 'wordcount', 
-          min_width: '500px',
+          min_width: '600px',
           branding: false, 
+          language: 'ru',
+          language_url: '/fonts/vendor/tinymce/ru.js',
         }
       },
     };
@@ -211,9 +212,11 @@ export default {
         if (this.getTour.transport.length > 0) {
           string += '<h3>Транспорт:</h3><p>'
           this.getTour.transport.forEach((transport) => {
-            if (transport.obj.day == (i + 1)) {
-              string += transport.obj.name
-            }
+            transport.obj.daysArray.forEach((day) => {
+              if (day == (i + 1)) {
+                string += transport.obj.name
+              }
+            })
           })
           string += '</p>'
         }
@@ -221,7 +224,7 @@ export default {
           string += '<h3>Экскурсии:</h3><p>'
           this.getTour.museum.forEach((museum) => {
             if (museum.obj.day == (i + 1)) {
-              string += `${museum.museum.name}: ${museum.obj.name}`
+              string += `${museum.museum.name}: ${museum.obj.name}<br>`
             }
           })
           string += '</p>'
@@ -229,18 +232,22 @@ export default {
         if (this.getTour.hotel.length > 0) {
           string += '<h3>Проживание:</h3><p>'
           this.getTour.hotel.forEach((hotel) => {
-            if (hotel.obj.day == (i + 1)) {
-              string += `${hotel.hotel.name}: ${hotel.obj.name}`
-            }
+            hotel.obj.daysArray.forEach((day) => {
+              if (day == (i + 1)) {
+                string += `${hotel.hotel.name}: ${hotel.obj.name}<br>`
+              }
+            })
           })
           string += '</p>'
         }
         if (this.getTour.meal.length > 0) {
           string += '<h3>Питание:</h3><p>'
           this.getTour.meal.forEach((meal) => {
-            if (meal.obj.day == (i + 1)) {
-              string += `${meal.meal.name}: ${meal.obj.name}`
-            }
+            meal.obj.daysArray.forEach((day) => {
+              if (day == (i + 1)) {
+                string += `${meal.meal.name}: ${meal.obj.name}<br>`
+              }
+            })
           })
           string += '</p>'
         }
@@ -297,11 +304,6 @@ export default {
       console.log(this.getTour)
       this.updateConstructorCurrentStage('Show summary')
     },
-    // fillEditorsContent() {
-    //   for (let i = 0; i < 2; i++) {
-    //     this.editorsContent[i] = 'test' + i
-    //   }
-    // },
   },
 };
 </script>
