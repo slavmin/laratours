@@ -84,19 +84,17 @@ export default {
     },
     setChoosenMeal(state, choosenMeal) {
       if (choosenMeal.noMeal) {
-        state.choosenMealPrice = 0 - state.defaultMealPrice
+        state.choosenMealPrice = 0
       }
       else {
         console.log(state, choosenMeal)
         const meal = state.alternativeMeal.find(item => item.id == choosenMeal.mealId)
         const obj = meal.objectables.find(item => item.id == choosenMeal.objId)
-        const days = state.defaultMeal[0].obj.day
         const correction = parseInt(state.defaultMeal[0].correction) / 100
         state.choosenMealPrice = 
-          0 
-          - state.defaultMealPrice 
-          + (obj.price * days)
-          + (obj.price * days) * correction
+          0  
+          + (obj.price)
+          + (obj.price) * correction
       }
     }
   },

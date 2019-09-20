@@ -16,6 +16,9 @@
           Данные о туристах
         </th>
         <th>
+          Стоимость
+        </th>
+        <th>
           Оператор
         </th>
         <th>
@@ -54,6 +57,9 @@
               :profiles="item.profiles"
               :order-id="item.id"
             />
+          </td>
+          <td>
+            {{ getPrice(item.profiles[0].content) }}
           </td>
           <td>
             {{ operators[item.operator_id] }}
@@ -169,6 +175,15 @@ export default {
       }
       return count
     },
+    getPrice(profiles) {
+      console.log(profiles)
+      let result = 0
+      if (profiles)
+      profiles.forEach((profile) => {
+        result += parseInt(profile.price)
+      })
+      return result
+    }
   }
 }
 </script>

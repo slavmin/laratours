@@ -165,6 +165,11 @@
           </span> 
           {{ getPrice() }}
         </div>
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][price]' : ''"
+          :value="getPrice()"
+        >
         Цена питания: {{ getChoosenMealPrice }}
       </v-flex>
     </v-layout>
@@ -312,24 +317,24 @@ export default {
       // CHD price
       if (this.isChd) {
         const price = this.$store.getters.getChdPrice(this.age)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice) + ' дополнительное размещение ' + price.name
+        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
         defaultPrice = false
-        return (price.standardPrice + this.getChoosenMealPrice) + ' стандартное размещение ' + price.name
+        return (price.standardPrice + this.getChoosenMealPrice)
       }
       // Pens price
       if (this.isPens) {
         const price = this.getPensPrice()
         // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice) + ' дополнительное размещение ' + price.name
+        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
         defaultPrice = false
-        return (price.standardPrice + this.getChoosenMealPrice) + ' стандартное размещение ' + price.name
+        return (price.standardPrice + this.getChoosenMealPrice)
       }
       // Default. ADL price
       if (defaultPrice) {
         const price = this.priceList.find(item => !item.isPens && !item.isChd)
         // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice) + ' дополнительное размещение ' + price.name
-        return (price.standardPrice + this.getChoosenMealPrice) + ' стандартное размещение ' + price.name
+        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
+        return (price.standardPrice + this.getChoosenMealPrice)
       }
     },
   }
