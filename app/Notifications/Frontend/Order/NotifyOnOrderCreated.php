@@ -8,11 +8,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Queue\SerializesModels;
 
-class NotifyOnOrderCreated extends Notification implements ShouldQueue
+class NotifyOnOrderCreated extends Notification
 {
-    use Queueable, SerializesModels;
+    use Queueable;
 
     /**
      * @var

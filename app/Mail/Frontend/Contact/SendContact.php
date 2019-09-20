@@ -17,16 +17,16 @@ class SendContact extends Mailable
     /**
      * @var Request
      */
-    protected $data;
+    public $request;
 
     /**
      * SendContact constructor.
      *
-     * @param $data
+     * @param Request $request
      */
-    public function __construct($data)
+    public function __construct(Request $request)
     {
-        $this->data = $data;
+        $this->request = $request;
     }
 
     /**
@@ -36,16 +36,11 @@ class SendContact extends Mailable
      */
     public function build()
     {
-        return $this->to(config('contacts.contact.address'), config('contacts.contact.name'))
-            ->markdown('frontend.mail.contact')
+        return $this->to(config('mail.from.address'), config('mail.from.name'))
+            ->view('frontend.mail.contact')
+            ->text('frontend.mail.contact-text')
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
-            ->from(config('mail.from.address'), config('mail.from.name'))
-            ->replyTo($this->data['email'], $this->data['name'])
-            ->with([
-                'email' => $this->data['email'],
-                'name' => $this->data['name'],
-                'phone' => $this->data['phone'],
-                'body' => $this->data['message'],
-            ]);
+            ->from($this->request->email, $this->request->name)
+            ->replyTo($this->request->email, $this->request->name);
     }
 }
