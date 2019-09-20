@@ -75,6 +75,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
             "@php artisan package:discover --ansi"
         ],
         "post-root-package-install": [
@@ -118,10 +120,6 @@
             "@composer validate",
             "@php artisan self-diagnosis",
             "npm audit"
-        ],
-        "ide-helper": [
-            "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:meta"
         ]
     }
 }

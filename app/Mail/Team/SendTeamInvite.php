@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendTeamInvite extends Mailable implements ShouldQueue
+class SendTeamInvite extends Mailable
 {
     use Queueable, SerializesModels;
 
