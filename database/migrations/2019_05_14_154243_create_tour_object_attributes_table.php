@@ -21,7 +21,14 @@ class CreateTourObjectAttributesTable extends Migration
             $table->unsignedInteger('qnt')->nullable();
             $table->unsignedDecimal('price')->nullable();
             $table->json('extra')->nullable();
+            $table->unsignedBigInteger('customer_type_id')->nullable();
+            $table->unsignedBigInteger('team_id')->nullable()->index();
             $table->timestamps();
+
+            $table->foreign('team_id')
+                ->references('id')
+                ->on(\Config::get( 'teamwork.teams_table' ))
+                ->onDelete('cascade');
         });
     }
 
