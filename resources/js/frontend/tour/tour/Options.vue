@@ -68,6 +68,7 @@
             </template>
             <v-date-picker 
               v-model="getTour.options.dateStart" 
+              :min="dateToday"
               color="green"
               locale="ru-ru"
               @input="showDateStart = false"
@@ -166,7 +167,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
+import moment from 'moment'
 export default {
 
   name: 'Options',
@@ -220,6 +221,10 @@ export default {
       }
       return types
     },
+    dateToday: function() {
+      return moment().format('YYYY-MM-DD')
+      // return '2019-09-21'
+    }
   },
   created() {
     this.fetchAllTourOptions()

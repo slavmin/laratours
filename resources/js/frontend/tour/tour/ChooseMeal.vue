@@ -70,7 +70,7 @@
                       color="green"
                       :dark="item.selected"
                       :disabled="item.selected"
-                      label="Количество дней"
+                      label="День тура"
                       outline
                       @change="calcTotalPrice(item)"
                     />

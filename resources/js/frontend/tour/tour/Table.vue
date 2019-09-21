@@ -11,25 +11,46 @@
         class="elevation-1"
       >
         <template v-slot:items="props">
-          <td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             {{ props.item.name }}
+            <div
+              v-if="!props.item.published"
+              class="text-xs-left red--text"
+              style="font-size: 10px;"
+            >
+              Тур не опубликован
+            </div>
           </td>
-          <td class="text-xs-right">
+          <td 
+            class="text-xs-right"
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             <span> 
               {{ getCitiesNames(props.item.cities_list) }}
             </span>
           </td>
-          <td class="text-xs-right">
+          <td 
+            class="text-xs-right"
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             {{ getTourTypes[props.item.tour_type_id] }}
           </td>
-          <td class="text-xs-right">
+          <td 
+            class="text-xs-right"
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             {{ 
               props.item.extra 
                 ? JSON.parse(props.item.extra).options.days 
                 : '' 
             }}
           </td>
-          <td class="text-xs-right grey--text">
+          <td 
+            class="text-xs-right grey--text"
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             Нетто:
             {{ 
               props.item.extra 
@@ -44,17 +65,23 @@
                 : '' 
             }}
           </td>
-          <td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             <About 
               :tour="props.item"
             />
           </td>
-          <td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             0
             /
             {{ JSON.parse(props.item.extra).qnt }}
           </td>
-          <td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             <v-layout 
               row 
               wrap
@@ -187,5 +214,8 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+.unpublished {
+  background-color: #efeeee,
+}
 </style>

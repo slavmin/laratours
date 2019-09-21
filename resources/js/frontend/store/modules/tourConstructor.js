@@ -624,10 +624,6 @@ export default {
         else {
           transport.correctedPricePerSeat = parseInt(transport.pricePerSeat)
         }
-        if (transport.commission > 0) {
-          transport.correctedPricePerSeat += 
-              (transport.correctedPricePerSeat * (transport.commission / 100))
-        }
       })
       // Add price-fields to Museum
       state.tour.museum.forEach((museum) => {
@@ -646,10 +642,6 @@ export default {
         } else {
           museum.correctedPrice = price.price
         }
-        if (museum.commission > 0) {
-          museum.correctedPrice += 
-            (museum.correctedPrice * museum.commission / 100)
-        }
       })
       // Add price-fields to Hotel
       state.tour.hotel.forEach((hotel) => {
@@ -659,10 +651,6 @@ export default {
             (hotel.obj.totalPrice * hotel.correction / 100) 
         } else {
           hotel.correctedPrice = parseInt(hotel.obj.totalPrice)
-        }
-        if (hotel.commission > 0) {
-          hotel.correctedPrice +=
-            (hotel.correctedPrice * hotel.commission / 100)
         }
       })
       // Add price-fields to Meal
@@ -674,10 +662,6 @@ export default {
         } else {
           meal.correctedPrice = parseInt(meal.obj.totalPrice)
         }
-        if (meal.commission > 0) {
-          meal.correctedPrice += 
-            (meal.correctedPrice * meal.commission / 100)
-        }
       })
       // Add price-fields to Guide
       state.tour.guide.forEach((guide) => {
@@ -687,10 +671,6 @@ export default {
             (guide.pricePerSeat * guide.correction / 100) 
         } else {
           guide.correctedPricePerSeat = guide.pricePerSeat
-        }
-        if (guide.commission > 0) {
-          guide.correctedPricePerSeat += 
-            (guide.correctedPricePerSeat * guide.commission / 100)
         }
       })
       // Add price-fields to Attendant
@@ -702,10 +682,6 @@ export default {
         } else {
           attendant.correctedPricePerSeat = attendant.pricePerSeat
         }
-        if (attendant.commission > 0) {
-          attendant.correctedPricePerSeat += 
-            (attendant.correctedPricePerSeat * attendant.commission / 100)
-        }
       })
       // Add price-fields to Custom Price (Services)
       state.tour.customPrice.forEach((price) => {
@@ -715,10 +691,6 @@ export default {
             (parseInt(price.pricePerSeat) * parseInt(price.correction) / 100) 
         } else {
           price.correctedPricePerSeat = parseInt(price.pricePerSeat)
-        }
-        if (price.commission > 0) {
-          price.correctedPricePerSeat += 
-            (price.correctedPricePerSeat * price.commission / 100)
         }
       })
       console.log('calculate for: ', state.tour.calc.currentCustomer)
@@ -902,6 +874,74 @@ export default {
     },
     getEditMode(state) {
       return state.editMode
+    },
+    getAverageCommission(state) {
+      let summ = 0
+      let count = 0
+      state.tour.transport.forEach((transport) => {
+        if (transport.commission == '' || !transport.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(transport.commission)
+          count += 1
+        }
+      })
+      state.tour.museum.forEach((museum) => {
+        if (museum.commission == '' || !museum.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(museum.commission)
+          count += 1
+        }
+      })
+      state.tour.hotel.forEach((hotel) => {
+        if (hotel.commission == '' || !hotel.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(hotel.commission)
+          count += 1
+        }
+      })
+      state.tour.meal.forEach((meal) => {
+        if (meal.commission == '' || !meal.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(meal.commission)
+          count += 1
+        }
+      })
+      state.tour.guide.forEach((guide) => {
+        if (guide.commission == '' || !guide.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(guide.commission)
+          count += 1
+        }
+      })
+      state.tour.attendant.forEach((attendant) => {
+        if (attendant.commission == '' || !attendant.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(attendant.commission)
+          count += 1
+        }
+      })
+      state.tour.customPrice.forEach((customPrice) => {
+        if (customPrice.commission == '' || !customPrice.commission) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(customPrice.commission)
+          count += 1
+        }
+      })
+      return parseFloat(summ / count).toFixed(2)
     }
   }
 }
