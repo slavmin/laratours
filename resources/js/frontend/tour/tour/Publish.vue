@@ -103,7 +103,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.token, this.tour)
   }
 }
 </script>

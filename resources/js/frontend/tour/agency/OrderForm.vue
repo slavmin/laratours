@@ -286,7 +286,6 @@ export default {
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
-    console.log(this.priceList)
   },
   updated() {
   },

@@ -32,24 +32,24 @@
               />
             </th>
             <th>
-              <v-layout 
-                row 
-                wrap
-                align-center
-              >
-                <v-flex xs9>
-                  Наценка, %
-                </v-flex>
-                <v-flex xs3>
-                  <v-text-field
-                    v-model="correctionToAll"
-                    label="На все"
-                    mask="###"
-                    outline
-                    @input="inputCorrection"
-                  /> 
-                </v-flex>
-              </v-layout>
+              Наценка, %
+              <v-text-field
+                v-model="correctionToAll"
+                label="На все"
+                mask="###"
+                outline
+                @input="inputCorrection"
+              /> 
+            </th>
+            <th>
+              Комиссия, %
+              <v-text-field
+                v-model="commissionToAll"
+                label="На все"
+                mask="###"
+                outline
+                @input="inputCommission"
+              /> 
             </th>
             <th>
               Итого
@@ -105,6 +105,13 @@
               </td>
               <td>
                 <v-text-field
+                  v-model="transport.commission"
+                  name="commission"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
                   v-model="transport.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
@@ -138,6 +145,13 @@
                 <v-text-field
                   v-model="event.correction"
                   name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  v-model="event.commission"
+                  name="commision"
                   @input="correctPrice"
                 />
               </td>
@@ -182,6 +196,13 @@
                 <v-text-field
                   v-model="hotel.correction"
                   name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  v-model="hotel.commission"
+                  name="commision"
                   @input="correctPrice"
                 />
               </td>
@@ -242,6 +263,13 @@
               </td>
               <td>
                 <v-text-field
+                  v-model="meal.commission"
+                  name="commision"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
                   v-model="meal.correctedPrice"
                   class="corrected-price"
                   name="corrected"
@@ -290,6 +318,13 @@
                 <v-text-field
                   v-model="guide.correction"
                   name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  v-model="guide.commission"
+                  name="commision"
                   @input="correctPrice"
                 />
               </td>
@@ -349,6 +384,13 @@
               </td>
               <td>
                 <v-text-field
+                  v-model="attendant.commission"
+                  name="commision"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                <v-text-field
                   v-model="attendant.correctedPricePerSeat"
                   class="corrected-price"
                   name="corrected"
@@ -396,7 +438,14 @@
                 />
               </td>
               <td>
-                {{ price.correctedPrice }}
+                <v-text-field
+                  v-model="price.commission"
+                  name="commision"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ price.correctedPricePerSeat }}
               </td>
             </tr>
             <tr>
@@ -409,6 +458,7 @@
               <td>
                 {{ getTour.totalPrice }}
               </td>
+              <td />
               <td />
               <td>
                 {{ getTour.correctedPrice }}
@@ -596,6 +646,7 @@ export default {
       totalPrice: 0,
       correctedPrice: 0,
       correctionToAll: 0,
+      commissionToAll: 0,
       currentCustomerType: 0,
       showPriceForEveryCustomer: true,
     };
@@ -619,7 +670,6 @@ export default {
     getTour: {
       handler(value) {
         this.updateTourTotalPrice()
-        this.updateCorrectedPriceValues()
         this.updateTourCorrectedPrice()
       },
       deep: true,
@@ -627,6 +677,7 @@ export default {
     currentCustomerType: {
       handler(value) {
         this.updateCurrentCustomerType(value)
+        this.updateTourCorrectedPrice()
       },
     },
   },
@@ -645,6 +696,8 @@ export default {
       'updateCorrectedPriceValues',
       'updateCurrentCustomerType',
       'generateTourCalcCustomerTypes',
+      'updateCommissiontoAll',
+      'updateCommissionPriceValues',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -655,6 +708,14 @@ export default {
       this.updateTourCorrectedPrice()
     },
     correctPrice() {
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+    },
+    correctCommissionPrice() {
+      this.updateCommissionPriceValues()
+    },
+    inputCommission() {
+      this.updateCommissiontoAll(this.commissionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
     },
@@ -682,9 +743,16 @@ export default {
     calculatePriceForEveryCustomer() {
       let prevCustomer = this.currentCustomerType
       this.getCurrentTourCustomers.forEach((customer) => {
-        setTimeout(() => { this.currentCustomerType = customer.id }, 10)
+        setTimeout(() => { 
+          this.currentCustomerType = customer.id
+          this.updateCorrectedPriceValues()
+        }, 50)
       })
-      setTimeout(() => {this.currentCustomerType = prevCustomer}, 500)
+      setTimeout(() => {
+        this.currentCustomerType = prevCustomer
+        this.updateCurrentCustomerType(0)
+        this.updateCorrectedPriceValues()
+      }, 500)
     },
     getHotelPrice(hotel) {
       let customer = this.getTour.calc.priceList.find((item) => {

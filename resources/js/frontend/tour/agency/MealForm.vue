@@ -1,14 +1,17 @@
 <template>
-  <v-flex>
-    День {{ day }}:
-    <v-select
-      v-model="choosenMeal"
-      :items="mealOptions"
-      item-text="name"
-      label="Питание"
-      @change="chooseMeal"
-    />
-  </v-flex>
+  <div>
+    <div
+      v-for="i in meal.length"
+      :key="i"
+    >
+      <v-select
+        v-model="choosenMeal"
+        item-text="name"
+        label="Питание"
+        @change="chooseMeal"
+      />
+    </div>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -19,12 +22,6 @@ export default {
       type: Number,
       default: 0
     },
-    meal: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
   },
   data() {
     return {
@@ -32,41 +29,44 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'getAlternativeMeal',
-    ]),
-    mealOptions: function() {
-      let result = [{
-        name: 'Без питания',
-        noMeal: true,
-        selected: false,
-        daysArray: [],
-      }]
-      this.getAlternativeMeal.forEach((meal) => {
-        meal.objectables.forEach((obj) => {
-          result.push({
-            mealId: meal.id,
-            objId: obj.id,
-            name: `${meal.name} ${obj.name}`,
-            selected: obj.selected,
-            daysArray: obj.daysArray,
-          })
-        })
-      })
-      return result
+    meal: function() {
+      return this.$store.getters.getMealByDay(this.day)
+    },
+    alternativeMeal: function() {
+      return this.$store.getters.getAlternativeMeal(this.day)
     }
+    // mealOptions: function() {
+    //   let result = [{
+    //     name: 'Без питания',
+    //     noMeal: true,
+    //     selected: false,
+    //     daysArray: [],
+    //   }]
+    //   this.getAlternativeMeal.forEach((meal) => {
+    //     meal.objectables.forEach((obj) => {
+    //       result.push({
+    //         mealId: meal.id,
+    //         objId: obj.id,
+    //         name: `${meal.name} ${obj.name}`,
+    //         selected: obj.selected,
+    //         daysArray: obj.daysArray,
+    //       })
+    //     })
+    //   })
+    //   return result
+    // }
   },
   created() {
   },
   mounted() {
-    this.choosenMeal = this.mealOptions.find((item) => {
-      if (item.daysArray 
-          && item.daysArray.indexOf(this.day) != -1 
-          && item.mealId == this.meal.meal.id) {
-        return item
-      }
-    })
-    console.log(this.choosenMeal)
+    // this.choosenMeal = this.mealOptions.find((item) => {
+    //   if (item.daysArray 
+    //       && item.daysArray.indexOf(this.day) != -1 
+    //       && item.mealId == this.meal.meal.id) {
+    //     return item
+    //   }
+    // })
+    console.log(this.meal)
   },
   methods: {
     ...mapActions([
@@ -75,7 +75,7 @@ export default {
       'updateChoosenMeal',
     ]),
     chooseMeal() {
-      this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
+      // this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
     },
   }
 }
