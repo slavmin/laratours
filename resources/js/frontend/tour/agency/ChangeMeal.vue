@@ -1,20 +1,20 @@
 <template>
-  <div class="body-1">
-    <div 
-      v-for="meal in JSON.parse(tour.extra).meal"
-      :key="meal.obj.id"
+  <v-layout
+    row
+    wrap
+  >
+    <v-flex
+      v-for="day in mealCount"
+      :key="day"
     >
-      <div
-        v-for="day in meal.obj.daysArray"
-        :key="day"
-      >
-        <MealForm
-          :day="day"
-          :meal="meal"
-        />
-      </div>
-    </div>
-  </div>
+      <span class="subheading grey--text">
+        День: {{ day }}
+      </span>
+      <MealForm
+        :day="day"
+      />
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -66,9 +66,10 @@ export default {
     },
     mealCount: function() {
       const allMeals = JSON.parse(this.tour.extra).meal
-      let result = 0
+      let result = [1,2]
       allMeals.forEach((meal) => {
-        result += meal.obj.daysArray.length
+        meal.obj.daysArray.forEach(day => result.push(day))
+        result = _.uniq(result)
       })
       return result
     }

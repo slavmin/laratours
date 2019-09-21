@@ -110,12 +110,7 @@ export default {
       femaleFrom: 55,
     },
     priceList: [],
-    defaultMeal: [{
-      meal: { name: '' },
-      obj: { name: ''},
-      price: 0,
-      correct: 0,
-    }],
+    defaultMeal: [],
     defaultMealPrice: 0,
     alternativeMeal: [],
     choosenMealPrice: 0,
@@ -154,11 +149,26 @@ export default {
     getDefaultMeal(state) {
       return state.defaultMeal
     },
-    getAlternativeMeal(state) {
-      return state.alternativeMeal
-    },
     getChoosenMealPrice(state) {
       return state.choosenMealPrice
-    }
+    },
+    getMealByDay: state => day =>  {
+      let result = []
+      state.defaultMeal.forEach((meal) => {
+        if (meal.obj.daysArray.find(item => item == day)) {
+          result.push(meal)
+        }
+      })
+      return result
+    },
+    getAlternativeMeal: state => mealId => {
+      let result = {}
+      state.alternativeMeal.forEach((meal) => {
+        if (meal.id == mealId) {
+          result = meal
+        }
+      })
+      return result
+    },
   },
 }

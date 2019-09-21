@@ -104,6 +104,12 @@ export default {
     async generateTourCalcCustomerTypes({ commit }, customerTypes) {
       commit('setTourCalcCustomerTypes', customerTypes)
     },
+    async updateCommissiontoAll({ commit }, commission) {
+      commit('setCommissionToAll', commission)
+    },
+    async updateCommissionPriceValues({ commit }) {
+      commit('setCommissionPriceValues')
+    }
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -170,6 +176,7 @@ export default {
               transport, 
               obj,
               correction: 0,
+              commission: 0,
               correctedPrice: 0,
               pricePerSeat: parseInt(obj.price / state.tour.qnt),
               correctedPricePerSeat: 0,
@@ -233,6 +240,7 @@ export default {
               museum, 
               obj,
               correction: 0,
+              commission: 0,
               correctedPrice: 0, 
             })
           }
@@ -294,6 +302,7 @@ export default {
               hotel, 
               obj,
               correction: 0,
+              commission: 0,
               correctedPrice: 0, 
             })
           }
@@ -353,6 +362,7 @@ export default {
               meal, 
               obj,
               correction: 0,
+              commission: 0,
               correctedPrice: 0, 
             })
           }
@@ -392,6 +402,7 @@ export default {
           state.tour.guide.push({
             guide,
             correction: 0,
+            commission: 0,
             correctedPrice: 0,
             pricePerSeat: parseInt(guide.totalPrice / state.tour.qnt)
           })
@@ -429,6 +440,7 @@ export default {
           state.tour.attendant.push({
             attendant,
             correction: 0,
+            commission: 0,
             correctedPrice: 0,
             pricePerSeat: parseInt(attendant.totalPrice / state.tour.qnt)
           })
@@ -439,6 +451,7 @@ export default {
       state.tour.customPrice.push({
         ...price,
         correction: 0,
+        commission: 0,
         correctedPrice: 0,
         pricePerSeat: parseInt(price.value / state.tour.qnt)
       })
@@ -600,14 +613,20 @@ export default {
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
       state.tour.transport.forEach((transport) => {
+        transport.correctedPricePerSeat = 0
         if (transport.correction > 0) {
           transport.correctedPricePerSeat = 
           parseInt(
             (transport.pricePerSeat + 
               transport.pricePerSeat * parseInt(transport.correction) / 100)
           )
-        } else {
+        }
+        else {
           transport.correctedPricePerSeat = parseInt(transport.pricePerSeat)
+        }
+        if (transport.commission > 0) {
+          transport.correctedPricePerSeat += 
+              (transport.correctedPricePerSeat * (transport.commission / 100))
         }
       })
       // Add price-fields to Museum
@@ -619,12 +638,17 @@ export default {
         // If event have no price with current customer Id set default customer
         if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         // Calculate corrected price
+        museum.correctedPrice = 0
         if (museum.correction > 0) {
           museum.correctedPrice = 
-            price.price + 
-            (price.price * museum.correction / 100) 
+            price.price 
+            + (price.price * museum.correction / 100) 
         } else {
           museum.correctedPrice = price.price
+        }
+        if (museum.commission > 0) {
+          museum.correctedPrice += 
+            (museum.correctedPrice * museum.commission / 100)
         }
       })
       // Add price-fields to Hotel
@@ -636,6 +660,10 @@ export default {
         } else {
           hotel.correctedPrice = parseInt(hotel.obj.totalPrice)
         }
+        if (hotel.commission > 0) {
+          hotel.correctedPrice +=
+            (hotel.correctedPrice * hotel.commission / 100)
+        }
       })
       // Add price-fields to Meal
       state.tour.meal.forEach((meal) => {
@@ -645,6 +673,10 @@ export default {
             (meal.obj.totalPrice * meal.correction / 100) 
         } else {
           meal.correctedPrice = parseInt(meal.obj.totalPrice)
+        }
+        if (meal.commission > 0) {
+          meal.correctedPrice += 
+            (meal.correctedPrice * meal.commission / 100)
         }
       })
       // Add price-fields to Guide
@@ -656,6 +688,10 @@ export default {
         } else {
           guide.correctedPricePerSeat = guide.pricePerSeat
         }
+        if (guide.commission > 0) {
+          guide.correctedPricePerSeat += 
+            (guide.correctedPricePerSeat * guide.commission / 100)
+        }
       })
       // Add price-fields to Attendant
       state.tour.attendant.forEach((attendant) => {
@@ -665,6 +701,10 @@ export default {
             (attendant.pricePerSeat * attendant.correction / 100) 
         } else {
           attendant.correctedPricePerSeat = attendant.pricePerSeat
+        }
+        if (attendant.commission > 0) {
+          attendant.correctedPricePerSeat += 
+            (attendant.correctedPricePerSeat * attendant.commission / 100)
         }
       })
       // Add price-fields to Custom Price (Services)
@@ -676,6 +716,37 @@ export default {
         } else {
           price.correctedPricePerSeat = parseInt(price.pricePerSeat)
         }
+        if (price.commission > 0) {
+          price.correctedPricePerSeat += 
+            (price.correctedPricePerSeat * price.commission / 100)
+        }
+      })
+      console.log('calculate for: ', state.tour.calc.currentCustomer)
+    },
+    setCommissionToAll: (state, commission) => {
+      if (commission == NaN || commission == '') {
+        commission = 0
+      }
+      state.tour.transport.forEach((transport) => {
+        transport.commission = parseInt(commission)
+      })
+      state.tour.museum.forEach((museum) => {
+        museum.commission = commission
+      })
+      state.tour.hotel.forEach((hotel) => {
+        hotel.commission = commission
+      })
+      state.tour.meal.forEach((meal) => {
+        meal.commission = commission
+      })
+      state.tour.guide.forEach((guide) => {
+        guide.commission = commission
+      })
+      state.tour.attendant.forEach((attendant) => {
+        attendant.commission = commission
+      })
+      state.tour.customPrice.forEach((price) => {
+        price.commission = commission
       })
     },
     setEditTour(state, tour) {
@@ -688,6 +759,7 @@ export default {
       state.tour.calc.currentCustomer = value
     },
     setTourCalcCustomerTypes(state, customerTypes) {
+      state.tour.calc.priceList = []
       customerTypes.forEach((customer) => {
         if (customer.name.includes("Взрослый")) {
           state.tour.calc.defaultCustomer = customer.id

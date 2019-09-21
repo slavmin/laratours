@@ -201,11 +201,6 @@ export default {
       item.day = item.daysArray.length
       console.log(item)
       item.totalPrice = item.price * item.day
-      // if (item.day != 0) {
-      //   item.totalPrice = item.price * item.day
-      // } else {
-      //   item.totalPrice = item.price
-      // }
     },
     choose(meal, item) {
       if (!item.day) item.totalPrice = item.price
