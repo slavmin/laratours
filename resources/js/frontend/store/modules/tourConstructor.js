@@ -109,6 +109,9 @@ export default {
     },
     async updateCommissionPriceValues({ commit }) {
       commit('setCommissionPriceValues')
+    },
+    async clearStore({ commit }) {
+      commit('reset')
     }
   },
   mutations: {
@@ -746,6 +749,39 @@ export default {
           isInf: false,
         })
       })
+    },
+    reset(state) {
+      console.log('reset ', state)
+      state.tour = {
+        id: NaN,
+        options: {
+          name: '',
+          tourType: 0,
+          cities: [],
+          tourGrade: [],
+          tourLanguages: [1],
+          days: NaN,
+          nights: NaN,
+          dateStart: new Date().toISOString().substr(0, 10),
+          qnt: 0,
+        },
+        transport: [],
+        museum: [],
+        hotel: [],
+        meal: [],
+        alternativeMeal: [],
+        guide: [],
+        attendant: [],
+        customPrice: [],
+        editorsContent: [],
+        totalPrice: NaN,
+        ordered: 0,
+        qnt: 0,
+        calc: {
+          currentCustomer: 0,
+          priceList: [],
+        },
+      }
     }
   },
   state: {

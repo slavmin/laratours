@@ -124,18 +124,50 @@
           wrap
           justify-center
         >
-          <v-flex xs8>
-            <v-expansion-panel popout>
-              <v-expansion-panel-content
-                v-for="(item,i) in editorsCount"
-                :key="parseInt(i)"
+          <v-flex xs10>
+            <div
+              v-for="(item,i) in editorsControl.length"
+              :key="parseInt(i)"
+            >
+              <v-dialog
+                v-model="dialog"
+                width="1000"
               >
-                <template v-slot:header>
-                  <h5 class="subheading">
-                    Программа на день: {{ i + 1 }}
-                  </h5>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    color="green"
+                    dark
+                    v-on="on"
+                  >
+                    День {{ i + 1 }}
+                  </v-btn>
                 </template>
-                <v-card>
+                <v-card
+                  style="min-height: 600px;"
+                >
+                  <v-card-title
+                    class="headline green white--text"
+                    primary-title
+                  >
+                    <v-layout 
+                      row 
+                      wrap
+                    >
+                      <v-btn 
+                        icon 
+                        dark 
+                        @click="dialog = false"
+                      >
+                        <v-icon>
+                          close
+                        </v-icon>
+                      </v-btn>
+                      <v-spacer />
+                      <v-flex xs2>
+                        День {{ i + 1 }}
+                      </v-flex>
+                    </v-layout>
+                  </v-card-title>
                   <v-card-text>
                     <Editor 
                       :id="'editor-day-' + i"
@@ -145,9 +177,24 @@
                       class="editor"
                     />
                   </v-card-text>
+                  <v-card-actions>
+                    <v-layout 
+                      row 
+                      wrap
+                      justify-end
+                    >
+                      <v-btn 
+                        flat 
+                        color="green"
+                        @click="dialog = false"
+                      >
+                        Сохранить
+                      </v-btn>
+                    </v-layout>
+                  </v-card-actions>
                 </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
+              </v-dialog>
+            </div>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -184,12 +231,14 @@ export default {
       tiny: {
         apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
         init: {
-          min_width: '600px',
+          min_width: '600',
           branding: false, 
           language: 'ru',
           language_url: '/fonts/vendor/tinymce/ru.js',
+          height: 500,
         }
       },
+      dialog: false,
     };
   },
   computed: {
@@ -200,14 +249,20 @@ export default {
     showTable: function() {
       return this.getCustomPrice.length == 0 ? false : true
     },
-    editorsCount: function() {
-      return parseInt(this.getTour.options.days)
+    editorsControl: function() {
+      let result = []
+      for (let i = 0; i < parseInt(this.getTour.options.days); i++) {
+        result.push({
+          dialog: false,
+        })
+      }
+      return result
     },
     editorsContent: function() {
       let result = []
       let days = []
       let string = ''
-      for (let i = 0; i < this.editorsCount; i++) {
+      for (let i = 0; i < this.editorsControl.length; i++) {
         string = `<h2>День ${i + 1}:<h2>`
         if (this.getTour.transport.length > 0) {
           string += '<h3>Транспорт:</h3><p>'

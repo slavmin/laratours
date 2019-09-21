@@ -75,7 +75,7 @@
           <td
             :class="props.item.published ? '' : 'unpublished'"
           >
-            0
+            {{ props.item.orderprofiles.length }}
             /
             {{ JSON.parse(props.item.extra).qnt }}
           </td>
@@ -185,6 +185,7 @@ export default {
     this.fetchAttendant()
     this.fetchCities()
     this.fetchTourTypes()
+    console.log(this.tours)
   },
   methods: {
     ...mapActions([
@@ -216,6 +217,6 @@ export default {
 
 <style lang="scss" scoped>
 .unpublished {
-  background-color: #efeeee,
+  background-color: #f8f8f8,
 }
 </style>

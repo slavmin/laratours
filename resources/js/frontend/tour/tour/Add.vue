@@ -322,35 +322,20 @@ export default {
       'fetchTransport',
       'fetchAllTourOptions',
       'updateConstructorCurrentStage',
+      'clearStore'
     ]),
     log() {
       console.log(this.allTourOptions)
     },
     close() {
       this.dialog = false
-      this.reset()
+      this.clearStore()
     },
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
         this.snackbar = true
         this.firstSlide = false
       }
-    },
-    reset () {
-      this.tourTypeFormValid = false
-      this.tourName = ''
-      this.firstSlide = true
-      this.showDateStart = false
-      this.showDateEnd = false
-      this.secondSlide = false
-      this.tourType = ''
-      this.tourGrade = []
-      this.tourLanguages = []
-      this.dateStart = new Date().toISOString().substr(0, 10)
-      this.dateEnd = new Date().toISOString().substr(0, 10)
-      this.choosenCities = []
-      this.choosenTransport = []
-      this.transportCount = 2
     },
     getCityName(id) {
       let cityName = ''

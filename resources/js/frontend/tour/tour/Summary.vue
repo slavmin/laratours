@@ -135,8 +135,11 @@
                 {{ event.museum.name }}:
                 <br>
                 {{ event.obj.name }}
-                <br>
-                {{ customerName(event) }}
+                <div class="body-1 grey--text">
+                  {{ customerName(event) }}
+                  <br>
+                  День: {{ event.obj.day }}
+                </div>
               </td>
               <td class="price">
                 {{ eventPrice(event) }}
@@ -182,7 +185,7 @@
                 {{ hotel.obj.name }}
                 <br>
                 <div class="body-1 grey--text">
-                  Ночей: {{ hotel.obj.day }}
+                  Дни: {{ hotel.obj.daysArray }}
                   <br>
                   Стандартное размещение
                   <!-- <br>
@@ -235,7 +238,7 @@
                 <div class="body-1 grey--text">
                   Описание: {{ meal.obj.description }}, {{ meal.obj.price }} руб.
                   <br>
-                  Дней: {{ meal.obj.day }}
+                  Дни: {{ meal.obj.daysArray }}
                 </div>
               </td>
               <td class="price">
@@ -291,11 +294,9 @@
             >
               <td>
                 {{ guide.guide.name }}:
-                <!-- <div class="body-1 grey--text">
-                  Часов: {{ guide.guide.duration }}
-                  <br>
-                  Цена: {{ guide.guide.price }}
-                </div> -->
+                <div class="body-1 grey--text">
+                  Цена: {{ guide.guide.totalPrice }}
+                </div>
               </td>
               <td class="price">
                 {{ guide.pricePerSeat }}

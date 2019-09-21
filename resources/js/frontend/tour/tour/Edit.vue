@@ -329,6 +329,7 @@ export default {
     },
     close() {
       this.dialog = false
+      this.updateConstructorCurrentStage('Initial stage')
       // this.reset()
     },
     submitType() {
