@@ -524,6 +524,7 @@ export default {
       let standardHotel = 0
       let singleHotel = 0
       let extraHotel = 0
+      
       state.tour.transport.forEach((transport) => {
         summ += transport.correctedPricePerSeat
       })

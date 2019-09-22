@@ -4,7 +4,10 @@
       v-for="i in mealCount"
       :key="i"
     >
-      <v-select
+      <MealSelect
+        :meal-options="mealOptions"
+      />
+      <!-- <v-select
         v-model="choosenMeal"
         :items="mealOptions"
         item-text="name"
@@ -12,14 +15,18 @@
         return-object
         single-line
         @change="chooseMeal"
-      />
+      /> -->
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import MealSelect from './MealSelect'
 export default {
   name: 'MealForm',
+  components: {
+    MealSelect,
+  },
   props: {
     day: {
       type: Number,
