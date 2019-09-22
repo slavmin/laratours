@@ -29,6 +29,7 @@
                 item-value="id"
                 item-text="name"
                 label="Тип туриста"
+                @change="customerChanged"
               />
             </th>
             <th>
@@ -566,7 +567,8 @@
                   Прибыль оператора: 
                 </span>
                 {{ ((price.standardPrice
-                  - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
+                  - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoStandardPrice).toFixed(2) }}
+                {{ price.nettoStandardPrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -589,7 +591,8 @@
                   Прибыль оператора: 
                 </span>
                 {{ ((price.singlePrice
-                  - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
+                  - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoSinglePrice).toFixed(2) }}
+                {{ price.nettoSinglePrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -612,7 +615,8 @@
                   Прибыль оператора: 
                 </span>
                 {{ ((price.addPrice
-                  - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
+                  - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoAddPrice).toFixed(2) }}
+                {{ price.nettoAddPrice }}
               </td>
               <td>
                 <v-checkbox 
@@ -815,9 +819,13 @@ export default {
       })
       setTimeout(() => {
         this.currentCustomerType = prevCustomer
-        this.updateCurrentCustomerType(0)
+        this.updateCurrentCustomerType(this.currentCustomerType)
         this.updateCorrectedPriceValues()
       }, 500)
+    },
+    customerChanged() {
+      this.updateCurrentCustomerType(this.currentCustomerType)
+      this.updateCorrectedPriceValues()
     },
     getHotelPrice(hotel) {
       let customer = this.getTour.calc.priceList.find((item) => {

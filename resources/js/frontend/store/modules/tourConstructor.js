@@ -518,30 +518,45 @@ export default {
         summ += parseInt(price.pricePerSeat)
       })
       state.tour.totalPrice = summ
+      state.tour.calc.priceList[state.tour.calc.currentCustomer].nettoPrice = summ
     },
     calculateTourCorrectedPrice: (state) => {
       let summ = 0
+      let netto = 0
       let standardHotel = 0
+      let nettoStandardHotel = 0
       let singleHotel = 0
+      let nettoSingleHotel = 0
       let extraHotel = 0
+      let nettoExtraHotel = 0
       
       state.tour.transport.forEach((transport) => {
         summ += transport.correctedPricePerSeat
+        netto += transport.pricePerSeat
+        console.log('transport: ', netto)
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
+        netto += parseInt(museum.correctedPrice 
+                  - (museum.correctedPrice * 100 / (100 + parseInt(museum.correction))))
+        console.log('+museum: ', netto)          
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
+        netto += parseInt(meal.obj.price)
+        console.log('+meal: ', netto)
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.correctedPricePerSeat)
+        netto += parseInt(guide.pricePerSeat)
       })
       state.tour.attendant.forEach((attendant) => {
         summ += parseInt(attendant.correctedPricePerSeat)
+        netto += parseInt(attendant.pricePerSeat)
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPricePerSeat)
+        netto += parseInt(price.pricePerSeat)
       })
       state.tour.hotel.forEach((hotel) => {
         // ADL prices
@@ -552,17 +567,26 @@ export default {
           +
           (stdPrice * hotel.obj.day * hotel.correction) / 100
         )
+        nettoStandardHotel += parseInt(
+          (stdPrice * hotel.obj.day)
+        )
         const singlePrice = parseInt(data.priceList.adl.sngl)
         singleHotel += parseInt(
           (singlePrice * hotel.obj.day)
           +
           (singlePrice * hotel.obj.day * hotel.correction) / 100
         )
+        nettoSingleHotel += parseInt(
+          (singlePrice * hotel.obj.day)
+        )
         const extraPrice = parseInt(data.priceList.adl.extra)
         extraHotel += parseInt(
           (extraPrice * hotel.obj.day)
           + 
           (extraPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        nettoExtraHotel += parseInt(
+          (extraPrice * hotel.obj.day)
         )
         // CHD prices
         let isChd = false
@@ -580,20 +604,29 @@ export default {
             +
             (stdPrice * hotel.obj.day * hotel.correction) / 100
           )
+          nettoStandardHotel += parseInt(
+            (stdPrice * hotel.obj.day)
+          )
           const extraPrice = parseInt(data.priceList.chd.extra)
           extraHotel += parseInt(
-          (extraPrice * hotel.obj.day)
-          + 
-          (extraPrice * hotel.obj.day * hotel.correction) / 100
-        )
+            (extraPrice * hotel.obj.day)
+            + 
+            (extraPrice * hotel.obj.day * hotel.correction) / 100
+          )
+          nettoExtraHotel += parseInt(
+            (extraPrice * hotel.obj.day)
+          )
         }
       })
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
       calcCustomer.standardPrice = summ + standardHotel
+      calcCustomer.nettoStandardPrice = netto + nettoStandardHotel
       calcCustomer.singlePrice = summ + singleHotel
+      calcCustomer.nettoSinglePrice = netto + nettoSingleHotel
       calcCustomer.addPrice = summ + extraHotel
+      calcCustomer.nettoAddPrice = netto + nettoExtraHotel
       state.tour.correctedPrice = summ + standardHotel
     },
     setCorrectionToAll: (state, correction) => {
