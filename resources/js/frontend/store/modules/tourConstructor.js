@@ -986,6 +986,74 @@ export default {
         }
       })
       return parseFloat(summ / count).toFixed(2)
+    },
+    getAverageCorrection(state) {
+      let summ = 0
+      let count = 0
+      state.tour.transport.forEach((transport) => {
+        if (transport.correction == '' || !transport.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(transport.correction)
+          count += 1
+        }
+      })
+      state.tour.museum.forEach((museum) => {
+        if (museum.correction == '' || !museum.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(museum.correction)
+          count += 1
+        }
+      })
+      state.tour.hotel.forEach((hotel) => {
+        if (hotel.correction == '' || !hotel.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(hotel.correction)
+          count += 1
+        }
+      })
+      state.tour.meal.forEach((meal) => {
+        if (meal.correction == '' || !meal.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(meal.correction)
+          count += 1
+        }
+      })
+      state.tour.guide.forEach((guide) => {
+        if (guide.correction == '' || !guide.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(guide.correction)
+          count += 1
+        }
+      })
+      state.tour.attendant.forEach((attendant) => {
+        if (attendant.correction == '' || !attendant.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(attendant.correction)
+          count += 1
+        }
+      })
+      state.tour.customPrice.forEach((customPrice) => {
+        if (customPrice.correction == '' || !customPrice.correction) {
+          summ += 0
+          count += 1
+        } else {
+          summ += parseInt(customPrice.correction)
+          count += 1
+        }
+      })
+      return parseFloat(summ / count).toFixed(2)
     }
   }
 }

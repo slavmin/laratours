@@ -352,12 +352,6 @@
             >
               <td>
                 {{ attendant.attendant.name }}:
-                <!-- <br>
-                <div class="body-1 grey--text">
-                  Часов: {{ attendant.attendant.duration }}
-                  <br>
-                  Цена: {{ attendant.attendant.price }}
-                </div> -->
               </td>
               <td class="price">
                 {{ attendant.pricePerSeat }}
@@ -459,7 +453,11 @@
               <td>
                 {{ getTour.totalPrice }}
               </td>
-              <td />
+              <td>
+                <span class="subheading">
+                  Наценка средняя: {{ getAverageCorrection }}%
+                </span>
+              </td>
               <td>
                 <span class="subheading">
                   Комиссия средняя: {{ getAverageCommission }}%
@@ -559,10 +557,16 @@
                 {{ price.standardPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Прибыль: 
+                  Оплата оператору: 
                 </span>
                 {{ (price.standardPrice
                   - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
+                <br>
+                <span class="body-1 grey--text">
+                  Прибыль оператора: 
+                </span>
+                {{ ((price.standardPrice
+                  - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -576,10 +580,16 @@
                 {{ price.singlePrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Прибыль: 
+                  Оплата оператору: 
                 </span>
                 {{ (price.singlePrice
                   - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
+                <br>
+                <span class="body-1 grey--text">
+                  Прибыль оператора: 
+                </span>
+                {{ ((price.singlePrice
+                  - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -593,10 +603,16 @@
                 {{ price.addPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Прибыль: 
+                  Оплата оператору: 
                 </span>
                 {{ (price.addPrice
                   - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
+                <br>
+                <span class="body-1 grey--text">
+                  Прибыль оператора: 
+                </span>
+                {{ ((price.addPrice
+                  - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - getTour.totalPrice).toFixed(2) }}
               </td>
               <td>
                 <v-checkbox 
@@ -706,6 +722,7 @@ export default {
       'getTourCalc',
       'getEditMode',
       'getAverageCommission',
+      'getAverageCorrection',
     ]),
     tourExtra: function() {
       return {
