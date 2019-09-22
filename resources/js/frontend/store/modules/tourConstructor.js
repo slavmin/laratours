@@ -373,7 +373,15 @@ export default {
       })
     },
     setTourAlternativeMeal(state) {
-      state.tour.alternativeMeal = state.actualMeal
+      if (state.tour.meal != []) {
+        state.tour.meal.forEach((meal) => {
+          meal.alternativeObj = []
+          const actualMealById = state.actualMeal.find((item) => item.id == meal.meal.id)
+          actualMealById.objectables.forEach((obj) => {
+            if (!obj.selected) meal.alternativeObj.push(obj)
+          })
+        })
+      }
     },
     setActualGuide(state) {
       let result = []

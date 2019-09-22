@@ -128,6 +128,22 @@
             <div
               v-for="(item,i) in editorsControl.length"
               :key="parseInt(i)"
+              class="mb-5"
+            > 
+              <h3>День {{ i + 1 }}</h3>
+              <Editor 
+                :id="'editor-day-' + i"
+                v-model="editorsContent[i]"
+                :api-key="tiny.apiKey"
+                :init="tiny.init"
+                class="editor"
+              />
+            </div>
+          </v-flex>
+          <!-- <v-flex xs10>
+            <div
+              v-for="(item,i) in editorsControl.length"
+              :key="parseInt(i)"
             >
               <v-dialog
                 v-model="dialog"
@@ -142,9 +158,7 @@
                     День {{ i + 1 }}
                   </v-btn>
                 </template>
-                <v-card
-                  style="min-height: 600px;"
-                >
+                <v-card>
                   <v-card-title
                     class="headline green white--text"
                     primary-title
@@ -195,7 +209,7 @@
                 </v-card>
               </v-dialog>
             </div>
-          </v-flex>
+          </v-flex> -->
         </v-layout>
       </v-flex>
       <v-btn 
