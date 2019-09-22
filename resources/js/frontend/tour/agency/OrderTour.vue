@@ -92,7 +92,9 @@
                         :key="c"
                       >
                         <template v-slot:header>
-                          <div>{{ c == 1 || c == 2 ? 'Основное место ' + c : 'Дополнительное место' }}</div>
+                          <div class="title">
+                            {{ c == 1 || c == 2 ? 'Основное место ' + c : 'Дополнительное место' }}
+                          </div>
                         </template>
                         <v-card>
                           <v-card-text>

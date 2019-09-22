@@ -1,13 +1,16 @@
 <template>
   <div>
     <div
-      v-for="i in meal.length"
+      v-for="i in mealCount"
       :key="i"
     >
       <v-select
         v-model="choosenMeal"
+        :items="mealOptions"
         item-text="name"
-        label="Питание"
+        item-value="objId"
+        return-object
+        single-line
         @change="chooseMeal"
       />
     </div>
@@ -25,48 +28,51 @@ export default {
   },
   data() {
     return {
-      choosenMeal: {}
+      // choosenMeal: []
     }
   },
   computed: {
-    meal: function() {
+    mealCount: function() {
+      return this.$store.getters.getMealByDayCount(this.day)
+    },
+    mealOptions: function() {
       return this.$store.getters.getMealByDay(this.day)
     },
-    alternativeMeal: function() {
-      return this.$store.getters.getAlternativeMeal(this.day)
+    choosenMeal: {
+      get: function() {
+        let result = 0
+        for (let i = 0; i < this.mealCount; i++) {
+          this.mealOptions.find((item) => {
+            if (item.daysArray 
+                && item.daysArray.indexOf(this.day) != -1
+                && item.selected == true) {
+              console.log(item)
+              result = item.objId
+            }
+          })
+        }
+        return result
+      },
+      set: function(newValue) {
+        console.log(newValue)
+      }
     }
-    // mealOptions: function() {
-    //   let result = [{
-    //     name: 'Без питания',
-    //     noMeal: true,
-    //     selected: false,
-    //     daysArray: [],
-    //   }]
-    //   this.getAlternativeMeal.forEach((meal) => {
-    //     meal.objectables.forEach((obj) => {
-    //       result.push({
-    //         mealId: meal.id,
-    //         objId: obj.id,
-    //         name: `${meal.name} ${obj.name}`,
-    //         selected: obj.selected,
-    //         daysArray: obj.daysArray,
-    //       })
-    //     })
-    //   })
-    //   return result
-    // }
   },
   created() {
   },
   mounted() {
-    // this.choosenMeal = this.mealOptions.find((item) => {
-    //   if (item.daysArray 
-    //       && item.daysArray.indexOf(this.day) != -1 
-    //       && item.mealId == this.meal.meal.id) {
-    //     return item
-    //   }
-    // })
-    console.log(this.meal)
+    // for (let i = 0; i < this.mealCount; i++) {
+    //   this.mealOptions.find((item) => {
+    //     if (item.daysArray 
+    //         && item.daysArray.indexOf(this.day) != -1
+    //         && item.selected == true) {
+    //       console.log(item)
+    //       this.choosenMeal = item.objId
+    //     }
+    //   })
+    // }
+    console.log(this.choosenMeal)
+    console.log(this.mealOptions)
   },
   methods: {
     ...mapActions([
@@ -75,6 +81,7 @@ export default {
       'updateChoosenMeal',
     ]),
     chooseMeal() {
+      console.log(this.choosenMeal)
       // this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
     },
   }

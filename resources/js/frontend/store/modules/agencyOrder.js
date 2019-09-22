@@ -152,13 +152,46 @@ export default {
     getChoosenMealPrice(state) {
       return state.choosenMealPrice
     },
-    getMealByDay: state => day =>  {
-      let result = []
+    getMealByDayCount: state => day => {
+      let mealByDay = []
       state.defaultMeal.forEach((meal) => {
         if (meal.obj.daysArray.find(item => item == day)) {
-          result.push(meal)
+          mealByDay.push(meal)
         }
       })
+      return mealByDay.length
+    },
+    getMealByDay: state => day =>  {
+      let mealByDay = []
+      state.defaultMeal.forEach((meal) => {
+        if (meal.obj.daysArray.find(item => item == day)) {
+          mealByDay.push(meal)
+        }
+      })
+      let result = [{
+        name: 'Без питания',
+        noMeal: true,
+        selected: false,
+        daysArray: [],
+      }]
+      mealByDay.forEach((meal) => {
+        result.push({
+          mealId: meal.meal.id,
+          objId: meal.obj.id,
+          name: `${meal.meal.name} ${meal.obj.name} ${meal.obj.description}`,
+          selected: meal.obj.selected,
+          daysArray: meal.obj.daysArray,
+        })
+        meal.alternativeObj.forEach((altMeal) => {
+          result.push({
+            mealId: meal.meal.id,
+            objId: altMeal.id,
+            name: `${meal.meal.name} ${altMeal.name} ${altMeal.description}`,
+            selected: altMeal.selected,
+          })
+        })
+      })
+      console.log(result)
       return result
     },
     getAlternativeMeal: state => mealId => {
