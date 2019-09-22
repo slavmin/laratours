@@ -568,7 +568,8 @@
                 </span>
                 {{ ((price.standardPrice
                   - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoStandardPrice).toFixed(2) }}
-                {{ price.nettoStandardPrice }}
+                <br>
+                Затраты: {{ price.nettoStandardPrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -592,7 +593,8 @@
                 </span>
                 {{ ((price.singlePrice
                   - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoSinglePrice).toFixed(2) }}
-                {{ price.nettoSinglePrice }}
+                <br>
+                Затраты: {{ price.nettoSinglePrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
@@ -616,7 +618,8 @@
                 </span>
                 {{ ((price.addPrice
                   - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoAddPrice).toFixed(2) }}
-                {{ price.nettoAddPrice }}
+                <br>
+                Затраты: {{ price.nettoAddPrice }}
               </td>
               <td>
                 <v-checkbox 

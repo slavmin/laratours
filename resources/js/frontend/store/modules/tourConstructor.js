@@ -537,8 +537,7 @@ export default {
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
-        netto += parseInt(museum.correctedPrice 
-                  - (museum.correctedPrice * 100 / (100 + parseInt(museum.correction))))
+        netto += parseInt(museum.correctedPrice * 100 / (100 + parseInt(museum.correction)))
         console.log('+museum: ', netto)          
       })
       state.tour.meal.forEach((meal) => {
@@ -549,14 +548,17 @@ export default {
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.correctedPricePerSeat)
         netto += parseInt(guide.pricePerSeat)
+        console.log('+guide: ', netto)
       })
       state.tour.attendant.forEach((attendant) => {
         summ += parseInt(attendant.correctedPricePerSeat)
         netto += parseInt(attendant.pricePerSeat)
+        console.log('+attendant: ', netto)
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPricePerSeat)
         netto += parseInt(price.pricePerSeat)
+        console.log('+custom: ', netto)
       })
       state.tour.hotel.forEach((hotel) => {
         // ADL prices
@@ -596,7 +598,9 @@ export default {
         isChd = currentPrice.isChd
         if (isChd) {
           standardHotel = 0
+          nettoStandardHotel = 0
           extraHotel = 0
+          nettoExtraHotel = 0
           console.log('chd mode')
           const stdPrice = parseInt(data.priceList.chd.std)
           standardHotel += parseInt(
@@ -607,6 +611,7 @@ export default {
           nettoStandardHotel += parseInt(
             (stdPrice * hotel.obj.day)
           )
+          console.log(stdPrice, standardHotel, nettoStandardHotel)
           const extraPrice = parseInt(data.priceList.chd.extra)
           extraHotel += parseInt(
             (extraPrice * hotel.obj.day)
