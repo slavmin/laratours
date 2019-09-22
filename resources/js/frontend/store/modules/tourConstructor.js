@@ -77,9 +77,6 @@ export default {
     async updateMuseumInEditMode({ commit }, updData) {
       commit('setMuseumInEditMode', updData)
     },
-    async updateEditorsContent({ commit }, content) {
-      commit('setEditorsContent', content)
-    },
     async updateTourName({ commit }, name) {
       commit('setTourName', name)
     },
@@ -193,7 +190,6 @@ export default {
     },
     setActualMuseum(state) {
       let result = []
-      console.log('setActualMuseum')
       state.tourOptions.museum_options.map((museum) => {
           if (state.tour.options.cities.indexOf(parseInt(museum.city_id)) != -1) {
             result.push({
@@ -216,7 +212,6 @@ export default {
               obj.day = selectedMuseum.obj.day
               obj.price = selectedMuseum.obj.price
               obj.selected = selectedMuseum.obj.selected
-              console.log(selectedMuseum.obj, obj)
             }
           })
         })
@@ -252,7 +247,6 @@ export default {
     },
     setActualHotel(state) {
       let result = []
-      console.log('setActualHotel')
       state.tourOptions.hotel_options.map((hotel) => {
           if (state.tour.options.cities.indexOf(parseInt(hotel.city_id)) != -1) {
             result.push({
@@ -314,7 +308,6 @@ export default {
     },
     setActualMeal(state) {
       let result = []
-      console.log('setActualMeal')
       state.tourOptions.meal_options.map((meal) => {
           if (state.tour.options.cities.indexOf(parseInt(meal.city_id)) != -1) {
             result.push({
@@ -399,6 +392,16 @@ export default {
         }
       )
       state.actualGuide = result
+      state.tour.guide.forEach((selectedGuide) => {
+        state.actualGuide.forEach((actualGuide) => {
+          if (actualGuide.id == selectedGuide.guide.id) {
+            actualGuide.day = selectedGuide.guide.day
+            actualGuide.daysArray = selectedGuide.guide.daysArray
+            actualGuide.totalPrice = selectedGuide.guide.totalPrice
+            actualGuide.selected = selectedGuide.guide.selected
+          }
+        })
+      })
     },
     setNewGuideOptions: (state, updGuide) => {
       const index = state.actualGuide.findIndex(guide => guide.id == updGuide.id)
@@ -437,6 +440,16 @@ export default {
         }
       )
       state.actualAttendant = result
+      state.tour.attendant.forEach((selectedAttendant) => {
+        state.actualAttendant.forEach((actualAttendant) => {
+          if (actualAttendant.id == selectedAttendant.attendant.id) {
+            actualAttendant.day = selectedAttendant.attendant.day
+            actualAttendant.daysArray = selectedAttendant.attendant.daysArray
+            actualAttendant.totalPrice = selectedAttendant.attendant.totalPrice
+            actualAttendant.selected = selectedAttendant.attendant.selected
+          }
+        })
+      })
     },
     setNewAttendantOptions: (state, updAttendant) => {
       const index = state.actualAttendant.findIndex(attendant => attendant.id == updAttendant.id)
@@ -533,32 +546,26 @@ export default {
       state.tour.transport.forEach((transport) => {
         summ += transport.correctedPricePerSeat
         netto += transport.pricePerSeat
-        console.log('transport: ', netto)
       })
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
-        netto += parseInt(museum.correctedPrice * 100 / (100 + parseInt(museum.correction)))
-        console.log('+museum: ', netto)          
+        netto += parseInt(museum.correctedPrice * 100 / (100 + parseInt(museum.correction)))       
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
         netto += parseInt(meal.obj.price)
-        console.log('+meal: ', netto)
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.correctedPricePerSeat)
         netto += parseInt(guide.pricePerSeat)
-        console.log('+guide: ', netto)
       })
       state.tour.attendant.forEach((attendant) => {
         summ += parseInt(attendant.correctedPricePerSeat)
         netto += parseInt(attendant.pricePerSeat)
-        console.log('+attendant: ', netto)
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPricePerSeat)
         netto += parseInt(price.pricePerSeat)
-        console.log('+custom: ', netto)
       })
       state.tour.hotel.forEach((hotel) => {
         // ADL prices
@@ -601,7 +608,6 @@ export default {
           nettoStandardHotel = 0
           extraHotel = 0
           nettoExtraHotel = 0
-          console.log('chd mode')
           const stdPrice = parseInt(data.priceList.chd.std)
           standardHotel += parseInt(
             (stdPrice * hotel.obj.day)
@@ -611,7 +617,6 @@ export default {
           nettoStandardHotel += parseInt(
             (stdPrice * hotel.obj.day)
           )
-          console.log(stdPrice, standardHotel, nettoStandardHotel)
           const extraPrice = parseInt(data.priceList.chd.extra)
           extraHotel += parseInt(
             (extraPrice * hotel.obj.day)
@@ -743,7 +748,6 @@ export default {
           price.correctedPricePerSeat = parseInt(price.pricePerSeat)
         }
       })
-      console.log('calculate for: ', state.tour.calc.currentCustomer)
     },
     setCommissionToAll: (state, commission) => {
       if (commission == NaN || commission == '') {
@@ -775,7 +779,6 @@ export default {
       state.tour = JSON.parse(tour.extra)
       state.editMode = true
       state.tour.id = tour.id
-      console.log('edit tour: ',state.tour)
     },
     setCurrentCustomerType(state, value) {
       state.tour.calc.currentCustomer = value
@@ -798,7 +801,6 @@ export default {
       })
     },
     reset(state) {
-      console.log('reset ', state)
       state.tour = {
         id: NaN,
         options: {

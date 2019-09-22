@@ -323,6 +323,7 @@ export default {
       'updateActualHotel',
       'updateActualMeal',
       'updateActualGuide',
+      'updateActualAttendant',
     ]),
     log() {
       console.log(this.allTourOptions)
@@ -376,6 +377,7 @@ export default {
       this.updateActualHotel()
       this.updateActualMeal()
       this.updateActualGuide()
+      this.updateActualAttendant()
       console.log(this.getTour)
     },
   }

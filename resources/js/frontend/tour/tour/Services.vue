@@ -114,11 +114,60 @@
           </v-flex>
         </v-layout>
         <h3 
-          class="grey--text"
-          mt-5
+          class="grey--text mt-5"
         >
           Редакторы:
         </h3>
+        <v-layout 
+          row 
+          justify-center
+        >
+          <v-btn
+            v-if="!dialogFillEditors"
+            color="green"
+            dark
+            @click="dialogFillEditors = true"
+          >
+            Заполнить
+          </v-btn>
+          <v-card
+            v-if="dialogFillEditors"
+          >
+            <v-card-title class="headline grey--text">
+              Автоматическое заполнение редакторов
+            </v-card-title>
+            <v-card-text
+              class="body-1"
+            >
+              <p>
+                Редакторы будут очищены и заново заполнены информацией по туру.
+              </p>
+              <p>
+                Введённая вручную информация не сохранится
+              </p>
+              <p class="body-2">
+                Вы уверены, что хотите продолжить?
+              </p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="green darken-1"
+                flat="flat"
+                @click="dialogFillEditors = false"
+              >
+                Нет
+              </v-btn>
+              <v-spacer />
+              <v-btn
+                color="green darken-1"
+                flat="flat"
+                @click="fillEditorsContent"
+              >
+                Да, заполнить редакторы
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-layout>
         <v-layout 
           row 
           wrap
@@ -133,83 +182,13 @@
               <h3>День {{ i + 1 }}</h3>
               <Editor 
                 :id="'editor-day-' + i"
-                v-model="editorsContent[i]"
+                v-model="getTour.editorsContent[i]"
                 :api-key="tiny.apiKey"
                 :init="tiny.init"
                 class="editor"
               />
             </div>
           </v-flex>
-          <!-- <v-flex xs10>
-            <div
-              v-for="(item,i) in editorsControl.length"
-              :key="parseInt(i)"
-            >
-              <v-dialog
-                v-model="dialog"
-                width="1000"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    color="green"
-                    dark
-                    v-on="on"
-                  >
-                    День {{ i + 1 }}
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title
-                    class="headline green white--text"
-                    primary-title
-                  >
-                    <v-layout 
-                      row 
-                      wrap
-                    >
-                      <v-btn 
-                        icon 
-                        dark 
-                        @click="dialog = false"
-                      >
-                        <v-icon>
-                          close
-                        </v-icon>
-                      </v-btn>
-                      <v-spacer />
-                      <v-flex xs2>
-                        День {{ i + 1 }}
-                      </v-flex>
-                    </v-layout>
-                  </v-card-title>
-                  <v-card-text>
-                    <Editor 
-                      :id="'editor-day-' + i"
-                      v-model="editorsContent[i]"
-                      :api-key="tiny.apiKey"
-                      :init="tiny.init"
-                      class="editor"
-                    />
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-layout 
-                      row 
-                      wrap
-                      justify-end
-                    >
-                      <v-btn 
-                        flat 
-                        color="green"
-                        @click="dialog = false"
-                      >
-                        Сохранить
-                      </v-btn>
-                    </v-layout>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </div>
-          </v-flex> -->
         </v-layout>
       </v-flex>
       <v-btn 
@@ -253,6 +232,8 @@ export default {
         }
       },
       dialog: false,
+      dialogFillEditors: false,
+      editorsContent: [],
     };
   },
   computed: {
@@ -272,7 +253,53 @@ export default {
       }
       return result
     },
-    editorsContent: function() {
+  },
+  watch: {
+    editorsContent: {
+      handler(value) {
+        this.updateEditorsContent(value)
+      }
+    }
+  },
+  created() {
+  },
+  updated() {
+    this.getCustomPrice
+  },
+  mounted() {
+    console.log('services mounted')
+    // this.fillEditorsContent()
+    console.log(this.editorsContent)
+  },
+  methods: {
+    ...mapActions([
+      'updateConstructorCurrentStage',
+      'updateCustomPrice',
+      'updateConstructorCurrentStage',
+      'updateEditorsContent',
+    ]),
+    addMoreGuide() {
+      this.updateConstructorCurrentStage('Hotel is set')
+    },
+    addMoreAttendant() {
+      this.updateConstructorCurrentStage('Show attendant')
+    },
+    addCustomService() {
+      if (this.customPrice.name != '' && this.customPrice.value != NaN) {
+        this.updateCustomPrice(this.customPrice)
+        this.customPrice = {
+          name: '',
+          value: NaN,
+        }
+      }
+    },
+    done() {
+      this.$emit('scrollme')
+      this.updateConstructorCurrentStage('Show summary')
+    },
+    fillEditorsContent() {
+      this.dialogFillEditors = false
+      this.updateEditorsContent([])
       let result = []
       let days = []
       let string = ''
@@ -328,50 +355,24 @@ export default {
           string += '</p>'
         }
         string += '<hr>'
+        if (this.getTour.attendant.length > 0) {
+          string += '<h3>Сопроводжающий:</h3><p>'
+          this.getTour.attendant.forEach((attendant) => {
+            string += `${attendant.attendant.name} `
+          })
+          string += '</p>'
+        }
+        if (this.getTour.customPrice.length > 0) {
+          string += '<h3>Допы:</h3><p>'
+          this.getTour.customPrice.forEach((customPrice) => {
+            string += `${customPrice.name} `
+          })
+          string += '</p>'
+        }
+        string += '<hr>'
         result.push(string)
       }
-      console.log('editors content: ', result)
-      return result
-    },
-  },
-  created() {
-  },
-  updated() {
-    this.getCustomPrice
-    console.log(this.editorsContent)
-  },
-  mounted() {
-    console.log('services mounted')
-    // this.fillEditorsContent()
-    console.log(this.editorsContent)
-  },
-  methods: {
-    ...mapActions([
-      'updateConstructorCurrentStage',
-      'updateCustomPrice',
-      'updateConstructorCurrentStage',
-      'updateEditorsContent',
-    ]),
-    addMoreGuide() {
-      this.updateConstructorCurrentStage('Hotel is set')
-    },
-    addMoreAttendant() {
-      this.updateConstructorCurrentStage('Show attendant')
-    },
-    addCustomService() {
-      if (this.customPrice.name != '' && this.customPrice.value != NaN) {
-        this.updateCustomPrice(this.customPrice)
-        this.customPrice = {
-          name: '',
-          value: NaN,
-        }
-      }
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateEditorsContent(this.editorsContent)
-      console.log(this.getTour)
-      this.updateConstructorCurrentStage('Show summary')
+      this.updateEditorsContent(result)
     },
   },
 };
