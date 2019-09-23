@@ -113,11 +113,6 @@
           :name="isRequired ? 'customer[' + id + '][address]' : ''"
           color="green lighten-3"
         />
-        <!-- <v-select
-          v-model="meal"
-          :items="meals"
-          label="Тип питания"
-        /> -->
         <input 
           v-model="meal"
           type="hidden"
@@ -131,14 +126,26 @@
       </v-flex>
     </v-layout>
     <v-divider />
+    <v-btn
+      color="green"
+      dark
+      flat
+      @click="showChangeMeal = !showChangeMeal"
+    >
+      {{ showChangeMeal ? 'Скрыть' : 'Выбор питания' }}
+      <v-icon right>
+        expand_{{ showChangeMeal ? 'less' : 'more' }}
+      </v-icon>
+    </v-btn>
+    <ChangeMeal 
+      v-show="showChangeMeal"
+      :tour="tour"
+    />  
     <v-layout 
       row 
       wrap
     >
       <v-flex xs6>
-        <ChangeMeal 
-          :tour="tour"
-        />
         <div>
           <BusScheme 
             :object="transport"
@@ -155,7 +162,8 @@
           :value="choosenSeat"
         >
       </v-flex>
-      <v-flex xs6>
+      <v-spacer />
+      <v-flex>
         <div
           v-if="age > 0" 
           class="subheading"
@@ -166,11 +174,11 @@
           {{ getPrice() }}
         </div>
         <input 
+          class="price"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][price]' : ''"
           :value="getPrice()"
         >
-        Цена питания: {{ getChoosenMealPrice }}
       </v-flex>
     </v-layout>
   </div>
@@ -230,13 +238,13 @@ export default {
         female: 50,
       },
       manualPens: false,
+      showChangeMeal: false,
     }
   },
   computed: {
     ...mapGetters([
       'getChdRange',
       'getPensRange',  
-      'getChoosenMealPrice',
     ]),
     transport: function() {
       return JSON.parse(this.tour.extra).transport[0].item
@@ -294,6 +302,7 @@ export default {
       'updateChdRange',
       'updatePensRange',
       'updatePriceList',
+      'updateOrderTotalPrice',
     ]),
     ...mapGetters([
       'getChdPrice',

@@ -1,11 +1,12 @@
 <template>
   <v-select
     v-model="choosenMeal"
-    :items="mealOptions"
+    :items="meal"
     item-text="name"
     item-value="objId"
     return-object
     single-line
+    class="body-1"
     @change="chooseMeal"
   />
 </template>
@@ -13,7 +14,7 @@
 export default {
   name: 'MealSelect',
   props: {
-    mealOptions: {
+    meal: {
       type: Array,
       default: () => {
         return []
@@ -24,6 +25,11 @@ export default {
     return {
       choosenMeal: 0,
     }
+  },
+  mounted() {
+    this.choosenMeal = this.meal.find((item) => {
+      return item.default
+    })
   },
   methods: {
     chooseMeal() {

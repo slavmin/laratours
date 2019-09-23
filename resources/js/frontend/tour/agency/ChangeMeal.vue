@@ -2,10 +2,12 @@
   <v-layout
     row
     wrap
+    justify-space-around
   >
     <v-flex
       v-for="day in mealCount"
       :key="day"
+      xs4
     >
       <span class="subheading grey--text">
         День: {{ day }}
@@ -39,30 +41,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'getDefaultMeal',
-      'getAlternativeMeal',
-    ]),
+    ...mapGetters([]),
     defaultMeal: function() {
       return JSON.parse(this.tour.extra).meal
-    },
-    meals: function() {
-      let result = [{
-        name: 'Без питания',
-        noMeal: true,
-        selected: false,
-      }]
-      this.getAlternativeMeal.forEach((meal) => {
-        meal.objectables.forEach((obj) => {
-          result.push({
-            mealId: meal.id,
-            objId: obj.id,
-            name: `${meal.name} ${obj.name}`,
-            selected: obj.selected,
-          })
-        })
-      })
-      return result
     },
     mealCount: function() {
       const allMeals = JSON.parse(this.tour.extra).meal
@@ -75,32 +56,12 @@ export default {
     }
   },
   mounted() {
-    this.updateDefaultMeal(this.tour)
-    this.updateAlternativeMeal(this.tour)
     // this.choosenMeal = this.meals.find(item => item.selected)
     // console.log(this.choosenMeal)
-    // console.log(JSON.parse(this.tour.extra))
+    console.log(JSON.parse(this.tour.extra))
   },
   methods: {
-    ...mapActions([
-      'updateDefaultMeal',
-      'updateAlternativeMeal',  
-      'updateChoosenMeal',
-    ]),
-    chooseMeal() {
-      this.updateChoosenMeal(this.meals.find(item => item.name == this.choosenMeal))
-    },
-    getMealAtDay(day) {
-      const meal = JSON.parse(this.tour.extra).meal
-      let result = []
-      meal.forEach((item) => {
-        if (item.obj.daysArray.indexOf(day) != -1) {
-          result.push(item)
-        }
-      })
-      console.log(day, result)
-      return result
-    }
+    ...mapActions([]),
   }
 }
 </script>

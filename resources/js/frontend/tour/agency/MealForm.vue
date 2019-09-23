@@ -1,21 +1,14 @@
 <template>
   <div>
-    <div
-      v-for="i in mealCount"
-      :key="i"
-    >
-      <MealSelect
-        :meal-options="mealOptions"
-      />
-      <!-- <v-select
-        v-model="choosenMeal"
-        :items="mealOptions"
-        item-text="name"
-        item-value="objId"
-        return-object
-        single-line
-        @change="chooseMeal"
-      /> -->
+    <div>
+      <div
+        v-for="(meal, i) in mealByDay"
+        :key="`${day} ${i}`"
+      >
+        <MealSelect
+          :meal="meal"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -39,10 +32,7 @@ export default {
     }
   },
   computed: {
-    mealCount: function() {
-      return this.$store.getters.getMealByDayCount(this.day)
-    },
-    mealOptions: function() {
+    mealByDay: function() {
       return this.$store.getters.getMealByDay(this.day)
     },
     choosenMeal: {
@@ -68,25 +58,9 @@ export default {
   created() {
   },
   mounted() {
-    // for (let i = 0; i < this.mealCount; i++) {
-    //   this.mealOptions.find((item) => {
-    //     if (item.daysArray 
-    //         && item.daysArray.indexOf(this.day) != -1
-    //         && item.selected == true) {
-    //       console.log(item)
-    //       this.choosenMeal = item.objId
-    //     }
-    //   })
-    // }
-    console.log(this.choosenMeal)
-    console.log(this.mealOptions)
   },
   methods: {
-    ...mapActions([
-      'updateDefaultMeal',
-      'updateAlternativeMeal',
-      'updateChoosenMeal',
-    ]),
+    ...mapActions([]),
     chooseMeal() {
       console.log(this.choosenMeal)
       // this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))

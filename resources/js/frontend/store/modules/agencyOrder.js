@@ -18,14 +18,8 @@ export default {
     async updatePensRange({ commit }, priceList) {
       commit('setPensRange', priceList)
     },
-    async updateDefaultMeal({ commit }, tour) {
-      commit('setDefaultMeal', tour)
-    },
-    async updateAlternativeMeal({ commit }, tour) {
-      commit('setAlternativeMeal', tour)
-    },
-    async updateChoosenMeal({ commit }, choosenMeal) {
-      commit('setChoosenMeal', choosenMeal)
+    async updateMealByDay({ commit }, tour) {
+      commit('setMealByDay', tour)
     }
   },
   mutations: {
@@ -64,38 +58,34 @@ export default {
         }
       })
     },
-    setDefaultMeal(state, tour) {
-      state.defaultMeal = []
-      JSON.parse(tour.extra).meal.forEach((item) => {
-        state.defaultMeal.push(item)
-      })
-      let defaultMealPrice = 0
-      state.defaultMeal.forEach((item) => {
-        defaultMealPrice += item.correctedPrice
-      })
-      state.defaultMealPrice = defaultMealPrice
-    },
-    setAlternativeMeal(state, tour) {
+    setMealByDay(state, tour) {
       let result = []
-      JSON.parse(tour.extra).alternativeMeal.forEach((meal) => {
-        result.push({...meal})
+      const daysCount = parseInt(JSON.parse(tour.extra).options.days)
+      for (let i = 0; i < daysCount; i++) {
+        result.push([])
+      } 
+      JSON.parse(tour.extra).meal.forEach((meal) => {
+        meal.obj.daysArray.forEach((day) => {
+          let mealWithAlternatives = []
+          mealWithAlternatives.push({
+            default: true,
+            mealId: meal.obj.id,
+            name: `${meal.meal.name}. ${meal.obj.name}, ${meal.obj.description}. (по-умолчанию)`,
+            price: meal.obj.price,
+          })
+          meal.alternativeObj.forEach((alt) => {
+            if (meal.obj.name == alt.name) {
+              mealWithAlternatives.push({
+                mealId: alt.id,
+                name: `${meal.meal.name}. ${alt.name}, ${alt.description}`,
+                price: alt.price,
+              })
+            }
+          })
+          result[day - 1].push(mealWithAlternatives)
+        })
       })
-      state.alternativeMeal = result
-    },
-    setChoosenMeal(state, choosenMeal) {
-      if (choosenMeal.noMeal) {
-        state.choosenMealPrice = 0
-      }
-      else {
-        console.log(state, choosenMeal)
-        const meal = state.alternativeMeal.find(item => item.id == choosenMeal.mealId)
-        const obj = meal.objectables.find(item => item.id == choosenMeal.objId)
-        const correction = parseInt(state.defaultMeal[0].correction) / 100
-        state.choosenMealPrice = 
-          0  
-          + (obj.price)
-          + (obj.price) * correction
-      }
+      state.mealByDay = result
     }
   },
   state: {
@@ -110,10 +100,7 @@ export default {
       femaleFrom: 55,
     },
     priceList: [],
-    defaultMeal: [],
-    defaultMealPrice: 0,
-    alternativeMeal: [],
-    choosenMealPrice: 0,
+    mealByDay: [],
   },
   getters: {
     getOrderedSeats(state) {
@@ -146,62 +133,8 @@ export default {
       })
       return price
     },
-    getDefaultMeal(state) {
-      return state.defaultMeal
-    },
-    getChoosenMealPrice(state) {
-      return state.choosenMealPrice
-    },
-    getMealByDayCount: state => day => {
-      let mealByDay = []
-      state.defaultMeal.forEach((meal) => {
-        if (meal.obj.daysArray.find(item => item == day)) {
-          mealByDay.push(meal)
-        }
-      })
-      return mealByDay.length
-    },
-    getMealByDay: state => day =>  {
-      let mealByDay = []
-      state.defaultMeal.forEach((meal) => {
-        if (meal.obj.daysArray.find(item => item == day)) {
-          mealByDay.push(meal)
-        }
-      })
-      let result = [{
-        name: 'Без питания',
-        noMeal: true,
-        selected: false,
-        daysArray: [],
-      }]
-      mealByDay.forEach((meal) => {
-        result.push({
-          mealId: meal.meal.id,
-          objId: meal.obj.id,
-          name: `${meal.meal.name} ${meal.obj.name} ${meal.obj.description}`,
-          selected: meal.obj.selected,
-          daysArray: meal.obj.daysArray,
-        })
-        meal.alternativeObj.forEach((altMeal) => {
-          result.push({
-            mealId: meal.meal.id,
-            objId: altMeal.id,
-            name: `${meal.meal.name} ${altMeal.name} ${altMeal.description}`,
-            selected: altMeal.selected,
-          })
-        })
-      })
-      console.log(result)
-      return result
-    },
-    getAlternativeMeal: state => mealId => {
-      let result = {}
-      state.alternativeMeal.forEach((meal) => {
-        if (meal.id == mealId) {
-          result = meal
-        }
-      })
-      return result
-    },
+    getMealByDay: state => day => {
+      return state.mealByDay[day - 1]
+    }
   },
 }
