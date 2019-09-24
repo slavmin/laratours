@@ -7,6 +7,9 @@
       >
         <MealSelect
           :meal="meal"
+          :day="day"
+          :index="i"
+          :profile-id="profileId"
         />
       </div>
     </div>
@@ -25,6 +28,10 @@ export default {
       type: Number,
       default: 0
     },
+    profileId: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {

@@ -11,6 +11,7 @@
   />
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MealSelect',
   props: {
@@ -20,10 +21,33 @@ export default {
         return []
       }
     },
+    index: {
+      type: Number,
+      default: 0,
+    },
+    day: {
+      type: Number,
+      default: 0,
+    },
+    profileId: {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     return {
       choosenMeal: 0,
+    }
+  },
+  watch: {
+    choosenMeal: function(newMeal, prevMeal) {
+      this.updateProfileMeal({
+        prevMeal,
+        newMeal,
+        profileId: this.profileId,
+        day: this.day,
+        index: this.index,
+      })
     }
   },
   mounted() {
@@ -32,6 +56,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions([
+      'updateProfileMeal',
+    ]),
     chooseMeal() {
       console.log(this.choosenMeal)
     }

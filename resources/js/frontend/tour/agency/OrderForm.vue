@@ -139,6 +139,7 @@
     </v-btn>
     <ChangeMeal 
       v-show="showChangeMeal"
+      :profile-id="id"
       :tour="tour"
     />  
     <v-layout 
@@ -181,6 +182,7 @@
         >
       </v-flex>
     </v-layout>
+    Питание: {{ profile.mealPrice }}
   </div>
 </template>
 
@@ -245,7 +247,11 @@ export default {
     ...mapGetters([
       'getChdRange',
       'getPensRange',  
+      'getMealByDay',
     ]),
+    profile: function() {
+      return this.$store.getters.getProfile(this.id)
+    },
     transport: function() {
       return JSON.parse(this.tour.extra).transport[0].item
     },
@@ -291,6 +297,7 @@ export default {
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
@@ -303,6 +310,7 @@ export default {
       'updatePensRange',
       'updatePriceList',
       'updateOrderTotalPrice',
+      'updateOrderProfiles',
     ]),
     ...mapGetters([
       'getChdPrice',

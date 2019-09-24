@@ -13,6 +13,7 @@
         День: {{ day }}
       </span>
       <MealForm
+        :profile-id="profileId"
         :day="day"
       />
     </v-flex>
@@ -34,6 +35,10 @@ export default {
         return {}
       }
     },
+    profileId: {
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -41,7 +46,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([]),
+    ...mapGetters([
+      'getMealByDay',
+      'getDefaultMealPriceArray',
+    ]),
     defaultMeal: function() {
       return JSON.parse(this.tour.extra).meal
     },
@@ -56,8 +64,7 @@ export default {
     }
   },
   mounted() {
-    // this.choosenMeal = this.meals.find(item => item.selected)
-    // console.log(this.choosenMeal)
+    console.log('form id: ', this.profileId)
     console.log(JSON.parse(this.tour.extra))
   },
   methods: {

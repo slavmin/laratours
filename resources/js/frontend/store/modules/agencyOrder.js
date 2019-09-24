@@ -9,6 +9,9 @@ export default {
     async removeSeatFromCurrent({ commit }, seat) {
       commit('filterCurrentSeats', seat)
     },
+    async updateOrderProfiles({ commit }, id) {
+      commit('setOrderProfiles', id)
+    },
     async updatePriceList({ commit }, priceList) {
       commit('setPriceList', priceList)
     },
@@ -20,7 +23,10 @@ export default {
     },
     async updateMealByDay({ commit }, tour) {
       commit('setMealByDay', tour)
-    }
+    },
+    async updateProfileMeal({ commit }, data) {
+      commit('setProfileMeal', data)
+    },
   },
   mutations: {
     setOrderedSeats(state, seats) {
@@ -34,6 +40,14 @@ export default {
       if (choosenSeat){
         state.seatsInCurrentOrder = state.seatsInCurrentOrder.filter(seat => seat != choosenSeat)
       }
+    },
+    setOrderProfiles(state, id) {
+      state.orders.push({
+        id: id,
+        price: 0,
+        mealPrice: 0,
+        mealPriceArray: [],
+      })
     },
     setPriceList(state, priceList) {
       state.priceList = priceList
@@ -68,17 +82,25 @@ export default {
         meal.obj.daysArray.forEach((day) => {
           let mealWithAlternatives = []
           mealWithAlternatives.push({
+            name: 'Без питания',
+            price: 0,
+          })
+          mealWithAlternatives.push({
             default: true,
             mealId: meal.obj.id,
             name: `${meal.meal.name}. ${meal.obj.name}, ${meal.obj.description}. (по-умолчанию)`,
-            price: meal.obj.price,
+            correction: parseInt(meal.correction),
+            commission: parseInt(meal.commission),
+            price: meal.obj.price + (meal.obj.price * meal.correction / 100),
           })
           meal.alternativeObj.forEach((alt) => {
             if (meal.obj.name == alt.name) {
               mealWithAlternatives.push({
                 mealId: alt.id,
                 name: `${meal.meal.name}. ${alt.name}, ${alt.description}`,
-                price: alt.price,
+                correction: parseInt(meal.correction),
+                commission: parseInt(meal.commission),
+                price: alt.price + (alt.price * meal.correction / 100),
               })
             }
           })
@@ -86,7 +108,38 @@ export default {
         })
       })
       state.mealByDay = result
-    }
+      let defaultMealPriceArray = []
+      state.mealByDay.forEach((mealTime, index) => {
+        defaultMealPriceArray[index] = []
+        mealTime.forEach((mealMenu) => {
+          let meal = mealMenu.find(menu => menu.default)
+          let price = meal.price
+          defaultMealPriceArray[index].push(price)
+        })
+      })
+      state.defaultMealPriceArray = defaultMealPriceArray
+      console.log(state)
+      state.orders.forEach((order) => {
+        defaultMealPriceArray.forEach((day) => {
+          let tmp = []
+          day.forEach((price) => {
+            tmp.push(price)
+          })
+          order.mealPriceArray.push(tmp)
+        })
+        console.log(order)
+      })
+    },
+    setProfileMeal(state, data) {
+      let order = state.orders.find(order => order.id == data.profileId)
+      order.mealPriceArray[data.day - 1][data.index] = data.newMeal.price
+      let mealPrice = 0
+      order.mealPriceArray.forEach((day) => {
+        day.forEach(price => mealPrice += price)
+      })
+      order.mealPrice = mealPrice
+      console.log(order.mealPrice)
+    },
   },
   state: {
     orderedSeats: [],
@@ -101,6 +154,8 @@ export default {
     },
     priceList: [],
     mealByDay: [],
+    orders: [],
+    defaultMealPriceArray: [],
   },
   getters: {
     getOrderedSeats(state) {
@@ -108,6 +163,9 @@ export default {
     },
     getSeatsInCurrentOrder(state) {
       return state.seatsInCurrentOrder
+    },
+    getProfile: state => id => {
+      return state.orders.find(order => order.id == id)
     },
     getChdRange(state) {
       return state.chdRange
@@ -135,6 +193,9 @@ export default {
     },
     getMealByDay: state => day => {
       return state.mealByDay[day - 1]
-    }
+    },
+    getDefaultMealPriceArray(state) {
+      return state.defaultMealPriceArray
+    },
   },
 }
