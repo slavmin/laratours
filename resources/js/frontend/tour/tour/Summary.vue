@@ -43,6 +43,9 @@
               /> 
             </th>
             <th>
+              Нетто
+            </th>
+            <th>
               Комиссия, %
               <v-text-field
                 v-model="commissionToAll"
@@ -61,7 +64,7 @@
             <tr v-if="getTour.transport.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Транспорт
               </td>
@@ -105,25 +108,23 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="transport.commission"
-                  name="commission"
-                  @input="correctPrice"
-                />
+                {{ transport.correctedPricePerSeat }}  
               </td>
               <td>
                 <v-text-field
-                  v-model="transport.correctedPricePerSeat"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
+                  v-model="transport.commission"
+                  name="commission"
+                  @input="commissPrice"
                 />
+              </td>
+              <td>
+                {{ transport.commissionPricePerSeat }}
               </td>
             </tr>
             <tr v-if="getTour.museum.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Экскурсии
               </td>
@@ -153,6 +154,9 @@
                 />
               </td>
               <td>
+                {{ event.correctedPrice }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="event.commission"
                   name="commision"
@@ -160,18 +164,13 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="event.correctedPrice"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
-                />
+                {{ event.commissionPrice }}
               </td>
             </tr>
             <tr v-if="getTour.hotel.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Размещение
               </td>
@@ -204,6 +203,9 @@
                 />
               </td>
               <td>
+                {{ hotel.correctedPrice }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="hotel.commission"
                   name="commision"
@@ -211,18 +213,13 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="hotel.correctedPrice"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
-                />
+                {{ hotel.commissionPrice }}
               </td>
             </tr>
             <tr v-if="getTour.meal.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Питание
               </td>
@@ -266,6 +263,9 @@
                 />
               </td>
               <td>
+                {{ meal.correctedPrice }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="meal.commission"
                   name="commision"
@@ -273,18 +273,13 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="meal.correctedPrice"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
-                />
+                {{ meal.commissionPrice }}
               </td>
             </tr>
             <tr v-if="getTour.guide.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Гиды
               </td>
@@ -324,6 +319,9 @@
                 />
               </td>
               <td>
+                {{ guide.correctedPricePerSeat }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="guide.commission"
                   name="commision"
@@ -331,18 +329,13 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="guide.correctedPricePerSeat"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
-                />
+                {{ guide.commissionPricePerSeat }}
               </td>
             </tr>
             <tr v-if="getTour.attendant.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Сопровождающие
               </td>
@@ -379,6 +372,9 @@
                 />
               </td>
               <td>
+                {{ attendant.correctedPricePerSeat }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="attendant.commission"
                   name="commision"
@@ -386,18 +382,13 @@
                 />
               </td>
               <td>
-                <v-text-field
-                  v-model="attendant.correctedPricePerSeat"
-                  class="corrected-price"
-                  name="corrected"
-                  disabled
-                />
+                {{ attendant.commissionPricePerSeat }}
               </td>
             </tr>
             <tr v-if="getTour.customPrice.length != 0">
               <td
                 class="text-xs-center" 
-                colspan="5"
+                colspan="6"
               >
                 Доп.услуги
               </td>
@@ -434,6 +425,9 @@
                 />
               </td>
               <td>
+                {{ price.correctedPricePerSeat }}
+              </td>
+              <td>
                 <v-text-field
                   v-model="price.commission"
                   name="commission"
@@ -441,7 +435,7 @@
                 />
               </td>
               <td>
-                {{ price.correctedPricePerSeat }}
+                {{ price.commissionPricePerSeat }}
               </td>
             </tr>
             <tr>
@@ -455,17 +449,20 @@
                 {{ getTour.totalPrice }}
               </td>
               <td>
-                <span class="subheading">
+                <span class="body-1 grey--text">
                   Наценка средняя: {{ getAverageCorrection }}%
                 </span>
               </td>
               <td>
-                <span class="subheading">
+                {{ getTour.correctedPrice }}
+              </td>
+              <td>
+                <span class="body-1 grey--text">
                   Комиссия средняя: {{ getAverageCommission }}%
                 </span>
               </td>
               <td>
-                {{ getTour.correctedPrice }}
+                {{ getTour.commissionPrice }}
               </td>
             </tr>
           </tbody>
@@ -548,78 +545,81 @@
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Комиссия {{ getAverageCommission }}%: 
+                  Общая стоимость: 
                 </span>
-                {{ (price.standardPrice * getAverageCommission / 100).toFixed(2) }}
+                {{ price.commissionStandardPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Комиссия: 
+                </span>
+                {{ price.commissionStandardPrice - price.standardPrice }}
+                <br>
+                <span class="body-1 grey--text">
+                  Оплата оператору: 
                 </span>
                 {{ price.standardPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
-                </span>
-                {{ (price.standardPrice
-                  - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
-                <br>
+                  Затраты:
+                </span> 
+                {{ price.nettoStandardPrice }}
+                <v-divider />
                 <span class="body-1 grey--text">
                   Прибыль оператора: 
                 </span>
-                {{ ((price.standardPrice
-                  - (price.standardPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoStandardPrice).toFixed(2) }}
-                <br>
-                Затраты: {{ price.nettoStandardPrice }}
+                {{ price.standardPrice - price.nettoStandardPrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Комиссия {{ getAverageCommission }}%: 
+                  Общая стоимость: 
                 </span>
-                {{ (price.singlePrice * getAverageCommission / 100).toFixed(2) }}
+                {{ price.commissionSinglePrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Комиссия: 
+                </span>
+                {{ price.commissionSinglePrice - price.singlePrice }}
+                <br>
+                <span class="body-1 grey--text">
+                  Оплата оператору: 
                 </span>
                 {{ price.singlePrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
-                </span>
-                {{ (price.singlePrice
-                  - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
-                <br>
+                  Затраты:
+                </span> 
+                {{ price.nettoSinglePrice }}
+                <v-divider />
                 <span class="body-1 grey--text">
                   Прибыль оператора: 
                 </span>
-                {{ ((price.singlePrice
-                  - (price.singlePrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoSinglePrice).toFixed(2) }}
-                <br>
-                Затраты: {{ price.nettoSinglePrice }}
+                {{ price.singlePrice - price.nettoSinglePrice }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Комиссия {{ getAverageCommission }}%: 
+                  Общая стоимость: 
                 </span>
-                {{ (price.addPrice * getAverageCommission / 100).toFixed(2) }}
+                {{ price.commissionExtraPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Комиссия: 
+                </span>
+                {{ price.commissionExtraPrice - price.addPrice }}
+                <br>
+                <span class="body-1 grey--text">
+                  Оплата оператору: 
                 </span>
                 {{ price.addPrice }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
-                </span>
-                {{ (price.addPrice
-                  - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) }}
-                <br>
+                  Затраты:
+                </span> 
+                {{ price.nettoAddPrice }}
+                <v-divider />
                 <span class="body-1 grey--text">
                   Прибыль оператора: 
                 </span>
-                {{ ((price.addPrice
-                  - (price.addPrice * getAverageCommission / 100).toFixed(2)).toFixed(2) - price.nettoAddPrice).toFixed(2) }}
-                <br>
-                Затраты: {{ price.nettoAddPrice }}
+                {{ price.addPrice - price.nettoAddPrice }}
               </td>
               <td>
                 <v-checkbox 
@@ -743,6 +743,8 @@ export default {
       handler(value) {
         this.updateTourTotalPrice()
         this.updateTourCorrectedPrice()
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
       },
       deep: true,
     },
@@ -750,6 +752,8 @@ export default {
       handler(value) {
         this.updateCurrentCustomerType(value)
         this.updateTourCorrectedPrice()
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
       },
     },
   },
@@ -758,6 +762,8 @@ export default {
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
+    this.updateCommissionPriceValues()
+    this.updateTourCommissionPrice()
   },
   methods: {
     ...mapActions([
@@ -770,6 +776,7 @@ export default {
       'generateTourCalcCustomerTypes',
       'updateCommissiontoAll',
       'updateCommissionPriceValues',
+      'updateTourCommissionPrice',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -778,18 +785,26 @@ export default {
       this.updateCorrectionToAll(this.correctionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
-    },
-    correctPrice() {
-      this.updateCorrectedPriceValues()
-      this.updateTourCorrectedPrice()
-    },
-    correctCommissionPrice() {
       this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
     },
     inputCommission() {
       this.updateCommissiontoAll(this.commissionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
+      this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
+    },
+    correctPrice() {
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+      this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
+    },
+    commissPrice() {
+      this.updateTourCorrectedPrice()
+      this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
     },
     customerName(event) {
       const data = JSON.parse(event.obj.extra)
@@ -815,16 +830,19 @@ export default {
     calculatePriceForEveryCustomer() {
       let prevCustomer = this.currentCustomerType
       this.getCurrentTourCustomers.forEach((customer) => {
+        console.log(customer.name)
         setTimeout(() => { 
           this.currentCustomerType = customer.id
           this.updateCorrectedPriceValues()
-        }, 50)
+          this.updateTourCommissionPrice()
+        }, 300)
       })
       setTimeout(() => {
         this.currentCustomerType = prevCustomer
         this.updateCurrentCustomerType(this.currentCustomerType)
         this.updateCorrectedPriceValues()
-      }, 500)
+        this.updateTourCommissionPrice()
+      }, 5000)
     },
     customerChanged() {
       this.updateCurrentCustomerType(this.currentCustomerType)
@@ -851,9 +869,10 @@ export default {
   margin: 0 auto;
   td,
   th {
-    border: 1px solid gray;
+    border: 1px solid #e8e8e8;
     padding: 16px;
     font-size: 24px;
+    font-weight: 250;
   }
   td {
     text-align: left

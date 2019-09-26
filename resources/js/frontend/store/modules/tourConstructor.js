@@ -86,6 +86,9 @@ export default {
     async updateTourCorrectedPrice({ commit }) {
       commit('calculateTourCorrectedPrice')
     },
+    async updateTourCommissionPrice({ commit }) {
+      commit('calculateTourCommissionPrice')
+    },
     async updateCorrectionToAll({ commit }, correction) {
       commit('setCorrectionToAll', correction)
     },
@@ -178,7 +181,9 @@ export default {
               correction: 0,
               commission: 0,
               correctedPrice: 0,
+              commissionPrice: 0,
               pricePerSeat: parseInt(obj.price / state.tour.qnt),
+              commissionPricePerSeat: 0,
               correctedPricePerSeat: 0,
             })
           }
@@ -240,6 +245,7 @@ export default {
               correction: 0,
               commission: 0,
               correctedPrice: 0, 
+              commissionPrice: 0,
             })
           }
         })
@@ -301,6 +307,7 @@ export default {
               correction: 0,
               commission: 0,
               correctedPrice: 0, 
+              commissionPrice: 0,
             })
           }
         })
@@ -360,6 +367,7 @@ export default {
               correction: 0,
               commission: 0,
               correctedPrice: 0, 
+              commissionPrice: 0,
             })
           }
         })
@@ -418,7 +426,10 @@ export default {
             correction: 0,
             commission: 0,
             correctedPrice: 0,
-            pricePerSeat: parseInt(guide.totalPrice / state.tour.qnt)
+            commissionPrice: 0,
+            pricePerSeat: parseInt(guide.totalPrice / state.tour.qnt),
+            correctedPricePerSeat: 0,
+            commissionPricePerSeat: 0,
           })
         }
       })
@@ -466,7 +477,10 @@ export default {
             correction: 0,
             commission: 0,
             correctedPrice: 0,
-            pricePerSeat: parseInt(attendant.totalPrice / state.tour.qnt)
+            commissionPrice: 0,
+            pricePerSeat: parseInt(attendant.totalPrice / state.tour.qnt),
+            correctedPricePerSeat: 0,
+            commissionPricePerSeat: 0,
           })
         }
       })
@@ -477,7 +491,10 @@ export default {
         correction: 0,
         commission: 0,
         correctedPrice: 0,
-        pricePerSeat: parseInt(price.value / state.tour.qnt)
+        commissionPrice: 0,
+        pricePerSeat: parseInt(price.value / state.tour.qnt),
+        correctedPricePerSeat: 0,
+        commissionPricePerSeat: 0,
       })
     },
     setMuseumInEditMode: (state, updData) => {
@@ -639,6 +656,96 @@ export default {
       calcCustomer.nettoAddPrice = netto + nettoExtraHotel
       state.tour.correctedPrice = summ + standardHotel
     },
+    calculateTourCommissionPrice(state) {
+      let summ = 0
+      let correctedStandardHotel = 0
+      let commissionStandardHotel = 0
+      let correctedSingleHotel = 0
+      let commissionSingleHotel = 0
+      let correctedExtraHotel = 0
+      let commissionExtraHotel = 0
+      state.tour.transport.forEach((transport) => {
+        summ += transport.commissionPricePerSeat
+      })
+      state.tour.museum.forEach((museum) => {
+        summ += museum.commissionPrice
+      })
+      state.tour.meal.forEach((meal) => {
+        summ += meal.commissionPrice
+      })
+      state.tour.guide.forEach((guide) => {
+        summ += guide.commissionPricePerSeat
+      })
+      state.tour.attendant.forEach((attendant) => {
+        summ += attendant.commissionPricePerSeat
+      })
+      state.tour.customPrice.forEach((customPrice) => {
+        summ += customPrice.commissionPricePerSeat
+      })
+      state.tour.hotel.forEach((hotel) => {
+        // ADL prices
+        const data = JSON.parse(hotel.obj.extra)
+        const stdPrice = parseInt(data.priceList.adl.std)
+        correctedStandardHotel += parseInt(
+          (stdPrice * hotel.obj.day)
+          +
+          (stdPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        commissionStandardHotel += correctedStandardHotel 
+          + (correctedStandardHotel * hotel.commission / 100)
+        const singlePrice = parseInt(data.priceList.adl.sngl)
+        correctedSingleHotel += parseInt(
+          (singlePrice * hotel.obj.day)
+          +
+          (singlePrice * hotel.obj.day * hotel.correction) / 100
+        )
+        commissionSingleHotel += correctedSingleHotel
+          + (correctedSingleHotel * hotel.commission / 100)
+        const extraPrice = parseInt(data.priceList.adl.extra)
+        correctedExtraHotel += parseInt(
+          (extraPrice * hotel.obj.day)
+          + 
+          (extraPrice * hotel.obj.day * hotel.correction) / 100
+        )
+        commissionExtraHotel += correctedExtraHotel
+          + (correctedExtraHotel * hotel.commission / 100)
+        // CHD prices
+        let isChd = false
+        let currentPrice = state.tour.calc.priceList.find((item) => {
+          return item.id == state.tour.calc.currentCustomer
+        })
+        isChd = currentPrice.isChd
+        if (isChd) {
+          correctedStandardHotel = 0
+          commissionStandardHotel = 0
+          correctedExtraHotel = 0
+          commissionExtraHotel = 0
+          const stdPrice = parseInt(data.priceList.chd.std)
+          correctedStandardHotel += parseInt(
+            (stdPrice * hotel.obj.day)
+            +
+            (stdPrice * hotel.obj.day * hotel.correction) / 100
+          )
+          commissionStandardHotel = correctedStandardHotel
+            + (correctedStandardHotel * hotel.commission / 100)
+          const extraPrice = parseInt(data.priceList.chd.extra)
+          correctedExtraHotel += parseInt(
+            (extraPrice * hotel.obj.day)
+            + 
+            (extraPrice * hotel.obj.day * hotel.correction) / 100
+          )
+          commissionExtraHotel = correctedExtraHotel
+            + (correctedExtraHotel * hotel.commssion / 100)
+        }
+      })
+      let calcCustomer = state.tour.calc.priceList.find((item) => {
+        return item.id == state.tour.calc.currentCustomer
+      })
+      calcCustomer.commissionStandardPrice = summ + commissionStandardHotel
+      calcCustomer.commissionSinglePrice = summ + commissionSingleHotel
+      calcCustomer.commissionExtraPrice = summ + commissionExtraHotel
+      state.tour.commissionPrice = summ + commissionStandardHotel
+    },
     setCorrectionToAll: (state, correction) => {
       if (correction == NaN || correction == '') {
         correction = 0
@@ -775,6 +882,90 @@ export default {
         price.commission = commission
       })
     },
+    setCommissionPriceValues(state) {
+      // Add price-fields to Transport
+      state.tour.transport.forEach((transport) => {
+        transport.commissionPricePerSeat = 0
+        if (transport.commission > 0) {
+          transport.commissionPricePerSeat = 
+          parseInt(
+            (transport.correctedPricePerSeat + 
+              transport.correctedPricePerSeat * parseInt(transport.commission) / 100)
+          )
+        }
+        else {
+          transport.commissionPricePerSeat = parseInt(transport.correctedPricePerSeat)
+        }
+      })
+      // Add price-fields to Museum
+      state.tour.museum.forEach((museum) => {
+        // Search price by current customer Id
+        let price = JSON.parse(museum.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
+        // Calculate corrected price
+        museum.commissionPrice = 0
+        if (museum.commission > 0) {
+          museum.commissionPrice = 
+            museum.correctedPrice 
+            + (museum.correctedPrice * museum.commission / 100) 
+        } else {
+          museum.commissionPrice = museum.correctedPrice
+        }
+      })
+      // Add price-fields to Hotel
+      state.tour.hotel.forEach((hotel) => {
+        if (hotel.commission > 0) {
+          hotel.commissionPrice = 
+            hotel.correctedPrice + 
+            (hotel.correctedPrice * hotel.commission / 100) 
+        } else {
+          hotel.commissionPrice = hotel.correctedPrice
+        }
+      })
+      // Add price-fields to Meal
+      state.tour.meal.forEach((meal) => {
+        if (meal.commission > 0) {
+          meal.commissionPrice = 
+            meal.correctedPrice + 
+            (meal.correctedPrice * meal.commission / 100) 
+        } else {
+          meal.commissionPrice = meal.correctedPrice
+        }
+      })
+      // Add price-fields to Guide
+      state.tour.guide.forEach((guide) => {
+        if (guide.commission > 0) {
+          guide.commissionPricePerSeat = 
+            guide.correctedPricePerSeat + 
+            (guide.correctedPricePerSeat * guide.commission / 100) 
+        } else {
+          guide.commissionPricePerSeat = guide.correctedPricePerSeat
+        }
+      })
+      // Add price-fields to Attendant
+      state.tour.attendant.forEach((attendant) => {
+        if (attendant.commission > 0) {
+          attendant.commissionPricePerSeat = 
+            attendant.correctedPricePerSeat + 
+            (attendant.correctedPricePerSeat * attendant.commission / 100) 
+        } else {
+          attendant.commissionPricePerSeat = attendant.correctedPricePerSeat
+        }
+      })
+      // Add price-fields to Custom Price (Services)
+      state.tour.customPrice.forEach((price) => {
+        if (price.commission > 0) {
+          price.commissionPricePerSeat = 
+          price.correctedPricePerSeat + 
+            (price.correctedPricePerSeat * price.commission / 100) 
+        } else {
+          price.commissionPricePerSeat = price.correctedPricePerSeat
+        }
+      })
+    },
     setEditTour(state, tour) {
       state.tour = JSON.parse(tour.extra)
       state.editMode = true
@@ -830,6 +1021,7 @@ export default {
           currentCustomer: 0,
           priceList: [],
         },
+        commissionPrice: 0,
       }
     }
   },
@@ -865,6 +1057,8 @@ export default {
         currentCustomer: 0,
         priceList: [],
       },
+      correctedPrice: 0,
+      commissionPrice: 0,
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',
@@ -1095,6 +1289,6 @@ export default {
         }
       })
       return parseFloat(summ / count).toFixed(2)
-    }
+    },
   }
 }
