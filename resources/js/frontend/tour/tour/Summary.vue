@@ -743,7 +743,7 @@ export default {
       handler(value) {
         this.updateTourTotalPrice()
         this.updateTourCorrectedPrice()
-        this.updateCommissionPriceValues()
+        // this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
       },
       deep: true,
@@ -763,8 +763,8 @@ export default {
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
     this.updateCommissionPriceValues()
-    this.updateTourCommissionPrice()
-    this.calculatePriceForEveryCustomer()
+    // this.updateTourCommissionPrice()
+    // this.calculatePriceForEveryCustomer()
   },
   methods: {
     ...mapActions([
