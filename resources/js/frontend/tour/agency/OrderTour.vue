@@ -146,6 +146,10 @@
         </v-tabs>
       </v-card-text>
       <v-divider />
+      <div class="subheading text-xs-right mr-3">
+        Цена заказа: {{ getOrderPrice }}
+      </div>
+      <v-divider />
       <v-card-actions>
         <v-spacer />
         <v-btn 
@@ -158,17 +162,20 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <!-- <Total /> -->
   </v-container>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import OrderForm from './OrderForm'
 import OrderHint from './OrderHint'
+// import Total from './Total'
 export default {
   name: 'OrderTour',
   components: {
     OrderForm,
     OrderHint,
+    // Total,
   },
   props: {
     tour: {
@@ -204,6 +211,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'getOrderPrice',
+    ]),
     chat: function() {
       if (this.comment != '') {
         let date = new Date().toISOString().substr(0, 10)

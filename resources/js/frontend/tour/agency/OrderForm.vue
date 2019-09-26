@@ -22,6 +22,7 @@
           :required="isRequired"
         />
         <v-text-field
+          v-model="order.email"
           label="Email"
           :rules="[v => !!v || 'Укажите email']"
           :name="isRequired ? 'customer[' + id + '][email]' : ''"
@@ -76,6 +77,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="date"
+                clearable
                 label="Дата рождения"
                 :name="isRequired ? 'customer[' + id + '][dob]' : ''"
                 prepend-icon="event"
@@ -93,18 +95,33 @@
               @change="save"
             />
           </v-menu>
+        </v-layout>
+        <v-layout 
+          row 
+          wrap
+        >
           <v-checkbox 
             v-model="manualPens"
             label="Пенсионер"
             color="green"
           />
+          <v-checkbox 
+            v-model="isForeigner"
+            label="Иностранец"
+            color="green"
+          />  
+          <v-checkbox 
+            v-model="isSinglePlace"
+            label="Single-размещение"
+            color="green"
+          />  
         </v-layout>
         <div>
           Возраст: {{ age }}
           <br>
-          Пенсионер: {{ isPens }}
+          Тип туриста: {{ profileCustomerType }}
           <br>
-          Ребёнок: {{ isChd }}
+          Тип размещения: {{ profilePlace }}
         </div>
         <v-text-field
           v-model="order.address"
@@ -166,13 +183,12 @@
       <v-spacer />
       <v-flex>
         <div
-          v-if="age > 0" 
           class="subheading"
         >
           <span class="grey--text">
             Цена:
           </span> 
-          {{ getPrice() }}
+          {{ profilePrice }}
         </div>
         <input 
           class="price"
@@ -182,7 +198,24 @@
         >
       </v-flex>
     </v-layout>
-    Питание: {{ profile.mealPrice }}
+    <!-- <div
+      v-if="profile"
+    >
+      Питание: {{ profile.mealPrice }}
+    </div> -->
+    <v-layout 
+      row 
+      wrap
+    >
+      <v-spacer />
+      <v-btn 
+        flat 
+        color="red"
+        @click="resetForm"
+      >
+        Очистить
+      </v-btn>
+    </v-layout>
   </div>
 </template>
 
@@ -192,7 +225,7 @@ import moment from 'moment'
 import BusScheme from './BusScheme'
 import ChangeMeal from './ChangeMeal'
 export default {
-  name: 'OrderFrom',
+  name: 'OrderForm',
   components: {
     BusScheme,
     ChangeMeal,
@@ -222,7 +255,11 @@ export default {
   data() {
     return {
       order: {
+        name: '',
         gender: '',
+        email: '',
+        passport: '',
+        address: '',
       },
       choosenSeat: [],
       date: null,
@@ -233,13 +270,15 @@ export default {
       ],
       meal: '',
       meals: ['Завтраки', 'Полупансион', 'Полный пансион'],
-      age: 0,
+      age: NaN,
       priceList: [],
       pensRange: {
         male: 55,
         female: 50,
       },
       manualPens: false,
+      isForeigner: false,
+      isSinglePlace: false,
       showChangeMeal: false,
     }
   },
@@ -248,6 +287,7 @@ export default {
       'getChdRange',
       'getPensRange',  
       'getMealByDay',
+      'getProfilePrice'
     ]),
     profile: function() {
       return this.$store.getters.getProfile(this.id)
@@ -288,11 +328,66 @@ export default {
       }
       return false
     },
-
+    profileCustomerType: function() {
+      let type = ''
+      if (!this.age) return 'age = nan'
+      if (this.isForeigner) {
+        type = 'FRGN'
+      } else if (this.isChd)  {
+        type = 'CHD'
+      } else if (this.isPens) {
+        type = 'PENS'
+      } else {
+        type = 'ADL'
+      }
+      return type
+    },
+    profilePlace: function() {
+      let place = 'STD'
+      if (this.id == (2 + this.roomId * 3)) place = 'EXTRA'
+      if (this.isSinglePlace) place = 'SNGL'
+      return place
+    },
+    profilePrice: function() {
+      return this.$store.getters.getProfilePrice(this.id)
+    },
   },
   watch: {
     menu (val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    },
+    age() {
+      this.updateProfilePrice({
+        profileId: this.id,
+        profileCustomerType: this.profileCustomerType,
+        age: this.age,
+        profilePlace: this.profilePlace,
+        name: this.order.name,
+      })
+      this.updateOrderPrice()
+    },
+    profileCustomerType() {
+      this.updateProfilePrice({
+        profileId: this.id,
+        profileCustomerType: this.profileCustomerType,
+        age: this.age,
+        profilePlace: this.profilePlace,
+        name: this.order.name,
+      })
+      this.updateOrderPrice()
+    },
+    date(val) {
+      if (!val) this.age = NaN
+    },
+    profilePlace() {
+      this.updateProfilePrice({
+        profileId: this.id,
+        profileCustomerType: this.profileCustomerType,
+        age: this.age,
+        profilePlace: this.profilePlace,
+        name: this.order.name,
+      })
+      this.updateOrderPrice()
     }
   },
   mounted() {
@@ -311,48 +406,40 @@ export default {
       'updatePriceList',
       'updateOrderTotalPrice',
       'updateOrderProfiles',
+      'updateProfilePrice',
+      'updateOrderPrice',
+      'resetProfile',
+      'updateResetProfileFlag',
     ]),
     ...mapGetters([
       'getChdPrice',
       'getPensPrice',
     ]),
     chooseSeat() {
-      console.log(this.transport)
     },
     onChoosen(seat) {
       this.choosenSeat = seat
     },
     save(date) {
       this.$refs.menu.save(date)
-      console.log('calc age before: ', this.age)
       this.age = moment().diff(date, 'years')
-      console.log('calc age after : ', this.age)
     },
     getPrice() {
-      let defaultPrice = true
-      // CHD price
-      if (this.isChd) {
-        const price = this.$store.getters.getChdPrice(this.age)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
-        defaultPrice = false
-        return (price.standardPrice + this.getChoosenMealPrice)
-      }
-      // Pens price
-      if (this.isPens) {
-        const price = this.getPensPrice()
-        // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
-        defaultPrice = false
-        return (price.standardPrice + this.getChoosenMealPrice)
-      }
-      // Default. ADL price
-      if (defaultPrice) {
-        const price = this.priceList.find(item => !item.isPens && !item.isChd)
-        // If additional form (extra in hotel)
-        if (this.id == (2 + this.roomId * 3)) return (price.addPrice + this.getChoosenMealPrice)
-        return (price.standardPrice + this.getChoosenMealPrice)
-      }
+      
     },
+    resetForm() {
+      this.order = {
+        name: '',
+        gender: '',
+        email: '',
+        passport: '',
+        address: '',
+      }
+      this.manualPens = false
+      this.isForeigner = false
+      this.date = undefined
+      this.resetProfile(this.id)
+    }
   }
 }
 </script>

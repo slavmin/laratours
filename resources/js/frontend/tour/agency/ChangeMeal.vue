@@ -15,6 +15,7 @@
       <MealForm
         :profile-id="profileId"
         :day="day"
+        :last-day="day == mealCount.length"
       />
     </v-flex>
   </v-layout>
@@ -62,10 +63,6 @@ export default {
       })
       return result
     }
-  },
-  mounted() {
-    console.log('form id: ', this.profileId)
-    console.log(JSON.parse(this.tour.extra))
   },
   methods: {
     ...mapActions([]),

@@ -7,7 +7,6 @@
     return-object
     single-line
     class="body-1"
-    @change="chooseMeal"
   />
 </template>
 <script>
@@ -33,10 +32,29 @@ export default {
       type: Number,
       default: 0
     },
+    lastDay: {
+      type: Boolean,
+      default: false,
+    },
+    lastMeal: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
       choosenMeal: 0,
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'getMealCount',
+    ]),
+    resetProfileFlag: function() {
+      return this.$store.getters.getResetProfileFlag(this.profileId)
+    },
+    isLastMeal: function() {
+      return this.lastDay && this.lastMeal
     }
   },
   watch: {
@@ -48,6 +66,15 @@ export default {
         day: this.day,
         index: this.index,
       })
+      this.updateOrderPrice()
+    },
+    resetProfileFlag: function(val) {
+      if (val) {
+        this.choosenMeal = this.meal.find((item) => {
+          return item.default
+        })
+        if (this.isLastMeal) this.updateResetProfileFlag(this.profileId)
+      }
     }
   },
   mounted() {
@@ -58,10 +85,9 @@ export default {
   methods: {
     ...mapActions([
       'updateProfileMeal',
+      'updateOrderPrice',
+      'updateResetProfileFlag',
     ]),
-    chooseMeal() {
-      console.log(this.choosenMeal)
-    }
   }
 }
 </script>

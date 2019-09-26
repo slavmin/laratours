@@ -9,6 +9,8 @@
           :meal="meal"
           :day="day"
           :index="i"
+          :last-day="lastDay"
+          :last-meal="i == mealByDay.length - 1"
           :profile-id="profileId"
         />
       </div>
@@ -31,6 +33,10 @@ export default {
     profileId: {
       type: Number,
       default: 0
+    },
+    lastDay: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {

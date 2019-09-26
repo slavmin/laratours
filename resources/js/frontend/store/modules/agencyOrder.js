@@ -27,6 +27,18 @@ export default {
     async updateProfileMeal({ commit }, data) {
       commit('setProfileMeal', data)
     },
+    async updateProfilePrice({ commit }, data) {
+      commit('setProfilePrice', data)
+    },
+    async updateOrderPrice({ commit }) {
+      commit('setOrderPrice')
+    },
+    async resetProfile({ commit }, profileId) {
+      commit('clearProfile', profileId)
+    },
+    async updateResetProfileFlag({ commit }, profileId) {
+      commit('toggleProfileFlag', profileId)
+    },
   },
   mutations: {
     setOrderedSeats(state, seats) {
@@ -42,11 +54,14 @@ export default {
       }
     },
     setOrderProfiles(state, id) {
-      state.orders.push({
+      state.profiles.push({
         id: id,
+        name: '',
         price: 0,
         mealPrice: 0,
         mealPriceArray: [],
+        priceWithoutMeal: 0,
+        resetProfile: 0,
       })
     },
     setPriceList(state, priceList) {
@@ -109,17 +124,22 @@ export default {
       })
       state.mealByDay = result
       let defaultMealPriceArray = []
+      state.mealCount = 0
       state.mealByDay.forEach((mealTime, index) => {
         defaultMealPriceArray[index] = []
         mealTime.forEach((mealMenu) => {
           let meal = mealMenu.find(menu => menu.default)
           let price = meal.price
           defaultMealPriceArray[index].push(price)
+          state.mealCount += 1
         })
       })
       state.defaultMealPriceArray = defaultMealPriceArray
-      console.log(state)
-      state.orders.forEach((order) => {
+      state.defaultMealPrice = 0
+      state.defaultMealPriceArray.forEach((day) => {
+        day.forEach(price => state.defaultMealPrice += price)
+      })
+      state.profiles.forEach((order) => {
         defaultMealPriceArray.forEach((day) => {
           let tmp = []
           day.forEach((price) => {
@@ -127,19 +147,122 @@ export default {
           })
           order.mealPriceArray.push(tmp)
         })
-        console.log(order)
       })
     },
     setProfileMeal(state, data) {
-      let order = state.orders.find(order => order.id == data.profileId)
-      order.mealPriceArray[data.day - 1][data.index] = data.newMeal.price
+      let profile = state.profiles.find(profile => profile.id == data.profileId)
+      profile.mealPriceArray[data.day - 1][data.index] = data.newMeal.price
       let mealPrice = 0
-      order.mealPriceArray.forEach((day) => {
+      profile.mealPriceArray.forEach((day) => {
         day.forEach(price => mealPrice += price)
       })
-      order.mealPrice = mealPrice
-      console.log(order.mealPrice)
+      profile.mealPrice = mealPrice
+      if (profile.name != '') {
+        profile.price = profile.priceWithoutMeal + profile.mealPrice
+      }
     },
+    setProfilePrice(state, data) {
+      const pricelist = state.priceList
+      let profile = state.profiles.find(profile => profile.id == data.profileId)
+      profile.name = data.name
+      let profilePrice = 0
+      switch (data.profileCustomerType) {
+        case 'CHD':
+          let price = pricelist.find((price) => {
+            let age = JSON.parse(price.age)
+            if (age && (age.ageFrom <= data.age && data.age < age.ageTo)) {
+              return price
+            }
+          })
+          switch (data.profilePlace) {
+            case 'EXTRA':
+              profilePrice = price.addPrice
+              break
+            case 'SNGL':
+              profilePrice = price.singlePrice
+              break
+            case 'STD':
+              profilePrice = price.standardPrice
+              break
+            default:
+              console.log('error')
+          }
+          break
+        case 'PENS':
+          price = state.priceList.find((price) => price.age && JSON.parse(price.age).isPens)
+          switch (data.profilePlace) {
+            case 'EXTRA':
+              profilePrice = price.addPrice
+              break
+            case 'SNGL':
+              profilePrice = price.singlePrice
+              break
+            case 'STD':
+              profilePrice = price.standardPrice
+              break
+            default:
+              console.log('error')
+          }
+          break
+        case 'FRGN':
+          price = state.priceList.find(price => price.name.includes('Иностр'))
+          switch (data.profilePlace) {
+            case 'EXTRA':
+              profilePrice = price.addPrice
+              break
+            case 'SNGL':
+              profilePrice = price.singlePrice
+              break
+            case 'STD':
+                profilePrice = price.standardPrice
+              break
+            default:
+              console.log('error')
+          }
+          break
+        case 'ADL':
+            price = state.priceList.find(price => price.name.includes('Взросл'))
+            switch (data.profilePlace) {
+              case 'EXTRA':
+                profilePrice = price.addPrice
+                break
+              case 'SNGL':
+                profilePrice = price.singlePrice
+                break
+              case 'STD':
+                profilePrice = price.standardPrice
+                break
+              default:
+                console.log('error')
+            }
+          break
+        default:
+          console.log('error')
+      }
+      if (profile.name != '') {
+        profile.price = profilePrice
+      }
+      profile.priceWithoutMeal = 
+        profilePrice - state.defaultMealPrice 
+    },
+    setOrderPrice(state) {
+      let result = 0
+      state.profiles.forEach(profile => result += profile.price)
+      state.orderPrice = result
+    },
+    clearProfile(state, profileId) {
+      let profile = state.profiles.find(profile => profile.id == profileId)
+      profile.price = 0
+      profile.priceWithoutMeal = 0
+      profile.mealPriceArray = state.defaultMealPriceArray
+      profile.mealPrice = state.defaultMealPrice
+      profile.resetProfile = true
+    },
+    toggleProfileFlag(state, profileId) {
+      let profile = state.profiles.find(profile => profile.id == profileId)
+      profile.resetProfile = !profile.resetProfile
+
+    }
   },
   state: {
     orderedSeats: [],
@@ -154,8 +277,11 @@ export default {
     },
     priceList: [],
     mealByDay: [],
-    orders: [],
+    profiles: [],
     defaultMealPriceArray: [],
+    defaultMealPrice: 0,
+    orderPrice: 0,
+    mealCount: 0,
   },
   getters: {
     getOrderedSeats(state) {
@@ -165,7 +291,7 @@ export default {
       return state.seatsInCurrentOrder
     },
     getProfile: state => id => {
-      return state.orders.find(order => order.id == id)
+      return state.profiles.find(profile => profile.id == id)
     },
     getChdRange(state) {
       return state.chdRange
@@ -197,5 +323,20 @@ export default {
     getDefaultMealPriceArray(state) {
       return state.defaultMealPriceArray
     },
+    getProfilePrice: state => profileId => {
+      const profile = state.profiles.find(profile => profile.id == profileId)
+      if (profile) {
+        return profile.price
+      }
+    },
+    getOrderPrice(state) {
+      return state.orderPrice
+    },
+    getResetProfileFlag: state => profileId => {
+      return state.profiles.find(profile => profile.id == profileId).resetProfile
+    },
+    getMealCount(state) {
+      return state.mealCount
+    }
   },
 }
