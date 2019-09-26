@@ -735,7 +735,7 @@ export default {
             (extraPrice * hotel.obj.day * hotel.correction) / 100
           )
           commissionExtraHotel = correctedExtraHotel
-            + (correctedExtraHotel * hotel.commssion / 100)
+            + (correctedExtraHotel * hotel.commission / 100)
         }
       })
       let calcCustomer = state.tour.calc.priceList.find((item) => {
