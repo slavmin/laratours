@@ -90,6 +90,8 @@ class OrderController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
             'total_price' => $request->get('total_price'),
+            'commission' => $request->get('commission'),
+            'total_paid' => $request->get('total_paid'),
         ]);
 
         $tour_order = TourOrder::findOrFail($tour_order_id);
