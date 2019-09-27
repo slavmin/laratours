@@ -122,6 +122,11 @@
                       name="operator_id"
                       :value="tour.team_id"
                     >
+                    <input 
+                      type="hidden"
+                      name="total_price"
+                      :value="getOrderPrice"
+                    >
                   </v-card-text>
                 </v-card>
               </v-tab-item>

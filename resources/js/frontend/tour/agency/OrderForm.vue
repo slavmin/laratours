@@ -166,7 +166,7 @@
       <v-flex xs6>
         <div>
           <BusScheme 
-            :object="transport"
+            :transport="transport"
             :scheme-id="id"
             @choosen="onChoosen"
           />
@@ -194,15 +194,10 @@
           class="price"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][price]' : ''"
-          :value="getPrice()"
+          :value="profilePrice"
         >
       </v-flex>
     </v-layout>
-    <!-- <div
-      v-if="profile"
-    >
-      Питание: {{ profile.mealPrice }}
-    </div> -->
     <v-layout 
       row 
       wrap
@@ -293,7 +288,7 @@ export default {
       return this.$store.getters.getProfile(this.id)
     },
     transport: function() {
-      return JSON.parse(this.tour.extra).transport[0].item
+      return JSON.parse(this.tour.extra).transport[0]
     },
     id: function() {
       return this.profileId + (this.roomId * 3)

@@ -739,15 +739,15 @@ export default {
     },
   },
   watch: {
-    getTour: {
-      handler(value) {
-        this.updateTourTotalPrice()
-        this.updateTourCorrectedPrice()
-        // this.updateCommissionPriceValues()
-        this.updateTourCommissionPrice()
-      },
-      deep: true,
-    },
+    // getTour: {
+    //   handler(value) {
+    //     this.updateTourTotalPrice()
+    //     this.updateTourCorrectedPrice()
+    //     // this.updateCommissionPriceValues()
+    //     this.updateTourCommissionPrice()
+    //   },
+    //   deep: true,
+    // },
     currentCustomerType: {
       handler(value) {
         this.updateCurrentCustomerType(value)

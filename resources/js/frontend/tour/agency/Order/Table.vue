@@ -59,7 +59,7 @@
             />
           </td>
           <td>
-            {{ getPrice(item.profiles[0].content) }}
+            {{ item.total_price }}
           </td>
           <td>
             {{ operators[item.operator_id] }}
@@ -175,15 +175,6 @@ export default {
       }
       return count
     },
-    getPrice(profiles) {
-      console.log(profiles)
-      let result = 0
-      if (profiles)
-      profiles.forEach((profile) => {
-        result += parseInt(profile.price)
-      })
-      return result
-    }
   }
 }
 </script>

@@ -261,7 +261,6 @@ export default {
     toggleProfileFlag(state, profileId) {
       let profile = state.profiles.find(profile => profile.id == profileId)
       profile.resetProfile = !profile.resetProfile
-
     }
   },
   state: {
@@ -337,6 +336,6 @@ export default {
     },
     getMealCount(state) {
       return state.mealCount
-    }
+    },
   },
 }
