@@ -189,6 +189,11 @@
             Цена:
           </span> 
           {{ profilePrice }}
+          <br>
+          <span class="grey--text">
+            Комиссия:
+          </span> 
+          {{ profileCommission }}
         </div>
         <input 
           class="price"
@@ -282,7 +287,8 @@ export default {
       'getChdRange',
       'getPensRange',  
       'getMealByDay',
-      'getProfilePrice'
+      'getProfilePrice',
+      'getProfileCommission',
     ]),
     profile: function() {
       return this.$store.getters.getProfile(this.id)
@@ -346,6 +352,9 @@ export default {
     profilePrice: function() {
       return this.$store.getters.getProfilePrice(this.id)
     },
+    profileCommission: function() {
+      return this.$store.getters.getProfileCommission(this.id)
+    },
   },
   watch: {
     menu (val) {
@@ -360,6 +369,7 @@ export default {
         name: this.order.name,
       })
       this.updateOrderPrice()
+      this.updateOrderCommission()
     },
     profileCustomerType() {
       this.updateProfilePrice({
@@ -370,6 +380,7 @@ export default {
         name: this.order.name,
       })
       this.updateOrderPrice()
+      this.updateOrderCommission()
     },
     date(val) {
       if (!val) this.age = NaN
@@ -383,6 +394,7 @@ export default {
         name: this.order.name,
       })
       this.updateOrderPrice()
+      this.updateOrderCommission()
     }
   },
   mounted() {
@@ -403,6 +415,7 @@ export default {
       'updateOrderProfiles',
       'updateProfilePrice',
       'updateOrderPrice',
+      'updateOrderCommission',
       'resetProfile',
       'updateResetProfileFlag',
     ]),

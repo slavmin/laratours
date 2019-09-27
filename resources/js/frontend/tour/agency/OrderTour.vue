@@ -127,6 +127,16 @@
                       name="total_price"
                       :value="getOrderPrice"
                     >
+                    <input 
+                      type="hidden"
+                      name="commission"
+                      :value="getOrderCommission"
+                    >
+                    <input 
+                      v-model="paid"
+                      type="hidden"
+                      name="total_paid"
+                    >
                   </v-card-text>
                 </v-card>
               </v-tab-item>
@@ -153,6 +163,25 @@
       <v-divider />
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ getOrderPrice }}
+        <br>
+        Комиссия: {{ getOrderCommission }}
+      </div>
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-spacer />
+        <v-flex xs3>
+          <v-text-field
+            v-model="paid"
+            mask="#######"
+            label="Оплачено"
+            width="200"
+          />
+        </v-flex>
+      </v-layout>
+      <div class="subheading text-xs-right mr-3">
+        Остаток: {{ getOrderPrice - paid }}
       </div>
       <v-divider />
       <v-card-actions>
@@ -213,11 +242,13 @@ export default {
       roomsCount: 1,
       tab: null,
       comment: '',
+      paid: 0,
     }
   },
   computed: {
     ...mapGetters([
       'getOrderPrice',
+      'getOrderCommission',
     ]),
     chat: function() {
       if (this.comment != '') {

@@ -33,6 +33,9 @@ export default {
     async updateOrderPrice({ commit }) {
       commit('setOrderPrice')
     },
+    async updateOrderCommission({ commit }){
+      commit('setOrderCommission')
+    },
     async resetProfile({ commit }, profileId) {
       commit('clearProfile', profileId)
     },
@@ -58,6 +61,7 @@ export default {
         id: id,
         name: '',
         price: 0,
+        commission: 0,
         mealPrice: 0,
         mealPriceArray: [],
         priceWithoutMeal: 0,
@@ -166,6 +170,7 @@ export default {
       let profile = state.profiles.find(profile => profile.id == data.profileId)
       profile.name = data.name
       let profilePrice = 0
+      let profileCommission = 0
       switch (data.profileCustomerType) {
         case 'CHD':
           let price = pricelist.find((price) => {
@@ -176,13 +181,16 @@ export default {
           })
           switch (data.profilePlace) {
             case 'EXTRA':
-              profilePrice = price.addPrice
+              profilePrice = price.commissionExtraPrice
+              profileCommission = price.commissionExtraPrice - price.addPrice
               break
             case 'SNGL':
-              profilePrice = price.singlePrice
+              profilePrice = price.commissionSinglePrice
+              profileCommission = price.commissionSinglePrice - price.singlePrice
               break
             case 'STD':
-              profilePrice = price.standardPrice
+              profilePrice = price.commissionStandardPrice
+              profileCommission = price.commissionStandardPrice - price.standardPrice
               break
             default:
               console.log('error')
@@ -192,13 +200,16 @@ export default {
           price = state.priceList.find((price) => price.age && JSON.parse(price.age).isPens)
           switch (data.profilePlace) {
             case 'EXTRA':
-              profilePrice = price.addPrice
+              profilePrice = price.commissionExtraPrice
+              profileCommission = price.commissionExtraPrice - price.addPrice
               break
             case 'SNGL':
-              profilePrice = price.singlePrice
+              profilePrice = price.commissionSinglePrice
+              profileCommission = price.commissionSinglePrice - price.singlePrice
               break
             case 'STD':
-              profilePrice = price.standardPrice
+              profilePrice = price.commissionStandardPrice
+              profileCommission = price.commissionStandardPrice - price.standardPrice
               break
             default:
               console.log('error')
@@ -208,39 +219,46 @@ export default {
           price = state.priceList.find(price => price.name.includes('Иностр'))
           switch (data.profilePlace) {
             case 'EXTRA':
-              profilePrice = price.addPrice
+              profilePrice = price.commissionExtraPrice
+              profileCommission = price.commissionExtraPrice - price.addPrice
               break
             case 'SNGL':
-              profilePrice = price.singlePrice
+              profilePrice = price.commissionSinglePrice
+              profileCommission = price.commissionSinglePrice - price.singlePrice
               break
             case 'STD':
-                profilePrice = price.standardPrice
+              profilePrice = price.commissionStandardPrice
+              profileCommission = price.commissionStandardPrice - price.standardPrice
               break
             default:
               console.log('error')
           }
           break
         case 'ADL':
-            price = state.priceList.find(price => price.name.includes('Взросл'))
-            switch (data.profilePlace) {
-              case 'EXTRA':
-                profilePrice = price.addPrice
-                break
-              case 'SNGL':
-                profilePrice = price.singlePrice
-                break
-              case 'STD':
-                profilePrice = price.standardPrice
-                break
-              default:
-                console.log('error')
-            }
+          price = state.priceList.find(price => price.name.includes('Взросл'))
+          switch (data.profilePlace) {
+            case 'EXTRA':
+              profilePrice = price.commissionExtraPrice
+              profileCommission = price.commissionExtraPrice - price.addPrice
+              break
+            case 'SNGL':
+              profilePrice = price.commissionSinglePrice
+              profileCommission = price.commissionSinglePrice - price.singlePrice
+              break
+            case 'STD':
+              profilePrice = price.commissionStandardPrice
+              profileCommission = price.commissionStandardPrice - price.standardPrice
+              break
+            default:
+              console.log('error')
+          }
           break
         default:
           console.log('error')
       }
       if (profile.name != '') {
         profile.price = profilePrice
+        profile.commission = profileCommission
       }
       profile.priceWithoutMeal = 
         profilePrice - state.defaultMealPrice 
@@ -250,9 +268,15 @@ export default {
       state.profiles.forEach(profile => result += profile.price)
       state.orderPrice = result
     },
+    setOrderCommission(state) {
+      let result = 0
+      state.profiles.forEach(profile => result += profile.commission)
+      state.orderCommission = result
+    },
     clearProfile(state, profileId) {
       let profile = state.profiles.find(profile => profile.id == profileId)
       profile.price = 0
+      profile.commission = 0
       profile.priceWithoutMeal = 0
       profile.mealPriceArray = state.defaultMealPriceArray
       profile.mealPrice = state.defaultMealPrice
@@ -280,6 +304,7 @@ export default {
     defaultMealPriceArray: [],
     defaultMealPrice: 0,
     orderPrice: 0,
+    orderCommission: 0,
     mealCount: 0,
   },
   getters: {
@@ -328,8 +353,18 @@ export default {
         return profile.price
       }
     },
+    getProfileCommission: state => profileId => {
+      const profile = state.profiles.find(profile => profile.id == profileId)
+      console.log(profile)
+      if (profile) {
+        return profile.commission
+      }
+    },
     getOrderPrice(state) {
       return state.orderPrice
+    },
+    getOrderCommission(state) {
+      return state.orderCommission
     },
     getResetProfileFlag: state => profileId => {
       return state.profiles.find(profile => profile.id == profileId).resetProfile

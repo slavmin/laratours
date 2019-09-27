@@ -19,6 +19,9 @@
           Стоимость
         </th>
         <th>
+          Коммиссия
+        </th>
+        <th>
           Оператор
         </th>
         <th>
@@ -58,8 +61,21 @@
               :order-id="item.id"
             />
           </td>
-          <td>
+          <td class="text-xs-right">
             {{ item.total_price }}
+            <br>
+            <div
+              v-if="item.total_paid"
+              class="grey--text"
+            >
+              Оплачено: {{ item.total_paid }}
+              <br>
+            </div>
+            <span class="grey--text">К оплате:</span> 
+            {{ item.total_price - item.total_paid }}
+          </td>
+          <td>
+            {{ item.commission }}
           </td>
           <td>
             {{ operators[item.operator_id] }}
