@@ -89,6 +89,7 @@ class OrderController extends Controller
             'team_id' => auth()->user()->currentTeam->getKey(),
             'created_at' => now(),
             'updated_at' => now(),
+            'total_price' => $request->get('total_price'),
         ]);
 
         $tour_order = TourOrder::findOrFail($tour_order_id);
