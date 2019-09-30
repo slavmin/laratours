@@ -160,7 +160,10 @@ export default {
     },
     setNewTransportOptions: (state, updData) => {
       let updTransport = updData.company
-      let updItem = updData.item
+      let updItem = {
+        ...updData.item,
+        drivers: updData.drivers,
+      }
       let itemIndex = updTransport.objectables.findIndex(obj => obj.id == updItem.id)
       if (itemIndex != -1) {
         updTransport.objectables.splice(itemIndex, 1, updItem)
@@ -172,6 +175,10 @@ export default {
     }, 
     setTourTransport(state) {
       state.tour.transport = []
+      state.tour.options.drivers = {
+        hotel: 0,
+        meal: 0,
+      }
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
@@ -186,6 +193,12 @@ export default {
               commissionPricePerSeat: 0,
               correctedPricePerSeat: 0,
             })
+            if (obj.drivers) {
+              obj.drivers.forEach((driver) => {
+                if (driver.hotel) state.tour.options.drivers.hotel += 1
+              })
+            }
+            console.log(state.tour.options)
           }
         })
       })
@@ -1004,6 +1017,10 @@ export default {
           nights: NaN,
           dateStart: new Date().toISOString().substr(0, 10),
           qnt: 0,
+          drivers: {
+            hotel: 0,
+            meal: 0,
+          },
         },
         transport: [],
         museum: [],
@@ -1040,6 +1057,10 @@ export default {
         nights: NaN,
         dateStart: new Date().toISOString().substr(0, 10),
         qnt: 0,
+        drivers: {
+          hotel: 0,
+          meal: 0,
+        }
       },
       transport: [],
       museum: [],

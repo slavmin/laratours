@@ -438,6 +438,59 @@
                 {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
+            <tr v-if="getTour.customPrice.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="6"
+              >
+                Персонал
+              </td>
+            </tr>
+            <tr 
+              v-for="(price, i) in getTour.customPrice"
+              :key="`CP-${i}`"
+            >
+              <td>
+                {{ price.name }}
+              </td>
+              <td class="price">
+                {{ price.pricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ price.value }} руб. / {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
+              </td>
+              <td>
+                <v-text-field
+                  v-model="price.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ parseInt(price.correctedPricePerSeat).toFixed(2) }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="price.commission"
+                  name="commission"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
+              </td>
+            </tr>
             <tr>
               <td>
                 Итого: 
