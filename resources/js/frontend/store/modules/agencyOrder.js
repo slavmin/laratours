@@ -64,6 +64,7 @@ export default {
         commission: 0,
         mealPrice: 0,
         mealPriceArray: [],
+        mealByDay: [],
         priceWithoutMeal: 0,
         resetProfile: 0,
       })
@@ -164,6 +165,10 @@ export default {
       if (profile.name != '') {
         profile.price = profile.priceWithoutMeal + profile.mealPrice
       }
+      profile.mealByDay = state.mealByDay
+      let choosenMeal = profile.mealByDay[data.day - 1][data.index].find(meal => meal.name == data.newMeal.name)
+      choosenMeal.manualChoose = true
+      if (data.prevMeal.manualChoose) data.prevMeal.manualChoose = false
     },
     setProfilePrice(state, data) {
       const pricelist = state.priceList
@@ -355,7 +360,6 @@ export default {
     },
     getProfileCommission: state => profileId => {
       const profile = state.profiles.find(profile => profile.id == profileId)
-      console.log(profile)
       if (profile) {
         return profile.commission
       }
@@ -372,5 +376,12 @@ export default {
     getMealCount(state) {
       return state.mealCount
     },
+    getProfileMealData: state => profileId => {
+      const profile = state.profiles.find(profile => profile.id == profileId)
+      return {
+        mealByDay: profile.mealByDay,
+        mealPriceArray: profile.mealPriceArray,
+      }
+    }
   },
 }

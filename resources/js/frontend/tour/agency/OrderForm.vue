@@ -201,6 +201,16 @@
           :name="isRequired ? 'customer[' + id + '][price]' : ''"
           :value="profilePrice"
         >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
+          :value="JSON.stringify(profileMealData.mealByDay)"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
+          :value="profileMealData.mealPriceArray"
+        >
       </v-flex>
     </v-layout>
     <v-layout 
@@ -355,6 +365,9 @@ export default {
     profileCommission: function() {
       return this.$store.getters.getProfileCommission(this.id)
     },
+    profileMealData: function() {
+      return this.$store.getters.getProfileMealData(this.id)
+    }
   },
   watch: {
     menu (val) {
@@ -447,6 +460,9 @@ export default {
       this.isForeigner = false
       this.date = undefined
       this.resetProfile(this.id)
+    },
+    log() {
+      console.log(this.profileMealData)
     }
   }
 }
