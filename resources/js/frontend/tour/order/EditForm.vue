@@ -165,7 +165,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import BusScheme from './BusScheme'
+// import BusScheme from './BusScheme'
 export default {
   name: 'OrderFrom',
   components: {

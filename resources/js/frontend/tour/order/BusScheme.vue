@@ -19,7 +19,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">
-            Схема салона: {{ object.name }}
+            Схема салона: {{ transport.obj.name ? transport.obj.name : 'Default bus' }}
           </span>
         </v-card-title>
         <v-card-text>
@@ -103,25 +103,25 @@
               :id="attribute + '[id]'" 
               type="hidden" 
               :name="attribute + '[id]'" 
-              :value="object.id"
+              :value="transport.id"
             > 
             <input 
               :id="attribute + '[name]'" 
               type="hidden" 
               :name="attribute + '[name]'" 
-              :value="object.name"
+              :value="transport.name"
             >
             <input 
               :id="attribute + '[description]'" 
               type="hidden" 
               :name="attribute + '[description]'" 
-              :value="object.description"
+              :value="transport.description"
             >
             <input 
               :id="attribute + '[qnt]'" 
               type="hidden" 
               :name="attribute + '[qnt]'" 
-              :value="object.qnt"
+              :value="transport.qnt"
             >
             <input 
               type="hidden" 
@@ -148,6 +148,22 @@
             </v-btn>
           </form>
         </v-card-actions>
+        <v-snackbar
+          v-model="snackbar"
+          multi-line
+          bottom
+          vertical
+          color="pink"
+        >
+          {{ text }}
+          <v-btn
+            color="white"
+            flat
+            @click="snackbar = false"
+          >
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-snackbar>
       </v-card>
     </v-dialog>
   </div>
@@ -165,7 +181,7 @@ export default {
         return 0
       }
     },
-    object: {
+    transport: {
       type: Object,
       default: () => {
         return {}
@@ -216,6 +232,8 @@ export default {
       initialScheme: {},
       orderedSeats: [],
       selectedInThisFormSeat: '',
+      snackbar: false,
+      text: 'За последний час этот тур заказали 5 человек!'
     };
   },
   computed: {
@@ -236,12 +254,11 @@ export default {
     }
   },
   created() {
-    this.attribute = 'attribute[' + this.object.id + ']'
+    this.attribute = 'attribute[' + this.transport.id + ']'
   },
   mounted() {
-    if (this.object.extra !== null && this.object.extra !== undefined) {
-      console.log(this.object.extra)
-      this.extra = JSON.parse(this.object.extra)
+    if (this.transport.obj.extra !== null && this.transport.obj.extra !== undefined) {
+      this.extra = JSON.parse(this.transport.obj.extra)
       this.initialScheme = Object.assign({}, this.extra.scheme)
       this.bus = Object.assign({}, this.extra.scheme)
     } else {
@@ -253,6 +270,7 @@ export default {
     this.setServiceSeats()
     this.bus.ordered = this.getOrderedSeats
     this.bus.current = this.getSeatsInCurrentOrder
+    this.snackbar = true
   },
   updated() {
     this.drawScheme()
@@ -350,19 +368,24 @@ export default {
         }
       })
       // Ordered
-      this.bus.ordered.forEach(orderedSeatId => {
-        if (orderedSeatId != null) {
-          this.setSeatClass(orderedSeatId, this.orderedSeatClass)
-        }
-      })
+      if (this.bus.ordered) {
+        this.bus.ordered.forEach(orderedSeatId => {
+          if (orderedSeatId != null) {
+            this.setSeatClass(orderedSeatId, this.orderedSeatClass)
+          }
+        })
+      }
       // Current order seats
-      this.bus.current.forEach(currentSeatId => {
-        if (currentSeatId != null) {
-          this.setSeatClass(currentSeatId, this.currentSeatClass)
-        }
-      })
+      if (this.bus.current) {
+        this.bus.current.forEach(currentSeatId => {
+          if (currentSeatId != null) {
+            this.setSeatClass(currentSeatId, this.currentSeatClass)
+          }
+        })
+      }
     },
     chooseSeat(seatId) {
+      console.log(this.bus)
       if (this.bus.service.find(serviceSeat => { return serviceSeat === seatId }) !== undefined) {
         this.showServiceError = true
         setTimeout(() => {

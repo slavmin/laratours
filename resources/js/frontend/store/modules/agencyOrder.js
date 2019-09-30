@@ -42,8 +42,17 @@ export default {
     async updateResetProfileFlag({ commit }, profileId) {
       commit('toggleProfileFlag', profileId)
     },
+    async updateEditMode({ commit }) {
+      commit('setEditMode')
+    },
+    async updateProfilesData({ commit }, data) {
+      commit('fillProfilesData', data)
+    }
   },
   mutations: {
+    setEditMode(state) {
+      state.editMode = true
+    },
     setOrderedSeats(state, seats) {
       state.orderedSeats = seats
     },
@@ -270,7 +279,7 @@ export default {
     },
     setOrderPrice(state) {
       let result = 0
-      state.profiles.forEach(profile => result += profile.price)
+      state.profiles.forEach(profile => result += parseInt(profile.price))
       state.orderPrice = result
     },
     setOrderCommission(state) {
@@ -290,9 +299,29 @@ export default {
     toggleProfileFlag(state, profileId) {
       let profile = state.profiles.find(profile => profile.id == profileId)
       profile.resetProfile = !profile.resetProfile
+    },
+    fillProfilesData(state, data) {
+      for (let index in data) {
+        let stateProfile = state.profiles[index]
+        let dataProfile = data[index]
+        stateProfile.address = dataProfile.address
+        stateProfile.busSeatId = dataProfile.busSeatId
+        stateProfile.dob = dataProfile.dob
+        stateProfile.email = dataProfile.email
+        stateProfile.gender = dataProfile.gender
+        stateProfile.first_name = dataProfile.first_name
+        stateProfile.last_name = dataProfile.last_name
+        stateProfile.meal = dataProfile.meal
+        stateProfile.mealByDay = dataProfile.mealByDay
+        stateProfile.mealPriceArray = dataProfile.mealPriceArray
+        stateProfile.passport = dataProfile.passport
+        stateProfile.price = dataProfile.price
+        stateProfile.room = dataProfile.room
+      }
     }
   },
   state: {
+    editMode: false,
     orderedSeats: [],
     seatsInCurrentOrder: [],
     chdRange: {

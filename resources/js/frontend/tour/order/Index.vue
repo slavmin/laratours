@@ -1,40 +1,31 @@
 <template>
   <v-container 
     grid-list-xs
-    fluid  
-    text-xs-center
+    fluid
   >
-    <h1
-      class="display-3 mb-5"
-    >
-      <i 
-        class="material-icons"
-        style="font-size: 42px;"
-      >
-        local_grocery_store
-      </i>
-      {{ header }}
-    </h1>
     <v-layout 
       row 
       wrap
-      justify-center
     >
-      <Table 
-        :items="items"
-        :agencies="agencies"
-        :statuses="statuses"
-        :tour-names="tourNames"
-        :token="token"
-      />
+      <v-flex xs12>
+        <h1 class="text-center grey--text mb-5">
+          {{ header }}
+        </h1>
+        <Table
+          :items="items"
+          :token="token"
+          :tour-names="tourNames"
+          :operators="operators"
+          :statuses="statuses"
+        />
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
-
 <script>
 import Table from './Table'
 export default {
-  name: 'OrdersIndex',
+  name: 'AgencyOrderIndex',
   components: {
     Table,
   },
@@ -43,41 +34,50 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      } 
     },
-    agencies: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    statuses: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    tourNames: {
-      type: Object,
-      default: () => {
-        return []
-      }
+    header: {
+      type: String,
+      default: '',
     },
     token: {
       type: String,
       default: '',
     },
-    header: {
-      type: String,
-      default: '',
+    tourNames: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    operators: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    statuses: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    statusesList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
+  data() {
+    return {
     }
   },
   mounted() {
-    console.log(this.items)
+    console.log(this.statusesList)
   }
 }
 </script>
-
 <style lang="scss" scoped>
-
+  
 </style>

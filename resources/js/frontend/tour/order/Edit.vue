@@ -1,18 +1,5 @@
 <template>
   <v-container grid-list-xs>
-    <!-- <v-layout 
-      row 
-      wrap
-      justify-center
-    > 
-      <v-flex xs2>
-        <v-select
-          v-model="count"
-          :items="items"
-          label="Туристов"
-        />
-      </v-flex>
-    </v-layout> -->
     <v-card>
       <v-card-title
         class="headline green white--text"
@@ -24,16 +11,15 @@
           column
           wrap
         >
-          Статус агентства: {{ profiles[0].orderStatus }}
-          <v-spacer />
           <v-select
-            v-model="status"
-            :items="statusesFormatted"
-            item-value="id"
-            item-text="text"
-            label="Статус"
-            solo
+            v-model="agencyStatus"
+            :items="agencyStatuses"
+            label="Статус агентства"
+            color="green"
+            dark
           />
+          <v-spacer />
+          Статус оператора: {{ statuses[status] }}
         </v-layout>
       </v-card-title>
       <v-card-text>
@@ -52,11 +38,42 @@
               Номер {{ room }}
             </h4>
           </v-tab>
+          <v-layout 
+            row 
+            wrap
+            justify-center
+          >
+            <v-btn 
+              fab
+              small
+              outline
+              color="grey"
+              title="Добавить номер"
+              @click="incrementRoomsCount"
+            >
+              <i class="material-icons">
+                add
+              </i>
+            </v-btn>
+            <v-btn 
+              v-if="roomsCount > 1"
+              fab
+              small
+              outline
+              color="grey"
+              title="Убрать номер"
+              @click="decrementRoomsCount"
+            >
+              <i class="material-icons">
+                remove
+              </i>
+            </v-btn>
+          </v-layout>
           <v-tabs-items>
             <form 
               id="form"
               method="POST"
-              :action="'/operator/order/' + order.id"
+              :action="'/agency/order/' + order.id"
             >
               <v-tab-item
                 v-for="room in roomsCount"
@@ -141,17 +158,10 @@
                 type="hidden"
                 name="customer[0][chat]"
               >
-              <!-- Agency status -->
               <input
-                v-model="profiles[0].orderStatus"
+                v-model="agencyStatus"
                 type="hidden"
                 name="customer[0][orderStatus]"
-              >
-              <!-- Operator status -->
-              <input
-                v-model="status"
-                type="hidden"
-                name="status"
               >
             </form>
           </v-tabs-items>
@@ -176,7 +186,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import EditForm from './EditForm'
 export default {
-  name: 'EditOrder',
+  name: 'AgencyEditOrder',
   components: {
     EditForm,
   },
@@ -218,19 +228,12 @@ export default {
       comment: '',
       profiles: {},
       status: 2,
+      roomsCount: 1,
+      agencyStatuses: ['Принят', 'Отменён'],
       agencyStatus: '',
     }
   },
   computed: {
-    roomsCount: function() {
-      let result = 1
-      for (let key in this.profiles) {
-        if ((result - 1) !== parseInt(this.profiles[key].room)) {
-          result += 1
-        }
-      }
-      return result
-    },
     prevChat: function() {
       if (this.profiles[0].chat) {
         const result = JSON.parse(this.profiles[0].chat)
@@ -243,7 +246,7 @@ export default {
       let date = new Date().toISOString().substr(0, 10)
       let message = {
         date,
-        sender: 'Оператор',
+        sender: 'Агентство',
         text: this.comment,
       }
       let length = 0
@@ -271,8 +274,10 @@ export default {
   mounted() {
     // this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
+    this.agencyStatus = this.profiles[0].orderStatus
     this.updateProfiles(this.profiles)
     this.status = this.order.status
+    this.initialRoomsCount()
   },
   updated() {
   },
@@ -302,6 +307,15 @@ export default {
         }
       })
       this.updateOrderedSeats(result)
+    },
+    initialRoomsCount() {
+      let result = 1
+      for (let key in this.profiles) {
+        if ((result - 1) !== parseInt(this.profiles[key].room)) {
+          result += 1
+        }
+      }
+      this.roomsCount = result
     }
   }
 }
