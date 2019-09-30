@@ -133,6 +133,7 @@
           Мест: {{ JSON.parse(item.extra).scheme.totalPassengersCount }}
         </div>
       </div>
+      {{ item }}
       <div
         v-show="!item.selected"
       >

@@ -438,23 +438,22 @@
                 {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
-            <tr v-if="getTour.customPrice.length != 0">
+            <tr v-if="getTour.options.drivers != 0">
               <td
                 class="text-xs-center" 
                 colspan="6"
               >
-                Персонал
+                Водители
               </td>
             </tr>
-            <tr 
-              v-for="(price, i) in getTour.customPrice"
-              :key="`CP-${i}`"
-            >
+            <tr>
               <td>
-                {{ price.name }}
+                Проживание: {{ getTour.options.drivers.hotel }} н.
+                <br>
+                Питание: {{ getTour.options.drivers.meal }} дн.
               </td>
-              <td class="price">
-                {{ price.pricePerSeat }}
+              <td>
+                {{ getTour.options.drivers.hotel * 2000 / getTour.qnt }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon 
@@ -465,31 +464,31 @@
                     </v-icon>
                   </template>
                   <span>
-                    Стоимость за одного человека:
-                    {{ price.value }} руб. / {{ getTour.qnt }} чел.
+                    {{ getTour.options.drivers.hotel * 2000 }} / 
+                    {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
+                <br>
+                {{ getTour.options.drivers.meal * 750 / getTour.qnt }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ getTour.options.drivers.meal * 2000 }} / 
+                    {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
-              <td>
-                <v-text-field
-                  v-model="price.correction"
-                  name="correction"
-                  @input="correctPrice"
-                />
-              </td>
-              <td>
-                {{ parseInt(price.correctedPricePerSeat).toFixed(2) }}
-              </td>
-              <td>
-                <v-text-field
-                  v-model="price.commission"
-                  name="commission"
-                  @input="correctPrice"
-                />
-              </td>
-              <td>
-                {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
-              </td>
+              <td />
+              <td />
+              <td />
+              <td />
             </tr>
             <tr>
               <td>

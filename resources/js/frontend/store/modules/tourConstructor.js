@@ -196,9 +196,9 @@ export default {
             if (obj.drivers) {
               obj.drivers.forEach((driver) => {
                 if (driver.hotel) state.tour.options.drivers.hotel += 1
+                if (driver.meal) state.tour.options.drivers.meal += 1
               })
             }
-            console.log(state.tour.options)
           }
         })
       })
@@ -560,6 +560,12 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.pricePerSeat)
       })
+      let hotelPrice = 2000
+      let mealPrice = 750
+      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
+      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
+      summ += driversHotelPricePerSeat
+      summ += driversMealPricePerSeat
       state.tour.totalPrice = summ
       state.tour.calc.priceList[state.tour.calc.currentCustomer].nettoPrice = summ
     },
@@ -661,6 +667,12 @@ export default {
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
+      let hotelPrice = 2000
+      let mealPrice = 750
+      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
+      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
+      summ += driversHotelPricePerSeat
+      summ += driversMealPricePerSeat
       calcCustomer.standardPrice = summ + standardHotel
       calcCustomer.nettoStandardPrice = netto + nettoStandardHotel
       calcCustomer.singlePrice = summ + singleHotel
@@ -754,6 +766,12 @@ export default {
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
+      let hotelPrice = 2000
+      let mealPrice = 750
+      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
+      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
+      summ += driversHotelPricePerSeat
+      summ += driversMealPricePerSeat
       calcCustomer.commissionStandardPrice = summ + commissionStandardHotel
       calcCustomer.commissionSinglePrice = summ + commissionSingleHotel
       calcCustomer.commissionExtraPrice = summ + commissionExtraHotel
