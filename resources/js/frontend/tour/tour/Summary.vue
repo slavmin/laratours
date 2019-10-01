@@ -442,18 +442,81 @@
               <td
                 class="text-xs-center" 
                 colspan="6"
+                style="background-color: #f8f8f8;"
+              >
+                Персонал
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="showStaff = !showStaff"
+                >
+                  <v-icon>
+                    expand_{{ showStaff ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
+              </td>
+            </tr>
+            <tr v-show="showStaff">
+              <td
+                class="text-xs-center" 
+                colspan="6"
               >
                 Водители
               </td>
             </tr>
-            <tr>
+            <tr
+              v-for="(driver, i) in getTour.options.drivers"
+              v-show="showStaff"
+              :key="`Driver-${i}`"
+            >
               <td>
-                Проживание: {{ getTour.options.drivers.hotel }} н.
+                {{ driver.busName }}. 
                 <br>
-                Питание: {{ getTour.options.drivers.meal }} дн.
+                Водитель {{ driver.driver }}
+                <div 
+                  v-if="driver.hotelPrice"
+                >
+                  Проживание: 
+                  <div 
+                    v-for="(room, r) in driver.hotelPrice"
+                    :key="`Room-${r}`"
+                  >
+                    День: {{ room.day }}
+                    <br>
+                    <span class="body-1 grey--text">
+                      {{ room.hotelName }}, {{ room.roomName }}
+                    </span>
+                    <br>
+                    <span class="body-1 grey--text">
+                      Цена (стандарт): {{ room.hotelStdPrice }}
+                      <br>
+                      Цена (сингл): {{ room.hotelSnglPrice }}
+                    </span>
+                  </div>
+                </div>
+                <div
+                  v-if="driver.mealPrice"
+                >
+                  Питание:
+                  <div
+                    v-for="(meal, m) in driver.mealPrice"
+                    :key="`Meal-${m}`"
+                  >
+                    День: {{ meal.day }}
+                    <br>
+                    <span class="body-1 grey--text">
+                      {{ meal.mealName }}
+                    </span>
+                    <br>
+                    <span class="body-1 grey--text">
+                      Цена: {{ meal.mealPrice }}
+                    </span>
+                  </div>
+                </div>
               </td>
               <td>
-                {{ getTour.options.drivers.hotel * 2000 / getTour.qnt }}
+                {{ driver.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon 
@@ -464,28 +527,18 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ getTour.options.drivers.hotel * 2000 }} / 
-                    {{ getTour.qnt }} чел.
-                  </span>
-                </v-tooltip>
-                <br>
-                {{ getTour.options.drivers.meal * 750 / getTour.qnt }}
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-icon 
-                      color="grey"
-                      v-on="on"
-                    >
-                      info
-                    </v-icon>
-                  </template>
-                  <span>
-                    {{ getTour.options.drivers.meal * 2000 }} / 
+                    {{ driver.totalPrice }} / 
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
-              <td />
+              <td>
+                <v-text-field
+                  v-model="driver.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
               <td />
               <td />
               <td />
@@ -771,6 +824,7 @@ export default {
       commissionToAll: 0,
       currentCustomerType: 0,
       showPriceForEveryCustomer: true,
+      showStaff: false,
     };
   },
   computed: {
@@ -811,6 +865,7 @@ export default {
   },
   mounted() {
     this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
+    this.updateTourStaff()
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
@@ -830,6 +885,7 @@ export default {
       'updateCommissiontoAll',
       'updateCommissionPriceValues',
       'updateTourCommissionPrice',
+      'updateTourStaff',
     ]),
     saveTour() {
       console.log(this.getTour)

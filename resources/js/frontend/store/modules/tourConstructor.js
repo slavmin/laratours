@@ -112,6 +112,9 @@ export default {
     },
     async clearStore({ commit }) {
       commit('reset')
+    },
+    async updateTourStaff({ commit }) {
+      commit('setTourStaff')
     }
   },
   mutations: {
@@ -150,6 +153,7 @@ export default {
               obj.day = selectedTransport.obj.day
               obj.daysArray = selectedTransport.obj.daysArray
               obj.duration = selectedTransport.obj.duration
+              obj.drivers = selectedTransport.obj.drivers
               obj.manualPrice = selectedTransport.obj.manualPrice
               obj.price = selectedTransport.obj.price
               obj.selected = selectedTransport.obj.selected
@@ -175,10 +179,7 @@ export default {
     }, 
     setTourTransport(state) {
       state.tour.transport = []
-      state.tour.options.drivers = {
-        hotel: 0,
-        meal: 0,
-      }
+      state.tour.options.drivers = []
       state.actualTransport.forEach((transport) => {
         transport.objectables.forEach((obj) => {
           if (obj.selected) {
@@ -194,9 +195,26 @@ export default {
               correctedPricePerSeat: 0,
             })
             if (obj.drivers) {
-              obj.drivers.forEach((driver) => {
-                if (driver.hotel) state.tour.options.drivers.hotel += 1
-                if (driver.meal) state.tour.options.drivers.meal += 1
+              obj.drivers.forEach((driver, n) => {
+                let result = {
+                  busName: obj.name,
+                  driver: n + 1,
+                  hotel: undefined,
+                  meal: undefined,
+                  correction: 0,
+                  commission: 0,
+                }
+                if (driver.hotel) {
+                  result.hotel = {
+                    daysArray: obj.daysArray,
+                  }
+                }
+                if (driver.meal) {
+                  result.meal = {
+                    daysArray: obj.daysArray,
+                  }
+                }
+                state.tour.options.drivers.push(result)
               })
             }
           }
@@ -510,6 +528,58 @@ export default {
         commissionPricePerSeat: 0,
       })
     },
+    setTourStaff(state) {
+      state.tour.options.drivers.forEach((driver) => {
+        if (driver.hotel) {
+          driver.hotelPrice = []
+          driver.hotel.daysArray.forEach((driverDay) => {
+            let hotelDay = {}
+            state.tour.hotel.forEach((hotel) => {
+              if (hotel.obj.daysArray.find(day => day == driverDay)) {
+                hotelDay = hotel
+              }
+            })
+            driver.hotelPrice.push({
+              day: driverDay,
+              hotelName: hotelDay.hotel.name,
+              roomName: hotelDay.obj.name,
+              hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+              hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+            })
+          })
+        }
+        if (driver.meal) {
+          driver.mealPrice = []
+          driver.meal.daysArray.forEach((driverDay) => {
+            let mealDay = {}
+            state.tour.meal.forEach((meal) => {
+              if (meal.obj.daysArray.find(day => day == driverDay)) {
+                mealDay = meal
+                driver.mealPrice.push({
+                  day: driverDay,
+                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                  mealPrice: mealDay.obj.price,
+                })
+              }
+            })
+          })
+        }
+      })
+      state.tour.options.drivers.forEach((driver) => {
+        let total = 0
+        if (driver.hotelPrice) {
+          driver.hotelPrice.forEach(room => total += parseInt(room.hotelStdPrice))
+        }
+        if (driver.mealPrice) {
+          driver.mealPrice.forEach(meal => total += parseInt(meal.mealPrice))
+        }
+        driver.totalPrice = total
+        driver.totalPricePerSeat = total / state.tour.qnt
+        driver.correctedPrice = total
+        driver.commissionPrice = total
+      })
+      console.log(state.tour.options.drivers)
+    },
     setMuseumInEditMode: (state, updData) => {
       state.tour.museum = updData
     },
@@ -560,12 +630,6 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.pricePerSeat)
       })
-      let hotelPrice = 2000
-      let mealPrice = 750
-      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
-      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
-      summ += driversHotelPricePerSeat
-      summ += driversMealPricePerSeat
       state.tour.totalPrice = summ
       state.tour.calc.priceList[state.tour.calc.currentCustomer].nettoPrice = summ
     },
@@ -667,12 +731,10 @@ export default {
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
-      let hotelPrice = 2000
-      let mealPrice = 750
-      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
-      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
-      summ += driversHotelPricePerSeat
-      summ += driversMealPricePerSeat
+      state.tour.options.drivers.forEach((driver) => {
+        console.log('calc: ', summ, driver)
+        summ += driver.correctedPricePerSeat
+      })
       calcCustomer.standardPrice = summ + standardHotel
       calcCustomer.nettoStandardPrice = netto + nettoStandardHotel
       calcCustomer.singlePrice = summ + singleHotel
@@ -766,12 +828,12 @@ export default {
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
-      let hotelPrice = 2000
-      let mealPrice = 750
-      let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
-      let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
-      summ += driversHotelPricePerSeat
-      summ += driversMealPricePerSeat
+      // let hotelPrice = 2000
+      // let mealPrice = 750
+      // let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
+      // let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
+      // summ += driversHotelPricePerSeat
+      // summ += driversMealPricePerSeat
       calcCustomer.commissionStandardPrice = summ + commissionStandardHotel
       calcCustomer.commissionSinglePrice = summ + commissionSingleHotel
       calcCustomer.commissionExtraPrice = summ + commissionExtraHotel
@@ -884,6 +946,16 @@ export default {
             (parseInt(price.pricePerSeat) * parseInt(price.correction) / 100) 
         } else {
           price.correctedPricePerSeat = parseInt(price.pricePerSeat)
+        }
+      })
+      // Calculate corrected price to Drivers
+      state.tour.options.drivers.forEach((driver) => {
+        if (driver.correction > 0) {
+          driver.correctedPricePerSeat = 
+          parseInt(driver.totalPricePerSeat) +
+            (parseInt(driver.totalPricePerSeat) * parseInt(driver.correction) / 100)
+        } else {
+          driver.correctedPricePerSeat = parseInt(driver.totalPricePerSeat)
         }
       })
     },
@@ -1036,8 +1108,8 @@ export default {
           dateStart: new Date().toISOString().substr(0, 10),
           qnt: 0,
           drivers: {
-            hotel: 0,
-            meal: 0,
+            hotel: [],
+            meal: [],
           },
         },
         transport: [],
@@ -1076,8 +1148,8 @@ export default {
         dateStart: new Date().toISOString().substr(0, 10),
         qnt: 0,
         drivers: {
-          hotel: 0,
-          meal: 0,
+          hotel: [],
+          meal: [],
         }
       },
       transport: [],

@@ -133,7 +133,6 @@
           Мест: {{ JSON.parse(item.extra).scheme.totalPassengersCount }}
         </div>
       </div>
-      {{ item }}
       <div
         v-show="!item.selected"
       >
@@ -239,6 +238,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'getActualTransport',
+      'getTour',
+    ]),
+  },
+  mounted() {
+    if (this.item.drivers) {
+      this.drivers = this.item.drivers
+      this.driversCount = this.item.drivers.length
+    }
   },
   methods: {
     ...mapActions([
@@ -257,7 +266,6 @@ export default {
     },
     daysSelected(item) {
       item.day = item.daysArray.length
-      console.log(item.daysArray)
     },
     calculateTotal(item, flag) {
       item.price = 0
@@ -289,6 +297,10 @@ export default {
     decrement() {
       this.driversCount -= 1
       this.drivers.pop()
+    },
+    log() {
+      console.log('actual: ', this.getActualTransport)
+      console.log('tour: ', this.getTour)
     },
   }
 }
