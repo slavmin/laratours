@@ -630,6 +630,10 @@ export default {
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.pricePerSeat)
       })
+      state.tour.options.drivers.forEach((driver) => {
+        console.log(state.tour.options)
+        summ += driver.totalPricePerSeat
+      })
       state.tour.totalPrice = summ
       state.tour.calc.priceList[state.tour.calc.currentCustomer].nettoPrice = summ
     },
@@ -732,7 +736,6 @@ export default {
         return item.id == state.tour.calc.currentCustomer
       })
       state.tour.options.drivers.forEach((driver) => {
-        console.log('calc: ', summ, driver)
         summ += driver.correctedPricePerSeat
       })
       calcCustomer.standardPrice = summ + standardHotel
@@ -828,12 +831,9 @@ export default {
       let calcCustomer = state.tour.calc.priceList.find((item) => {
         return item.id == state.tour.calc.currentCustomer
       })
-      // let hotelPrice = 2000
-      // let mealPrice = 750
-      // let driversHotelPricePerSeat = hotelPrice * state.tour.options.drivers.hotel / state.tour.qnt
-      // let driversMealPricePerSeat = mealPrice * state.tour.options.drivers.meal / state.tour.qnt
-      // summ += driversHotelPricePerSeat
-      // summ += driversMealPricePerSeat
+      state.tour.options.drivers.forEach((driver) => {
+        summ += driver.commissionPricePerSeat
+      })
       calcCustomer.commissionStandardPrice = summ + commissionStandardHotel
       calcCustomer.commissionSinglePrice = summ + commissionSingleHotel
       calcCustomer.commissionExtraPrice = summ + commissionExtraHotel
@@ -864,6 +864,9 @@ export default {
       state.tour.customPrice.forEach((price) => {
         price.correction = correction
       })
+      state.tour.options.drivers.forEach((driver) =>
+        driver.correction = correction
+      )
     },
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
@@ -984,6 +987,9 @@ export default {
       state.tour.customPrice.forEach((price) => {
         price.commission = commission
       })
+      state.tour.options.drivers.forEach((driver) => {
+        driver.commission = commission
+      })
     },
     setCommissionPriceValues(state) {
       // Add price-fields to Transport
@@ -1066,6 +1072,16 @@ export default {
             (price.correctedPricePerSeat * price.commission / 100) 
         } else {
           price.commissionPricePerSeat = price.correctedPricePerSeat
+        }
+      })
+      // Calculate commission price to drivers
+      state.tour.options.drivers.forEach((driver) => {
+        if (driver.commission > 0) {
+          driver.commissionPricePerSeat = 
+          driver.correctedPricePerSeat +
+            (driver.correctedPricePerSeat * driver.commission / 100)
+        } else {
+          driver.commissionPricePerSeat = driver.correctedPricePerSeat
         }
       })
     },

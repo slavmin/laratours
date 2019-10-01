@@ -535,13 +535,21 @@
               <td>
                 <v-text-field
                   v-model="driver.correction"
-                  name="correction"
                   @input="correctPrice"
                 />
               </td>
-              <td />
-              <td />
-              <td />
+              <td>
+                {{ driver.correctedPricePerSeat }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="driver.commission"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ driver.commissionPricePerSeat }}
+              </td>
             </tr>
             <tr>
               <td>
