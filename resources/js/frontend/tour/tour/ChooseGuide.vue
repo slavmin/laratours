@@ -32,62 +32,9 @@
               lg2
               ma-2
             >
-              <v-card 
-                class="guide-card"
-                :class="{'is-select' : guide.selected}"
-                pa-3
-              >
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline mb-2">
-                      {{ guide.name }}
-                      <i 
-                        class="material-icons ml-2"
-                        style="color: grey; font-size: 20px;"
-                        :title="JSON.parse(guide.description).about"
-                      >
-                        info
-                      </i>
-                    </div>
-                    <v-divider />
-                    <v-text-field
-                      v-model="guide.totalPrice"
-                      :dark="guide.selected"
-                      :disabled="guide.selected"
-                      label="Стоимость"
-                      mask="######"
-                      class="mt-3"
-                      color="green"
-                    />
-                    <v-text-field
-                      v-model="about"
-                      :dark="guide.selected"
-                      :disabled="guide.selected"
-                      label="Описание"
-                      append-outer-icon="description"
-                      class="mt-3"
-                      color="green"
-                    />
-                    <!-- <br>
-                    <span class="grey--text text--darken-1">
-                      Цена за час: {{ guide.price }}
-                    </span>
-                    <br>
-                    <span class="grey--text text--darken-1">
-                      Итого: {{ guide.price * guide.duration }}
-                    </span> -->
-                  </div>
-                </v-card-title>
-                <v-card-actions>
-                  <v-btn 
-                    flat
-                    :dark="guide.selected"
-                    @click="choose(guide)"
-                  >
-                    {{ guide.selected ? 'Убрать' : 'Выбрать' }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
+              <Guide 
+                :guide="guide"
+              />
             </v-flex>
           </v-layout>
         </v-layout>
@@ -109,10 +56,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Guide from './Guide'
 export default {
 
   name: 'ChooseGuide',
-
+  components: {
+    Guide,
+  },
   data() {
     return {
       about: '',
@@ -132,9 +82,6 @@ export default {
       } 
       return result
     },
-  },
-  created() {
-    // this.updateActualGuide()
   },
   methods: {
     ...mapActions([

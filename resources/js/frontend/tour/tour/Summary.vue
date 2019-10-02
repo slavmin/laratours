@@ -559,7 +559,7 @@
                 </div>
               </td>
               <td>
-                {{ getTour.totalPrice }}
+                {{ getTour.totalPrice.toFixed(2) }}
               </td>
               <td>
                 <span class="body-1 grey--text">

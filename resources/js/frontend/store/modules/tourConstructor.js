@@ -423,6 +423,11 @@ export default {
             result.push({
               ...guide,
               selected: false,
+              events: [],
+              options: {
+                hotel: false,
+                meal: false,
+              },
               day: NaN,
               duration: NaN,
               totalPrice: 0,
@@ -434,8 +439,11 @@ export default {
       state.tour.guide.forEach((selectedGuide) => {
         state.actualGuide.forEach((actualGuide) => {
           if (actualGuide.id == selectedGuide.guide.id) {
+            console.log(selectedGuide)
             actualGuide.day = selectedGuide.guide.day
             actualGuide.daysArray = selectedGuide.guide.daysArray
+            actualGuide.events = selectedGuide.guide.events
+            actualGuide.options = selectedGuide.guide.options
             actualGuide.totalPrice = selectedGuide.guide.totalPrice
             actualGuide.selected = selectedGuide.guide.selected
           }
@@ -447,6 +455,7 @@ export default {
       if (index != -1) {
         state.actualGuide.splice(index, 1, updGuide)
       }
+      console.log(state.actualGuide[index])
     },  
     setTourGuide: (state) => {
       state.tour.guide = []
@@ -1083,6 +1092,7 @@ export default {
         } else {
           driver.commissionPricePerSeat = driver.correctedPricePerSeat
         }
+        driver.commissionPricePerSeat = parseInt(driver.commissionPricePerSeat.toFixed(2))
       })
     },
     setEditTour(state, tour) {
