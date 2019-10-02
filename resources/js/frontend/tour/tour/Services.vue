@@ -6,26 +6,7 @@
       class="wrap"
     >
       <v-flex xs12>
-        <v-layout 
-          row 
-          wrap
-          justify-content-center
-        >
-          <v-btn 
-            dark 
-            color="green"
-            @click="addMoreGuide"
-          >
-            Добавить гида
-          </v-btn>
-          <v-btn 
-            dark 
-            color="green"
-            @click="addMoreAttendant"
-          >
-            Добавить сопровождающего
-          </v-btn>
-        </v-layout>
+        <FreeAdl />
       </v-flex>
       <v-flex xs12>
         <v-layout 
@@ -209,11 +190,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Editor from '@tinymce/tinymce-vue'
+import FreeAdl from './FreeAdl'
 export default {
 
   name: 'Services',
   components: {
     Editor,
+    FreeAdl,
   },
   data() {
     return {

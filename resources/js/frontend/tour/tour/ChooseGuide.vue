@@ -118,7 +118,7 @@ export default {
       this.end()
     },
     end() {
-      this.updateConstructorCurrentStage('Show services')
+      this.updateConstructorCurrentStage('Show attendant')
     },
   }
 };

@@ -115,6 +115,9 @@ export default {
     },
     async updateTourStaff({ commit }) {
       commit('setTourStaff')
+    },
+    async updateFreeAdlsOptions({ commit }, updData) {
+      commit('setFreeAdlsOptions', updData)
     }
   },
   mutations: {
@@ -482,6 +485,11 @@ export default {
             result.push({
               ...attendant,
               selected: false,
+              events: [],
+              options: {
+                hotel: false,
+                meal: false,
+              },
               day: NaN,
               duration: NaN,
               about: '',
@@ -496,6 +504,8 @@ export default {
           if (actualAttendant.id == selectedAttendant.attendant.id) {
             actualAttendant.day = selectedAttendant.attendant.day
             actualAttendant.daysArray = selectedAttendant.attendant.daysArray
+            actualAttendant.events = selectedAttendant.attendant.events
+            actualAttendant.options = selectedAttendant.attendant.options
             actualAttendant.totalPrice = selectedAttendant.attendant.totalPrice
             actualAttendant.selected = selectedAttendant.attendant.selected
           }
@@ -1120,6 +1130,18 @@ export default {
         })
       })
     },
+    setFreeAdlsOptions(state, updData) {
+      if (updData.delete) {
+        console.log(updData)
+        state.tour.options.freeAdls = state.tour.options.freeAdls.filter((item) => {
+          return item.id != updData.delete
+        })
+      } else {
+        console.log('before: ', state.tour.options.freeAdls, updData)
+        state.tour.options.freeAdls.push(updData)
+        console.log('after: ', state.tour.options.freeAdls, updData)
+      }
+    },
     reset(state) {
       state.tour = {
         id: NaN,
@@ -1137,6 +1159,7 @@ export default {
             hotel: [],
             meal: [],
           },
+          freeAdls: [],
         },
         transport: [],
         museum: [],
@@ -1161,6 +1184,7 @@ export default {
   state: {
     editMode: false,
     tourOptions: [],
+    test: 0,
     tour: {
       id: NaN,
       options: {
@@ -1176,7 +1200,8 @@ export default {
         drivers: {
           hotel: [],
           meal: [],
-        }
+        },
+        freeAdls: [],
       },
       transport: [],
       museum: [],
