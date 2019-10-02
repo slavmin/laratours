@@ -148,7 +148,7 @@ import Summary from './Summary'
 import { mapActions, mapGetters } from 'vuex'
 export default {
 
-  name: 'TourAdd',
+  name: 'TourEdit',
   components: {
     Options,
     ChooseTransport,

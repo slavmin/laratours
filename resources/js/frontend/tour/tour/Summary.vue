@@ -484,44 +484,58 @@
                 {{ driver.busName }}. 
                 <br>
                 Водитель {{ driver.driver }}
-                <div 
-                  v-if="driver.hotelPrice"
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="driver.showDetails = !driver.showDetails"
                 >
-                  Проживание: 
-                  <div 
-                    v-for="(room, r) in driver.hotelPrice"
-                    :key="`Room-${r}`"
-                  >
-                    День: {{ room.day }}
-                    <br>
-                    <span class="body-1 grey--text">
-                      {{ room.hotelName }}, {{ room.roomName }}
-                    </span>
-                    <br>
-                    <span class="body-1 grey--text">
-                      Цена (стандарт): {{ room.hotelStdPrice }}
-                      <br>
-                      Цена (сингл): {{ room.hotelSnglPrice }}
-                    </span>
-                  </div>
-                </div>
+                  <v-icon>
+                    expand_{{ driver.showDetails ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
                 <div
-                  v-if="driver.mealPrice"
+                  v-if="driver.showDetails"
                 >
-                  Питание:
-                  <div
-                    v-for="(meal, m) in driver.mealPrice"
-                    :key="`Meal-${m}`"
+                  <div 
+                    v-if="driver.hotelPrice"
                   >
-                    День: {{ meal.day }}
-                    <br>
-                    <span class="body-1 grey--text">
-                      {{ meal.mealName }}
-                    </span>
-                    <br>
-                    <span class="body-1 grey--text">
-                      Цена: {{ meal.mealPrice }}
-                    </span>
+                    Проживание: 
+                    <div 
+                      v-for="(room, r) in driver.hotelPrice"
+                      :key="`Room-${r}`"
+                    >
+                      День: {{ room.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ room.hotelName }}, {{ room.roomName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена (стандарт): {{ room.hotelStdPrice }}
+                        <br>
+                        Цена (сингл): {{ room.hotelSnglPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="driver.mealPrice"
+                  >
+                    Питание:
+                    <div
+                      v-for="(meal, m) in driver.mealPrice"
+                      :key="`Meal-${m}`"
+                    >
+                      День: {{ meal.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ meal.mealName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -586,50 +600,63 @@
             >
               <td>
                 {{ guide.guide.name }}
-                {{ guide }}
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="guide.showDetails = !guide.showDetails"
+                >
+                  <v-icon>
+                    expand_{{ guide.showDetails ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
                 <div
-                  v-if="guide.guide.options.hotel"
+                  v-show="guide.showDetails"
                 >
-                  Проживание: 
-                  <!-- <div 
-                    v-for="(room, r) in driver.hotelPrice"
-                    :key="`Room-${r}`"
-                  >
-                    День: {{ room.day }}
-                    <br>
-                    <span class="body-1 grey--text">
-                      {{ room.hotelName }}, {{ room.roomName }}
-                    </span>
-                    <br>
-                    <span class="body-1 grey--text">
-                      Цена (стандарт): {{ room.hotelStdPrice }}
-                      <br>
-                      Цена (сингл): {{ room.hotelSnglPrice }}
-                    </span>
-                  </div> -->
-                </div>
-                <!-- <div
-                  v-if="driver.mealPrice"
-                >
-                  Питание:
                   <div
-                    v-for="(meal, m) in driver.mealPrice"
-                    :key="`Meal-${m}`"
+                    v-if="guide.guide.options.hotel"
                   >
-                    День: {{ meal.day }}
-                    <br>
-                    <span class="body-1 grey--text">
-                      {{ meal.mealName }}
-                    </span>
-                    <br>
-                    <span class="body-1 grey--text">
-                      Цена: {{ meal.mealPrice }}
-                    </span>
+                    Проживание: 
+                    <div 
+                      v-for="(room, r) in guide.hotelPrice"
+                      :key="`Room-${r}`"
+                    >
+                      День: {{ room.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ room.hotelName }}, {{ room.roomName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена (стандарт): {{ room.hotelStdPrice }}
+                        <br>
+                        Цена (сингл): {{ room.hotelSnglPrice }}
+                      </span>
+                    </div>
                   </div>
-                </div> -->
+                  <div
+                    v-if="guide.mealPrice"
+                  >
+                    Питание:
+                    <div
+                      v-for="(meal, m) in guide.mealPrice"
+                      :key="`Meal-${m}`"
+                    >
+                      День: {{ meal.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ meal.mealName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </td>
-              <!-- <td>
-                {{ driver.totalPricePerSeat }}
+              <td>
+                {{ guide.guide.options.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-icon 
@@ -640,29 +667,29 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ driver.totalPrice }} / 
+                    {{ guide.guide.options.totalPrice }} / 
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
               <td>
                 <v-text-field
-                  v-model="driver.correction"
+                  v-model="guide.guide.options.correction"
                   @input="correctPrice"
                 />
               </td>
               <td>
-                {{ driver.correctedPricePerSeat }}
+                {{ guide.guide.options.correctedPricePerSeat }}
               </td>
               <td>
                 <v-text-field
-                  v-model="driver.commission"
+                  v-model="guide.guide.options.commission"
                   @input="correctPrice"
                 />
               </td>
               <td>
-                {{ driver.commissionPricePerSeat }}
-              </td> -->
+                {{ guide.guide.options.commissionPricePerSeat }}
+              </td>
             </tr>
             <tr>
               <td>
@@ -688,7 +715,7 @@
                 </span>
               </td>
               <td>
-                {{ parseInt(getTour.commissionPrice).toFixed(2) }}
+                {{ getTour.commissionPrice }}
               </td>
             </tr>
           </tbody>
