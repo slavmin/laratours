@@ -7,8 +7,7 @@ use App\Models\Tour\Tour;
 use App\Notifications\Frontend\Order\NotifyOnOrderCreated;
 use App\Notifications\Frontend\Order\ReplyOnOrderCreated;
 use Notification;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+
 
 class OrderEventListener
 {

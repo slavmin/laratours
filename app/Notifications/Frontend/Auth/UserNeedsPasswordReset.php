@@ -3,15 +3,17 @@
 namespace App\Notifications\Frontend\Auth;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Class UserNeedsPasswordReset.
  */
-class UserNeedsPasswordReset extends Notification
+class UserNeedsPasswordReset extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * The password reset token.

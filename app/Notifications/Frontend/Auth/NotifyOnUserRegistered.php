@@ -7,14 +7,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Class NotifyOnUserRegistered
  * @package App\Notifications\Frontend\Auth
  */
-class NotifyOnUserRegistered extends Notification
+class NotifyOnUserRegistered extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * @var
