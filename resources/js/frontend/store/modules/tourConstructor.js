@@ -597,7 +597,27 @@ export default {
         driver.correctedPrice = total
         driver.commissionPrice = total
       })
-      console.log(state.tour.options.drivers)
+      state.tour.guide.forEach((guide) => {
+        if (guide.guide.options.hotel) {
+          guide.hotelPrice = []
+          guide.guide.daysArray.forEach((guideDay) => {
+            let hotelDay = {}
+            state.tour.hotel.forEach((hotel) => {
+              if (hotel.obj.daysArray.find(day => day == guideDay)) {
+                hotelDay = hotel
+              }
+            })
+            guide.hotelPrice.push({
+              day: guideDay,
+              hotelName: hotelDay.hotel.name,
+              roomName: hotelDay.obj.name,
+              hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+              hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+            })
+          })
+        }
+        if (guide.guide.options.meal) console.log('meal', guide)
+      })
     },
     setMuseumInEditMode: (state, updData) => {
       state.tour.museum = updData
@@ -1132,14 +1152,11 @@ export default {
     },
     setFreeAdlsOptions(state, updData) {
       if (updData.delete) {
-        console.log(updData)
         state.tour.options.freeAdls = state.tour.options.freeAdls.filter((item) => {
           return item.id != updData.delete
         })
       } else {
-        console.log('before: ', state.tour.options.freeAdls, updData)
         state.tour.options.freeAdls.push(updData)
-        console.log('after: ', state.tour.options.freeAdls, updData)
       }
     },
     reset(state) {
