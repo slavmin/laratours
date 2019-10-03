@@ -244,6 +244,13 @@ export default {
         showEvents: false,
         museums: [],
         selected: false,
+        showDetailsInSummary: false,
+        totalPrice: 0,
+        totalPricePerSeat: 0,
+        correction: 0,
+        commission: 0,
+        correctedPricePerSeat: 0,
+        commissionPricePerSeat: 0,
       }
       this.museums.forEach((museum) => {
         adl.museums.push({...museum})

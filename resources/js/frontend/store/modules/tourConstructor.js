@@ -118,7 +118,10 @@ export default {
     },
     async updateFreeAdlsOptions({ commit }, updData) {
       commit('setFreeAdlsOptions', updData)
-    }
+    },
+    async updateTourFreeAdls({ commit }) {
+      commit('setTourFreeAdls')
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -598,26 +601,25 @@ export default {
           driver.mealPrice = []
           driver.meal.daysArray.forEach((driverDay) => {
             let mealDay = {}
-            if (state.tour.meal.length == 0) {
-              state.staffErrors.show = true
-            }
             state.tour.meal.forEach((meal) => {
               if (meal.obj.daysArray.find(day => day == driverDay)) {
                 mealDay = meal
               }
+              if (!_.isEqual(mealDay, {})) {
+                driver.mealPrice.push({
+                  day: driverDay,
+                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                  mealPrice: mealDay.obj.price,
+                })
+              }
             })
+            // If no meal in all tour.mealArray add error
             if (_.isEqual(mealDay, {})) {
               state.staffErrors.noMeal.push({
                 name: 'Водитель ' + driver.driver,
                 day: driverDay,
               })
               state.staffErrors.show = true
-            } else {
-              driver.mealPrice.push({
-                day: driverDay,
-                mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
-                mealPrice: mealDay.obj.price,
-              })
             }
           })
         }
@@ -668,27 +670,26 @@ export default {
           guide.mealPrice = []
           guide.guide.daysArray.forEach((guideDay) => {
             let mealDay = {}
-            if (state.tour.meal.length == 0) {
-              state.staffErrors.show = true
-            }
             state.tour.meal.forEach((meal) => {
               if (meal.obj.daysArray.find(day => day == guideDay)) {
                 mealDay = meal
               }
+              if (!_.isEqual(mealDay, {})){
+                guide.mealPrice.push({
+                  day: guideDay,
+                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                  mealPrice: mealDay.obj.price,
+                })
+              }
             })
+            // If no meal in all tour.mealArray add error
             if (_.isEqual(mealDay, {})) {
               state.staffErrors.noMeal.push({
                 name: 'Гид: ' + guide.guide.name,
                 day: guideDay,
               }) 
               state.staffErrors.show = true
-            } else {
-              guide.mealPrice.push({
-                day: guideDay,
-                mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
-                mealPrice: mealDay.obj.price,
-              })
-            }
+            } 
           })
         }
         state.tour.guide.forEach((guide) => {
@@ -698,6 +699,9 @@ export default {
           }
           if (guide.mealPrice) {
             guide.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
+          }
+          if (guide.guide.events.length > 0) {
+            guide.guide.events.forEach(event => total += parseFloat(event.price))
           }
           guide.guide.options.totalPrice = total
           guide.guide.options.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
@@ -736,27 +740,26 @@ export default {
             attendant.mealPrice = []
             attendant.attendant.daysArray.forEach((attendantDay) => {
               let mealDay = {}
-              if (state.tour.meal.length == 0) {
-                state.staffErrors.show = true
-              }
               state.tour.meal.forEach((meal) => {
                 if (meal.obj.daysArray.find(day => day == attendantDay)) {
                   mealDay = meal
                 }
+                if (!_.isEqual(mealDay, {})) {
+                  attendant.mealPrice.push({
+                    day: attendantDay,
+                    mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                    mealPrice: mealDay.obj.price,
+                  })
+                }
               })
+              // If no meal in all tour.mealArray add error
               if (_.isEqual(mealDay, {})) {
                 state.staffErrors.noMeal.push({
                   name: 'Сопровождающий: ' + attendant.attendant.name,
                   day: attendantDay,
                 }) 
                 state.staffErrors.show = true
-              } else {
-                attendant.mealPrice.push({
-                  day: attendantDay,
-                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
-                  mealPrice: mealDay.obj.price,
-                })
-              }
+              } 
             })
           }
           state.tour.attendant.forEach((attendant) => {
@@ -767,11 +770,92 @@ export default {
             if (attendant.mealPrice) {
               attendant.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
             }
+            if (attendant.attendant.events.length > 0) {
+              attendant.attendant.events.forEach(event => total += parseFloat(event.price))
+            }
             attendant.attendant.options.totalPrice = total
             attendant.attendant.options.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
             attendant.attendant.options.correctedPrice = total
             attendant.attendant.options.commissionPrice = total
           })
+        })
+      })
+    },
+    setTourFreeAdls(state) {
+      state.freeAdlErrors = {
+        noHotel: [],
+        noMeal: [],
+        show: false,
+      }
+      // FreeAdl options
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        if (freeAdl.options.hotel) {
+          freeAdl.hotelPrice = []
+          freeAdl.daysArray.forEach((freeAdlDay) => {
+            let hotelDay = {}
+            state.tour.hotel.forEach((hotel) => {
+              if (hotel.obj.daysArray.find(day => day == freeAdlDay)) {
+                hotelDay = hotel
+              }
+            })
+            if (_.isEqual(hotelDay, {})) {
+              state.freeAdlErrors.noHotel.push({
+                name: '"Бесплатный взрослый": ' + freeAdl.name,
+                day: freeAdlDay,
+              })
+              state.freeAdlErrors.show = true
+            } else {
+              freeAdl.hotelPrice.push({
+                day: freeAdlDay,
+                hotelName: hotelDay.hotel.name,
+                roomName: hotelDay.obj.name,
+                hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+                hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+              })
+            }
+          })
+        }
+        if (freeAdl.options.meal) {
+          freeAdl.mealPrice = []
+          freeAdl.daysArray.forEach((freeAdlDay) => {
+            let mealDay = {}
+            state.tour.meal.forEach((meal) => {
+              if (meal.obj.daysArray.find(day => day == freeAdlDay)) {
+                mealDay = meal
+              }
+              if (!_.isEqual(mealDay, {})) {
+                freeAdl.mealPrice.push({
+                  day: freeAdlDay,
+                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                  mealPrice: mealDay.obj.price,
+                })
+              }
+            })
+            // If no meal in all tour.mealArray add error
+            if (_.isEqual(mealDay, {})) {
+              state.freeAdlErrors.noMeal.push({
+                name: '"Бесплатный взрослый": ' + freeAdl.name,
+                day: freeAdlDay,
+              }) 
+              state.staffErrors.show = true
+            } 
+          })
+        }
+        state.tour.options.freeAdls.forEach((freeAdl) => {
+          let total = 0
+          if (freeAdl.hotelPrice) {
+            freeAdl.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+          }
+          if (freeAdl.mealPrice) {
+            freeAdl.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
+          }
+          if (freeAdl.museums.length > 0) {
+            freeAdl.museums.forEach(event => total += parseFloat(event.price))
+          }
+          freeAdl.totalPrice = total
+          freeAdl.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
+          freeAdl.correctedPrice = total
+          freeAdl.commissionPrice = total
         })
       })
     },
@@ -941,6 +1025,11 @@ export default {
       })
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.correctedPricePerSeat
+        netto += driver.totalPricePerSeat
+      })
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        summ += freeAdl.correctedPricePerSeat
+        netto += freeAdl.totalPricePerSeat
       })
       calcCustomer.standardPrice = summ + standardHotel
       calcCustomer.nettoStandardPrice = netto + nettoStandardHotel
@@ -1046,6 +1135,9 @@ export default {
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.commissionPricePerSeat
       })
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        summ += freeAdl.commissionPricePerSeat
+      })
       calcCustomer.commissionStandardPrice = summ + commissionStandardHotel
       calcCustomer.commissionSinglePrice = summ + commissionSingleHotel
       calcCustomer.commissionExtraPrice = summ + commissionExtraHotel
@@ -1081,6 +1173,9 @@ export default {
       state.tour.options.drivers.forEach((driver) =>
         driver.correction = correction
       )
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        freeAdl.correction = correction
+      })
     },
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
@@ -1210,6 +1305,17 @@ export default {
         }
         driver.correctedPricePerSeat = parseFloat(driver.correctedPricePerSeat.toFixed(2))
       })
+      // Calculate corrected price to FreeAdls
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        if (freeAdl.correction > 0) {
+          freeAdl.correctedPricePerSeat = 
+          parseFloat(freeAdl.totalPricePerSeat) +
+            (parseFloat(freeAdl.totalPricePerSeat) * parseFloat(freeAdl.correction) / 100)
+        } else {
+          freeAdl.correctedPricePerSeat = freeAdl.totalPricePerSeat
+        }
+        freeAdl.correctedPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
+      })
     },
     setCommissionToAll: (state, commission) => {
       if (commission == NaN || commission == '') {
@@ -1240,6 +1346,9 @@ export default {
       })
       state.tour.options.drivers.forEach((driver) => {
         driver.commission = commission
+      })
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        freeAdl.commission = commission
       })
     },
     setCommissionPriceValues(state) {
@@ -1366,6 +1475,17 @@ export default {
         }
         driver.commissionPricePerSeat = parseFloat(driver.commissionPricePerSeat.toFixed(2))
       })
+      // Calculate commission price to FreeAdls
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        if (freeAdl.commission > 0) {
+          freeAdl.commissionPricePerSeat = 
+          parseFloat(freeAdl.correctedPricePerSeat) +
+            (parseFloat(freeAdl.correctedPricePerSeat) * parseFloat(freeAdl.commission) / 100)
+        } else {
+          freeAdl.commissionPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
+        }
+        freeAdl.commissionPricePerSeat = parseFloat(freeAdl.commissionPricePerSeat.toFixed(2))
+      })
     },
     setEditTour(state, tour) {
       state.tour = JSON.parse(tour.extra)
@@ -1490,6 +1610,11 @@ export default {
     actualAttendant: [],
     actualTransport: [],
     staffErrors: {
+      noHotel: [],
+      noMeal: [],
+      show: true,
+    },
+    freeAdlErrors: {
       noHotel: [],
       noMeal: [],
       show: true,
@@ -1717,6 +1842,9 @@ export default {
     },
     getStaffErrors(state) {
       return state.staffErrors
-    }
+    },
+    getFreeAdlErrors(state) {
+      return state.freeAdlErrors
+    },
   }
 }

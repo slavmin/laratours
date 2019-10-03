@@ -438,7 +438,7 @@
                 {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
-            <tr v-if="getTour.options.drivers != 0 || getTour.guide.length != 0">
+            <tr v-if="getTour.options.drivers != 0 || getTour.guide.length != 0 || getTour.attendant.length != 0">
               <td
                 class="text-xs-center" 
                 colspan="6"
@@ -504,6 +504,7 @@
                 </v-alert>
               </td>
             </tr>
+            <!-- Driver -->
             <tr v-show="showStaff">
               <td
                 v-if="getTour.options.drivers != []"
@@ -525,7 +526,7 @@
             </tr>
             <tr
               v-for="(driver, i) in getTour.options.drivers"
-              v-show="showDrivers"
+              v-show="showDrivers && showStaff"
               :key="`Driver-${i}`"
             >
               <td>
@@ -548,6 +549,7 @@
                   <div 
                     v-if="driver.hotelPrice"
                   >
+                    <v-divider />
                     Проживание: 
                     <div 
                       v-for="(room, r) in driver.hotelPrice"
@@ -569,6 +571,7 @@
                   <div
                     v-if="driver.mealPrice"
                   >
+                    <v-divider />
                     Питание:
                     <div
                       v-for="(meal, m) in driver.mealPrice"
@@ -623,6 +626,7 @@
                 {{ driver.commissionPricePerSeat }}
               </td>
             </tr>
+            <!-- Guide -->
             <tr v-show="showStaff">
               <td
                 v-if="getTour.guide.length != 0"
@@ -644,7 +648,7 @@
             </tr>
             <tr
               v-for="(guide, i) in getTour.guide"
-              v-show="showGuides"
+              v-show="showGuides && showStaff"
               :key="`Guide-${i}`"
             >
               <td>
@@ -665,6 +669,7 @@
                   <div
                     v-if="guide.guide.options.hotel"
                   >
+                    <v-divider />
                     Проживание: 
                     <div 
                       v-for="(room, r) in guide.hotelPrice"
@@ -686,6 +691,7 @@
                   <div
                     v-if="guide.mealPrice"
                   >
+                    <v-divider />
                     Питание:
                     <div
                       v-for="(meal, m) in guide.mealPrice"
@@ -699,6 +705,26 @@
                       <br>
                       <span class="body-1 grey--text">
                         Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="guide.guide.events.length > 0"
+                  >
+                    <v-divider />
+                    Экскурсии:
+                    <div
+                      v-for="(event, e) in guide.guide.events"
+                      :key="`Event-${e}`"
+                    >
+                      День: {{ event.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ event.museum }}, {{ event.event }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ event.price }}
                       </span>
                     </div>
                   </div>
@@ -740,6 +766,7 @@
                 {{ guide.guide.options.commissionPricePerSeat }}
               </td>
             </tr>
+            <!-- Attendant -->
             <tr v-show="showStaff">
               <td
                 v-if="getTour.guide.length != 0"
@@ -761,7 +788,7 @@
             </tr>
             <tr
               v-for="(attendant, i) in getTour.attendant"
-              v-show="showAttendant"
+              v-show="showAttendant && showStaff"
               :key="`Attendant-${i}`"
             >
               <td>
@@ -782,6 +809,7 @@
                   <div
                     v-if="attendant.attendant.options.hotel"
                   >
+                    <v-divider />
                     Проживание: 
                     <div 
                       v-for="(room, r) in attendant.hotelPrice"
@@ -803,6 +831,7 @@
                   <div
                     v-if="attendant.mealPrice"
                   >
+                    <v-divider />
                     Питание:
                     <div
                       v-for="(meal, m) in attendant.mealPrice"
@@ -816,6 +845,26 @@
                       <br>
                       <span class="body-1 grey--text">
                         Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="attendant.attendant.events.length > 0"
+                  >
+                    <v-divider />
+                    Экскурсии:
+                    <div
+                      v-for="(event, e) in attendant.attendant.events"
+                      :key="`AttendantEvent-${e}`"
+                    >
+                      День: {{ event.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ event.museum }}, {{ event.event }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ event.price }}
                       </span>
                     </div>
                   </div>
@@ -855,6 +904,193 @@
               </td>
               <td>
                 {{ attendant.attendant.options.commissionPricePerSeat }}
+              </td>
+            </tr>
+            <!-- Free adls -->
+            <tr v-if="getTour.options.freeAdls != 0">
+              <td
+                class="text-xs-center" 
+                colspan="6"
+                style="background-color: #f8f8f8;"
+              >
+                "Бесплатные взрослые"
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="showFreeAdls = !showFreeAdls"
+                >
+                  <v-icon>
+                    expand_{{ showFreeAdls ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
+                <v-alert
+                  v-if="getFreeAdlErrors.show"
+                  :value="true"
+                  color="orange"
+                  icon="priority_high"
+                >
+                  <p
+                    v-if="getFreeAdlErrors.noHotel.length > 0"
+                    class="body-2"
+                  >
+                    <v-icon
+                      color="white"
+                      class="mr-2"
+                    >
+                      hotel
+                    </v-icon>
+                    Не выбран отель на нужный день для:
+                    <ul style="list-style: none;">
+                      <li
+                        v-for="(error, i) in getFreeAdlErrors.noHotel"
+                        :key="`${error.name}-${i}`"
+                      >
+                        {{ error.name }}, день: {{ error.day }}
+                      </li>
+                    </ul>
+                  </p>
+                  <p
+                    v-if="getFreeAdlErrors.noMeal.length > 0"
+                    class="body-2"
+                  >
+                    <v-icon
+                      color="white"
+                      class="mr-2"
+                    >
+                      fastfood
+                    </v-icon>
+                    Не выбрано питание на нужный день для:
+                    <ul style="list-style: none;">
+                      <li
+                        v-for="(error, i) in getFreeAdlErrors.noMeal"
+                        :key="`${error.name}-${i}`"
+                      >
+                        {{ error.name }}, день: {{ error.day }}
+                      </li>
+                    </ul>
+                  </p>
+                </v-alert>
+              </td>
+            </tr>
+            <tr
+              v-for="(freeAdl, i) in getTour.options.freeAdls"
+              v-show="showFreeAdls"
+              :key="`FreeAdl-${i}`"
+            >
+              <td>
+                {{ freeAdl.name }}
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="freeAdl.showDetailsInSummary = !freeAdl.showDetailsInSummary"
+                >
+                  <v-icon>
+                    expand_{{ freeAdl.showDetailsInSummary ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
+                <div
+                  v-show="freeAdl.showDetailsInSummary"
+                >
+                  <div
+                    v-if="freeAdl.options.hotel"
+                  >
+                    <v-divider />
+                    Проживание: 
+                    <div 
+                      v-for="(room, r) in freeAdl.hotelPrice"
+                      :key="`FreeAdlRoom-${r}`"
+                    >
+                      День: {{ room.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ room.hotelName }}, {{ room.roomName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена (стандарт): {{ room.hotelStdPrice }}
+                        <br>
+                        Цена (сингл): {{ room.hotelSnglPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="freeAdl.mealPrice"
+                  >
+                    <v-divider />
+                    Питание:
+                    <div
+                      v-for="(meal, m) in freeAdl.mealPrice"
+                      :key="`FreeAdlMeal-${m}`"
+                    >
+                      День: {{ meal.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ meal.mealName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="freeAdl.museums.length > 0"
+                  >
+                    <v-divider />
+                    Экскурсии:
+                    <div
+                      v-for="(event, e) in freeAdl.museums"
+                      :key="`FreeAdl-${e}`"
+                    >
+                      День: {{ event.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ event.museum }}, {{ event.event }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ event.price }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {{ freeAdl.totalPricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ freeAdl.totalPrice }} / 
+                    {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
+              </td>
+              <td>
+                <v-text-field
+                  v-model="freeAdl.correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ freeAdl.correctedPricePerSeat }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="freeAdl.commission"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ freeAdl.commissionPricePerSeat }}
               </td>
             </tr>
             <tr>
@@ -1142,6 +1378,7 @@ export default {
       showDrivers: false,
       showGuides: false,
       showAttendant: false,
+      showFreeAdls: false,
     };
   },
   computed: {
@@ -1154,6 +1391,7 @@ export default {
       'getAverageCommission',
       'getAverageCorrection',
       'getStaffErrors',
+      'getFreeAdlErrors',
     ]),
     tourExtra: function() {
       return {
@@ -1184,6 +1422,7 @@ export default {
   mounted() {
     this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
     this.updateTourStaff()
+    this.updateTourFreeAdls()
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
@@ -1204,6 +1443,7 @@ export default {
       'updateCommissionPriceValues',
       'updateTourCommissionPrice',
       'updateTourStaff',
+      'updateTourFreeAdls',
     ]),
     saveTour() {
       console.log(this.getTour)
