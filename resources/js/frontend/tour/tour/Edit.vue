@@ -324,6 +324,7 @@ export default {
       'updateActualMeal',
       'updateActualGuide',
       'updateActualAttendant',
+      'clearStore'
     ]),
     log() {
       console.log(this.allTourOptions)
@@ -331,6 +332,7 @@ export default {
     close() {
       this.dialog = false
       this.updateConstructorCurrentStage('Initial stage')
+      this.clearStore()
       // this.reset()
     },
     submitType() {

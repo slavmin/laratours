@@ -208,6 +208,7 @@ export default {
                   commission: 0,
                   correctedPricePerSeat: 0,
                   commissionPricePerSeat: 0,
+                  showDetails: false,
                 }
                 if (driver.hotel) {
                   result.hotel = {
@@ -434,6 +435,8 @@ export default {
                 meal: false,
                 correction: 0,
                 commission: 0,
+                correctedPricePerSeat: 0,
+                commissionPricePerSeat: 0,
               },
               day: NaN,
               duration: NaN,
@@ -553,6 +556,11 @@ export default {
       })
     },
     setTourStaff(state) {
+      state.staffErrors = {
+        noHotel: [],
+        noMeal: [],
+        show: false,
+      }
       state.tour.options.drivers.forEach((driver) => {
         if (driver.hotel) {
           driver.hotelPrice = []
@@ -563,40 +571,60 @@ export default {
                 hotelDay = hotel
               }
             })
-            driver.hotelPrice.push({
-              day: driverDay,
-              hotelName: hotelDay.hotel.name,
-              roomName: hotelDay.obj.name,
-              hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
-              hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
-              showDetails: false,
-            })
+            if (_.isEqual(hotelDay, {})) {
+              state.staffErrors.noHotel.push({
+                name: 'Водитель ' + driver.driver,
+                day: driverDay,
+              })
+              state.staffErrors.show = true
+            }
+            else {
+              driver.hotelPrice.push({
+                day: driverDay,
+                hotelName: hotelDay.hotel.name,
+                roomName: hotelDay.obj.name,
+                hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+                hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+              })
+            }
           })
         }
         if (driver.meal) {
           driver.mealPrice = []
           driver.meal.daysArray.forEach((driverDay) => {
             let mealDay = {}
+            if (state.tour.meal.length == 0) {
+              state.staffErrors.show = true
+            }
             state.tour.meal.forEach((meal) => {
               if (meal.obj.daysArray.find(day => day == driverDay)) {
                 mealDay = meal
-                driver.mealPrice.push({
-                  day: driverDay,
-                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
-                  mealPrice: mealDay.obj.price,
-                })
               }
             })
+            if (_.isEqual(mealDay, {})) {
+              state.staffErrors.noMeal.push({
+                name: 'Водитель ' + driver.driver,
+                day: driverDay,
+              })
+              state.staffErrors.show = true
+            } else {
+              driver.mealPrice.push({
+                day: driverDay,
+                mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                mealPrice: mealDay.obj.price,
+              })
+            }
           })
         }
       })
+      console.log(state.staffErrors)
       state.tour.options.drivers.forEach((driver) => {
         let total = 0
         if (driver.hotelPrice) {
-          driver.hotelPrice.forEach(room => total += parseInt(room.hotelStdPrice))
+          driver.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
         }
         if (driver.mealPrice) {
-          driver.mealPrice.forEach(meal => total += parseInt(meal.mealPrice))
+          driver.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
         }
         driver.totalPrice = parseFloat(total)
         driver.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
@@ -613,13 +641,21 @@ export default {
                 hotelDay = hotel
               }
             })
-            guide.hotelPrice.push({
-              day: guideDay,
-              hotelName: hotelDay.hotel.name,
-              roomName: hotelDay.obj.name,
-              hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
-              hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
-            })
+            if (_.isEqual(hotelDay, {})) {
+              state.staffErrors.noHotel.push({
+                name: 'Гид: ' + guide.guide.name,
+                day: guideDay,
+              })
+              state.staffErrors.show = true
+            } else {
+              guide.hotelPrice.push({
+                day: guideDay,
+                hotelName: hotelDay.hotel.name,
+                roomName: hotelDay.obj.name,
+                hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+                hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+              })
+            }
           })
         }
         if (guide.guide.options.meal) {
@@ -627,25 +663,36 @@ export default {
           guide.mealPrice = []
           guide.guide.daysArray.forEach((guideDay) => {
             let mealDay = {}
+            if (state.tour.meal.length == 0) {
+              state.staffErrors.show = true
+            }
             state.tour.meal.forEach((meal) => {
               if (meal.obj.daysArray.find(day => day == guideDay)) {
                 mealDay = meal
-                guide.mealPrice.push({
-                  day: guideDay,
-                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
-                  mealPrice: mealDay.obj.price,
-                })
               }
             })
+            if (_.isEqual(mealDay, {})) {
+              state.staffErrors.noMeal.push({
+                name: 'Гид: ' + guide.guide.name,
+                day: guideDay,
+              }) 
+              state.staffErrors.show = true
+            } else {
+              guide.mealPrice.push({
+                day: guideDay,
+                mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                mealPrice: mealDay.obj.price,
+              })
+            }
           })
         }
         state.tour.guide.forEach((guide) => {
           let total = 0
           if (guide.hotelPrice) {
-            guide.hotelPrice.forEach(room => total += parseInt(room.hotelStdPrice))
+            guide.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
           }
           if (guide.mealPrice) {
-            guide.mealPrice.forEach(meal => total += parseInt(meal.mealPrice))
+            guide.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
           }
           guide.guide.options.totalPrice = total
           guide.guide.options.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
@@ -705,7 +752,6 @@ export default {
         summ += parseInt(price.pricePerSeat)
       })
       state.tour.options.drivers.forEach((driver) => {
-        console.log(state.tour.options)
         summ += driver.totalPricePerSeat
       })
       state.tour.totalPrice = summ
@@ -1012,20 +1058,25 @@ export default {
           guide.correctedPricePerSeat = 
             guide.pricePerSeat + 
             (guide.pricePerSeat * guide.correction / 100) 
+          } else {
+          // Guide price for customers
+          guide.correctedPricePerSeat = guide.pricePerSeat
+        }
+        if (guide.guide.options.correction > 0) {
           // Staff
           // Guide options: hotel, meal, events.
+          // Price per seat.
           guide.guide.options.correctedPricePerSeat = 
             guide.guide.options.totalPricePerSeat + 
             (guide.guide.options.totalPricePerSeat 
               * guide.guide.options.correction / 100)
           guide.guide.options.correctedPricePerSeat = parseFloat(guide.guide.options.correctedPricePerSeat.toFixed(2))
         } else {
-          // Guide price for customers
-          guide.correctedPricePerSeat = guide.pricePerSeat
           // Staff
           // Guide options: hotel, meal, events.
+          // Price per seat.
           guide.guide.options.correctedPricePerSeat = 
-            parseFloat(guide.guide.options.correctedPricePerSeat.toFixed(2))
+            parseFloat(guide.guide.options.totalPricePerSeat.toFixed(2))
         }
       })
       // Add price-fields to Attendant
@@ -1052,11 +1103,12 @@ export default {
       state.tour.options.drivers.forEach((driver) => {
         if (driver.correction > 0) {
           driver.correctedPricePerSeat = 
-          parseInt(driver.totalPricePerSeat) +
-            (parseInt(driver.totalPricePerSeat) * parseInt(driver.correction) / 100)
+          parseFloat(driver.totalPricePerSeat) +
+            (parseFloat(driver.totalPricePerSeat) * parseFloat(driver.correction) / 100)
         } else {
-          driver.correctedPricePerSeat = parseInt(driver.totalPricePerSeat)
+          driver.correctedPricePerSeat = driver.totalPricePerSeat
         }
+        driver.correctedPricePerSeat = parseFloat(driver.correctedPricePerSeat.toFixed(2))
       })
     },
     setCommissionToAll: (state, commission) => {
@@ -1189,12 +1241,12 @@ export default {
       state.tour.options.drivers.forEach((driver) => {
         if (driver.commission > 0) {
           driver.commissionPricePerSeat = 
-          driver.correctedPricePerSeat +
-            (driver.correctedPricePerSeat * driver.commission / 100)
+          parseFloat(driver.correctedPricePerSeat) +
+            (parseFloat(driver.correctedPricePerSeat) * parseFloat(driver.commission) / 100)
         } else {
-          driver.commissionPricePerSeat = driver.correctedPricePerSeat
+          driver.commissionPricePerSeat = parseFloat(driver.correctedPricePerSeat.toFixed(2))
         }
-        driver.commissionPricePerSeat = parseInt(driver.commissionPricePerSeat.toFixed(2))
+        driver.commissionPricePerSeat = parseFloat(driver.commissionPricePerSeat.toFixed(2))
       })
     },
     setEditTour(state, tour) {
@@ -1273,7 +1325,6 @@ export default {
   state: {
     editMode: false,
     tourOptions: [],
-    test: 0,
     tour: {
       id: NaN,
       options: {
@@ -1320,6 +1371,11 @@ export default {
     actualGuide: [],
     actualAttendant: [],
     actualTransport: [],
+    staffErrors: {
+      noHotel: [],
+      noMeal: [],
+      show: true,
+    },
   },
   getters: {
     allState(state) {
@@ -1541,5 +1597,8 @@ export default {
       })
       return parseFloat(summ / count).toFixed(2)
     },
+    getStaffErrors(state) {
+      return state.staffErrors
+    }
   }
 }

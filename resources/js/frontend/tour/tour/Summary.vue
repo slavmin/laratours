@@ -438,7 +438,7 @@
                 {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
-            <tr v-if="getTour.options.drivers != 0">
+            <tr v-if="getTour.options.drivers != 0 || getTour.guide.length != 0">
               <td
                 class="text-xs-center" 
                 colspan="6"
@@ -455,10 +455,58 @@
                     expand_{{ showStaff ? 'less' : 'more' }}
                   </v-icon>
                 </v-btn>
+                <v-alert
+                  v-if="getStaffErrors.show"
+                  :value="true"
+                  color="orange"
+                  icon="priority_high"
+                >
+                  <p
+                    v-if="getStaffErrors.noHotel.length > 0"
+                    class="body-2"
+                  >
+                    <v-icon
+                      color="white"
+                      class="mr-2"
+                    >
+                      hotel
+                    </v-icon>
+                    Не выбран отель на нужный день для:
+                    <ul style="list-style: none;">
+                      <li
+                        v-for="(error, i) in getStaffErrors.noHotel"
+                        :key="`${error.name}-${i}`"
+                      >
+                        {{ error.name }}, день: {{ error.day }}
+                      </li>
+                    </ul>
+                  </p>
+                  <p
+                    v-if="getStaffErrors.noMeal.length > 0"
+                    class="body-2"
+                  >
+                    <v-icon
+                      color="white"
+                      class="mr-2"
+                    >
+                      fastfood
+                    </v-icon>
+                    Не выбрано питание на нужный день для:
+                    <ul style="list-style: none;">
+                      <li
+                        v-for="(error, i) in getStaffErrors.noMeal"
+                        :key="`${error.name}-${i}`"
+                      >
+                        {{ error.name }}, день: {{ error.day }}
+                      </li>
+                    </ul>
+                  </p>
+                </v-alert>
               </td>
             </tr>
             <tr v-show="showStaff">
               <td
+                v-if="getTour.options.drivers != []"
                 class="text-xs-center" 
                 colspan="6"
               >
@@ -577,6 +625,7 @@
             </tr>
             <tr v-show="showStaff">
               <td
+                v-if="getTour.guide.length != 0"
                 class="text-xs-center" 
                 colspan="6"
               >
@@ -986,6 +1035,7 @@ export default {
       'getEditMode',
       'getAverageCommission',
       'getAverageCorrection',
+      'getStaffErrors',
     ]),
     tourExtra: function() {
       return {
@@ -1020,7 +1070,7 @@ export default {
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
     this.updateCommissionPriceValues()
-    // this.updateTourCommissionPrice()
+    this.updateTourCommissionPrice()
     // this.calculatePriceForEveryCustomer()
   },
   methods: {
