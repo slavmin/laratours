@@ -497,6 +497,10 @@ export default {
               options: {
                 hotel: false,
                 meal: false,
+                correction: 0,
+                commission: 0,
+                correctedPricePerSeat: 0,
+                commissionPricePerSeat: 0,
               },
               day: NaN,
               duration: NaN,
@@ -539,6 +543,7 @@ export default {
             pricePerSeat: parseInt(attendant.totalPrice / state.tour.qnt),
             correctedPricePerSeat: 0,
             commissionPricePerSeat: 0,
+            showDetails: false,
           })
         }
       })
@@ -617,7 +622,6 @@ export default {
           })
         }
       })
-      console.log(state.staffErrors)
       state.tour.options.drivers.forEach((driver) => {
         let total = 0
         if (driver.hotelPrice) {
@@ -631,6 +635,7 @@ export default {
         driver.correctedPrice = total
         driver.commissionPrice = total
       })
+      // Guide options
       state.tour.guide.forEach((guide) => {
         if (guide.guide.options.hotel) {
           guide.hotelPrice = []
@@ -698,6 +703,75 @@ export default {
           guide.guide.options.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
           guide.guide.options.correctedPrice = total
           guide.guide.options.commissionPrice = total
+        })
+        // Attendant options
+        state.tour.attendant.forEach((attendant) => {
+          if (attendant.attendant.options.hotel) {
+            attendant.hotelPrice = []
+            attendant.attendant.daysArray.forEach((attendantDay) => {
+              let hotelDay = {}
+              state.tour.hotel.forEach((hotel) => {
+                if (hotel.obj.daysArray.find(day => day == attendantDay)) {
+                  hotelDay = hotel
+                }
+              })
+              if (_.isEqual(hotelDay, {})) {
+                state.staffErrors.noHotel.push({
+                  name: 'Сопровождающий: ' + attendant.attendant.name,
+                  day: attendantDay,
+                })
+                state.staffErrors.show = true
+              } else {
+                attendant.hotelPrice.push({
+                  day: attendantDay,
+                  hotelName: hotelDay.hotel.name,
+                  roomName: hotelDay.obj.name,
+                  hotelStdPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.std,
+                  hotelSnglPrice: JSON.parse(hotelDay.obj.extra).priceList.adl.sngl,
+                })
+              }
+            })
+          }
+          if (attendant.attendant.options.meal) {
+            attendant.mealPrice = []
+            attendant.attendant.daysArray.forEach((attendantDay) => {
+              let mealDay = {}
+              if (state.tour.meal.length == 0) {
+                state.staffErrors.show = true
+              }
+              state.tour.meal.forEach((meal) => {
+                if (meal.obj.daysArray.find(day => day == attendantDay)) {
+                  mealDay = meal
+                }
+              })
+              if (_.isEqual(mealDay, {})) {
+                state.staffErrors.noMeal.push({
+                  name: 'Сопровождающий: ' + attendant.attendant.name,
+                  day: attendantDay,
+                }) 
+                state.staffErrors.show = true
+              } else {
+                attendant.mealPrice.push({
+                  day: attendantDay,
+                  mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
+                  mealPrice: mealDay.obj.price,
+                })
+              }
+            })
+          }
+          state.tour.attendant.forEach((attendant) => {
+            let total = 0
+            if (attendant.hotelPrice) {
+              attendant.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+            }
+            if (attendant.mealPrice) {
+              attendant.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
+            }
+            attendant.attendant.options.totalPrice = total
+            attendant.attendant.options.totalPricePerSeat = parseFloat((total / state.tour.qnt).toFixed(2))
+            attendant.attendant.options.correctedPrice = total
+            attendant.attendant.options.commissionPrice = total
+          })
         })
       })
     },
@@ -789,8 +863,13 @@ export default {
         netto += guide.guide.options.totalPricePerSeat
       })
       state.tour.attendant.forEach((attendant) => {
+        // Attendant price for customers
         summ += parseInt(attendant.correctedPricePerSeat)
         netto += parseInt(attendant.pricePerSeat)
+        // Staff
+        // Attendant options: hotel, meal, events.
+        summ += attendant.attendant.options.correctedPricePerSeat
+        netto += attendant.attendant.options.totalPricePerSeat
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.correctedPricePerSeat)
@@ -896,7 +975,11 @@ export default {
         summ += guide.guide.options.commissionPricePerSeat
       })
       state.tour.attendant.forEach((attendant) => {
+        // Attendant price for customers
         summ += attendant.commissionPricePerSeat
+        // Staff
+        // Attendant options: hotel, meal, events.
+        summ += attendant.attendant.options.commissionPricePerSeat
       })
       state.tour.customPrice.forEach((customPrice) => {
         summ += customPrice.commissionPricePerSeat
@@ -990,6 +1073,7 @@ export default {
       })
       state.tour.attendant.forEach((attendant) => {
         attendant.correction = correction
+        attendant.attendant.options.correction = correction
       })
       state.tour.customPrice.forEach((price) => {
         price.correction = correction
@@ -1088,6 +1172,22 @@ export default {
         } else {
           attendant.correctedPricePerSeat = attendant.pricePerSeat
         }
+        if (attendant.attendant.options.correction > 0) {
+          // Staff
+          // Attendant options: hotel, meal, events.
+          // Price per seat.
+          attendant.attendant.options.correctedPricePerSeat = 
+          attendant.attendant.options.totalPricePerSeat + 
+            (attendant.attendant.options.totalPricePerSeat 
+              * attendant.attendant.options.correction / 100)
+              attendant.attendant.options.correctedPricePerSeat = parseFloat(attendant.attendant.options.correctedPricePerSeat.toFixed(2))
+        } else {
+          // Staff
+          // Guide options: hotel, meal, events.
+          // Price per seat.
+          attendant.attendant.options.correctedPricePerSeat = 
+            parseFloat(attendant.attendant.options.totalPricePerSeat.toFixed(2))
+        }
       })
       // Add price-fields to Custom Price (Services)
       state.tour.customPrice.forEach((price) => {
@@ -1133,6 +1233,7 @@ export default {
       })
       state.tour.attendant.forEach((attendant) => {
         attendant.commission = commission
+        attendant.attendant.options.commission = commission
       })
       state.tour.customPrice.forEach((price) => {
         price.commission = commission
@@ -1201,16 +1302,19 @@ export default {
           guide.commissionPricePerSeat = 
             guide.correctedPricePerSeat + 
             (guide.correctedPricePerSeat * guide.commission / 100) 
+        } else {
+          // Guide price for customers
+          guide.commissionPricePerSeat = guide.correctedPricePerSeat
+        }
+        if (guide.guide.options.commission > 0) {
           // Staff
           // Guide options: hotel, meal, events.
           guide.guide.options.commissionPricePerSeat = 
             guide.guide.options.correctedPricePerSeat + 
             (guide.guide.options.correctedPricePerSeat 
               * guide.guide.options.commission / 100)
-          guide.guide.options.commissionPricePerSeat = parseFloat(guide.guide.options.commissionPricePerSeat.toFixed(2))
+              guide.guide.options.commissionPricePerSeat = parseFloat(guide.guide.options.commissionPricePerSeat.toFixed(2))
         } else {
-          // Guide price for customers
-          guide.commissionPricePerSeat = guide.correctedPricePerSeat
           // Staff
           // Guide options: hotel, meal, events.
           guide.guide.options.commissionPricePerSeat = 
@@ -1225,6 +1329,20 @@ export default {
             (attendant.correctedPricePerSeat * attendant.commission / 100) 
         } else {
           attendant.commissionPricePerSeat = attendant.correctedPricePerSeat
+        }
+        if (attendant.attendant.options.commission > 0) {
+          // Staff
+          // Attendant options: hotel, meal, events.
+          attendant.attendant.options.commissionPricePerSeat = 
+            attendant.attendant.options.correctedPricePerSeat + 
+            (attendant.attendant.options.correctedPricePerSeat 
+              * attendant.attendant.options.commission / 100)
+              attendant.attendant.options.commissionPricePerSeat = parseFloat(attendant.attendant.options.commissionPricePerSeat.toFixed(2))
+        } else {
+          // Staff
+          // Attendant options: hotel, meal, events.
+          attendant.attendant.options.commissionPricePerSeat = 
+            parseFloat(attendant.attendant.options.correctedPricePerSeat.toFixed(2))
         }
       })
       // Add price-fields to Custom Price (Services)

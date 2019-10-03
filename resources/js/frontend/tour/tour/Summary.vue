@@ -740,6 +740,123 @@
                 {{ guide.guide.options.commissionPricePerSeat }}
               </td>
             </tr>
+            <tr v-show="showStaff">
+              <td
+                v-if="getTour.guide.length != 0"
+                class="text-xs-center" 
+                colspan="6"
+              >
+                Сопровождающие
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="showAttendant = !showAttendant"
+                >
+                  <v-icon>
+                    expand_{{ showAttendant ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
+              </td>
+            </tr>
+            <tr
+              v-for="(attendant, i) in getTour.attendant"
+              v-show="showAttendant"
+              :key="`Attendant-${i}`"
+            >
+              <td>
+                {{ attendant.attendant.name }}
+                <v-btn 
+                  color="green"
+                  fab
+                  flat
+                  @click="attendant.showDetails = !attendant.showDetails"
+                >
+                  <v-icon>
+                    expand_{{ attendant.showDetails ? 'less' : 'more' }}
+                  </v-icon>
+                </v-btn>
+                <div
+                  v-show="attendant.showDetails"
+                >
+                  <div
+                    v-if="attendant.attendant.options.hotel"
+                  >
+                    Проживание: 
+                    <div 
+                      v-for="(room, r) in attendant.hotelPrice"
+                      :key="`Room-${r}`"
+                    >
+                      День: {{ room.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ room.hotelName }}, {{ room.roomName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена (стандарт): {{ room.hotelStdPrice }}
+                        <br>
+                        Цена (сингл): {{ room.hotelSnglPrice }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-if="attendant.mealPrice"
+                  >
+                    Питание:
+                    <div
+                      v-for="(meal, m) in attendant.mealPrice"
+                      :key="`Meal-${m}`"
+                    >
+                      День: {{ meal.day }}
+                      <br>
+                      <span class="body-1 grey--text">
+                        {{ meal.mealName }}
+                      </span>
+                      <br>
+                      <span class="body-1 grey--text">
+                        Цена: {{ meal.mealPrice }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {{ attendant.attendant.options.totalPricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    {{ attendant.attendant.options.totalPrice }} / 
+                    {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
+              </td>
+              <td>
+                <v-text-field
+                  v-model="attendant.attendant.options.correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ attendant.attendant.options.correctedPricePerSeat }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="attendant.attendant.options.commission"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ attendant.attendant.options.commissionPricePerSeat }}
+              </td>
+            </tr>
             <tr>
               <td>
                 Итого: 
@@ -751,17 +868,17 @@
                 {{ getTour.totalPrice.toFixed(2) }}
               </td>
               <td>
-                <span class="body-1 grey--text">
+                <!-- <span class="body-1 grey--text">
                   Наценка средняя: {{ getAverageCorrection }}%
-                </span>
+                </span> -->
               </td>
               <td>
                 {{ (getTour.correctedPrice).toFixed(2) }}
               </td>
               <td>
-                <span class="body-1 grey--text">
+                <!-- <span class="body-1 grey--text">
                   Комиссия средняя: {{ getAverageCommission }}%
-                </span>
+                </span> -->
               </td>
               <td>
                 {{ getTour.commissionPrice }}
@@ -1024,6 +1141,7 @@ export default {
       showStaff: false,
       showDrivers: false,
       showGuides: false,
+      showAttendant: false,
     };
   },
   computed: {
