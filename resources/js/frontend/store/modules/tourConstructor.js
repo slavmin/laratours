@@ -910,15 +910,25 @@ export default {
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.pricePerSeat)
+        console.log(guide)
+        if (guide.guide.options.totalPricePerSeat > 0) {
+          summ += parseInt(guide.guide.options.totalPricePerSeat)
+        }
       })
       state.tour.attendant.forEach((attendant) => {
         summ += parseInt(attendant.pricePerSeat)
+        if (attendant.attendant.options.totalPricePerSeat > 0) {
+          summ += parseInt(attendant.attendant.options.totalPricePerSeat)
+        }
       })
       state.tour.customPrice.forEach((price) => {
         summ += parseInt(price.pricePerSeat)
       })
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.totalPricePerSeat
+      })
+      state.tour.options.freeAdls.forEach((freeAdl) => {
+        summ += freeAdl.totalPricePerSeat
       })
       state.tour.totalPrice = summ
       state.tour.calc.priceList[state.tour.calc.currentCustomer].nettoPrice = summ
@@ -943,7 +953,7 @@ export default {
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
-        netto += parseInt(meal.obj.price)
+        netto += parseInt(meal.obj.totalPrice)
       })
       state.tour.guide.forEach((guide) => {
         // Guide price for customers
@@ -1028,9 +1038,6 @@ export default {
           )
         }
       })
-      let calcCustomer = state.tour.calc.priceList.find((item) => {
-        return item.id == state.tour.calc.currentCustomer
-      })
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.correctedPricePerSeat
         netto += driver.totalPricePerSeat
@@ -1038,6 +1045,9 @@ export default {
       state.tour.options.freeAdls.forEach((freeAdl) => {
         summ += freeAdl.correctedPricePerSeat
         netto += freeAdl.totalPricePerSeat
+      })
+      let calcCustomer = state.tour.calc.priceList.find((item) => {
+        return item.id == state.tour.calc.currentCustomer
       })
       calcCustomer.standardPrice = summ + standardHotel
       calcCustomer.nettoStandardPrice = netto + nettoStandardHotel

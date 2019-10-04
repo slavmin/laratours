@@ -1500,15 +1500,13 @@ export default {
         console.log(customer.name)
         setTimeout(() => { 
           this.currentCustomerType = customer.id
-          this.updateCorrectedPriceValues()
-          this.updateTourCommissionPrice()
+          this.correctPrice()
         }, 300)
       })
       setTimeout(() => {
         this.currentCustomerType = prevCustomer
         this.updateCurrentCustomerType(this.currentCustomerType)
-        this.updateCorrectedPriceValues()
-        this.updateTourCommissionPrice()
+        this.correctPrice()
       }, 2000)
     },
     customerChanged() {
