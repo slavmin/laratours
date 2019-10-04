@@ -39,7 +39,7 @@
           <td>
             {{ 
               item.extra 
-                ? getCityName(JSON.parse(item.extra).options.cities[0]) 
+                ? getCitiesNames(JSON.parse(item.extra).options.cities) 
                 : '' 
             }}
           </td>
@@ -116,13 +116,19 @@ export default {
       }
     },
   },
+  mounted() {
+    console.log(JSON.parse(this.items[0].extra))
+  },
   methods: {
-    getCityName(id) {
+    getCitiesNames(cities) {
       let cityName = ''
-      _.toArray(this.cities).forEach((city, i) => {
-        if (i == id) {
-          cityName = this.cities[i]
-        }
+      console.log(cities)
+      cities.forEach((cityId) => {
+        _.toArray(this.cities).forEach((city, i) => {
+          if (i == cityId) {
+            cityName += this.cities[i] + '. '
+          }
+        })
       })
       return cityName
     },

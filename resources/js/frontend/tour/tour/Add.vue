@@ -270,7 +270,6 @@ export default {
       'allTransports',
       'allTourOptions',
       'getConstructorCurrentStage',
-      'allState',
       'getTour',
       
     ]),

@@ -13,6 +13,7 @@
     <v-dialog
       v-if="showScheme"
       v-model="showScheme"
+      max-width="800"
       lazy
       hide-overlay
     >
@@ -55,6 +56,28 @@
                   </div>
                 </div>
                 <!-- /Bus scheme -->
+              </v-flex>
+              <v-flex>
+                <p
+                  class="headline text-xs-right"
+                >
+                  <span
+                    class="grey--text"
+                  >
+                    Всего пассажирских мест:
+                  </span>
+                  {{ bus.totalPassengersCount }}
+                </p>
+                <p
+                  class="headline text-xs-right"
+                >
+                  <span
+                    class="orange--text"
+                  >
+                    Свободно:
+                  </span>
+                  {{ bus.freePassengersCount }}
+                </p>
               </v-flex>
               <v-flex>
                 <v-alert
@@ -155,7 +178,7 @@
           vertical
           color="pink"
         >
-          {{ text }}
+          {{ fakeText }}
           <v-btn
             color="white"
             flat
@@ -214,7 +237,7 @@ export default {
         ordered: [],
         current: [],
         seatsInCurrentOrder: [],
-        totalPassengersCount: 0,
+        freePassengersCount: 0,
       },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
@@ -241,6 +264,24 @@ export default {
       'getOrderedSeats',
       'getSeatsInCurrentOrder',
     ]),
+    fakeOrderedSeats() {
+      return 10
+    },
+    fakeFreeSeats() {
+      return this.bus.totalPassengersCount - this.fakeOrderedSeats
+    },
+    fakeText: function() {
+      let orderedCount = 0
+      if (this.bus.ordered) {
+        this.bus.ordered.forEach((orderedSeatId) => {
+          if (orderedSeatId != null) {
+            orderedCount += 1
+          }
+        })
+      }
+      if (orderedCount > 0) return `Этот тур уже заказали ${orderedCount} чел.! Смотрят сейчас: ${orderedCount + 3}`
+      return `4 человека смотрят этот тур прямо сейчас!`
+    }
   },
   watch: {
     choosenSeats: function() {
@@ -265,8 +306,8 @@ export default {
       this.initialScheme = this.bus
     }
     this.drawScheme()
-    this.totalPassengersCount = 0
-    this.setTotalPassengersCount()
+    this.freePassengersCount = 0
+    this.setFreePassengersCount()
     this.setServiceSeats()
     this.bus.ordered = this.getOrderedSeats
     this.bus.current = this.getSeatsInCurrentOrder
@@ -274,8 +315,8 @@ export default {
   },
   updated() {
     this.drawScheme()
-    this.totalPassengersCount = 0
-    this.setTotalPassengersCount()
+    this.freePassengersCount = 0
+    this.setFreePassengersCount()
     this.extra.scheme = this.bus
   },
   methods: {
@@ -487,9 +528,9 @@ export default {
       //   scheme: this.bus
       // })
     },
-    setTotalPassengersCount() {
+    setFreePassengersCount() {
       let commonSeats = document.getElementsByClassName('common-seat')
-      this.bus.totalPassengersCount = commonSeats.length
+      this.bus.freePassengersCount = commonSeats.length
     },
     setServiceSeats() {
       // Unavailable seats for order
@@ -505,10 +546,10 @@ export default {
       this.choosenSeats = []
       // this.updateSeatsInCurrentOrder(_.concat(this.getSeatsInCurrentOrder, this.selectedInThisFormSeat))
       this.bus = Object.assign({}, this.initialScheme)
-      this.showScheme = false
-      this.bus.totalPassengersCount = 0
+      this.bus.freePassengersCount = 0
       this.updateSeatsInCurrentOrder(this.selectedInThisFormSeat)
-      this.setTotalPassengersCount()
+      this.setFreePassengersCount()
+      this.showScheme = false
     },
     save() {
       this.$emit('choosen', this.choosenSeats[0])
@@ -516,7 +557,7 @@ export default {
       this.updateSeatsInCurrentOrder(this.choosenSeats[0])
       this.choosenSeats = []
       this.showScheme = false
-    }
+    },
   }
 };
 </script>

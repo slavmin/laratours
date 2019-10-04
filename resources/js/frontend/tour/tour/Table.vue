@@ -82,6 +82,11 @@
           <td
             :class="props.item.published ? '' : 'unpublished'"
           >
+            {{ getCreatedFormattedDate(props.item.created_at) }}
+          </td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             <v-layout 
               row 
               wrap
@@ -136,6 +141,7 @@ import About from './About'
 import Edit from './Edit'
 import Publish from './Publish'
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
 
   name: 'TourTable',
@@ -171,7 +177,8 @@ export default {
         { text: 'Стоимость', value: 'price' },
         { text: 'Описание', value: 'about' },
         { text: 'Забронировано', value: 'ordered' },
-        { text: 'Действия', value: 'actions' }
+        { text: 'Создан', value: 'created' },
+        { text: 'Действия', value: 'actions' },
       ],
     }
   },
@@ -209,6 +216,11 @@ export default {
         }
       })
       return cityName
+    },
+    getCreatedFormattedDate(date) {
+      const a = moment(date)
+      moment.locale('ru')
+      return a.format('DD MMM YYYY')
     }
   },
 
