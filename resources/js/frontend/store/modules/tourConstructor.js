@@ -621,6 +621,8 @@ export default {
               })
               state.staffErrors.show = true
             }
+            // Remove duplicates
+            driver.mealPrice = _.uniqWith(driver.mealPrice, _.isEqual)
           })
         }
       })
@@ -666,7 +668,6 @@ export default {
           })
         }
         if (guide.guide.options.meal) {
-          console.log(guide)
           guide.mealPrice = []
           guide.guide.daysArray.forEach((guideDay) => {
             let mealDay = {}
@@ -675,6 +676,7 @@ export default {
                 mealDay = meal
               }
               if (!_.isEqual(mealDay, {})){
+                console.log('push meal: ', mealDay, guideDay)
                 guide.mealPrice.push({
                   day: guideDay,
                   mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
@@ -690,6 +692,8 @@ export default {
               }) 
               state.staffErrors.show = true
             } 
+            // Remove duplicates
+            guide.mealPrice = _.uniqWith(guide.mealPrice, _.isEqual)
           })
         }
         state.tour.guide.forEach((guide) => {
@@ -760,6 +764,8 @@ export default {
                 }) 
                 state.staffErrors.show = true
               } 
+              // Remove duplicates
+              attendant.mealPrice = _.uniqWith(attendant.mealPrice, _.isEqual)
             })
           }
           state.tour.attendant.forEach((attendant) => {
@@ -839,6 +845,8 @@ export default {
               }) 
               state.staffErrors.show = true
             } 
+            // Remove duplicates
+            freeAdl.mealPrice = _.uniqWith(freeAdl.mealPrice, _.isEqual)
           })
         }
         state.tour.options.freeAdls.forEach((freeAdl) => {
