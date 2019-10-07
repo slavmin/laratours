@@ -18,7 +18,7 @@ class TourOrder extends Model implements AuditableInterface
 {
     use UsedByTeams, HasPagination, HasProfile, SoftDeletes, OrderButtonsAttribute, Auditable;
 
-    protected $fillable = ['status'];
+    protected $fillable = ['status', 'total_price', 'total_paid', 'commission', 'discount', 'tax', 'invoice'];
 
     protected $casts = [
         'status' => 'integer'
@@ -68,7 +68,7 @@ class TourOrder extends Model implements AuditableInterface
      */
     public function tour()
     {
-        return $this->hasOne('App\Models\Tour\Tour')->withDefault();
+        return $this->belongsTo('App\Models\Tour\Tour', 'tour_id')->withDefault();
     }
 
     public function customer()
