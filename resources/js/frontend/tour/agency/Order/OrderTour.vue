@@ -120,12 +120,12 @@
                     <input 
                       type="hidden"
                       name="tour_id"
-                      :value="tour.id"
+                      :value="order.tour_id"
                     >
                     <input 
                       type="hidden"
                       name="operator_id"
-                      :value="tour.team_id"
+                      :value="order.team_id"
                     >
                     <input 
                       type="hidden"
@@ -138,9 +138,9 @@
                       :value="getOrderCommission"
                     >
                     <input 
-                      v-model="paid"
                       type="hidden"
                       name="total_paid"
+                      :value="parseInt(order.total_paid) + parseInt(paid)"
                     >
                   </v-card-text>
                 </v-card>
@@ -157,7 +157,7 @@
                 :name="chat != '' ? 'customer[0][chat]' : ''"
               >
               <input
-                value="Принят"
+                :value="agencyStatus"
                 type="hidden"
                 name="customer[0][orderStatus]"
               >
@@ -168,6 +168,8 @@
       <v-divider />
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ getOrderPrice }}
+        <br>
+        Оплачено ранее: {{ order.total_paid }}
         <br>
         Комиссия: {{ getOrderCommission }}
       </div>
@@ -180,13 +182,13 @@
           <v-text-field
             v-model="paid"
             mask="#######"
-            label="Оплачено"
+            label="Оплата"
             width="200"
           />
         </v-flex>
       </v-layout>
       <div class="subheading text-xs-right mr-3">
-        Остаток: {{ getOrderPrice - paid }}
+        Остаток: {{ getOrderPrice - order.total_paid - paid }}
       </div>
       <v-divider />
       <v-card-actions>
@@ -317,7 +319,6 @@ export default {
     this.status = this.order.status
     this.initialRoomsCount()
     this.updateProfilesData(this.profiles)
-    // this.updateMealByDay(this.tour)
   },
   methods: {
     ...mapActions([
