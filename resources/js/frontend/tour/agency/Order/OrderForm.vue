@@ -442,9 +442,6 @@ export default {
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
   },
-  updated() {
-    console.log(this.profile)
-  },
   methods: {
     ...mapActions([
       'updateChdRange',
