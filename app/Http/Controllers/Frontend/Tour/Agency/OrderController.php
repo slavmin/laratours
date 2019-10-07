@@ -64,7 +64,7 @@ class OrderController extends Controller
             ->with('action', 'create')
             ->with('route', route('frontend.agency.' . $model_alias . '.store'))
             ->with('cancel_route', route('frontend.agency.tour-list'))
-            ->with('item', $tour)
+            ->with('tour', $tour)
             ->with('statuses', [])
             ->with('profiles', [0 => []])
             ->with('model_alias', $model_alias);
@@ -78,7 +78,7 @@ class OrderController extends Controller
             'customer.*.first_name' => 'required|min:3|max:191',
             'customer.*.last_name'=> 'required|min:3|max:191',
             'customer.*.email'=> 'required|email|max:191',
-            // 'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
+            //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
         $profile = $request->get('customer');
@@ -87,6 +87,9 @@ class OrderController extends Controller
             'tour_id' => $request->get('tour_id'),
             'operator_id' => $request->get('operator_id'),
             'team_id' => auth()->user()->currentTeam->getKey(),
+            'total_price' => $request->get('total_price'),
+            'commission' => $request->get('commission'),
+            'total_paid' => $request->get('total_paid'),
             'created_at' => now(),
             'updated_at' => now(),
             'total_price' => $request->get('total_price'),
@@ -113,6 +116,15 @@ class OrderController extends Controller
 
         $item = TourOrder::findOrFail($id);
 
+        $operators = Team::getTeamSubscriptions();
+        $subscriptions = array_keys($operators);
+
+        $tour = Tour::whereId($item->tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
+
+        if (!$tour) {
+            return redirect()->back()->withFlashDanger(__('alerts.general.not_found'));
+        }
+
         $profiles = $item->profiles()->get()->pluck('content')->first();
 
         if(!is_array($profiles)){
@@ -123,7 +135,7 @@ class OrderController extends Controller
 
         $audits = $item->audits->sortByDesc('created_at');
 
-        return view('frontend.tour.order.private.edit', compact('item', 'profiles', 'statuses', 'audits'))
+        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.agency.' . $model_alias . '.update', [$item->id]))
@@ -138,7 +150,7 @@ class OrderController extends Controller
             'customer.*.first_name' => 'required|min:3|max:191',
             'customer.*.last_name'=> 'required|min:3|max:191',
             'customer.*.email'=> 'required|email|max:191',
-            // 'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
+            //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
         $profile = $request->get('customer');

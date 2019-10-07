@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
+use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -67,6 +69,12 @@ class OrderController extends Controller
 
         $item = TourOrder::findOrFail($id);
 
+        $tour = Tour::whereId($item->tour_id)->first();
+
+        if (!$tour) {
+            session()->put('flash_danger', __('alerts.general.not_found'));
+        }
+
         $profiles = $item->profiles()->get()->pluck('content')->first();
 
         if(!is_array($profiles)){
@@ -77,7 +85,7 @@ class OrderController extends Controller
 
         $audits = $item->audits->sortByDesc('created_at');
 
-        return view('frontend.tour.order.private.edit', compact('item', 'profiles', 'statuses', 'audits'))
+        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
@@ -92,7 +100,7 @@ class OrderController extends Controller
             'customer.*.first_name' => 'required|min:3|max:191',
             'customer.*.last_name'=> 'required|min:3|max:191',
             'customer.*.email'=> 'required|email|max:191',
-            // 'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
+            //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
         $profile = $request->get('customer');
