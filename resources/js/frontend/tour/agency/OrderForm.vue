@@ -211,6 +211,21 @@
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
           :value="profileMealData.mealPriceArray"
         >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isPens]' : ''"
+          :value="manualPens"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isForeigner]' : ''"
+          :value="isForeigner"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
+          :value="isSinglePlace"
+        >
       </v-flex>
     </v-layout>
     <v-layout 

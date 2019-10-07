@@ -309,9 +309,9 @@ export default {
     },
   },
   mounted() {
+    console.log(this.order)
     this.updateEditMode()
     // this.orderedSeats()
-    console.log(JSON.parse(this.profilesRaw))
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status

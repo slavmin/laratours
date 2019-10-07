@@ -76,6 +76,9 @@ export default {
         mealByDay: [],
         priceWithoutMeal: 0,
         resetProfile: 0,
+        isPens: false,
+        isForeigner: false,
+        isSinglePlace: false,
       })
     },
     setPriceList(state, priceList) {
@@ -185,6 +188,7 @@ export default {
       profile.name = data.name
       let profilePrice = 0
       let profileCommission = 0
+      console.log(state)
       switch (data.profileCustomerType) {
         case 'CHD':
           let price = pricelist.find((price) => {
@@ -317,6 +321,9 @@ export default {
         stateProfile.passport = dataProfile.passport
         stateProfile.price = dataProfile.price
         stateProfile.room = dataProfile.room
+        stateProfile.isPens = dataProfile.isPens == 'true' ? true : false
+        stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
+        stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
       }
     }
   },
@@ -413,7 +420,6 @@ export default {
           mealPriceArray: profile.mealPriceArray,
         }
       }
-      return {}
     }
   },
 }

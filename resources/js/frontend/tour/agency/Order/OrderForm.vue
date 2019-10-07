@@ -101,17 +101,17 @@
           wrap
         >
           <v-checkbox 
-            v-model="manualPens"
+            v-model="profile.isPens"
             label="Пенсионер"
             color="green"
           />
           <v-checkbox 
-            v-model="isForeigner"
+            v-model="profile.isForeigner"
             label="Иностранец"
             color="green"
           />  
           <v-checkbox 
-            v-model="isSinglePlace"
+            v-model="profile.isSinglePlace"
             label="Single-размещение"
             color="green"
           />  
@@ -204,12 +204,27 @@
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
-          :value="JSON.stringify(profileMealData.mealByDay)"
+          :value="profileMealData ? JSON.stringify(profileMealData.mealByDay) : ''"
         >
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
-          :value="profileMealData.mealPriceArray"
+          :value="profileMealData ? profileMealData.mealPriceArray : ''"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isPens]' : ''"
+          :value="profile.isPens"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isForeigner]' : ''"
+          :value="profile.isForeigner"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
+          :value="profile.isSinglePlace"
         >
       </v-flex>
     </v-layout>
@@ -280,7 +295,6 @@ export default {
       ],
       meal: '',
       meals: ['Завтраки', 'Полупансион', 'Полный пансион'],
-      age: NaN,
       priceList: [],
       pensRange: {
         male: 55,
@@ -301,7 +315,12 @@ export default {
       'getProfileCommission',
     ]),
     profile: function() {
-      return this.$store.getters.getProfile(this.id)
+      if (this.$store.getters.getProfile(this.id)) {
+        return this.$store.getters.getProfile(this.id)
+      } 
+      else {
+        return {}
+      }
     },
     transport: function() {
       // return JSON.parse(this.tour.extra).transport[0]
@@ -343,11 +362,11 @@ export default {
     profileCustomerType: function() {
       let type = ''
       if (!this.age) return 'age = nan'
-      if (this.isForeigner) {
+      if (this.profile.isForeigner) {
         type = 'FRGN'
-      } else if (this.isChd)  {
+      } else if (this.profile.isChd)  {
         type = 'CHD'
-      } else if (this.isPens) {
+      } else if (this.profile.isPens) {
         type = 'PENS'
       } else {
         type = 'ADL'
@@ -357,7 +376,7 @@ export default {
     profilePlace: function() {
       let place = 'STD'
       if (this.id == (2 + this.roomId * 3)) place = 'EXTRA'
-      if (this.isSinglePlace) place = 'SNGL'
+      if (this.profile && this.profile.isSinglePlace) place = 'SNGL'
       return place
     },
     profilePrice: function() {
@@ -367,8 +386,11 @@ export default {
       return this.$store.getters.getProfileCommission(this.id)
     },
     profileMealData: function() {
-      // return this.$store.getters.getProfileMealData(this.id)
-      return {}
+      return this.$store.getters.getProfileMealData(this.id)
+    },
+    age: function() {
+      if (this.profile) return moment().diff(this.profile.dob, 'years')
+      return NaN
     }
   },
   watch: {
@@ -413,15 +435,15 @@ export default {
     }
   },
   mounted() {
+    console.log(this.tour)
     // this.priceList = JSON.parse(this.tour.extra).calc.priceList
     this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
-    this.age = moment().diff(this.profile.dob, 'years')
-    console.log(this.profile)
   },
   updated() {
+    console.log(this.profile)
   },
   methods: {
     ...mapActions([
