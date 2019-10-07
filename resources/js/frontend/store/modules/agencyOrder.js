@@ -407,10 +407,13 @@ export default {
     },
     getProfileMealData: state => profileId => {
       const profile = state.profiles.find(profile => profile.id == profileId)
-      return {
-        mealByDay: profile.mealByDay,
-        mealPriceArray: profile.mealPriceArray,
+      if (profile) {
+        return {
+          mealByDay: profile.mealByDay,
+          mealPriceArray: profile.mealPriceArray,
+        }
       }
+      return {}
     }
   },
 }

@@ -215,6 +215,7 @@ export default {
         current: [],
         seatsInCurrentOrder: [],
         totalPassengersCount: 0,
+        freePassengersCount: 0,
       },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
