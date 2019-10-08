@@ -47,10 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'getMealByDay',
-      'getDefaultMealPriceArray',
-    ]),
+    ...mapGetters([]),
     defaultMeal: function() {
       return JSON.parse(this.tour.extra).meal
     },

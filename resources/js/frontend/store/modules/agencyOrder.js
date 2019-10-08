@@ -80,6 +80,12 @@ export default {
         isForeigner: false,
         isSinglePlace: false,
       })
+      if (state.editMode) {
+        let profile = _.last(state.profiles)
+        profile.mealByDay = state.mealByDay
+        profile.mealPrice = state.defaultMealPrice
+        profile.mealPriceArray = state.defaultMealPriceArray
+      }
     },
     setPriceList(state, priceList) {
       state.priceList = priceList
@@ -157,7 +163,6 @@ export default {
         day.forEach(price => state.defaultMealPrice += price)
       })
       if (!state.editMode) {
-        console.log('!state.ediMode')
         state.profiles.forEach((profile) => {
           defaultMealPriceArray.forEach((day) => {
             let tmp = []
@@ -166,6 +171,16 @@ export default {
             })
             profile.mealPriceArray.push(tmp)
           })
+        })
+      }
+      if (state.editMode) {
+        state.profiles.forEach((profile) => {
+          if (profile.mealByDay.length == 0) {
+            profile.mealByDay = state.mealByDay
+          }
+          if (profile.mealPriceArray.length == 0) {
+            profile.mealPriceArray = state.defaultMealPriceArray
+          }
         })
       }
     },
@@ -180,10 +195,14 @@ export default {
       if (profile.name != '') {
         profile.price = profile.priceWithoutMeal + profile.mealPrice
       }
-      profile.mealByDay = state.mealByDay
+      if (!state.editMode) profile.mealByDay = state.mealByDay
       let choosenMeal = profile.mealByDay[data.day - 1][data.index].find(meal => meal.name == data.newMeal.name)
       choosenMeal.manualChoose = true
-      if (data.prevMeal.manualChoose) data.prevMeal.manualChoose = false
+      profile.mealByDay[data.day - 1][data.index].map((meal) => {
+        if (meal.name != choosenMeal.name) {
+          meal.manualChoose = false
+        }
+      })
     },
     setProfilePrice(state, data) {
       const pricelist = state.priceList
@@ -310,6 +329,7 @@ export default {
       for (let index in data) {
         let stateProfile = state.profiles[index]
         let dataProfile = data[index]
+        console.log(stateProfile)
         stateProfile.address = dataProfile.address
         stateProfile.busSeatId = dataProfile.busSeatId
         stateProfile.dob = dataProfile.dob
@@ -384,8 +404,21 @@ export default {
       })
       return price
     },
-    getMealByDay: state => day => {
-      return state.mealByDay[day - 1]
+    getMealByDay: state => data => {
+      if (!state.editMode) {
+        return state.mealByDay[data.day - 1]
+      }
+      if (state.editMode) {
+        let profile = state.profiles.find(p => p.id == data.profileId)
+        // If empty profile, return default meal
+        if (profile.mealPriceArray.length == 0) {
+          return state.mealByDay[data.day - 1]
+        } 
+        // Else, return meal by day from profile
+        else {
+          return profile.mealByDay[data.day - 1]
+        }
+      }
     },
     getDefaultMealPriceArray(state) {
       return state.defaultMealPriceArray

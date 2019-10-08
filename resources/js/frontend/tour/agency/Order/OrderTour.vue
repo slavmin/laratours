@@ -318,16 +318,18 @@ export default {
       return result
     },
   },
+  created() {
+    // this.initialRoomsCount()
+  },
   mounted() {
-    // console.log(JSON.parse(this.tourProfilesRaw))
     this.updateEditMode()
     this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
-    this.updateProfilesData(this.profiles)
     this.updateMealByDay(this.tour)
+    this.updateProfilesData(this.profiles)
   },
   methods: {
     ...mapActions([

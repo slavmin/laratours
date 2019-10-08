@@ -46,7 +46,10 @@ export default {
   },
   computed: {
     mealByDay: function() {
-      return this.$store.getters.getMealByDay(this.day)
+      return this.$store.getters.getMealByDay({
+        day: this.day, 
+        profileId: this.profileId,
+      })
     },
     choosenMeal: {
       get: function() {

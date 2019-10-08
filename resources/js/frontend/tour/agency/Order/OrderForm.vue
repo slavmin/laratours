@@ -204,12 +204,12 @@
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
-          :value="profileMealData ? JSON.stringify(profileMealData.mealByDay) : ''"
+          :value="profileMealData ? JSON.stringify({content: profileMealData.mealByDay}) : ''"
         >
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
-          :value="profileMealData ? profileMealData.mealPriceArray : ''"
+          :value="profileMealData ? JSON.stringify({content: profileMealData.mealPriceArray}) : ''"
         >
         <input 
           type="hidden"
@@ -435,9 +435,12 @@ export default {
       this.date = this.profile.dob
     }
   },
+  created() {
+    if (this.id > 2) console.log('second page')
+    this.updateOrderProfiles(this.id)
+  },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
-    this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
