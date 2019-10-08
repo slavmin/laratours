@@ -330,6 +330,7 @@ export default {
     this.initialRoomsCount()
     this.updateMealByDay(this.tour)
     this.updateProfilesData(this.profiles)
+    console.log(this.profiles)
   },
   methods: {
     ...mapActions([
@@ -338,6 +339,7 @@ export default {
       'updateProfiles',
       'updateEditMode',
       'updateProfilesData',
+      'updateSeatsInCurrentOrder',
     ]),
     close() {
       this.dialog = false
@@ -359,7 +361,22 @@ export default {
           result.push(content[key].busSeatId)
         }
       })
-      this.updateOrderedSeats(result)
+      // Fill ordered seats in tour, exclude seats ordered in this order.
+      let seatsOrderedInCurrentOrder = []
+      JSON.parse(this.profilesRaw).map((profile) => {
+        seatsOrderedInCurrentOrder.push(profile.busSeatId)
+        this.updateSeatsInCurrentOrder(profile.busSeatId)
+      })
+      this.updateOrderedSeats(_.difference(result, seatsOrderedInCurrentOrder))
+      // Fill ordered in this order seats with id's.
+      // seatsOrderedInCurrentOrder = []
+      // for (let key in JSON.parse(this.profilesRaw)) {
+      //   seatsOrderedInCurrentOrder.push({
+      //     profileId: key,
+      //     orderedBusSeatId: JSON.parse(this.profilesRaw)[key],
+      //   })
+      // }
+      // console.log(seatsOrderedInCurrentOrder)
     },
     initialRoomsCount() {
       let result = 1

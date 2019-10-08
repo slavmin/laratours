@@ -165,11 +165,12 @@
     >
       <v-flex xs6>
         <div>
-          <!-- <BusScheme 
+          <BusScheme 
             :transport="transport"
             :scheme-id="id"
+            :ordered-seat="profile.busSeatId"
             @choosen="onChoosen"
-          /> -->
+          />
           <div v-if="choosenSeat != ''">
             Выбрано место: {{ choosenSeat }}
           </div>
@@ -247,12 +248,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-// import BusScheme from './BusScheme'
+import BusScheme from './BusScheme'
 import ChangeMeal from './ChangeMeal'
 export default {
   name: 'OrderForm',
   components: {
-    // BusScheme,
+    BusScheme,
     ChangeMeal,
   },
   props: {
@@ -324,8 +325,7 @@ export default {
       }
     },
     transport: function() {
-      // return JSON.parse(this.tour.extra).transport[0]
-      return {}
+      return JSON.parse(this.tour.extra).transport[0]
     },
     id: function() {
       return this.profileId + (this.roomId * 3)
