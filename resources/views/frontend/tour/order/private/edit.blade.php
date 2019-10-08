@@ -5,10 +5,12 @@
     @can('administer-tours')
         <?php $sitems = json_encode($audits); ?>
         <?php $sitem = json_encode($item); ?>   
+        <?php $stour = json_encode($tour); ?>  
         <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
         <?php $sprofiles = json_encode($profiles); ?>
         <operator-order-edit
             data-app
+            :tour="{{ $tour }}"
             :order="{{ $sitem }}"
             header-text="@lang('labels.frontend.tours.order.edit')"
             :statuses="{{ $sstatuses }}"
@@ -17,17 +19,21 @@
             token="{{ csrf_token() }}"
         ></operator-order-edit>
     @else
-    <?php $sitems = json_encode($audits); ?>
+        <?php $sitems = json_encode($audits); ?>
         <?php $sitem = json_encode($item); ?>   
         <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
-        <?php $sprofiles = json_encode($profiles); ?>
+        <?php $s_order_profiles = json_encode($profiles); ?>
+        <?php $s_tour_profiles = json_encode($tour->orderprofiles); ?>  
+        <?php $stour = json_encode($tour); ?>
         <agency-order-edit
             data-app
+            :tour="{{ $stour }}"
             :order="{{ $sitem }}"
             header-text="@lang('labels.frontend.tours.order.edit')"
             :statuses="{{ $sstatuses }}"
             :items="{{ $sitems }}"
-            profiles-raw="{{ $sprofiles }}"
+            profiles-raw="{{ $s_order_profiles }}"
+            tour-profiles-raw="{{ $s_tour_profiles }}"
             token="{{ csrf_token() }}"
         ></agency-order-edit>
     @endcan

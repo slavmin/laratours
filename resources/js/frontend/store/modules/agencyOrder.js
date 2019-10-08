@@ -47,7 +47,7 @@ export default {
     },
     async updateProfilesData({ commit }, data) {
       commit('fillProfilesData', data)
-    }
+    },
   },
   mutations: {
     setEditMode(state) {
@@ -156,15 +156,18 @@ export default {
       state.defaultMealPriceArray.forEach((day) => {
         day.forEach(price => state.defaultMealPrice += price)
       })
-      state.profiles.forEach((order) => {
-        defaultMealPriceArray.forEach((day) => {
-          let tmp = []
-          day.forEach((price) => {
-            tmp.push(price)
+      if (!state.editMode) {
+        console.log('!state.ediMode')
+        state.profiles.forEach((profile) => {
+          defaultMealPriceArray.forEach((day) => {
+            let tmp = []
+            day.forEach((price) => {
+              tmp.push(price)
+            })
+            profile.mealPriceArray.push(tmp)
           })
-          order.mealPriceArray.push(tmp)
         })
-      })
+      }
     },
     setProfileMeal(state, data) {
       let profile = state.profiles.find(profile => profile.id == data.profileId)
@@ -188,7 +191,6 @@ export default {
       profile.name = data.name
       let profilePrice = 0
       let profileCommission = 0
-      console.log(state)
       switch (data.profileCustomerType) {
         case 'CHD':
           let price = pricelist.find((price) => {
@@ -272,7 +274,7 @@ export default {
           }
           break
         default:
-          console.log('error')
+        console.log('error data: ', data)
       }
       if (profile.name != '') {
         profile.price = profilePrice
@@ -316,8 +318,8 @@ export default {
         stateProfile.first_name = dataProfile.first_name
         stateProfile.last_name = dataProfile.last_name
         stateProfile.meal = dataProfile.meal
-        stateProfile.mealByDay = dataProfile.mealByDay
-        stateProfile.mealPriceArray = dataProfile.mealPriceArray
+        stateProfile.mealByDay = JSON.parse(dataProfile.mealByDay).content
+        stateProfile.mealPriceArray = JSON.parse(dataProfile.mealPriceArray).content
         stateProfile.passport = dataProfile.passport
         stateProfile.price = dataProfile.price
         stateProfile.room = dataProfile.room
@@ -325,7 +327,7 @@ export default {
         stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
       }
-    }
+    },
   },
   state: {
     editMode: false,

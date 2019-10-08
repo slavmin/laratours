@@ -76,7 +76,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="profile.dob"
+                v-model="date"
                 clearable
                 label="Дата рождения"
                 :name="isRequired ? 'customer[' + id + '][dob]' : ''"
@@ -304,6 +304,7 @@ export default {
       isForeigner: false,
       isSinglePlace: false,
       showChangeMeal: false,
+      age: NaN,
     }
   },
   computed: {
@@ -364,7 +365,7 @@ export default {
       if (!this.age) return 'age = nan'
       if (this.profile.isForeigner) {
         type = 'FRGN'
-      } else if (this.profile.isChd)  {
+      } else if (this.isChd)  {
         type = 'CHD'
       } else if (this.profile.isPens) {
         type = 'PENS'
@@ -388,10 +389,6 @@ export default {
     profileMealData: function() {
       return this.$store.getters.getProfileMealData(this.id)
     },
-    age: function() {
-      if (this.profile) return moment().diff(this.profile.dob, 'years')
-      return NaN
-    }
   },
   watch: {
     menu (val) {
@@ -399,22 +396,22 @@ export default {
     },
     age() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.first_name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
     },
     profileCustomerType() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.first_name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
@@ -424,19 +421,22 @@ export default {
     },
     profilePlace() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
+    },
+    profile() {
+      this.age = moment().diff(this.profile.dob, 'years')
+      this.date = this.profile.dob
     }
   },
   mounted() {
-    console.log(this.tour)
-    // this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    this.priceList = JSON.parse(this.tour.extra).calc.priceList
     this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)

@@ -76,7 +76,7 @@ export default {
     ...mapActions([]),
     chooseMeal() {
       console.log(this.choosenMeal)
-      // this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
+      this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
     },
   }
 }

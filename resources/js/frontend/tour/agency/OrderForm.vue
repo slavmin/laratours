@@ -204,12 +204,12 @@
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
-          :value="JSON.stringify(profileMealData.mealByDay)"
+          :value="JSON.stringify({content: profileMealData.mealByDay})"
         >
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
-          :value="profileMealData.mealPriceArray"
+          :value="JSON.stringify({content: profileMealData.mealPriceArray})"
         >
         <input 
           type="hidden"
@@ -433,6 +433,7 @@ export default {
     this.updatePensRange(this.priceList)
   },
   updated() {
+    console.log(this.profileMealData)
   },
   methods: {
     ...mapActions([

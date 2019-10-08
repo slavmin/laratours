@@ -229,11 +229,19 @@ export default {
         return {}
       }
     },
+    // Order profiles
     profilesRaw: {
       type: String,
       default: () => {
         return ''
       }
+    },
+    // Tour profiles for bus-scheme and free seats
+    tourProfilesRaw: {
+      type: String,
+      default() {
+        return ''
+      },
     },
     token: {
       type: String,
@@ -311,14 +319,15 @@ export default {
     },
   },
   mounted() {
-    console.log(this.order)
+    // console.log(JSON.parse(this.tourProfilesRaw))
     this.updateEditMode()
-    // this.orderedSeats()
+    this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
     this.updateProfilesData(this.profiles)
+    this.updateMealByDay(this.tour)
   },
   methods: {
     ...mapActions([
@@ -342,7 +351,7 @@ export default {
     },
     orderedSeats() {
       let result = []
-      JSON.parse(this.profiles).map((profile) => {
+      JSON.parse(this.tourProfilesRaw).map((profile) => {
         let content = Object.assign({}, profile.content)
         for (let key in content) {
           result.push(content[key].busSeatId)

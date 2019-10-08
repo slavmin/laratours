@@ -120,7 +120,7 @@ class OrderController extends Controller
         $subscriptions = array_keys($operators);
 
         $tour = Tour::whereId($item->tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
-
+        
         if (!$tour) {
             return redirect()->back()->withFlashDanger(__('alerts.general.not_found'));
         }

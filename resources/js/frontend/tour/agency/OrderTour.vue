@@ -266,6 +266,7 @@ export default {
   },
   mounted() {
     console.log(this.tour)
+    console.log(this.profiles)
     this.orderedSeats()
     this.updateMealByDay(this.tour)
   },

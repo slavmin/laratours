@@ -55,12 +55,12 @@ export default {
       return JSON.parse(this.tour.extra).meal
     },
     mealCount: function() {
-      // const allMeals = JSON.parse(this.tour.extra).meal
+      const allMeals = JSON.parse(this.tour.extra).meal
       let result = [1,2]
-      // allMeals.forEach((meal) => {
-      //   meal.obj.daysArray.forEach(day => result.push(day))
-      //   result = _.uniq(result)
-      // })
+      allMeals.forEach((meal) => {
+        meal.obj.daysArray.forEach(day => result.push(day))
+        result = _.uniq(result)
+      })
       return result
     }
   },
