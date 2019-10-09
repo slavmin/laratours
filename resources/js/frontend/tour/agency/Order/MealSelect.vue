@@ -59,7 +59,6 @@ export default {
   },
   watch: {
     choosenMeal: function(newMeal, prevMeal) {
-      console.log('choosenMeal!', prevMeal, newMeal)
       this.updateProfileMeal({
         prevMeal,
         newMeal,

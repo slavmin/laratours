@@ -62,20 +62,16 @@
             />
           </td>
           <td class="text-xs-right">
-            {{ item.total_price }}
+            Цена: {{ item.total_price }}
             <br>
-            <div
-              v-if="item.total_paid"
-              class="grey--text"
-            >
-              Оплачено: {{ item.total_paid }}
-              <br>
-            </div>
             <span class="grey--text">К оплате:</span> 
-            {{ item.total_price - item.total_paid }}
+            {{ parseInt(item.total_price - item.commission) }}
+            <br>
+            <span class="grey--text">Оплачено:</span> 
+            {{ item.total_paid }}
           </td>
           <td>
-            {{ item.commission }}
+            {{ parseInt(item.commission) }}
           </td>
           <td>
             {{ operators[item.operator_id] }}

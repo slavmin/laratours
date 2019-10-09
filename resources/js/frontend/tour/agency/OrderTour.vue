@@ -149,7 +149,7 @@
               <input 
                 v-model="chat"
                 type="hidden"
-                :name="chat != '' ? 'customer[0][chat]' : ''"
+                name="customer[0][chat]"
               >
               <input
                 value="Принят"

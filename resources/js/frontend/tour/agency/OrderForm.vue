@@ -167,17 +167,26 @@
         <div>
           <BusScheme 
             :transport="transport"
-            :scheme-id="id"
-            @choosen="onChoosen"
+            :profile-id="id"
           />
-          <div v-if="choosenSeat != ''">
-            Выбрано место: {{ choosenSeat }}
+          <div v-if="profileBusSeatId != ''">
+            <span class="subheading">
+              Выбрано место: {{ profileBusSeatId }}
+            </span>
+            <v-btn 
+              color="red"
+              fab
+              flat
+              @click="clearBusSeatId"
+            >
+              <v-icon>delete_forever</v-icon>
+            </v-btn>
           </div>
         </div>
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][busSeatId]' : ''"
-          :value="choosenSeat"
+          :value="profileBusSeatId"
         >
       </v-flex>
       <v-spacer />
@@ -247,7 +256,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import BusScheme from './BusScheme'
+import BusScheme from '../includes/BusScheme'
 import ChangeMeal from './ChangeMeal'
 export default {
   name: 'OrderForm',
@@ -382,6 +391,9 @@ export default {
     },
     profileMealData: function() {
       return this.$store.getters.getProfileMealData(this.id)
+    },
+    profileBusSeatId: function() {
+      return this.$store.getters.getProfileBusSeatId(this.id)
     }
   },
   watch: {
@@ -445,22 +457,15 @@ export default {
       'updateOrderCommission',
       'resetProfile',
       'updateResetProfileFlag',
+      'removeBusSeatIdFromCurrent',
     ]),
     ...mapGetters([
       'getChdPrice',
       'getPensPrice',
     ]),
-    chooseSeat() {
-    },
-    onChoosen(seat) {
-      this.choosenSeat = seat
-    },
     save(date) {
       this.$refs.menu.save(date)
       this.age = moment().diff(date, 'years')
-    },
-    getPrice() {
-      
     },
     resetForm() {
       this.order = {
@@ -477,6 +482,12 @@ export default {
     },
     log() {
       console.log(this.profileMealData)
+    },
+    clearBusSeatId() {
+      this.removeBusSeatIdFromCurrent({
+        profileId: this.id,
+        busSeatId: this.profileBusSeatId,
+      })
     }
   }
 }

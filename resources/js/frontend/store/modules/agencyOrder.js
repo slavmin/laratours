@@ -48,6 +48,12 @@ export default {
     async updateProfilesData({ commit }, data) {
       commit('fillProfilesData', data)
     },
+    async updateProfileBusSeatId({ commit }, data) {
+      commit('setProfileBusSeatId', data)
+    },
+    async removeBusSeatIdFromCurrent({ commit }, data) {
+      commit('delBusSeatIdFromCurrent', data)
+    }
   },
   mutations: {
     setEditMode(state) {
@@ -79,6 +85,7 @@ export default {
         isPens: false,
         isForeigner: false,
         isSinglePlace: false,
+        busSeatId: '',
       })
       if (state.editMode) {
         let profile = _.last(state.profiles)
@@ -356,6 +363,17 @@ export default {
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
       }
     },
+    setProfileBusSeatId(state, data) {
+      let profile = state.profiles.find(p => p.id == data.profileId)
+      profile.busSeatId = data.busSeatId
+    },
+    delBusSeatIdFromCurrent(state, data) {
+      console.log(state.seatsInCurrentOrder, data)
+      let profile = state.profiles.find(p => p.id == data.profileId)
+      profile.busSeatId = ''
+      state.seatsInCurrentOrder = state.seatsInCurrentOrder.filter(s => s != data.busSeatId)
+      console.log(profile, state)
+    }
   },
   state: {
     editMode: false,
@@ -462,6 +480,12 @@ export default {
           mealByDay: profile.mealByDay,
           mealPriceArray: profile.mealPriceArray,
         }
+      }
+    },
+    getProfileBusSeatId: state => profileId => {
+      const profile = state.profiles.find(profile => profile.id == profileId)
+      if (profile) {
+        return profile.busSeatId
       }
     }
   },
