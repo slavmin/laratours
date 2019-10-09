@@ -218,6 +218,13 @@ export default {
               return price
             }
           })
+          // Hack to fix no-price if child younger than prices in pricelist
+          if (!price) {
+            price = pricelist.find((price) => {
+              return price.isChd
+            })
+          }
+          console.log(price)
           switch (data.profilePlace) {
             case 'EXTRA':
               profilePrice = price.commissionExtraPrice
@@ -228,6 +235,7 @@ export default {
               profileCommission = price.commissionSinglePrice - price.singlePrice
               break
             case 'STD':
+              console.log(profilePrice)
               profilePrice = price.commissionStandardPrice
               profileCommission = price.commissionStandardPrice - price.standardPrice
               break
