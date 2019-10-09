@@ -188,12 +188,12 @@
           <span class="grey--text">
             Цена:
           </span> 
-          {{ profilePrice }}
+          {{ parseInt(profilePrice) }}
           <br>
           <span class="grey--text">
             Комиссия:
           </span> 
-          {{ profileCommission }}
+          {{ parseInt(profileCommission) }}
         </div>
         <input 
           class="price"
@@ -427,13 +427,11 @@ export default {
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    console.log(this.priceList)
     this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
-  },
-  updated() {
-    console.log(this.profileMealData)
   },
   methods: {
     ...mapActions([

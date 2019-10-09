@@ -167,11 +167,11 @@
       </v-card-text>
       <v-divider />
       <div class="subheading text-xs-right mr-3">
-        Цена заказа: {{ getOrderPrice }}
+        Цена заказа: {{ parseInt(getOrderPrice) }}
         <br>
         Оплачено ранее: {{ order.total_paid }}
         <br>
-        Комиссия: {{ getOrderCommission }}
+        Комиссия: {{ parseInt(getOrderCommission) }}
       </div>
       <v-layout 
         row 
@@ -280,11 +280,11 @@ export default {
       'getOrderCommission',
     ]),
     prevChat: function() {
-      
-      // if (this.profiles[0].chat) {
-      //   const result = JSON.parse(this.profiles[0].chat)
-      //   return result
-      // }
+      console.log(this.profiles)
+      if (this.profiles[0]) {
+        const result = JSON.parse(this.profiles[0].chat)
+        return result
+      }
       return ''
     },
     chat: function() {
@@ -306,8 +306,7 @@ export default {
       if (this.comment != '') {
         return JSON.stringify(result)
       }
-      // return JSON.stringify(this.prevChat)
-      return ''
+      return JSON.stringify(this.prevChat)
     },
     statusesFormatted: function() {
       let result = []
@@ -325,12 +324,12 @@ export default {
     this.updateEditMode()
     this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
+    console.log(this.profiles)
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
     this.updateMealByDay(this.tour)
     this.updateProfilesData(this.profiles)
-    console.log(this.profiles)
   },
   methods: {
     ...mapActions([

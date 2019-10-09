@@ -164,7 +164,7 @@
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ getOrderPrice }}
         <br>
-        Комиссия: {{ getOrderCommission }}
+        Комиссия: {{ parseInt(getOrderCommission) }}
       </div>
       <v-layout 
         row 
@@ -265,8 +265,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.tour)
-    console.log(this.profiles)
     this.orderedSeats()
     this.updateMealByDay(this.tour)
   },

@@ -189,12 +189,12 @@
           <span class="grey--text">
             Цена:
           </span> 
-          {{ profilePrice }}
+          {{ parseInt(profilePrice) }}
           <br>
           <span class="grey--text">
             Комиссия:
           </span> 
-          {{ profileCommission }}
+          {{ parseInt(profileCommission) }}
         </div>
         <input 
           class="price"
