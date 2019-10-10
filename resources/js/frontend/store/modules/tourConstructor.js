@@ -28,6 +28,9 @@ export default {
     async updateNewMuseumOptions({ commit }, updData) {
       commit('setNewMuseumOptions', updData) // Toggle museum objectable 'selected'
     },
+    async upateNewMuseumCustomOrder({ commit }, updData) {
+      commit('setNewMuseumCustomOrder', updData)
+    },
     async updateTourMuseum({ commit }) {
       commit('setTourMuseum')
     },
@@ -273,20 +276,34 @@ export default {
       if (index != -1) {
         state.actualMuseum.splice(index, 1, updMuseum)
       }
-    }, 
+    },
     setTourMuseum: (state) => {
       state.tour.museum = []
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (obj.selected) {
-            state.tour.museum.push({ 
-              museum, 
-              obj,
-              correction: 0,
-              commission: 0,
-              correctedPrice: 0, 
-              commissionPrice: 0,
-            })
+            if (!obj.isCustomOrder) {
+              state.tour.museum.push({ 
+                museum, 
+                obj,
+                correction: 0,
+                commission: 0,
+                correctedPrice: 0, 
+                commissionPrice: 0,
+              })
+            }
+            if (obj.isCustomOrder) {
+              const pricePerSeat = (JSON.parse(obj.extra).price * obj.count / state.tour.qnt).toFixed(2)
+              state.tour.museumCustomOrder.push({
+                museum, 
+                obj,
+                correction: 0,
+                commission: 0,
+                correctedPrice: 0, 
+                commissionPrice: 0,
+                pricePerSeat: pricePerSeat,
+              })
+            }
           }
         })
       })
@@ -427,8 +444,8 @@ export default {
     setActualGuide(state) {
       let result = []
       state.tourOptions.guide_options.map((guide) => {
-        let guideCity = JSON.parse(guide.description).city
-          if (state.tour.options.cities.indexOf(parseInt(guideCity)) != -1) {
+        let guideCity = JSON.parse(guide.extra).city
+          if (_.intersection(guideCity, state.tour.options.cities) != []) {
             result.push({
               ...guide,
               selected: false,
@@ -491,26 +508,26 @@ export default {
     setActualAttendant(state) {
       let result = []
       state.tourOptions.attendant_options.map((attendant) => {
-        let attendantCity = JSON.parse(attendant.description).city
-          if (state.tour.options.cities.indexOf(parseInt(attendantCity)) != -1) {
-            result.push({
-              ...attendant,
-              selected: false,
-              events: [],
-              options: {
-                hotel: false,
-                meal: false,
-                correction: 0,
-                commission: 0,
-                correctedPricePerSeat: 0,
-                commissionPricePerSeat: 0,
-              },
-              day: NaN,
-              duration: NaN,
-              about: '',
-              totalPrice: 0,
-            })
-          }
+        let attendantCity = JSON.parse(attendant.extra).city
+        if (_.intersection(attendantCity, state.tour.options.cities) != []) {
+          result.push({
+            ...attendant,
+            selected: false,
+            events: [],
+            options: {
+              hotel: false,
+              meal: false,
+              correction: 0,
+              commission: 0,
+              correctedPricePerSeat: 0,
+              commissionPricePerSeat: 0,
+            },
+            day: NaN,
+            duration: NaN,
+            about: '',
+            totalPrice: 0,
+          })
+        }
         }
       )
       state.actualAttendant = result
@@ -890,6 +907,9 @@ export default {
         if (price == undefined) price = JSON.parse(museum.obj.extra).priceList[state.tour.calc.defaultCustomer]
         summ += parseInt(price.price)
       })
+      state.tour.museumCustomOrder.forEach((order) => {
+        summ += parseInt(order.pricePerSeat)
+      })
       state.tour.hotel.forEach((hotel) => {
         summ += parseInt(hotel.obj.totalPrice)
         // CHD prices
@@ -950,6 +970,10 @@ export default {
       state.tour.museum.forEach((museum) => {
         summ += parseInt(museum.correctedPrice)
         netto += parseInt(museum.correctedPrice * 100 / (100 + parseInt(museum.correction)))       
+      })
+      state.tour.museumCustomOrder.forEach((order) => {
+        summ += parseInt(order.correctedPricePerSeat)
+        netto += parseInt(order.pricePerSeat)
       })
       state.tour.meal.forEach((meal) => {
         summ += parseInt(meal.correctedPrice)
@@ -1071,6 +1095,9 @@ export default {
       state.tour.museum.forEach((museum) => {
         summ += museum.commissionPrice
       })
+      state.tour.museumCustomOrder.forEach((order) => {
+        summ += order.commissionPricePerSeat
+      })
       state.tour.meal.forEach((meal) => {
         summ += meal.commissionPrice
       })
@@ -1171,6 +1198,9 @@ export default {
       state.tour.museum.forEach((museum) => {
         museum.correction = correction
       })
+      state.tour.museumCustomOrder((order) => {
+        order.correction = correction
+      })
       state.tour.hotel.forEach((hotel) => {
         hotel.correction = correction
       })
@@ -1226,6 +1256,16 @@ export default {
             + (price.price * museum.correction / 100) 
         } else {
           museum.correctedPrice = price.price
+        }
+      })
+      // Calculate corrected price to museum custom order
+      state.tour.museumCustomOrder.forEach((order) => {
+        if (order.correction > 0) {
+          order.correctedPricePerSeat = 
+            parseInt(order.pricePerSeat) + 
+            (order.pricePerSeat * order.correction / 100)
+        } else {
+          order.correctedPricePerSeat = parseInt(order.pricePerSeat)
         }
       })
       // Add price-fields to Hotel
@@ -1345,6 +1385,9 @@ export default {
       state.tour.museum.forEach((museum) => {
         museum.commission = commission
       })
+      state.tour.museumCustomOrder.forEach((order) => {
+        order.commission = commission
+      })
       state.tour.hotel.forEach((hotel) => {
         hotel.commission = commission
       })
@@ -1400,6 +1443,16 @@ export default {
             + (museum.correctedPrice * museum.commission / 100) 
         } else {
           museum.commissionPrice = museum.correctedPrice
+        }
+      })
+      // Calculate museum custum order commission prices
+      state.tour.museumCustomOrder.forEach((order) => {
+        if (order.commission > 0) {
+          order.commissionPricePerSeat = 
+            order.correctedPricePerSeat +
+            (order.correctedPricePerSeat * order.commission / 100)
+        } else {
+          order.commissionPricePerSeat = order.correctedPricePerSeat
         }
       })
       // Add price-fields to Hotel
@@ -1560,6 +1613,7 @@ export default {
         },
         transport: [],
         museum: [],
+        museumCustomOrder: [],
         hotel: [],
         meal: [],
         alternativeMeal: [],
@@ -1601,6 +1655,7 @@ export default {
       },
       transport: [],
       museum: [],
+      museumCustomOrder: [],
       hotel: [],
       meal: [],
       alternativeMeal: [],
@@ -1706,13 +1761,15 @@ export default {
     getCurrentTourCustomers(state) {
       let result = []
       state.tour.museum.forEach((museum) => {
-        JSON.parse(museum.obj.extra).priceList.forEach((price) => {
-          result.push({
-            id: price.customerId,
-            name: price.customerName,
-            age: price.customerAge,
+        if (!JSON.parse(museum.obj.extra).isCustomOrder) {
+          JSON.parse(museum.obj.extra).priceList.forEach((price) => {
+            result.push({
+              id: price.customerId,
+              name: price.customerName,
+              age: price.customerAge,
+            })
           })
-        })
+        }
       })
       return _.uniqWith(result, _.isEqual)
     },

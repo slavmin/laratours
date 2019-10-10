@@ -160,7 +160,9 @@
             <td class="text-xs-center">
               {{ JSON.parse(props.item.extra).duration }} ч.
             </td>
-            <td>
+            <td
+              v-if="!JSON.parse(props.item.extra).isCustomOrder"
+            >
               <v-layout
                 v-for="price in JSON.parse(props.item.extra).priceList "
                 :key="price.customerId"
@@ -169,16 +171,24 @@
                 justify-space-between
                 my-2
               >
-                <div 
-                  d-flex
-                  class="grey--text"  
-                >
+                <span class="grey--text">
                   {{ price.customerName }}
-                </div>
-                <div d-flex>
-                  {{ price.price }}
-                </div>
+                </span>
+                {{ price.price }}
               </v-layout>
+            </td>
+            <td
+              v-if="JSON.parse(props.item.extra).isCustomOrder"
+            >
+              <span class="grey--text">
+                Цена:
+              </span> 
+              {{ JSON.parse(props.item.extra).price }}
+              <br>
+              <span class="grey--text">
+                Кол-во человек:
+              </span> 
+              {{ JSON.parse(props.item.extra).count }}
             </td>
             <td class="text-xs-right">
               <EditObjectables

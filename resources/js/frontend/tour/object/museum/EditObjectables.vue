@@ -105,6 +105,11 @@
                 xs12 
                 sm6 
               >
+                <v-checkbox 
+                  v-model="isCustomOrder" 
+                  label="Заказ-наряд" 
+                  color="green"
+                />
                 <v-text-field 
                   v-model="name"
                   label="Название" 
@@ -112,36 +117,74 @@
                   color="green"
                   class="mb-3"
                 />
-                <v-text-field 
-                  v-model="duration"
-                  label="Продолжительность экскурсии" 
-                  mask="##"
-                  outline
-                  color="green"
-                />
-                <h5 class="subheading grey--text">
-                  Цены:
-                </h5>
-                <div class="grey--text">
-                  Заполните только нужные поля. Остальные оставьте пустыми.
-                </div>
-                <v-layout 
-                  row 
-                  wrap
-                  justify-space-between
+                <div
+                  v-show="!isCustomOrder"
                 >
-                  <v-flex
-                    v-for="(customer, i) in customerTypes"
-                    :key="customer.id"
+                  <v-text-field 
+                    v-model="duration"
+                    label="Продолжительность экскурсии" 
+                    mask="##"
+                    outline
+                    color="green"
+                  />
+                  <h5 class="subheading grey--text">
+                    Цены:
+                  </h5>
+                  <div class="grey--text">
+                    Заполните только нужные поля. Остальные оставьте пустыми.
+                  </div>
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-space-between
                   >
-                    <v-text-field
-                      v-model="priceArray[i]"
-                      :label="customer.name"
-                      outline
-                      mask="#####"
-                    />
-                  </v-flex>
-                </v-layout>
+                    <v-flex
+                      v-for="(customer, i) in customerTypes"
+                      :key="customer.id"
+                    >
+                      <v-text-field
+                        v-model="priceArray[i]"
+                        :label="customer.name"
+                        outline
+                        mask="#####"
+                      />
+                    </v-flex>
+                  </v-layout>
+                </div>
+                <div
+                  v-show="isCustomOrder"
+                >
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-space-between
+                  >
+                    <v-flex>
+                      <v-text-field
+                        v-model="customOrder.count"
+                        label="Кол-во человек"
+                        outline
+                        mask="#####"
+                      />
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        v-model="customOrder.price"
+                        label="Цена"
+                        outline
+                        mask="#####"
+                      />
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="customOrder.about"
+                        label="Описание"
+                        outline
+                        color="green"
+                      />
+                    </v-flex>
+                  </v-layout>
+                </div>
               </v-flex>
             </v-layout>
           </v-form>
@@ -206,6 +249,12 @@ export default {
       name: '',
       price: 0,
       priceArray: [],
+      isCustomOrder: false,
+      customOrder: {
+        about: '',
+        count: NaN,
+        price: NaN,
+      }
     };
   },
   computed: {
@@ -213,6 +262,13 @@ export default {
       return 'attribute[' + this.event.id + ']'
     },
     extra: function() {
+      if (this.isCustomOrder) {
+        let customOrderData = JSON.stringify({
+          isCustomOrder: this.isCustomOrder,
+          ...this.customOrder,
+        })
+        return customOrderData
+      }
       return JSON.stringify({
         duration: this.duration,
         priceList: this.getPriceList()
@@ -237,14 +293,20 @@ export default {
   },
   methods: {
     parseInfo() {
-      this.name = this.event.name
-      this.price = this.event.price
-      this.duration = JSON.parse(this.event.extra).duration
-      this.customerId = JSON.parse(this.event.extra).customer
-      if (JSON.parse(this.event.extra).priceList) {
-        JSON.parse(this.event.extra).priceList.forEach((price, i) => {
-          this.priceArray[i] = price.price
-        })
+      if (!JSON.parse(this.event.extra).isCustomOrder) {
+        this.name = this.event.name
+        this.price = this.event.price
+        this.duration = JSON.parse(this.event.extra).duration
+        this.customerId = JSON.parse(this.event.extra).customer
+        if (JSON.parse(this.event.extra).priceList) {
+          JSON.parse(this.event.extra).priceList.forEach((price, i) => {
+            this.priceArray[i] = price.price
+          })
+        }
+      } else {
+        this.isCustomOrder = true
+        this.name = this.event.name
+        this.customOrder = JSON.parse(this.event.extra)
       }
     },
     close() {

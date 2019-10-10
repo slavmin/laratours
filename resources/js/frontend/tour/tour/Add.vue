@@ -271,6 +271,7 @@ export default {
       'allTourOptions',
       'getConstructorCurrentStage',
       'getTour',
+      'allState',
       
     ]),
     showOptions: function() {

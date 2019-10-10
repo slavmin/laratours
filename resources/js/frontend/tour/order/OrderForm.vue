@@ -501,6 +501,7 @@ export default {
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
+    console.log(this.priceList)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)

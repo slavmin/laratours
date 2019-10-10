@@ -167,6 +167,70 @@
                 {{ parseInt(event.commissionPrice).toFixed(2) }}
               </td>
             </tr>
+            <tr v-if="getTour.museumCustomOrder.length != 0">
+              <td
+                class="text-xs-center" 
+                colspan="6"
+              >
+                Заказ-наряды
+              </td>
+            </tr>
+            <tr 
+              v-for="(order, i) in getTour.museumCustomOrder"
+              :key="`CO-${i}`"
+            >
+              <td>
+                {{ order.museum.name }}:
+                <br>
+                {{ order.obj.name }}
+                <div class="body-1 grey--text">
+                  День: {{ order.obj.day }}
+                </div>
+                <div class="body-1 grey--text">
+                  Цена: {{ JSON.parse(order.obj.extra).price }}
+                </div>
+                <div class="body-1 grey--text">
+                  Количество: {{ order.obj.count }}
+                </div>
+              </td>
+              <td class="price">
+                {{ order.pricePerSeat }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon 
+                      color="grey"
+                      v-on="on"
+                    >
+                      info
+                    </v-icon>
+                  </template>
+                  <span>
+                    Стоимость за одного человека:
+                    {{ JSON.parse(order.obj.extra).price * order.obj.count }} руб. / {{ getTour.qnt }} чел.
+                  </span>
+                </v-tooltip>
+              </td>
+              <td>
+                <v-text-field
+                  v-model="order.correction"
+                  name="correction"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ parseInt(order.correctedPricePerSeat).toFixed(2) }}
+              </td>
+              <td>
+                <v-text-field
+                  v-model="order.commission"
+                  name="commision"
+                  @input="correctPrice"
+                />
+              </td>
+              <td>
+                {{ parseInt(order.commissionPricePerSeat).toFixed(2) }}
+              </td>
+            </tr>
             <tr v-if="getTour.hotel.length != 0">
               <td
                 class="text-xs-center" 

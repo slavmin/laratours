@@ -80,25 +80,68 @@
                       class="mt-3"
                       color="green"
                     />
+                    <!-- Regular events -->
                     <div
-                      v-for="(price, i) in JSON.parse(item.extra).priceList"
-                      :key="i"
-                      row
-                      justify-content-between
-                      wrap
+                      v-if="!JSON.parse(item.extra).isCustomOrder"
                     >
-                      <span class="grey--text text--darken-1">
-                        {{ price.customerName }}: 
-                      </span>
-                      <p 
-                        style="display: inline-block;"
+                      <div
+                        v-for="(price, i) in JSON.parse(item.extra).priceList"
+                        :key="i"
+                        row
+                        justify-content-between
+                        wrap
                       >
-                        {{ price.price }}
-                      </p>
+                        <span class="grey--text text--darken-1">
+                          {{ price.customerName }}: 
+                        </span>
+                        <p 
+                          style="display: inline-block;"
+                        >
+                          {{ price.price }}
+                        </p>
+                      </div>
+                      <br>
+                      <div class="mt-2">
+                        Длительность: {{ JSON.parse(item.extra).duration }}ч.
+                      </div>
                     </div>
-                    <br>
-                    <div class="mt-2">
-                      Длительность: {{ JSON.parse(item.extra).duration }}ч.
+                    <!-- Custom events. ЗАКАЗ НАРЯД -->
+                    <div
+                      v-if="JSON.parse(item.extra).isCustomOrder"
+                    >
+                      <v-layout 
+                        row 
+                        wrap
+                        justify-space-between
+                      >
+                        <v-flex xs8>
+                          <span class="grey--text text--darken-1">
+                            Цена: 
+                          </span>  
+                          <p 
+                            style="display: inline-block;"
+                          >
+                            {{ JSON.parse(item.extra).price }}
+                          </p>
+                          <br>
+                          <span class="grey--text text--darken-1">
+                            Кол-во человек: 
+                          </span>  
+                          <p 
+                            style="display: inline-block;"
+                          >
+                            {{ JSON.parse(item.extra).count }}
+                          </p>
+                        </v-flex>
+                        <v-flex xs4>
+                          <v-text-field
+                            v-model.number="item.count"
+                            :disabled="item.selected"
+                            label="Штук"
+                            type="number"
+                          />
+                        </v-flex>
+                      </v-layout>
                     </div>
                   </div>
                 </v-card-title>
@@ -187,13 +230,26 @@ export default {
       return cityName
     },
     choose(museum, item) {
-      let updData = {
-        'museum': museum,
-        'item': {
-          ...item,
-          selected: !item.selected,
-          'about': document.getElementById('about' + item.id).value,
-        }, 
+      let updData = {}
+      if (!JSON.parse(item.extra).isCustomOrder) {
+        updData = {
+          'museum': museum,
+          'item': {
+            ...item,
+            selected: !item.selected,
+            'about': document.getElementById('about' + item.id).value,
+            isCustomOrder: false,
+          }, 
+        }
+      } else {
+        updData = {
+          museum: museum,
+          item: {
+            ...item,
+            selected: !item.selected,
+            isCustomOrder: true,
+          }
+        }
       }
       this.updateNewMuseumOptions(updData)
     },
