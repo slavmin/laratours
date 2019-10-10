@@ -264,6 +264,16 @@ export default {
           })
         })
       })
+      state.tour.museumCustomOrder.forEach((selectedMuseumCustomOrder) => {
+        state.actualMuseum.forEach((actualMuseum) => {
+          actualMuseum.objectables.forEach((obj) => {
+            if (obj.id == selectedMuseumCustomOrder.obj.id) {
+              obj.day = selectedMuseumCustomOrder.obj.day
+              obj.selected = selectedMuseumCustomOrder.obj.selected
+            }
+          })
+        })
+      })
     },
     setNewMuseumOptions: (state, updData) => {
       let updMuseum = updData.museum
@@ -279,6 +289,7 @@ export default {
     },
     setTourMuseum: (state) => {
       state.tour.museum = []
+      state.tour.museumCustomOrder = []
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (obj.selected) {
