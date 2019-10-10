@@ -76,7 +76,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="profile.dob"
+                v-model="date"
                 clearable
                 label="Дата рождения"
                 :name="isRequired ? 'customer[' + id + '][dob]' : ''"
@@ -101,17 +101,17 @@
           wrap
         >
           <v-checkbox 
-            v-model="manualPens"
+            v-model="profile.isPens"
             label="Пенсионер"
             color="green"
           />
           <v-checkbox 
-            v-model="isForeigner"
+            v-model="profile.isForeigner"
             label="Иностранец"
             color="green"
           />  
           <v-checkbox 
-            v-model="isSinglePlace"
+            v-model="profile.isSinglePlace"
             label="Single-размещение"
             color="green"
           />  
@@ -165,19 +165,29 @@
     >
       <v-flex xs6>
         <div>
-          <!-- <BusScheme 
+          <BusScheme 
+            edit-mode
             :transport="transport"
-            :scheme-id="id"
-            @choosen="onChoosen"
-          /> -->
-          <div v-if="choosenSeat != ''">
-            Выбрано место: {{ choosenSeat }}
+            :profile-id="id"
+          />
+          <div v-if="profileBusSeatId != ''">
+            <span class="subheading">
+              Выбрано место: {{ profileBusSeatId }}
+            </span>
+            <v-btn 
+              color="red"
+              fab
+              flat
+              @click="clearBusSeatId"
+            >
+              <v-icon>delete_forever</v-icon>
+            </v-btn>
           </div>
         </div>
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][busSeatId]' : ''"
-          :value="choosenSeat"
+          :value="profileBusSeatId"
         >
       </v-flex>
       <v-spacer />
@@ -188,12 +198,12 @@
           <span class="grey--text">
             Цена:
           </span> 
-          {{ profilePrice }}
+          {{ parseInt(profilePrice) }}
           <br>
           <span class="grey--text">
             Комиссия:
           </span> 
-          {{ profileCommission }}
+          {{ parseInt(profileCommission) }}
         </div>
         <input 
           class="price"
@@ -204,12 +214,27 @@
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
-          :value="JSON.stringify(profileMealData.mealByDay)"
+          :value="profileMealData ? JSON.stringify({content: profileMealData.mealByDay}) : ''"
         >
         <input 
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
-          :value="profileMealData.mealPriceArray"
+          :value="profileMealData ? JSON.stringify({content: profileMealData.mealPriceArray}) : ''"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isPens]' : ''"
+          :value="profile.isPens"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isForeigner]' : ''"
+          :value="profile.isForeigner"
+        >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
+          :value="profile.isSinglePlace"
         >
       </v-flex>
     </v-layout>
@@ -232,12 +257,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-// import BusScheme from './BusScheme'
+import BusScheme from '../includes/BusScheme'
 import ChangeMeal from './ChangeMeal'
 export default {
   name: 'OrderForm',
   components: {
-    // BusScheme,
+    BusScheme,
     ChangeMeal,
   },
   props: {
@@ -280,7 +305,6 @@ export default {
       ],
       meal: '',
       meals: ['Завтраки', 'Полупансион', 'Полный пансион'],
-      age: NaN,
       priceList: [],
       pensRange: {
         male: 55,
@@ -290,6 +314,7 @@ export default {
       isForeigner: false,
       isSinglePlace: false,
       showChangeMeal: false,
+      age: NaN,
     }
   },
   computed: {
@@ -301,11 +326,15 @@ export default {
       'getProfileCommission',
     ]),
     profile: function() {
-      return this.$store.getters.getProfile(this.id)
+      if (this.$store.getters.getProfile(this.id)) {
+        return this.$store.getters.getProfile(this.id)
+      } 
+      else {
+        return {}
+      }
     },
     transport: function() {
-      // return JSON.parse(this.tour.extra).transport[0]
-      return {}
+      return JSON.parse(this.tour.extra).transport[0]
     },
     id: function() {
       return this.profileId + (this.roomId * 3)
@@ -343,11 +372,11 @@ export default {
     profileCustomerType: function() {
       let type = ''
       if (!this.age) return 'age = nan'
-      if (this.isForeigner) {
+      if (this.profile.isForeigner) {
         type = 'FRGN'
       } else if (this.isChd)  {
         type = 'CHD'
-      } else if (this.isPens) {
+      } else if (this.profile.isPens) {
         type = 'PENS'
       } else {
         type = 'ADL'
@@ -357,7 +386,7 @@ export default {
     profilePlace: function() {
       let place = 'STD'
       if (this.id == (2 + this.roomId * 3)) place = 'EXTRA'
-      if (this.isSinglePlace) place = 'SNGL'
+      if (this.profile && this.profile.isSinglePlace) place = 'SNGL'
       return place
     },
     profilePrice: function() {
@@ -367,8 +396,10 @@ export default {
       return this.$store.getters.getProfileCommission(this.id)
     },
     profileMealData: function() {
-      // return this.$store.getters.getProfileMealData(this.id)
-      return {}
+      return this.$store.getters.getProfileMealData(this.id)
+    },
+    profileBusSeatId: function() {
+      return this.$store.getters.getProfileBusSeatId(this.id)
     }
   },
   watch: {
@@ -377,22 +408,22 @@ export default {
     },
     age() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.first_name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
     },
     profileCustomerType() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.first_name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
@@ -402,26 +433,29 @@ export default {
     },
     profilePlace() {
       this.updateProfilePrice({
-        profileId: this.id,
+        profileId: this.profile.id,
         profileCustomerType: this.profileCustomerType,
         age: this.age,
         profilePlace: this.profilePlace,
-        name: this.order.name,
+        name: this.profile.name,
       })
       this.updateOrderPrice()
       this.updateOrderCommission()
+    },
+    profile() {
+      this.age = moment().diff(this.profile.dob, 'years')
+      this.date = this.profile.dob
     }
   },
-  mounted() {
-    // this.priceList = JSON.parse(this.tour.extra).calc.priceList
+  created() {
+    if (this.id > 2) console.log('second page')
     this.updateOrderProfiles(this.id)
+  },
+  mounted() {
+    this.priceList = JSON.parse(this.tour.extra).calc.priceList
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
-    this.age = moment().diff(this.profile.dob, 'years')
-    console.log(this.profile)
-  },
-  updated() {
   },
   methods: {
     ...mapActions([
@@ -435,6 +469,7 @@ export default {
       'updateOrderCommission',
       'resetProfile',
       'updateResetProfileFlag',
+      'removeBusSeatIdFromCurrent',
     ]),
     ...mapGetters([
       'getChdPrice',
@@ -467,6 +502,12 @@ export default {
     },
     log() {
       console.log(this.profileMealData)
+    },
+    clearBusSeatId() {
+      this.removeBusSeatIdFromCurrent({
+        profileId: this.id,
+        busSeatId: this.profileBusSeatId,
+      })
     }
   }
 }

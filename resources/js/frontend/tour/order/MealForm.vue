@@ -46,7 +46,10 @@ export default {
   },
   computed: {
     mealByDay: function() {
-      return this.$store.getters.getMealByDay(this.day)
+      return this.$store.getters.getMealByDay({
+        day: this.day, 
+        profileId: this.profileId,
+      })
     },
     choosenMeal: {
       get: function() {
@@ -76,7 +79,7 @@ export default {
     ...mapActions([]),
     chooseMeal() {
       console.log(this.choosenMeal)
-      // this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
+      this.updateChoosenMeal(this.mealOptions.find(item => item.name == this.choosenMeal))
     },
   }
 }

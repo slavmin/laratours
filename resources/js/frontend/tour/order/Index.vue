@@ -15,7 +15,7 @@
           :items="items"
           :token="token"
           :tour-names="tourNames"
-          :operators="operators"
+          :agencies="agencies"
           :statuses="statuses"
         />
       </v-flex>
@@ -25,7 +25,7 @@
 <script>
 import Table from './Table'
 export default {
-  name: 'AgencyOrderIndex',
+  name: 'OperatorOrderIndex',
   components: {
     Table,
   },
@@ -50,7 +50,7 @@ export default {
         return {}
       },
     },
-    operators: {
+    agencies: {
       type: Object,
       default: () => {
         return {}

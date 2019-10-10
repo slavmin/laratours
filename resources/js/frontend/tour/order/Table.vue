@@ -75,8 +75,6 @@ export default {
   },
   mounted() {
     this.updateTours(this.items.data)
-    console.log(this.items.data)
-    console.log(this.getTours)
   },
   methods: {
     ...mapActions([

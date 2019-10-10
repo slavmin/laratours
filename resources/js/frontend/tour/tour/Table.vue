@@ -75,7 +75,7 @@
           <td
             :class="props.item.published ? '' : 'unpublished'"
           >
-            {{ props.item.orderprofiles.length }}
+            {{ getOrdersCount(props.item.orderprofiles) }}
             /
             {{ JSON.parse(props.item.extra).qnt }}
           </td>
@@ -192,7 +192,6 @@ export default {
     this.fetchAttendant()
     this.fetchCities()
     this.fetchTourTypes()
-    console.log(this.tours)
   },
   methods: {
     ...mapActions([
@@ -221,9 +220,16 @@ export default {
       const a = moment(date)
       moment.locale('ru')
       return a.format('DD MMM YYYY')
+    },
+    getOrdersCount(orders) {
+      let result = 0
+      orders.forEach((order) => {
+        order.content.forEach(profile => result += 1)
+      })
+      return result
     }
   },
-
+  
 };
 </script>
 

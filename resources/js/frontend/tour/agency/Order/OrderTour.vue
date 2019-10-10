@@ -208,6 +208,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 import OrderForm from './OrderForm'
 // import Total from './Total'
 export default {
@@ -289,7 +290,7 @@ export default {
     },
     chat: function() {
       let result = {}
-      let date = new Date().toISOString().substr(0, 10)
+      let date = moment().locale('ru').format('lll')
       let message = {
         date,
         sender: 'Агентство',

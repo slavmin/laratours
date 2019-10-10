@@ -78,9 +78,16 @@ export default {
     }
   },
   mounted() {
+    // If profile is not empty, return choosed meal
     this.choosenMeal = this.meal.find((item) => {
-      return item.default
+      return item.manualChoose
     })
+    // Else: return default meal
+    if (!this.choosenMeal) {
+      this.choosenMeal = this.meal.find((item) => {
+        return item.default
+      })
+    }
   },
   methods: {
     ...mapActions([

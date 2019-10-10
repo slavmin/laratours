@@ -12,17 +12,15 @@
           column
           wrap
         >
-          <!-- Статус агентства: {{ agencyStatus }} -->
-          <v-spacer />
           <v-select
-            v-model="status"
-            :items="statusesFormatted"
-            hint="Статус оператора"
-            persistent-hint
-            item-value="id"
-            item-text="text"
-            solo
+            v-model="agencyStatus"
+            :items="agencyStatuses"
+            label="Статус агентства"
+            color="green"
+            dark
           />
+          <v-spacer />
+          Статус оператора: {{ statuses[status] }}
         </v-layout>
       </v-card-title>
       <v-card-text>
@@ -122,12 +120,12 @@
                     <input 
                       type="hidden"
                       name="tour_id"
-                      :value="order.tour_id"
+                      :value="tour.id"
                     >
                     <input 
                       type="hidden"
                       name="operator_id"
-                      :value="order.team_id"
+                      :value="tour.team_id"
                     >
                     <input 
                       type="hidden"
@@ -140,9 +138,9 @@
                       :value="getOrderCommission"
                     >
                     <input 
+                      v-model="paid"
                       type="hidden"
                       name="total_paid"
-                      :value="parseInt(order.total_paid) + parseInt(paid)"
                     >
                   </v-card-text>
                 </v-card>
@@ -156,19 +154,12 @@
               <input 
                 v-model="chat"
                 type="hidden"
-                name="customer[0][chat]"
+                :name="chat != '' ? 'customer[0][chat]' : ''"
               >
-              <!-- Agency status -->
               <input
-                :value="agencyStatus"
+                value="Принят"
                 type="hidden"
                 name="customer[0][orderStatus]"
-              >
-              <!-- Operator status -->
-              <input
-                v-model="status"
-                type="hidden"
-                name="status"
               >
             </form>
           </v-tabs-items>
@@ -176,11 +167,9 @@
       </v-card-text>
       <v-divider />
       <div class="subheading text-xs-right mr-3">
-        Цена заказа: {{ parseInt(getOrderPrice) }}
+        Цена заказа: {{ getOrderPrice }}
         <br>
-        Оплачено ранее: {{ order.total_paid }}
-        <br>
-        Комиссия: {{ parseInt(getOrderCommission) }}
+        Комиссия: {{ getOrderCommission }}
       </div>
       <v-layout 
         row 
@@ -191,13 +180,13 @@
           <v-text-field
             v-model="paid"
             mask="#######"
-            label="Оплата"
+            label="Оплачено"
             width="200"
           />
         </v-flex>
       </v-layout>
       <div class="subheading text-xs-right mr-3">
-        Остаток: {{ getOrderPrice - order.total_paid - paid }}
+        Остаток: {{ getOrderPrice - paid }}
       </div>
       <v-divider />
       <v-card-actions>
@@ -218,7 +207,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import OrderForm from './OrderForm'
-import moment from 'moment'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
@@ -239,19 +227,11 @@ export default {
         return {}
       }
     },
-    // Order profiles
     profilesRaw: {
       type: String,
       default: () => {
         return ''
       }
-    },
-    // Tour profiles for bus-scheme and free seats
-    tourProfilesRaw: {
-      type: String,
-      default() {
-        return ''
-      },
     },
     token: {
       type: String,
@@ -290,19 +270,19 @@ export default {
       'getOrderCommission',
     ]),
     prevChat: function() {
-      console.log(this.profiles)
-      if (this.profiles[0]) {
-        const result = JSON.parse(this.profiles[0].chat)
-        return result
-      }
+      
+      // if (this.profiles[0].chat) {
+      //   const result = JSON.parse(this.profiles[0].chat)
+      //   return result
+      // }
       return ''
     },
     chat: function() {
       let result = {}
-      let date = moment().locale('ru').format('lll')
+      let date = new Date().toISOString().substr(0, 10)
       let message = {
         date,
-        sender: 'Оператор',
+        sender: 'Агентство',
         text: this.comment,
       }
       let length = 0
@@ -316,7 +296,8 @@ export default {
       if (this.comment != '') {
         return JSON.stringify(result)
       }
-      return JSON.stringify(this.prevChat)
+      // return JSON.stringify(this.prevChat)
+      return ''
     },
     statusesFormatted: function() {
       let result = []
@@ -327,19 +308,16 @@ export default {
       return result
     },
   },
-  created() {
-    // this.initialRoomsCount()
-  },
   mounted() {
     this.updateEditMode()
-    this.orderedSeats()
+    // this.orderedSeats()
+    console.log(JSON.parse(this.profilesRaw))
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
-    console.log(this.profiles)
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
-    this.updateMealByDay(this.tour)
     this.updateProfilesData(this.profiles)
+    // this.updateMealByDay(this.tour)
   },
   methods: {
     ...mapActions([
@@ -348,7 +326,6 @@ export default {
       'updateProfiles',
       'updateEditMode',
       'updateProfilesData',
-      'updateSeatsInCurrentOrder',
     ]),
     close() {
       this.dialog = false
@@ -364,28 +341,13 @@ export default {
     },
     orderedSeats() {
       let result = []
-      JSON.parse(this.tourProfilesRaw).map((profile) => {
+      JSON.parse(this.profiles).map((profile) => {
         let content = Object.assign({}, profile.content)
         for (let key in content) {
           result.push(content[key].busSeatId)
         }
       })
-      // Fill ordered seats in tour, exclude seats ordered in this order.
-      let seatsOrderedInCurrentOrder = []
-      JSON.parse(this.profilesRaw).map((profile) => {
-        seatsOrderedInCurrentOrder.push(profile.busSeatId)
-        this.updateSeatsInCurrentOrder(profile.busSeatId)
-      })
-      this.updateOrderedSeats(_.difference(result, seatsOrderedInCurrentOrder))
-      // Fill ordered in this order seats with id's.
-      // seatsOrderedInCurrentOrder = []
-      // for (let key in JSON.parse(this.profilesRaw)) {
-      //   seatsOrderedInCurrentOrder.push({
-      //     profileId: key,
-      //     orderedBusSeatId: JSON.parse(this.profilesRaw)[key],
-      //   })
-      // }
-      // console.log(seatsOrderedInCurrentOrder)
+      this.updateOrderedSeats(result)
     },
     initialRoomsCount() {
       let result = 1

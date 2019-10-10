@@ -7,7 +7,8 @@
         <?php $sitem = json_encode($item); ?>   
         <?php $stour = json_encode($tour); ?>  
         <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
-        <?php $sprofiles = json_encode($profiles); ?>
+        <?php $s_order_profiles = json_encode($profiles); ?>
+        <?php $s_tour_profiles = json_encode($tour->orderprofiles); ?>  
         <operator-order-edit
             data-app
             :tour="{{ $tour }}"
@@ -15,7 +16,8 @@
             header-text="@lang('labels.frontend.tours.order.edit')"
             :statuses="{{ $sstatuses }}"
             :items="{{ $sitems }}"
-            profiles-raw="{{ $sprofiles }}"
+            profiles-raw="{{ $s_order_profiles }}"
+            tour-profiles-raw="{{ $s_tour_profiles }}"
             token="{{ csrf_token() }}"
         ></operator-order-edit>
     @else
