@@ -27,7 +27,6 @@
           :rules="[v => !!v || 'Укажите email']"
           :name="isRequired ? 'customer[' + id + '][email]' : ''"
           color="green lighten-3"
-          :required="isRequired"
         />
         <v-checkbox
           label="Квота"
@@ -50,15 +49,33 @@
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][gender]' : ''"
         >
-        <v-text-field
-          v-model="order.passport"
-          label="Номер документа"
-          placeholder="44 00-123 123"
-          :rules="[v => !!v || 'Укажите данные']"
-          :name="isRequired ? 'customer[' + id + '][passport]' : ''"
-          color="green lighten-3"
-          :required="isRequired"
-        />
+        <v-layout 
+          row 
+          wrap
+        >
+          <v-text-field
+            v-model="order.passport"
+            :label="passportMask.label"
+            :mask="passportMask.mask"
+            :placeholder="passportMask.placeholder"
+            :rules="[v => !!v || 'Укажите данные']"
+            :name="isRequired ? 'customer[' + id + '][passport]' : ''"
+            color="green lighten-3"
+            :required="isRequired"
+          />
+          <v-checkbox 
+            v-if="!isForeigner"
+            v-model="isRfIntPass" 
+            :required="isRequired"
+            color="green"
+            label="Загран" 
+          />
+          <input
+            v-model="isRfIntPass"
+            type="hidden"
+            :name="isRequired ? 'customer[' + id + '][isRfIntPass]' : ''"
+          >
+        </v-layout>
         <v-layout 
           row 
           wrap
@@ -314,6 +331,7 @@ export default {
       isForeigner: false,
       isSinglePlace: false,
       showChangeMeal: false,
+      isRfIntPass: false,
     }
   },
   computed: {
@@ -394,6 +412,37 @@ export default {
     },
     profileBusSeatId: function() {
       return this.$store.getters.getProfileBusSeatId(this.id)
+    },
+    passportMask: function() {
+      const foreignerPass = {
+        label: 'Паспорт иностранца',
+      }
+      const rfLocalPass = {
+        mask: '#### - ### ###',
+        label: 'Паспорт РФ',
+        placeholder: '4605 - 390 089',
+      }
+      const rfInternationalPass = {
+        mask: '## #######',
+        label: 'Загранпаспорт РФ',
+        placeholder: '52 0022196',
+      }
+      const birthCert = {
+        label: 'Свидетельство о рождении',
+        placeholder: 'VII-МЮ 123456',
+      }
+      if (this.isForeigner) {
+        return foreignerPass
+      }
+      else if (this.age < 14 && !this.isRfIntPass) {
+        return birthCert
+      }
+      else if (this.isRfIntPass) {
+        return rfInternationalPass
+      }
+      else {
+        return rfLocalPass
+      }
     }
   },
   watch: {

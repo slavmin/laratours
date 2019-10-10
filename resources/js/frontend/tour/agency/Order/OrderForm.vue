@@ -50,15 +50,32 @@
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][gender]' : ''"
         >
-        <v-text-field
-          v-model="profile.passport"
-          label="Номер документа"
-          placeholder="44 00-123 123"
-          :rules="[v => !!v || 'Укажите данные']"
-          :name="isRequired ? 'customer[' + id + '][passport]' : ''"
-          color="green lighten-3"
-          :required="isRequired"
-        />
+        <v-layout 
+          row 
+          wrap
+        >
+          <v-text-field
+            v-model="profile.passport"
+            :label="passportMask.label"
+            :mask="passportMask.mask"
+            :placeholder="passportMask.placeholder"
+            :rules="[v => !!v || 'Укажите данные']"
+            :name="isRequired ? 'customer[' + id + '][passport]' : ''"
+            color="green lighten-3"
+            :required="isRequired"
+          />
+          <v-checkbox 
+            v-if="!profile.isForeigner"
+            v-model="profile.isRfIntPass" 
+            color="green"
+            label="Загран" 
+          />
+          <input
+            v-model="profile.isRfIntPass"
+            type="hidden"
+            :name="isRequired ? 'customer[' + id + '][isRfIntPass]' : ''"
+          >
+        </v-layout>
         <v-layout 
           row 
           wrap
@@ -315,6 +332,7 @@ export default {
       isSinglePlace: false,
       showChangeMeal: false,
       age: NaN,
+      isRfIntPass: false,
     }
   },
   computed: {
@@ -400,7 +418,38 @@ export default {
     },
     profileBusSeatId: function() {
       return this.$store.getters.getProfileBusSeatId(this.id)
-    }
+    },
+    passportMask: function() {
+      const foreignerPass = {
+        label: 'Паспорт иностранца',
+      }
+      const rfLocalPass = {
+        mask: '#### - ### ###',
+        label: 'Паспорт РФ',
+        placeholder: '4605 - 390 089',
+      }
+      const rfInternationalPass = {
+        mask: '## #######',
+        label: 'Загранпаспорт РФ',
+        placeholder: '52 0022196',
+      }
+      const birthCert = {
+        label: 'Свидетельство о рождении',
+        placeholder: 'VII-МЮ 123456',
+      }
+      if (this.profile.isForeigner) {
+        return foreignerPass
+      }
+      else if (this.age < 14 && !this.profile.isRfIntPass) {
+        return birthCert
+      }
+      else if (this.profile.isRfIntPass) {
+        return rfInternationalPass
+      }
+      else {
+        return rfLocalPass
+      }
+    },
   },
   watch: {
     menu (val) {
@@ -450,6 +499,9 @@ export default {
   created() {
     if (this.id > 2) console.log('second page')
     this.updateOrderProfiles(this.id)
+  },
+  updated() {
+    console.log(this.profile)
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList

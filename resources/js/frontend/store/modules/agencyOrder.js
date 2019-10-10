@@ -85,6 +85,7 @@ export default {
         isPens: false,
         isForeigner: false,
         isSinglePlace: false,
+        isRfIntPass: false,
         busSeatId: '',
       })
       if (state.editMode) {
@@ -361,6 +362,7 @@ export default {
         stateProfile.isPens = dataProfile.isPens == 'true' ? true : false
         stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
+        stateProfile.isRfIntPass = dataProfile.isRfIntPass == 'true' ? true : false
       }
     },
     setProfileBusSeatId(state, data) {
