@@ -1456,6 +1456,7 @@ export default {
       'getAverageCorrection',
       'getStaffErrors',
       'getFreeAdlErrors',
+      'allState',
     ]),
     tourExtra: function() {
       return {
@@ -1492,6 +1493,7 @@ export default {
     this.updateTourCorrectedPrice()
     this.updateCommissionPriceValues()
     this.updateTourCommissionPrice()
+    console.log('all state: ', this.allState)
     // this.calculatePriceForEveryCustomer()
   },
   methods: {

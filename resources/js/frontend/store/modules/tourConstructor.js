@@ -293,7 +293,7 @@ export default {
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (obj.selected) {
-            if (!obj.isCustomOrder) {
+            if (!JSON.parse(obj.extra).isCustomOrder) {
               state.tour.museum.push({ 
                 museum, 
                 obj,
@@ -303,7 +303,7 @@ export default {
                 commissionPrice: 0,
               })
             }
-            if (obj.isCustomOrder) {
+            if (JSON.parse(obj.extra).isCustomOrder) {
               const pricePerSeat = (JSON.parse(obj.extra).price * obj.count / state.tour.qnt).toFixed(2)
               state.tour.museumCustomOrder.push({
                 museum, 
