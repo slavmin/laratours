@@ -81,9 +81,10 @@
           </td>
           <td>
             <span 
+              class="status"
               :class="statuses[item.status]"
             >
-              {{ statuses[item.status] }}
+              {{ statusesTranslated[item.status] }}
             </span>
           </td>
           <td>
@@ -176,8 +177,21 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      statusesTranslated: [
+        'Не подвержден', 
+        'Подтвержден', 
+        'Оплачен',
+        'Отменен',
+        'Отклонен',
+        'Завершен',
+      ]
+    }
+  },
   mounted() {
     console.log(this.items)
+    console.log(this.statuses)
   },
   methods: {
     touristsCount(content) {
@@ -201,12 +215,31 @@ table {
   }
 }
 span {
-  &.pending {
+  &.status {
     display: block;
-    background-color: #FDD835;
     padding: 6px;
     border-radius: 6px;
     color: white;
+    font-size: 12px;
+    text-align: center;
+  }
+  &.pending {
+    background-color: #FDD835;
+  }
+  &.confirmed {
+    background-color: rgb(40, 43, 214);
+  }
+  &.paid {
+    background-color: rgb(17, 150, 0);
+  }
+  &.cancelled {
+    background-color: rgb(180, 2, 2);
+  }
+  &.declined {
+    background-color: rgb(255, 0, 0);
+  }
+  &.completed {
+    background-color: rgb(126, 255, 143);
   }
 }
 </style>

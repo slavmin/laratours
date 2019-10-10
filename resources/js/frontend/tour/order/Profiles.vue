@@ -55,9 +55,10 @@
         </td>
         <td>
           <span 
+            class="status"
             :class="statuses[order.status]"
           >
-            {{ statuses[order.status] }}
+            {{ statusesTranslated[order.status] }}
           </span>
         </td>
         <td>
@@ -171,19 +172,14 @@ export default {
   },
   data() {
     return {
-      state: {
-        name: 'San Luis Potosi',
-        map: 'data:image/png;base64',
-        municipalities: [
-          {name:'San Luis Potosi', population: 824000}, 
-          {name:'Rio Verde', population: 160000},
-          {name:'Cd Valles', population: 176000},
-          {name:'Matehuala', population:82726}
-        ],
-        tourist_attractions: [
-          'Tamtoc', 'Sótano de las Golondrinas', 'Cascada de Tamul' 
-        ]
-      }
+      statusesTranslated: [
+        'Не подвержден', 
+        'Подтвержден', 
+        'Оплачен',
+        'Отменен',
+        'Отклонен',
+        'Завершен',
+      ]
     }
   },
   mounted() {
@@ -259,12 +255,31 @@ table {
   }
 }
 span {
-  &.pending {
+  &.status {
     display: block;
-    background-color: #FDD835;
     padding: 6px;
     border-radius: 6px;
     color: white;
+    font-size: 12px;
+    text-align: center;
   }
-}  
+  &.pending {
+    background-color: #FDD835;
+  }
+  &.confirmed {
+    background-color: rgb(40, 43, 214);
+  }
+  &.paid {
+    background-color: rgb(17, 150, 0);
+  }
+  &.cancelled {
+    background-color: rgb(180, 2, 2);
+  }
+  &.declined {
+    background-color: rgb(255, 0, 0);
+  }
+  &.completed {
+    background-color: rgb(126, 255, 143);
+  }
+}
 </style>
