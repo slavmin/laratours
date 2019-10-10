@@ -147,6 +147,11 @@
                       type="hidden" 
                       name="description" 
                     > 
+                    <input 
+                      v-model="details"
+                      type="hidden" 
+                      name="extra" 
+                    > 
                     <div class="display-1 mb-3">
                       Контакты:
                     </div>

@@ -15,7 +15,14 @@
             {{ props.item.name }}
           </td>
           <td class="text-xs-right">
-            {{ getCityName(JSON.parse(props.item.description).city) }}
+            <span 
+              v-for="cityId in JSON.parse(props.item.description).city"
+              :key="cityId"
+              class="grey--text"
+            >
+              {{ getCityName(cityId) }}
+              <br>
+            </span>
           </td>
           <td class="text-xs-right">
             <span 
@@ -39,6 +46,39 @@
           <td class="text-xs-right">
             {{ props.item.price }}
           </td>
+          <td>
+            <Edit
+              :token="token"
+              :attendant="props.item"
+            />
+            <form 
+              :action="'/operator/attendant/' + props.item.id"
+              method="POST"
+            >
+              <input 
+                id="_method" 
+                type="hidden" 
+                name="_method" 
+                value="DELETE"
+              >
+              <input 
+                type="hidden" 
+                name="_token" 
+                :value="token"
+              > 
+              <v-btn 
+                fab
+                small
+                outline
+                color="red"
+                type="submit"
+              >
+                <i class="material-icons">
+                  delete
+                </i>
+              </v-btn>
+            </form>
+          </td>
         </template>
       </v-data-table>
     </v-layout>
@@ -47,9 +87,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Edit from './Edit'
 export default {
-
   name: 'ObjectAttendantTable',
+  components: {
+    Edit,
+  },
   props: {
     token: {
       type: String,
@@ -68,7 +111,8 @@ export default {
         { text: 'Город', value: 'сity' },
         { text: 'Уровень', value: 'grade' },
         { text: 'Язык', value: 'language' },
-        { text: 'Стоимость', value: 'price' }
+        { text: 'Стоимость', value: 'price' },
+        { text: 'Действия', value: 'actions'},
       ],
     }
   },
