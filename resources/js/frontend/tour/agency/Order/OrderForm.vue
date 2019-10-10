@@ -376,10 +376,10 @@ export default {
       return false
     },
     isPens: function() {
-      if (this.order.gender == 'male' && this.age >= this.getPensRange.maleFrom) {
+      if (this.profile.gender == 'male' && this.age >= this.getPensRange.maleFrom) {
         return true
       }
-      if (this.order.gender == 'female' && this.age >= this.getPensRange.femaleFrom) {
+      if (this.profile.gender == 'female' && this.age >= this.getPensRange.femaleFrom) {
         return true
       }
       if (this.manualPens) {
@@ -394,7 +394,7 @@ export default {
         type = 'FRGN'
       } else if (this.isChd)  {
         type = 'CHD'
-      } else if (this.profile.isPens) {
+      } else if (this.profile.isPens || this.isPens) {
         type = 'PENS'
       } else {
         type = 'ADL'
