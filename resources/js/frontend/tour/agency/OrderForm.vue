@@ -66,7 +66,6 @@
           <v-checkbox 
             v-if="!isForeigner"
             v-model="isRfIntPass" 
-            :required="isRequired"
             color="green"
             label="Загран" 
           />
