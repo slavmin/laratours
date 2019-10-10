@@ -48,6 +48,7 @@
               fab
               small
               outline
+              disabled
               color="grey"
               title="Добавить номер"
               @click="incrementRoomsCount"
