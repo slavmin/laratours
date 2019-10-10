@@ -1198,7 +1198,7 @@ export default {
       state.tour.museum.forEach((museum) => {
         museum.correction = correction
       })
-      state.tour.museumCustomOrder((order) => {
+      state.tour.museumCustomOrder.forEach((order) => {
         order.correction = correction
       })
       state.tour.hotel.forEach((hotel) => {

@@ -47,7 +47,10 @@
               <v-card 
                 :id="'museum-' + museum.id + '-card-' + item.id"
                 class="museum-card"
-                :class="{'is-select' : item.selected}"
+                :class="[
+                  {'is-select' : item.selected}, 
+                  {'is-custom-order': JSON.parse(item.extra).isCustomOrder}
+                ]"
                 pa-3
               >
                 <v-card-title primary-title>
@@ -287,6 +290,9 @@ export default {
 <style lang="css" scoped>
 .museum-card {
   background-color: #E8F5E9;
+}
+.is-custom-order {
+  background-color: rgb(77, 238, 187);
 }
 .is-select {
   background-color: #FFAB16;
