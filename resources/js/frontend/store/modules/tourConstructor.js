@@ -304,7 +304,7 @@ export default {
               })
             }
             if (JSON.parse(obj.extra).isCustomOrder) {
-              const pricePerSeat = (JSON.parse(obj.extra).price * obj.count / state.tour.qnt).toFixed(2)
+              const pricePerSeat = JSON.parse(obj.extra).price * obj.count / state.tour.qnt
               state.tour.museumCustomOrder.push({
                 museum, 
                 obj,
@@ -647,6 +647,7 @@ export default {
                 name: 'Водитель ' + driver.driver,
                 day: driverDay,
               })
+              console.log('Водитель. Нет питания.', state)
               state.staffErrors.show = true
             }
             // Remove duplicates
@@ -718,6 +719,7 @@ export default {
                 name: 'Гид: ' + guide.guide.name,
                 day: guideDay,
               }) 
+              console.log('Гид. Нет питания.', state)
               state.staffErrors.show = true
             } 
             // Remove duplicates
@@ -790,6 +792,7 @@ export default {
                   name: 'Сопровождающий: ' + attendant.attendant.name,
                   day: attendantDay,
                 }) 
+                console.log('Соп. Нет питания.', state)
                 state.staffErrors.show = true
               } 
               // Remove duplicates
@@ -871,6 +874,7 @@ export default {
                 name: '"Бесплатный взрослый": ' + freeAdl.name,
                 day: freeAdlDay,
               }) 
+              console.log('БВ. Нет питания.', state)
               state.staffErrors.show = true
             } 
             // Remove duplicates
@@ -1593,6 +1597,8 @@ export default {
           isInf: false,
         })
       })
+      console.log(state)
+      state.tour.calc.priceList = _.uniqWith(state.tour.calc.priceList, _.isEqual)
     },
     setFreeAdlsOptions(state, updData) {
       if (updData.delete) {
