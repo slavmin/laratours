@@ -1486,6 +1486,7 @@ export default {
   },
   mounted() {
     this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
+    console.log(this.getCurrentTourCustomers)
     this.updateTourStaff()
     this.updateTourFreeAdls()
     this.updateTourTotalPrice()

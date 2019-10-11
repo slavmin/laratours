@@ -304,7 +304,9 @@ export default {
               })
             }
             if (JSON.parse(obj.extra).isCustomOrder) {
-              const pricePerSeat = JSON.parse(obj.extra).price * obj.count / state.tour.qnt
+              if (!obj.count) obj.count = 1
+              let pricePerSeat = JSON.parse(obj.extra).price * obj.count / state.tour.qnt
+              if (pricePerSeat) pricePerSeat = pricePerSeat.toFixed(2)
               state.tour.museumCustomOrder.push({
                 museum, 
                 obj,
@@ -1583,22 +1585,25 @@ export default {
     },
     setTourCalcCustomerTypes(state, customerTypes) {
       state.tour.calc.priceList = []
+      let idesArray = []
       customerTypes.forEach((customer) => {
         if (customer.name.includes("Взрослый")) {
           state.tour.calc.defaultCustomer = customer.id
           state.tour.calc.currentCustomer = customer.id
         }
-        state.tour.calc.priceList.push({
-          ...customer,
-          standardPrice: 0,
-          singlePrice: 0,
-          addPrice: 0,
-          isChd: false,
-          isInf: false,
-        })
+        if (!idesArray.includes(customer.id)){
+          state.tour.calc.priceList.push({
+            ...customer,
+            standardPrice: 0,
+            singlePrice: 0,
+            addPrice: 0,
+            isChd: false,
+            isInf: false,
+          })
+          idesArray.push(customer.id)
+        }
       })
-      console.log(state)
-      state.tour.calc.priceList = _.uniqWith(state.tour.calc.priceList, _.isEqual)
+      console.log(state, 'ides array: ', idesArray)
     },
     setFreeAdlsOptions(state, updData) {
       if (updData.delete) {
@@ -1788,6 +1793,8 @@ export default {
           })
         }
       })
+      console.log('before: ', result)
+      console.log('after: ', _.uniqWith(result, _.isEqual))
       return _.uniqWith(result, _.isEqual)
     },
     getTourCalc(state) {
