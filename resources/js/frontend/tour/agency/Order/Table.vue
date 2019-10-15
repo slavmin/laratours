@@ -60,6 +60,10 @@
               :profiles="item.profiles"
               :order-id="item.id"
             />
+            <HasNewMessage 
+              :chat="JSON.parse(item.profiles[0].content[0].chat)"
+              recipient="Агентство"
+            />
           </td>
           <td class="text-xs-right">
             Цена: {{ item.total_price }}
@@ -142,10 +146,12 @@
 
 <script>
 import Details from './Details'
+import HasNewMessage from '../../includes/HasNewMessage'
 export default {
   name: 'OrderTable',
   components:{
     Details,
+    HasNewMessage,
   },
   props: {
     token: {

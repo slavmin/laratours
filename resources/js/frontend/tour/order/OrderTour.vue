@@ -308,6 +308,7 @@ export default {
       agencyStatus: '',
       status: 2,
       profiles: {},
+      recipient: 'Оператор',
     }
   },
   computed: {
@@ -320,6 +321,11 @@ export default {
       console.log(this.profiles)
       if (this.profiles[0]) {
         const result = JSON.parse(this.profiles[0].chat)
+        for (let key in result) {
+          if (result[key].sender != this.recipient) {
+            result[key].isReaded = true
+          }
+        }
         return result
       }
       return ''
@@ -331,6 +337,7 @@ export default {
         date,
         sender: 'Оператор',
         text: this.comment,
+        isReaded: false,
       }
       let length = 0
       for (let key in this.prevChat) {

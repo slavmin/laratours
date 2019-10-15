@@ -75,6 +75,8 @@
           <div
             v-for="(message, i) in JSON.parse(profiles[0].content[0].chat)"
             :key="i"
+            class="message"
+            :class="!message.isReaded ? 'new-message' : ''"
           >
             <span class="sender body-2">
               {{ message.sender }}:
@@ -132,5 +134,13 @@ export default {
   padding: 6px;
   background-color: #ffa83b;
   border-radius: 3px;
+}
+.message {
+  max-width: 250px;
+  border-radius: 6px;
+  padding: 12px;
+}
+.new-message {
+  background-color: rgb(186, 244, 248);
 }
 </style>

@@ -265,6 +265,7 @@ export default {
               date,
               sender: 'Агентство',
               text: this.comment,
+              isReaded: false,
           },
         })
       }

@@ -46,6 +46,10 @@
             :profiles="order.profiles"
             :order-id="order.id"
           />
+          <HasNewMessage 
+            :chat="JSON.parse(order.profiles[0].content[0].chat)"
+            recipient="Оператор"
+          />
         </td>
         <td>
           {{ agencies[order.team_id] }}
@@ -135,10 +139,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs
 import { Document, Paragraph, Packer, TextRun, TableOfContents, StyleLevel, HeadingLevel } from "docx"
 import { saveAs } from 'file-saver'
 import Details from './Details'
+import HasNewMessage from '../includes/HasNewMessage'
 export default {
   name: 'Profiles',
   components: {
     Details,
+    HasNewMessage,
   },
   props: {
     tour: {
