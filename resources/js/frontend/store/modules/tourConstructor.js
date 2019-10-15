@@ -74,6 +74,9 @@ export default {
     async updateCustomPrice({ commit }, customPrice) {
       commit('setCustomPrice', customPrice)
     },
+    async removeCustomPrice({ commit }, customPriceId) {
+      commit('delCustomPrice', customPriceId)
+    },
     async updateEditorsContent({ commit }, content) {
       commit('setEditorsContent', content)
     },
@@ -584,6 +587,7 @@ export default {
     setCustomPrice: (state, price) => {
       state.tour.customPrice.push({
         ...price,
+        id: state.tour.customPrice.length,
         correction: 0,
         commission: 0,
         correctedPrice: 0,
@@ -591,6 +595,11 @@ export default {
         pricePerSeat: parseInt(price.value / state.tour.qnt),
         correctedPricePerSeat: 0,
         commissionPricePerSeat: 0,
+      })
+    },
+    delCustomPrice(state, customPriceId) {
+      state.tour.customPrice = state.tour.customPrice.filter((item) => {
+        return item.id != customPriceId
       })
     },
     setTourStaff(state) {

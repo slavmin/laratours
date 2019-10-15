@@ -24,6 +24,10 @@
         </v-layout>
       </v-card-title>
       <v-card-text>
+        <OrderContacts />
+        <h2 class="grey--text text-xs-center mt-3">
+          Данные туристов:
+        </h2>
         <v-tabs
           color="white"
           show-arrows
@@ -146,6 +150,25 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
+              <div
+                v-if="profiles[0]"
+              >
+                <div
+                  v-for="(message, i) in prevChat"
+                  :key="i"
+                >
+                  <span class="sender body-2">
+                    {{ message.sender }}:
+                  </span>
+                  <span class="text body-1">
+                    {{ message.text }}
+                  </span>
+                  <br>
+                  <span class="date grey--text">
+                    {{ message.date }}
+                  </span>
+                </div>
+              </div>
               <v-textarea
                 v-model="comment"
                 box
@@ -211,11 +234,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import OrderForm from './OrderForm'
+import OrderContacts from '../../includes/OrderContacts'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
   components: {
     OrderForm,
+    OrderContacts,
     // Total,
   },
   props: {
@@ -332,6 +357,12 @@ export default {
     this.initialRoomsCount()
     this.updateMealByDay(this.tour)
     this.updateProfilesData(this.profiles)
+    const contacts = {
+      name: this.profiles[0].contactsName,
+      email: this.profiles[0].email,
+      phone: this.profiles[0].phone,
+    }
+    this.updateOrderContacts(contacts)
   },
   methods: {
     ...mapActions([
@@ -341,6 +372,7 @@ export default {
       'updateEditMode',
       'updateProfilesData',
       'updateSeatsInCurrentOrder',
+      'updateOrderContacts',
     ]),
     close() {
       this.dialog = false

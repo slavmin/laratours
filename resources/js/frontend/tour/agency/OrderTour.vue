@@ -24,6 +24,10 @@
         <OrderHint />
       </v-card-title>
       <v-card-text>
+        <OrderContacts />
+        <h2 class="grey--text text-xs-center mt-3">
+          Данные туристов:
+        </h2>
         <v-tabs
           color="white"
           show-arrows
@@ -204,12 +208,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import OrderForm from './OrderForm'
 import OrderHint from './OrderHint'
+import OrderContacts from '../includes/OrderContacts'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
   components: {
     OrderForm,
     OrderHint,
+    OrderContacts,
     // Total,
   },
   props: {

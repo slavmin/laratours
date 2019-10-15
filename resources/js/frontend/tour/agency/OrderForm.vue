@@ -21,13 +21,21 @@
           color="green lighten-3"
           :required="isRequired"
         />
-        <v-text-field
-          v-model="order.email"
-          label="Email"
-          :rules="[v => !!v || 'Укажите email']"
+        <input 
+          v-model="getOrderContacts.email"
+          type="hidden"
           :name="isRequired ? 'customer[' + id + '][email]' : ''"
-          color="green lighten-3"
-        />
+        >
+        <input 
+          v-model="getOrderContacts.phone"
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][phone]' : ''"
+        >
+        <input 
+          v-model="getOrderContacts.name"
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][contactsName]' : ''"
+        >
         <v-checkbox
           label="Квота"
           disabled
@@ -340,6 +348,7 @@ export default {
       'getMealByDay',
       'getProfilePrice',
       'getProfileCommission',
+      'getOrderContacts',
     ]),
     profile: function() {
       return this.$store.getters.getProfile(this.id)

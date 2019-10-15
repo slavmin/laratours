@@ -77,6 +77,9 @@
                 <th>
                   Стоимость
                 </th>  
+                <th>
+                  Действия
+                </th>
               </thead>
               <tbody>
                 <tr
@@ -88,6 +91,21 @@
                   </td>
                   <td>
                     {{ price.value }}
+                  </td>
+                  <td>
+                    <v-btn 
+                      color="red"
+                      flat
+                      fab
+                      outline
+                      small
+                      dark
+                      @click="removeCustomPrice(price.id)"
+                    >
+                      <i class="material-icons">
+                        delete
+                      </i>
+                    </v-btn>
                   </td>
                 </tr>
               </tbody>
@@ -260,6 +278,7 @@ export default {
       'updateCustomPrice',
       'updateConstructorCurrentStage',
       'updateEditorsContent',
+      'removeCustomPrice',
     ]),
     addMoreGuide() {
       this.updateConstructorCurrentStage('Hotel is set')

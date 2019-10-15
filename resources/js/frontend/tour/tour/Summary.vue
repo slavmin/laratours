@@ -1495,7 +1495,7 @@ export default {
     this.updateCommissionPriceValues()
     this.updateTourCommissionPrice()
     console.log('all state: ', this.allState)
-    // this.calculatePriceForEveryCustomer()
+    this.calculatePriceForEveryCustomer()
   },
   methods: {
     ...mapActions([

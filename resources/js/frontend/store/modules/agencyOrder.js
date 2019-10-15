@@ -53,7 +53,10 @@ export default {
     },
     async removeBusSeatIdFromCurrent({ commit }, data) {
       commit('delBusSeatIdFromCurrent', data)
-    }
+    },
+    async updateOrderContacts({commit}, contacts) {
+      commit('setOrderContacts', contacts)
+    },
   },
   mutations: {
     setEditMode(state) {
@@ -75,6 +78,7 @@ export default {
       state.profiles.push({
         id: id,
         name: '',
+        address: '',
         price: 0,
         commission: 0,
         mealPrice: 0,
@@ -375,6 +379,9 @@ export default {
       profile.busSeatId = ''
       state.seatsInCurrentOrder = state.seatsInCurrentOrder.filter(s => s != data.busSeatId)
       console.log(profile, state)
+    },
+    setOrderContacts(state, contacts) {
+      state.orderContacts = contacts
     }
   },
   state: {
@@ -397,6 +404,11 @@ export default {
     orderPrice: 0,
     orderCommission: 0,
     mealCount: 0,
+    orderContacts: {
+      email: '',
+      phone: '',
+      name: '',
+    }
   },
   getters: {
     getOrderedSeats(state) {
@@ -489,6 +501,9 @@ export default {
       if (profile) {
         return profile.busSeatId
       }
+    },
+    getOrderContacts(state) {
+      return state.orderContacts
     }
   },
 }
