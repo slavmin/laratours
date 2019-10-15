@@ -26,6 +26,7 @@
         <v-text-field
           v-model="getOrderContacts.phone"
           label="Телефон"
+          mask="N (NNN) NNN-NN-NN"
           :rules="[v => !!v || 'Укажите телефон']"
           required
           color="green lighten-3"
