@@ -57,6 +57,9 @@ export default {
     async updateOrderContacts({commit}, contacts) {
       commit('setOrderContacts', contacts)
     },
+    async updateOrderStatus({ commit }, status) {
+      commit('setOrderStatus', status)
+    }
   },
   mutations: {
     setEditMode(state) {
@@ -382,10 +385,14 @@ export default {
     },
     setOrderContacts(state, contacts) {
       state.orderContacts = contacts
-    }
+    },
+    setOrderStatus(state, status) {
+      state.orderStatus = status
+    },
   },
   state: {
     editMode: false,
+    orderStatus: '',
     orderedSeats: [],
     seatsInCurrentOrder: [],
     chdRange: {
@@ -504,6 +511,9 @@ export default {
     },
     getOrderContacts(state) {
       return state.orderContacts
+    },
+    getOrderStatus(state) {
+      return state.orderStatus
     }
   },
 }

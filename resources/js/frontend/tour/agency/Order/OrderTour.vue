@@ -370,6 +370,7 @@ export default {
       phone: this.profiles[0].phone,
     }
     this.updateOrderContacts(contacts)
+    this.updateOrderStatus(this.statuses[this.status])
   },
   methods: {
     ...mapActions([
@@ -380,6 +381,7 @@ export default {
       'updateProfilesData',
       'updateSeatsInCurrentOrder',
       'updateOrderContacts',
+      'updateOrderStatus',
     ]),
     close() {
       this.dialog = false

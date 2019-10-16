@@ -12,6 +12,7 @@
           :name="isRequired ? 'customer[' + id + '][first_name]' : ''"
           color="green lighten-3"
           :required="isRequired"
+          :disabled="isDisabled"
         />
         <v-text-field
           v-model="profile.last_name"
@@ -20,6 +21,7 @@
           :name="isRequired ? 'customer[' + id + '][last_name]' : ''"
           color="green lighten-3"
           :required="isRequired"
+          :disabled="isDisabled"
         />
         <input 
           v-model="getOrderContacts.email"
@@ -40,6 +42,13 @@
           label="Квота"
           disabled
         />
+        <div
+          v-if="showDocuments"
+        >
+          <VaucherWord
+            :profile="profile"
+          />
+        </div>
       </v-flex>
       <v-flex 
         xs5
@@ -51,6 +60,7 @@
           item-text="text"
           item-name="value"
           label="Пол"
+          :disabled="isDisabled"
         />
         <input 
           v-model="profile.gender"
@@ -70,17 +80,20 @@
             :name="isRequired ? 'customer[' + id + '][passport]' : ''"
             color="green lighten-3"
             :required="isRequired"
+            :disabled="isDisabled"
           />
           <v-checkbox 
             v-if="!profile.isForeigner"
             v-model="profile.isRfIntPass" 
             color="green"
             label="Загран" 
+            :disabled="isDisabled"
           />
           <input
             v-model="profile.isRfIntPass"
             type="hidden"
             :name="isRequired ? 'customer[' + id + '][isRfIntPass]' : ''"
+            :disabled="isDisabled"
           >
         </v-layout>
         <v-layout 
@@ -106,6 +119,7 @@
                 :name="isRequired ? 'customer[' + id + '][dob]' : ''"
                 prepend-icon="event"
                 readonly
+                :disabled="isDisabled"
                 v-on="on"
               />
             </template>
@@ -128,16 +142,19 @@
             v-model="profile.isPens"
             label="Пенсионер"
             color="green"
+            :disabled="isDisabled"
           />
           <v-checkbox 
             v-model="profile.isForeigner"
             label="Иностранец"
             color="green"
+            :disabled="isDisabled"
           />  
           <v-checkbox 
             v-model="profile.isSinglePlace"
             label="Single-размещение"
             color="green"
+            :disabled="isDisabled"
           />  
         </v-layout>
         <div>
@@ -153,6 +170,7 @@
           :rules="[v => !!v || 'Укажите адрес']"
           :name="isRequired ? 'customer[' + id + '][address]' : ''"
           color="green lighten-3"
+          :disabled="isDisabled"
         />
         <input 
           v-model="meal"
@@ -168,6 +186,7 @@
     </v-layout>
     <v-divider />
     <v-btn
+      v-if="!isDisabled"
       color="green"
       dark
       flat
@@ -190,6 +209,7 @@
       <v-flex xs6>
         <div>
           <BusScheme 
+            v-if="!isDisabled"
             edit-mode
             :transport="transport"
             :profile-id="id"
@@ -199,6 +219,7 @@
               Выбрано место: {{ profileBusSeatId }}
             </span>
             <v-btn 
+              v-if="!isDisabled"
               color="red"
               fab
               flat
@@ -268,6 +289,7 @@
     >
       <v-spacer />
       <v-btn 
+        v-if="!isDisabled"
         flat 
         color="red"
         @click="resetForm"
@@ -283,11 +305,13 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../../includes/BusScheme'
 import ChangeMeal from './ChangeMeal'
+import VaucherWord from '../../includes/documents/VaucherWord'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
     ChangeMeal,
+    VaucherWord,
   },
   props: {
     tour: {
@@ -350,6 +374,7 @@ export default {
       'getProfilePrice',
       'getProfileCommission',
       'getOrderContacts',
+      'getOrderStatus',
     ]),
     profile: function() {
       if (this.$store.getters.getProfile(this.id)) {
@@ -458,6 +483,23 @@ export default {
         return rfLocalPass
       }
     },
+    isDisabled: function() {
+      if (this.getOrderStatus != 'Не подтвержден' 
+          && this.getOrderStatus != 'Подтвержден') {
+        return true
+      } else {
+        return false
+      }
+    },
+    showDocuments: function() {
+      if (this.getOrderStatus != 'Не подтвержден' 
+          && this.getOrderStatus != 'Подтвержден'
+          && this.isRequired) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   watch: {
     menu (val) {
