@@ -190,6 +190,16 @@
         </v-tabs>
       </v-card-text>
       <v-divider />
+      <div
+        v-if="showDocuments"
+      >
+        <VaucherWord
+          :profiles="Object.assign({}, JSON.parse(profilesRaw))"
+          :tour="tour"
+          :order="order"
+        />
+      </div>
+      <v-spacer />
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ parseInt(getOrderPrice) }}
         <br>
@@ -235,12 +245,14 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import OrderForm from './OrderForm'
 import OrderContacts from '../../includes/OrderContacts'
+import VaucherWord from '../../includes/documents/VaucherWord'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
   components: {
     OrderForm,
     OrderContacts,
+    VaucherWord,
     // Total,
   },
   props: {
@@ -306,6 +318,7 @@ export default {
     ...mapGetters([
       'getOrderPrice',
       'getOrderCommission',
+      'getOrderStatus',
     ]),
     prevChat: function() {
       console.log(this.profiles)
@@ -349,6 +362,14 @@ export default {
         text: this.statuses[index]
       }))
       return result
+    },
+    showDocuments: function() {
+      if (this.getOrderStatus != 'Не подтвержден' 
+          && this.getOrderStatus != 'Подтвержден') {
+        return true
+      } else {
+        return false
+      }
     },
   },
   created() {

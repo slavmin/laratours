@@ -42,13 +42,6 @@
           label="Квота"
           disabled
         />
-        <div
-          v-if="showDocuments"
-        >
-          <VaucherWord
-            :profile="profile"
-          />
-        </div>
       </v-flex>
       <v-flex 
         xs5
@@ -305,13 +298,11 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../../includes/BusScheme'
 import ChangeMeal from './ChangeMeal'
-import VaucherWord from '../../includes/documents/VaucherWord'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
     ChangeMeal,
-    VaucherWord,
   },
   props: {
     tour: {
@@ -491,15 +482,7 @@ export default {
         return false
       }
     },
-    showDocuments: function() {
-      if (this.getOrderStatus != 'Не подтвержден' 
-          && this.getOrderStatus != 'Подтвержден'
-          && this.isRequired) {
-        return true
-      } else {
-        return false
-      }
-    }
+    
   },
   watch: {
     menu (val) {

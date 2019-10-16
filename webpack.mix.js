@@ -6,6 +6,10 @@ const mix = require('laravel-mix');
  */
 require('laravel-mix-eslint');
 
+/* fs module
+ */
+// mix.webpackConfig({ node: { fs: 'empty' }});
+
 
 /*
  |--------------------------------------------------------------------------
