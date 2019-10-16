@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       statusesTranslated: [
-        'Не подвержден', 
+        'Не подтвержден', 
         'Подтвержден', 
         'Оплачен',
         'Отменен',
