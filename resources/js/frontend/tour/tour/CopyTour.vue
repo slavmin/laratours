@@ -84,5 +84,8 @@ export default {
       return moment().format('YYYY-MM-DD')
     }
   },
+  mounted() {
+    this.picker = JSON.parse(this.tour.extra).options.dateStart
+  }
 }
 </script>
