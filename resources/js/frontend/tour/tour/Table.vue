@@ -27,6 +27,14 @@
             class="text-xs-right"
             :class="props.item.published ? '' : 'unpublished'"
           >
+            {{ props.item.extra 
+              ? JSON.parse(props.item.extra).options.dateStart 
+              : '' }}
+          </td> 
+          <td 
+            class="text-xs-right"
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             <span> 
               {{ getCitiesNames(props.item.cities_list) }}
             </span>
@@ -92,6 +100,10 @@
               wrap
               align-top
             >
+              <CopyTour
+                :tour="props.item"
+                :token="token"
+              />
               <Edit
                 :tour="props.item"
                 :token="token"
@@ -142,6 +154,7 @@ import Edit from './Edit'
 import Publish from './Publish'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
+import CopyTour from './CopyTour'
 export default {
 
   name: 'TourTable',
@@ -149,6 +162,7 @@ export default {
     About,
     Edit,
     Publish,
+    CopyTour,
   },
   props: {
     token: {
@@ -171,6 +185,7 @@ export default {
           sortable: false,
           value: 'name'
         },
+        { text: 'Дата', value: 'date' },
         { text: 'Города', value: 'сity' },
         { text: 'Тип тура', value: 'type' },
         { text: 'Дней', value: 'days' },
