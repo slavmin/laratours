@@ -34,7 +34,9 @@
             color="green"
             locale="ru-ru" 
             :min="dateToday"
+            multiple
           />
+          {{ picker }}
         </v-card-text>
 
         <v-divider />
@@ -74,7 +76,7 @@ export default {
   data() {
     return {
       dialog: false,
-      picker: new Date().toISOString().substr(0, 10),
+      picker: [new Date().toISOString().substr(0, 10)],
       landscape: false,
       reactive: false
     }
@@ -85,7 +87,7 @@ export default {
     }
   },
   mounted() {
-    this.picker = JSON.parse(this.tour.extra).options.dateStart
-  }
+    this.picker = [JSON.parse(this.tour.extra).options.dateStart]
+  },
 }
 </script>
