@@ -1,5 +1,6 @@
 <template>
   <v-flex> 
+    {{ dateStart }}
     <form
       method="POST" 
       action="/operator/tour"
@@ -46,10 +47,22 @@
       >
         Создать тур
       </v-btn>
+      <v-btn 
+        color="red"
+        @click="sendRequest"
+      >
+        text
+      </v-btn>
     </form>
   </v-flex>
 </template>
 <script>
+function* queue(data) {
+  for (let i = 0; i < data.length; i++) {
+    yield data[i]
+  }
+  return 'end'
+}
 export default {
   name: 'CreateTour',
   props: {
@@ -64,8 +77,10 @@ export default {
       }
     },
     dateStart: {
-      type: String,
-      default: '',
+      type: Array,
+      default: () => {
+        return []
+      },
     }
   },
   data() {
@@ -78,11 +93,33 @@ export default {
       let tourExtra = JSON.parse(this.tour.extra)
       tourExtra.options.dateStart = this.dateStart
       return JSON.stringify(tourExtra)
+    },
+    arrayOfTours: function() {
+      let result = []
+      let tour = Object.assign({}, this.tour)
+      let tourExtra = JSON.parse(this.tour.extra)
+      this.dateStart.forEach((date) => {
+        tourExtra.options.dateStart = this.dateStart
+        tour.extra = JSON.stringify(tourExtra)
+        result.push(tour)
+      })
+      return result
     }
   },
   mounted() {
     console.log(JSON.parse(this.tour.extra))
     console.log(this.dateStart)
+  },
+  methods: {
+    sendRequest() {
+      const q = queue(this.arrayOfTours)
+      let flag = false
+      while(!flag) {
+        let data = q.next()
+        console.log(data.value)
+        flag = data.done
+      }
+    },
   }
 }
 </script>

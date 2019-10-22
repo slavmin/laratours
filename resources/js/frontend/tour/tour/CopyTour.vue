@@ -36,7 +36,6 @@
             :min="dateToday"
             multiple
           />
-          {{ picker }}
         </v-card-text>
 
         <v-divider />
