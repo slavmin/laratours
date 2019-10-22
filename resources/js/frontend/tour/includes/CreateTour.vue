@@ -63,13 +63,13 @@
         @click="sendRequest"
       >
         Создать
+        <v-progress-circular
+          v-show="showLoader"
+          :width="2"
+          color="white"
+          indeterminate
+        />
       </v-btn>
-      <v-progress-circular
-        v-show="showLoader"
-        :width="2"
-        color="red"
-        indeterminate
-      />
     </v-layout>
   </v-flex>
 </template>
