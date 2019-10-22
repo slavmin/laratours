@@ -55,7 +55,7 @@
       <v-checkbox
         v-model="published"
         color="green"
-        :label="published ? 'Не публиковать' : 'Опубликовать'"
+        label="Опубликовать сразу"
       />
       <v-btn 
         dark
