@@ -14,6 +14,15 @@
           <td
             :class="props.item.published ? '' : 'unpublished'"
           >
+            <v-checkbox 
+              v-model="props.item.del" 
+              color="red"
+              @change="tourToDel(props.item.id)"
+            />
+          </td>
+          <td
+            :class="props.item.published ? '' : 'unpublished'"
+          >
             {{ props.item.name }}
             <div
               v-if="!props.item.published"
@@ -144,6 +153,26 @@
           </td>
         </template>
       </v-data-table>
+      <v-layout>
+        <v-btn 
+          v-if="tourIdsToDel.length > 0"
+          color="red"
+          dark
+          small
+          @click="deleteTours"
+        >
+          Удалить выбранные туры
+          <v-progress-circular
+            v-if="showLoader"
+            class="ml-2"
+            :width="2"
+            :size="18"
+            color="white"
+            indeterminate
+          />
+        </v-btn>
+        <v-spacer />
+      </v-layout>
     </v-layout>
   </v-layout>
 </template>
@@ -179,6 +208,7 @@ export default {
   data () {
     return {
       headers: [
+        {},
         {
           text: 'Название тура',
           align: 'left',
@@ -195,6 +225,8 @@ export default {
         { text: 'Создан', value: 'created' },
         { text: 'Действия', value: 'actions' },
       ],
+      tourIdsToDel: [],
+      showLoader: false,
     }
   },
   computed: {
@@ -242,6 +274,32 @@ export default {
         order.content.forEach(profile => result += 1)
       })
       return result
+    },
+    deleteTours() {
+      this.showLoader = true
+      console.log(this.tourIdsToDel)
+      this.tourIdsToDel.forEach((tourId) => {
+        const url = '/operator/tour/' + tourId
+        const tour = {
+          '_token': this.token,
+          '_method': 'DELETE',
+          id: tourId
+        }
+        console.log(tour)
+        axios.post(url, tour)
+          .then(r => console.log(r))
+          .catch(e => console.log(e))
+      })
+      setTimeout(function() {
+        document.location.reload(true)
+      }, 2000)
+    },
+    tourToDel(id) {
+      if (this.tourIdsToDel.includes(id)) {
+        this.tourIdsToDel = this.tourIdsToDel.filter(tourId => tourId != id)
+      } else {
+        this.tourIdsToDel.push(id)
+      }
     }
   },
   
