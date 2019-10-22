@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       dialog: false,
-      picker: [new Date().toISOString().substr(0, 10)],
+      picker: [],
       landscape: false,
       reactive: false
     }
@@ -84,9 +84,6 @@ export default {
     dateToday: function() {
       return moment().format('YYYY-MM-DD')
     }
-  },
-  mounted() {
-    this.picker = [JSON.parse(this.tour.extra).options.dateStart]
   },
 }
 </script>

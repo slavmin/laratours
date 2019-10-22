@@ -1,6 +1,5 @@
 <template>
   <v-flex> 
-    {{ dateStart }}
     <form
       method="POST" 
       action="/operator/tour"
@@ -40,23 +39,42 @@
         :value="extraWithNewDate"
         name="extra"
       > 
-      <v-btn 
+      <!-- <v-btn 
         dark
         color="green"
         type="submit"
       >
         Создать тур
-      </v-btn>
+      </v-btn> -->
+    </form>
+    <v-layout
+      row
+      wrap
+      align-center
+    >
+      <v-checkbox
+        v-model="published"
+        color="green"
+        :label="published ? 'Не публиковать' : 'Опубликовать'"
+      />
       <v-btn 
-        color="red"
+        dark
+        color="green"
         @click="sendRequest"
       >
-        text
+        Создать
       </v-btn>
-    </form>
+      <v-progress-circular
+        v-show="showLoader"
+        :width="2"
+        color="red"
+        indeterminate
+      />
+    </v-layout>
   </v-flex>
 </template>
 <script>
+import axios from 'axios'
 function* queue(data) {
   for (let i = 0; i < data.length; i++) {
     yield data[i]
@@ -85,7 +103,9 @@ export default {
   },
   data() {
     return {
-      key: ''
+      url: '/operator/tour',
+      showLoader: false,
+      published: false,
     }
   },
   computed: {
@@ -99,26 +119,40 @@ export default {
       let tour = Object.assign({}, this.tour)
       let tourExtra = JSON.parse(this.tour.extra)
       this.dateStart.forEach((date) => {
-        tourExtra.options.dateStart = this.dateStart
+        tourExtra.options.dateStart = date
         tour.extra = JSON.stringify(tourExtra)
         result.push(tour)
+        console.log(date)
       })
+      console.log(result)
       return result
     }
   },
-  mounted() {
-    console.log(JSON.parse(this.tour.extra))
-    console.log(this.dateStart)
-  },
+  mounted() {},
   methods: {
     sendRequest() {
-      const q = queue(this.arrayOfTours)
-      let flag = false
-      while(!flag) {
-        let data = q.next()
-        console.log(data.value)
-        flag = data.done
-      }
+      this.showLoader = true
+      console.log(this.showLoader)
+      this.dateStart.forEach((date) => {  
+        let extra = JSON.parse(this.tour.extra)
+        extra.options.dateStart = date
+        let tour = {
+          '_token': this.token,
+          '_method': 'POST',
+          name: this.tour.name,
+          tour_type_id: this.tour.tour_type_id,
+          cities_list: this.tour.cities_list,
+          duration: this.tour.duration, 
+          extra: JSON.stringify(extra),
+          published: this.published,
+        }
+        axios.post(this.url, tour)
+          .then(r => console.log(r))
+          .catch(e => console.log(e))
+      })
+      setTimeout(function() {
+        document.location.reload(true)
+      }, 2000)
     },
   }
 }
