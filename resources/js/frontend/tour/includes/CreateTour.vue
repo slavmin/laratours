@@ -59,10 +59,10 @@
       />
       <v-btn 
         dark
-        color="green"
+        :color="showLoader ? 'grey' : 'green'"
         @click="sendRequest"
       >
-        Создать
+        {{ showLoader ? 'Создаю' : 'Создать' }}
         <v-progress-circular
           v-show="showLoader"
           class="ml-2"
@@ -108,6 +108,7 @@ export default {
       url: '/operator/tour',
       showLoader: false,
       published: false,
+      count: 0,
     }
   },
   computed: {
@@ -133,7 +134,10 @@ export default {
     sendRequest() {
       this.showLoader = true
       console.log(this.showLoader)
-      this.dateStart.forEach((date) => {  
+      let n = 0
+      this.dateStart.forEach((date) => { 
+        n++
+        console.log(n) 
         let extra = JSON.parse(this.tour.extra)
         extra.options.dateStart = date
         let tour = {
@@ -147,12 +151,13 @@ export default {
           published: this.published,
         }
         axios.post(this.url, tour)
-          .then()
+          .then(r => this.count += 1)
           .catch(e => console.log(e))
       })
+      const time = this.dateStart.length * 200
       setTimeout(function() {
         document.location.reload(true)
-      }, 2000)
+      }, time)
     },
   }
 }

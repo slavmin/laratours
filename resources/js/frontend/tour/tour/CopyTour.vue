@@ -84,7 +84,7 @@ export default {
   computed: {
     dateToday: function() {
       return moment().format('YYYY-MM-DD')
-    }
+    },
   },
 }
 </script>
