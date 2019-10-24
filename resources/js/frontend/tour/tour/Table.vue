@@ -104,12 +104,22 @@
                 : '' 
             }}
             <v-divider />
-            Прибыль:
+            Комиссия:
             {{ 
               props.item.extra 
                 ? parseFloat(
                   JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice 
                     - JSON.parse(props.item.extra).calc.priceList[0].standardPrice
+                ).toFixed(2)
+                : '' 
+            }}
+            <br>
+            Прибыль:
+            {{ 
+              props.item.extra 
+                ? parseFloat(
+                  JSON.parse(props.item.extra).calc.priceList[0].standardPrice 
+                    - JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
                 ).toFixed(2)
                 : '' 
             }}
