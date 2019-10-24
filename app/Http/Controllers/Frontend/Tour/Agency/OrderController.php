@@ -77,7 +77,7 @@ class OrderController extends Controller
             'operator_id' => 'required|exists:teams,id',
             'customer.*.first_name' => 'required|min:3|max:191',
             'customer.*.last_name'=> 'required|min:3|max:191',
-            'customer.*.email'=> 'required|email|max:191',
+            //'customer.*.email'=> 'required|email|max:191',
             //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
