@@ -169,7 +169,7 @@
           small
           @click="deleteTours"
         >
-          Удалить выбранные туры
+          Удалить выбранные туры ({{ tourIdsToDel.length }})
           <v-progress-circular
             v-if="showLoader"
             class="ml-2"
