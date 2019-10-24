@@ -3,7 +3,6 @@
 namespace App\Listeners\Frontend\Order;
 
 use App\Models\Auth\Team;
-use App\Models\Tour\Tour;
 use App\Notifications\Frontend\Order\NotifyOnOrderCreated;
 use App\Notifications\Frontend\Order\ReplyOnOrderCreated;
 use Notification;
@@ -27,12 +26,17 @@ class OrderEventListener
         $customer = collect($customers)->first();
         Notification::route('mail', $customer['email'])->notify(new ReplyOnOrderCreated($event->order));
 
-        \Log::info('Tour:' . $event->order->id . ' ordered from company:' . $team->name);
+        \Log::info('Tour ID: ' . $event->order->tour_id . ' ordered from company: ' . $team->name);
     }
 
     public function onOrderStatusChanged($event) {
 
-        \Log::info('Order ID:' . $event->order->id . ' status changed from: ' . $event->order->getOriginal('status') . ' to: ' . $event->order->status);
+        \Log::info('Order ID: ' . $event->order->id . ' status changed from: ' . $event->order->getOriginal('status') . ' to: ' . $event->order->status);
+    }
+
+    public function onDeleted($event) {
+
+        \Log::info('Order ID: ' . $event->order->id . ' for Tour ID '. $event->order->tour_id . ' was deleted');
     }
 
     public function subscribe($events)
@@ -45,6 +49,11 @@ class OrderEventListener
         $events->listen(
             \App\Events\Frontend\Order\OrderStatusChanged::class,
             'App\Listeners\Frontend\Order\OrderEventListener@onOrderStatusChanged'
+        );
+
+        $events->listen(
+            \App\Events\Frontend\Order\OrderDeleted::class,
+            'App\Listeners\Frontend\Order\OrderEventListener@onDeleted'
         );
     }
 }

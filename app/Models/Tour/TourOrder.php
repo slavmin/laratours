@@ -93,6 +93,13 @@ class TourOrder extends Model implements AuditableInterface
                 event(new OrderStatusChanged($model));
             }
         });
+
+        static::deleting(function (Model $model) {
+            if (!$model->isForceDeleting()) {
+                $model->status = 4;
+                $model->save();
+            }
+        });
     }
 
 }
