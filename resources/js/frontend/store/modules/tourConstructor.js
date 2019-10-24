@@ -1093,6 +1093,7 @@ export default {
             (extraPrice * hotel.obj.day)
           )
         }
+        console.log('calculate tour corrected: ', state.tour)
       })
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.correctedPricePerSeat
@@ -1256,6 +1257,7 @@ export default {
       state.tour.options.freeAdls.forEach((freeAdl) => {
         freeAdl.correction = correction
       })
+      console.log('correction to all: ', state.tour)
     },
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
@@ -1406,6 +1408,7 @@ export default {
         }
         freeAdl.correctedPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
       })
+      console.log('corrected price values: ', state.tour)
     },
     setCommissionToAll: (state, commission) => {
       if (commission == NaN || commission == '') {

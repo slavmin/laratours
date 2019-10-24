@@ -1570,8 +1570,7 @@ export default {
     commissionManualValue: {
       handler(value) {
         console.log(value)
-        if (value == NaN || value == '') {
-          
+        if (value == NaN || value == '' || value == undefined) {
           value = 0
         }
         if (this.commissionManualMode) {
@@ -1604,6 +1603,8 @@ export default {
         if (!this.commissionManualMode) {
           this.updateCommissionPriceValues()
           this.updateTourCommissionPrice()
+        } else {
+          this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
         }
       },
     },
@@ -1617,12 +1618,12 @@ export default {
     this.updateTourCorrectedPrice()
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
-    if (this.commissionManualMode) {
-      this.updateCommissiontoAll(0)
+    if (!this.commissionManualMode) {
       this.updateCommissionPriceValues()
       this.updateTourCommissionPrice()
     }
-    if (!this.commissionManualMode) {
+    if (this.commissionManualMode) {
+      this.updateCommissiontoAll(0)
       this.updateCommissionPriceValues()
       this.updateTourCommissionPrice()
     }
@@ -1649,12 +1650,15 @@ export default {
       console.log(this.getTour)
     },
     inputCorrection() {
+      console.log('inputCorrection: ', this. commissionManualValue, this.commissionManualMode)
       this.updateCorrectionToAll(this.correctionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
       if (!this.commissionManualMode) {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
+      } else {
+        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
       }
     },
     inputCommission() {
@@ -1664,6 +1668,8 @@ export default {
       if (!this.commissionManualMode) {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
+      } else {
+        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
       }
     },
     correctPrice() {
@@ -1672,6 +1678,8 @@ export default {
       if (!this.commissionManualMode) {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
+      } else {
+        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
       }
     },
     commissPrice() {
@@ -1679,8 +1687,10 @@ export default {
       if (!this.commissionManualMode) {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
+      } else {
+        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
       }
-    },
+  },
     customerName(event) {
       const data = JSON.parse(event.obj.extra)
       const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
@@ -1716,6 +1726,7 @@ export default {
         this.updateCurrentCustomerType(this.currentCustomerType)
         this.correctPrice()
       }, 2000)
+      console.log(this.getTour.calc)
     },
     customerChanged() {
       this.updateCurrentCustomerType(this.currentCustomerType)
