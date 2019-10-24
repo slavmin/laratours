@@ -45,7 +45,9 @@
             <th>
               Нетто
             </th>
-            <th>
+            <th
+              v-show="!commissionManualMode"
+            >
               Комиссия, %
               <v-text-field
                 v-model="commissionToAll"
@@ -55,7 +57,9 @@
                 @input="inputCommission"
               /> 
             </th>
-            <th>
+            <th
+              v-show="!commissionManualMode"
+            >
               Итого
               <br>
             </th>
@@ -110,14 +114,18 @@
               <td>
                 {{ parseInt(transport.correctedPricePerSeat).toFixed(2) }}  
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="transport.commission"
                   name="commission"
                   @input="commissPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(transport.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
@@ -156,14 +164,18 @@
               <td>
                 {{ parseInt(event.correctedPrice).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="event.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(event.commissionPrice).toFixed(2) }}
               </td>
             </tr>
@@ -220,14 +232,18 @@
               <td>
                 {{ parseInt(order.correctedPricePerSeat).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="order.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(order.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
@@ -269,14 +285,18 @@
               <td>
                 {{ parseInt(hotel.correctedPrice).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="hotel.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(hotel.commissionPrice).toFixed(2) }}
               </td>
             </tr>
@@ -329,14 +349,18 @@
               <td>
                 {{ parseInt(meal.correctedPrice).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="meal.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(meal.commissionPrice).toFixed(2) }}
               </td>
             </tr>
@@ -385,14 +409,18 @@
               <td>
                 {{ parseInt(guide.correctedPricePerSeat).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="guide.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(guide.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
@@ -438,14 +466,18 @@
               <td>
                 {{ parseInt(attendant.correctedPricePerSeat).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="attendant.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(attendant.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
@@ -491,14 +523,18 @@
               <td>
                 {{ parseInt(price.correctedPricePerSeat).toFixed(2) }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="price.commission"
                   name="commission"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
               </td>
             </tr>
@@ -680,13 +716,17 @@
               <td>
                 {{ driver.correctedPricePerSeat }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="driver.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ driver.commissionPricePerSeat }}
               </td>
             </tr>
@@ -820,13 +860,17 @@
               <td>
                 {{ guide.guide.options.correctedPricePerSeat }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="guide.guide.options.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ guide.guide.options.commissionPricePerSeat }}
               </td>
             </tr>
@@ -960,13 +1004,17 @@
               <td>
                 {{ attendant.attendant.options.correctedPricePerSeat }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="attendant.attendant.options.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ attendant.attendant.options.commissionPricePerSeat }}
               </td>
             </tr>
@@ -1147,13 +1195,17 @@
               <td>
                 {{ freeAdl.correctedPricePerSeat }}
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 <v-text-field
                   v-model="freeAdl.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ freeAdl.commissionPricePerSeat }}
               </td>
             </tr>
@@ -1168,24 +1220,62 @@
                 {{ getTour.totalPrice.toFixed(2) }}
               </td>
               <td>
-                <!-- <span class="body-1 grey--text">
-                  Наценка средняя: {{ getAverageCorrection }}%
-                </span> -->
+                Наценка, %
+                <v-text-field
+                  v-model="correctionToAll"
+                  label="На все"
+                  mask="###"
+                  outline
+                  @input="inputCorrection"
+                /> 
               </td>
               <td>
                 {{ (getTour.correctedPrice).toFixed(2) }}
               </td>
-              <td>
-                <!-- <span class="body-1 grey--text">
-                  Комиссия средняя: {{ getAverageCommission }}%
-                </span> -->
+              <td
+                v-show="!commissionManualMode"
+              >
+                Комиссия, %
+                <v-text-field
+                  v-model="commissionToAll"
+                  label="На все"
+                  mask="###"
+                  outline
+                  @input="inputCommission"
+                /> 
               </td>
-              <td>
+              <td
+                v-show="!commissionManualMode"
+              >
                 {{ getTour.commissionPrice }}
               </td>
             </tr>
           </tbody>
         </table>
+      </v-flex>
+    </v-layout>
+    <v-divider />
+    <v-layout
+      row
+      wrap
+      justify-center
+    >
+      <v-flex
+        xs6
+        md3
+        lg2
+      >
+        <v-switch
+          v-model="commissionManualMode"
+          color="green"
+          label="Комиссия вручную"
+        />
+        <v-text-field
+          v-if="commissionManualMode"
+          v-model="commissionManualValue"
+          label="Введите комиссию"
+          outline
+        />
       </v-flex>
     </v-layout>
     <v-divider />
@@ -1443,6 +1533,8 @@ export default {
       showGuides: false,
       showAttendant: false,
       showFreeAdls: false,
+      commissionManualMode: false,
+      commissionManualValue: 0,
     };
   },
   computed: {
@@ -1475,12 +1567,32 @@ export default {
     //   },
     //   deep: true,
     // },
+    commissionManualValue: {
+      handler(value) {
+        if (this.commissionManualMode) {
+          this.updateManualCommissionPriceValues(parseFloat(value).toFixed(2))
+        }
+      }
+    },
+    commissionManualMode: {
+      handler(value) {
+        if (!value) {
+          this.commissionToAll = 0
+          this.updateCommissiontoAll(0)
+          this.updateCommissionPriceValues()
+          this.updateTourCommissionPrice()
+          this.commissionManualValue = 0
+        }
+      }
+    },
     currentCustomerType: {
       handler(value) {
         this.updateCurrentCustomerType(value)
         this.updateTourCorrectedPrice()
-        this.updateCommissionPriceValues()
-        this.updateTourCommissionPrice()
+        if (!this.commissionManualMode) {
+          this.updateCommissionPriceValues()
+          this.updateTourCommissionPrice()
+        }
       },
     },
   },
@@ -1492,9 +1604,10 @@ export default {
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
-    this.updateCommissionPriceValues()
-    this.updateTourCommissionPrice()
-    console.log('all state: ', this.allState)
+    if (!this.commissionManualMode) {
+      this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
+    }
     this.calculatePriceForEveryCustomer()
   },
   methods: {
@@ -1511,6 +1624,7 @@ export default {
       'updateTourCommissionPrice',
       'updateTourStaff',
       'updateTourFreeAdls',
+      'updateManualCommissionPriceValues',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -1519,26 +1633,34 @@ export default {
       this.updateCorrectionToAll(this.correctionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
     },
     inputCommission() {
       this.updateCommissiontoAll(this.commissionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
     },
     correctPrice() {
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
     },
     commissPrice() {
       this.updateTourCorrectedPrice()
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
     },
     customerName(event) {
       const data = JSON.parse(event.obj.extra)

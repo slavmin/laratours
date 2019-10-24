@@ -128,6 +128,9 @@ export default {
     async updateTourFreeAdls({ commit }) {
       commit('setTourFreeAdls')
     },
+    async updateManualCommissionPriceValues({ commit }, commissionValue) {
+      commit('setManualCommissionPriceValues', commissionValue)
+    }
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -1661,7 +1664,16 @@ export default {
         },
         commissionPrice: 0,
       }
-    }
+    },
+    setManualCommissionPriceValues(state, commissionValue) {
+      const com = parseFloat(commissionValue).toFixed(2)
+      state.tour.calc.priceList.forEach((price) => {
+        price.commissionExtraPrice = parseFloat(price.addPrice) + parseFloat(com)
+        price.commissionStandardPrice = parseFloat(price.standardPrice) + parseFloat(com)
+        price.commissionSinglePrice = parseFloat(price.singlePrice) + parseFloat(com)
+      })
+      console.log(state.tour.calc.priceList)
+    },
   },
   state: {
     editMode: false,
