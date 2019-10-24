@@ -35,6 +35,7 @@
             locale="ru-ru" 
             :min="dateToday"
             multiple
+            first-day-of-week="1"
           />
         </v-card-text>
 

@@ -10,7 +10,7 @@
         :items="{{ $sitems }}"
     ></tour-index>
 
-    @include('frontend.tour.includes.pagination-row')
+    {{-- @include('frontend.tour.includes.pagination-row') --}}
 
     @include('frontend.tour.includes.trash-bin')
 

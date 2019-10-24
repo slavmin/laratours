@@ -20,6 +20,7 @@
     <Table
       :token="token"
       :tours="items.data"
+      :items="items"
     />
   </v-container>
 </template>
@@ -51,6 +52,9 @@ export default {
 
     };
   },
+  mounted() {
+    console.log(this.items)
+  }
 };
 </script>
 

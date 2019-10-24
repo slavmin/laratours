@@ -5,10 +5,18 @@
       wrap
       justify-center
     >
+      <v-layout>
+        <v-spacer />
+        <TablePagination
+          :items="items"
+        />
+      </v-layout>
       <v-data-table
         :headers="headers"
         :items="tours"
         class="elevation-1"
+        hide-actions
+        :pagination.sync="pagination"
       >
         <template v-slot:items="props">
           <td
@@ -173,6 +181,12 @@
         </v-btn>
         <v-spacer />
       </v-layout>
+      <v-layout>
+        <v-spacer />
+        <TablePagination
+          :items="items"
+        />
+      </v-layout>
     </v-layout>
   </v-layout>
 </template>
@@ -184,6 +198,7 @@ import Publish from './Publish'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import CopyTour from './CopyTour'
+import TablePagination from './TablePagination'
 export default {
 
   name: 'TourTable',
@@ -192,6 +207,7 @@ export default {
     Edit,
     Publish,
     CopyTour,
+    TablePagination,
   },
   props: {
     token: {
@@ -202,6 +218,12 @@ export default {
       type: Array,
       default: () => {
         return []
+      }
+    },
+    items: {
+      type: Object,
+      default: () => {
+        return {}
       }
     },
   },
@@ -227,6 +249,9 @@ export default {
       ],
       tourIdsToDel: [],
       showLoader: false,
+      pagination: {
+        rowsPerPage: 15,
+      },
     }
   },
   computed: {
@@ -239,6 +264,7 @@ export default {
     this.fetchAttendant()
     this.fetchCities()
     this.fetchTourTypes()
+    console.log(this.items)
   },
   methods: {
     ...mapActions([
@@ -277,7 +303,6 @@ export default {
     },
     deleteTours() {
       this.showLoader = true
-      console.log(this.tourIdsToDel)
       this.tourIdsToDel.forEach((tourId) => {
         const url = '/operator/tour/' + tourId
         const tour = {
@@ -285,9 +310,8 @@ export default {
           '_method': 'DELETE',
           id: tourId
         }
-        console.log(tour)
         axios.post(url, tour)
-          .then(r => console.log(r))
+          .then()
           .catch(e => console.log(e))
       })
       setTimeout(function() {
@@ -300,7 +324,7 @@ export default {
       } else {
         this.tourIdsToDel.push(id)
       }
-    }
+    },
   },
   
 };

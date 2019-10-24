@@ -71,6 +71,7 @@
               :min="dateToday"
               color="green"
               locale="ru-ru"
+              first-day-of-week="1"
               @input="showDateStart = false"
             />
           </v-menu>

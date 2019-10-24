@@ -65,7 +65,9 @@
         Создать
         <v-progress-circular
           v-show="showLoader"
+          class="ml-2"
           :width="2"
+          :size="18"
           color="white"
           indeterminate
         />
@@ -122,9 +124,7 @@ export default {
         tourExtra.options.dateStart = date
         tour.extra = JSON.stringify(tourExtra)
         result.push(tour)
-        console.log(date)
       })
-      console.log(result)
       return result
     }
   },
@@ -147,7 +147,7 @@ export default {
           published: this.published,
         }
         axios.post(this.url, tour)
-          .then(r => console.log(r))
+          .then()
           .catch(e => console.log(e))
       })
       setTimeout(function() {
