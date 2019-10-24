@@ -1569,6 +1569,11 @@ export default {
     // },
     commissionManualValue: {
       handler(value) {
+        console.log(value)
+        if (value == NaN || value == '') {
+          
+          value = 0
+        }
         if (this.commissionManualMode) {
           this.updateManualCommissionPriceValues(parseFloat(value).toFixed(2))
         }
@@ -1576,12 +1581,19 @@ export default {
     },
     commissionManualMode: {
       handler(value) {
+        if (value) {
+          this.updateCommissiontoAll(0)
+          this.updateCommissionPriceValues()
+          this.updateTourCommissionPrice()
+          this.updateManualCommissionMode(true)
+        }
         if (!value) {
           this.commissionToAll = 0
           this.updateCommissiontoAll(0)
           this.updateCommissionPriceValues()
           this.updateTourCommissionPrice()
           this.commissionManualValue = 0
+          this.updateManualCommissionMode(false)
         }
       }
     },
@@ -1598,12 +1610,18 @@ export default {
   },
   mounted() {
     this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
-    console.log(this.getCurrentTourCustomers)
     this.updateTourStaff()
     this.updateTourFreeAdls()
     this.updateTourTotalPrice()
     this.updateCorrectedPriceValues()
     this.updateTourCorrectedPrice()
+    this.commissionManualMode = this.getTour.calc.commissionManualMode
+    this.commissionManualValue = this.getTour.calc.commissionManualValue
+    if (this.commissionManualMode) {
+      this.updateCommissiontoAll(0)
+      this.updateCommissionPriceValues()
+      this.updateTourCommissionPrice()
+    }
     if (!this.commissionManualMode) {
       this.updateCommissionPriceValues()
       this.updateTourCommissionPrice()
@@ -1625,6 +1643,7 @@ export default {
       'updateTourStaff',
       'updateTourFreeAdls',
       'updateManualCommissionPriceValues',
+      'updateManualCommissionMode',
     ]),
     saveTour() {
       console.log(this.getTour)

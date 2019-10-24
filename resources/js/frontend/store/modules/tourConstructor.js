@@ -130,6 +130,9 @@ export default {
     },
     async updateManualCommissionPriceValues({ commit }, commissionValue) {
       commit('setManualCommissionPriceValues', commissionValue)
+    },
+    async updateManualCommissionMode({ commit }, flag) {
+      commit('setManualCommissionMode', flag)
     }
   },
   mutations: {
@@ -1666,14 +1669,21 @@ export default {
       }
     },
     setManualCommissionPriceValues(state, commissionValue) {
-      const com = parseFloat(commissionValue).toFixed(2)
+      let com = parseFloat(commissionValue).toFixed(2)
       state.tour.calc.priceList.forEach((price) => {
         price.commissionExtraPrice = parseFloat(price.addPrice) + parseFloat(com)
         price.commissionStandardPrice = parseFloat(price.standardPrice) + parseFloat(com)
         price.commissionSinglePrice = parseFloat(price.singlePrice) + parseFloat(com)
       })
-      console.log(state.tour.calc.priceList)
+      state.tour.calc.commissionManualValue = com
     },
+    setManualCommissionMode(state, flag) {
+      if (flag) {
+        state.tour.calc.commissionManualMode = true
+      } else {
+        state.tour.calc.commissionManualMode = false
+      }
+    }
   },
   state: {
     editMode: false,
