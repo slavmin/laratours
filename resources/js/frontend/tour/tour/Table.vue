@@ -76,17 +76,41 @@
             class="text-xs-right grey--text"
             :class="props.item.published ? '' : 'unpublished'"
           >
+            Тип туриста:
+            {{ 
+              props.item.extra 
+                ? JSON.parse(props.item.extra).calc.priceList[0].name
+                : '' 
+            }}
+            <br>
             Нетто:
             {{ 
               props.item.extra 
-                ? JSON.parse(props.item.extra).totalPrice
+                ? JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
                 : '' 
             }}
             <br>
             С наценкой:
             {{ 
               props.item.extra 
-                ? JSON.parse(props.item.extra).correctedPrice 
+                ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].standardPrice).toFixed(2)
+                : '' 
+            }}
+            <br>
+            С комиссией:
+            {{ 
+              props.item.extra 
+                ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
+                : '' 
+            }}
+            <v-divider />
+            Прибыль:
+            {{ 
+              props.item.extra 
+                ? parseFloat(
+                  JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice 
+                    - JSON.parse(props.item.extra).calc.priceList[0].standardPrice
+                ).toFixed(2)
                 : '' 
             }}
           </td>
@@ -264,7 +288,7 @@ export default {
     this.fetchAttendant()
     this.fetchCities()
     this.fetchTourTypes()
-    console.log(this.items)
+    console.log(JSON.parse(this.items.data[0].extra))
   },
   methods: {
     ...mapActions([

@@ -61,32 +61,6 @@
           row 
           wrap
         >
-          <v-text-field
-            v-model="profile.passport"
-            :label="passportMask.label"
-            :mask="passportMask.mask"
-            :placeholder="passportMask.placeholder"
-            :rules="[v => !!v || 'Укажите данные']"
-            :name="isRequired ? 'customer[' + id + '][passport]' : ''"
-            color="green lighten-3"
-            :required="isRequired"
-          />
-          <v-checkbox 
-            v-if="!profile.isForeigner"
-            v-model="profile.isRfIntPass" 
-            color="green"
-            label="Загран" 
-          />
-          <input
-            v-model="profile.isRfIntPass"
-            type="hidden"
-            :name="isRequired ? 'customer[' + id + '][isRfIntPass]' : ''"
-          >
-        </v-layout>
-        <v-layout 
-          row 
-          wrap
-        >
           <v-menu
             ref="menu"
             v-model="menu"
@@ -119,6 +93,32 @@
               @change="save"
             />
           </v-menu>
+        </v-layout>
+        <v-layout 
+          row 
+          wrap
+        >
+          <v-text-field
+            v-model="profile.passport"
+            :label="passportMask.label"
+            :mask="passportMask.mask"
+            :placeholder="passportMask.placeholder"
+            :rules="[v => !!v || 'Укажите данные']"
+            :name="isRequired ? 'customer[' + id + '][passport]' : ''"
+            color="green lighten-3"
+            :required="isRequired"
+          />
+          <v-checkbox 
+            v-if="!profile.isForeigner"
+            v-model="profile.isRfIntPass" 
+            color="green"
+            label="Загран" 
+          />
+          <input
+            v-model="profile.isRfIntPass"
+            type="hidden"
+            :name="isRequired ? 'customer[' + id + '][isRfIntPass]' : ''"
+          >
         </v-layout>
         <v-layout 
           row 

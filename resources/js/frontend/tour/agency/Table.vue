@@ -63,11 +63,25 @@
             />
           </td>
           <td>
+            от
             {{ 
               item.extra
-                ? JSON.parse(item.extra).correctedPrice
+                ? parseFloat(JSON.parse(item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
                 : ''  
             }}
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon 
+                  color="grey"
+                  v-on="on"
+                >
+                  info
+                </v-icon>
+              </template>
+              <span>
+                Цена за одного взрослого при стандартном размещении.
+              </span>
+            </v-tooltip>
           </td>
           <td>
             <!-- <OrderTour 
