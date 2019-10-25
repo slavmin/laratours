@@ -7,10 +7,10 @@ use App\Models\Tour\TourOrder;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class OrderStatusChanged
+ * Class OrderDeleted
  * @package App\Events\Frontend\Order
  */
-class OrderStatusChanged
+class OrderDeleted
 {
     use SerializesModels;
 
@@ -20,7 +20,7 @@ class OrderStatusChanged
     public $order;
 
     /**
-     * OrderStatusChanged constructor.
+     * OrderDeleted constructor.
      * @param TourOrder $order
      */
     public function __construct(TourOrder $order)
