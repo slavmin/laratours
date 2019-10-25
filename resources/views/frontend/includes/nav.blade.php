@@ -1,5 +1,45 @@
+@auth
+    <nav-bar-status
+        status="auth"
+        :flag="true"
+        name="{{ $logged_in_user->name }}"
+    ></nav-bar-status>
+@else  
+    <nav-bar-status
+        status="auth"
+        :flag="false"
+    ></nav-bar-status>
+@endauth
+@guest
+    <nav-bar-status
+        status="guest"
+        :flag="true"
+    ></nav-bar-status>
+@else  
+    <nav-bar-status
+        status="guest"
+        :flag="false"
+    ></nav-bar-status>
+@endguest
+@can('administer-tours')
+    <nav-bar-status
+        status="operator"
+        :flag="true"
+    ></nav-bar-status>
+@endcan
+@can('administer-orders')
+    <nav-bar-status
+        status="agency"
+        :flag="true"
+    ></nav-bar-status>
+@endcan
+
 <nav-bar
     data-app
+    login-url="{{route('frontend.auth.login')}}"
+    login-text="@lang('navs.frontend.login')"
+    reg-url="{{route('frontend.auth.register')}}"
+    reg-text="@lang('navs.frontend.register')"
     dashboard-url="{{route('frontend.user.dashboard')}}"
     dashboard-text="@lang('navs.frontend.dashboard')"
     management-text="@lang('labels.frontend.tours.management')"
@@ -35,4 +75,8 @@
     auth-logout-text="@lang('navs.general.logout')"
     contact-url="{{route('frontend.contact')}}"
     contact-text="@lang('navs.frontend.contact')"
+    agency-tour-list-url="{{ route('frontend.agency.tour-list') }}" 
+    agency-tour-list-text="@lang('labels.frontend.tours.tour.management')"
+    agency-order-index-url="{{ route('frontend.agency.order.index') }}"
+    agency-order-index-text="@lang('labels.frontend.tours.order.management')"
 ></nav-bar>

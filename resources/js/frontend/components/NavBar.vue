@@ -12,12 +12,29 @@
     <v-spacer />
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn 
+        v-if="auth"
         :href="dashboardUrl"
         flat
       >
         {{ dashboardText }}
       </v-btn>
-      <v-menu>
+      <v-btn 
+        v-if="status.guest"
+        :href="loginUrl"
+        flat
+      >
+        {{ loginText }}
+      </v-btn>
+      <v-btn 
+        v-if="status.guest"
+        :href="regUrl"
+        flat
+      >
+        {{ regText }}
+      </v-btn>
+      <v-menu
+        v-if="!status.guest"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             flat
@@ -45,13 +62,15 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-      <v-menu>
+      <v-menu
+        v-if="!status.guest"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             flat
             v-on="on"
           >
-            Operator Member
+            {{ status.userName }}
             <v-icon>
               expand_more
             </v-icon>
@@ -84,9 +103,26 @@
   </v-toolbar>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'NavBar',
   props: {
+    loginUrl: {
+      type: String,
+      default: '/login'
+    },
+    loginText: {
+      type: String,
+      default: 'login!'
+    },
+    regUrl: {
+      type: String,
+      default: '/registration'
+    },
+    regText: {
+      type: String,
+      default: 'reg!'
+    },
     dashboardUrl: {
       type: String,
       default: '/dashboard'
@@ -219,6 +255,22 @@ export default {
       type: String,
       default: 'tourclick!'
     },
+    agencyTourListUrl: {
+      type: String,
+      default: '#'
+    },
+    agencyTourListText: {
+      type: String,
+      default: 'tourclick!'
+    },
+    agencyOrderIndexUrl: {
+      type: String,
+      default: '#'
+    },
+    agencyOrderIndexText: {
+      type: String,
+      default: 'tourclick!'
+    },
   },
   data() {
     return {
@@ -231,52 +283,69 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      auth: 'getAuthStatus',
+      guest: 'getGuestStatus',
+      status: 'getNavBarStatue',
+    }),
     management: function() {
       let result = []
-      result.push({
-        text: this.orderIndexText,
-        url: this.orderIndexUrl
-      })
-      result.push({
-        text: this.tourIndexText,
-        url: this.tourIndexUrl
-      })
-      result.push({
-        text: this.tourTypeIndexText,
-        url: this.tourTypeIndexUrl
-      })
-      result.push({
-        text: this.tourCustomerIndexText,
-        url: this.tourCustomerIndexUrl
-      })
-      result.push({
-        text: this.tourHotelCategoryIndexText,
-        url: this.tourHotelCategoryIndexUrl
-      })
-      result.push({
-        text: this.tourCountryIndexText,
-        url: this.tourCountryIndexUrl
-      })
-      result.push({
-        text: this.tourHotelIndexText,
-        url: this.tourHotelIndexUrl
-      })
-      result.push({
-        text: this.tourMealIndexText,
-        url: this.tourMealIndexUrl
-      })
-      result.push({
-        text: this.tourTransportIndexText,
-        url: this.tourTransportIndexUrl
-      })
-      result.push({
-        text: this.tourGuideIndexText,
-        url: this.tourGuideIndexUrl
-      })
-      result.push({
-        text: this.tourAttendantIndexText,
-        url: this.tourAttendantIndexUrl
-      })
+      if (this.status.operator) {
+        result.push({
+          text: this.orderIndexText,
+          url: this.orderIndexUrl
+        })
+        result.push({
+          text: this.tourIndexText,
+          url: this.tourIndexUrl
+        })
+        result.push({
+          text: this.tourTypeIndexText,
+          url: this.tourTypeIndexUrl
+        })
+        result.push({
+          text: this.tourCustomerIndexText,
+          url: this.tourCustomerIndexUrl
+        })
+        result.push({
+          text: this.tourHotelCategoryIndexText,
+          url: this.tourHotelCategoryIndexUrl
+        })
+        result.push({
+          text: this.tourCountryIndexText,
+          url: this.tourCountryIndexUrl
+        })
+        result.push({
+          text: this.tourHotelIndexText,
+          url: this.tourHotelIndexUrl
+        })
+        result.push({
+          text: this.tourMealIndexText,
+          url: this.tourMealIndexUrl
+        })
+        result.push({
+          text: this.tourTransportIndexText,
+          url: this.tourTransportIndexUrl
+        })
+        result.push({
+          text: this.tourGuideIndexText,
+          url: this.tourGuideIndexUrl
+        })
+        result.push({
+          text: this.tourAttendantIndexText,
+          url: this.tourAttendantIndexUrl
+        })
+      }
+      if (this.status.agency) {
+        result.push({
+          text: this.agencyTourListText,
+          url: this.agencyTourListUrl
+        })
+        result.push({
+          text: this.agencyOrderIndexText,
+          url: this.agencyOrderIndexUrl
+        })
+      }
       return result
     },
     profile: function() {
@@ -295,6 +364,6 @@ export default {
       })
       return result
     }
-  }
+  },
 }
 </script>
