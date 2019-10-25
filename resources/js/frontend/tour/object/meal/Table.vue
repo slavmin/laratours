@@ -3,6 +3,7 @@
     <v-layout 
       row
       wrap
+      class="white--text"
     >
       <v-flex
         v-for="meal in allMeal"
@@ -47,7 +48,6 @@
             <v-btn 
               small
               fab
-              outline
               :title="`Удалить '` + meal.name + `'`"
               color="red"
               dark 
@@ -84,6 +84,7 @@
             <a 
               :href="JSON.parse(meal.extra).contacts.site"
               target="_blank"
+              style="color: white;"
             >
               {{ JSON.parse(meal.extra).contacts.site }}
             </a>

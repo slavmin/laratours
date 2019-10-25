@@ -3,6 +3,7 @@
     <v-layout 
       row
       wrap
+      class="white--text"
     >
       <v-flex
         v-for="transport in allTransports"
@@ -41,9 +42,7 @@
             >
             <v-btn 
               color="red"
-              flat
               fab
-              outline
               small
               dark
               type="submit"
@@ -76,6 +75,7 @@
             <a 
               :href="JSON.parse(transport.description).contacts.site"
               target="_blank"
+              style="color: white;"
             >
               {{ JSON.parse(transport.description).contacts.site }}
             </a>

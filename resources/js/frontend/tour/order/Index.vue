@@ -2,13 +2,20 @@
   <v-container 
     grid-list-xs
     fluid
+    style="background-color: #66a5ae;"
   >
     <v-layout 
       row 
       wrap
     >
       <v-flex xs12>
-        <h1 class="text-center grey--text mb-5">
+        <h1 class="text-center white--text mb-5">
+          <v-icon
+            dark
+            large
+          >
+            view_list
+          </v-icon>
           {{ header }}
         </h1>
         <Table
@@ -73,9 +80,6 @@ export default {
     return {
     }
   },
-  mounted() {
-    console.log(this.statusesList)
-  }
 }
 </script>
 <style lang="scss" scoped>

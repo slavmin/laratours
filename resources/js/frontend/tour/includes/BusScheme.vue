@@ -168,7 +168,7 @@
               dark 
               class="ml-2"
               @click="save"
-            >
+            > 
               Выбрать
             </v-btn>
           </form>

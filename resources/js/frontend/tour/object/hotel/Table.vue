@@ -3,6 +3,7 @@
     <v-layout 
       row
       wrap
+      class="white--text"
     >
       <v-flex
         v-for="hotel in allHotel"
@@ -47,7 +48,6 @@
             <v-btn 
               small
               fab
-              outline
               :title="`Удалить '` + hotel.name + `'`"
               color="red"
               dark 
@@ -64,6 +64,7 @@
           wrap
           mb-3
           align-center
+          class="white--text"
         >
           <i class="material-icons mr-2">
             hotel
@@ -91,6 +92,7 @@
             <a 
               :href="JSON.parse(hotel.extra).contacts.site"
               target="_blank"
+              style="color: white;"
             >
               {{ JSON.parse(hotel.extra).contacts.site }}
             </a>

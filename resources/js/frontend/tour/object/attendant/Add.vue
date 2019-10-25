@@ -10,9 +10,8 @@
     <template v-slot:activator="{ on }">
       <v-btn 
         fab
-        outline
         title="Добавить"
-        color="green"
+        color="#aa282a"
         dark 
         v-on="on"
       >
@@ -24,7 +23,7 @@
     <v-card>
       <v-toolbar
         dark
-        color="green"
+        color="#66a5ae"
       >
         <v-btn 
           icon 
@@ -77,7 +76,7 @@
                       v-model="name"
                       label="ФИО сопровождающего"
                       name="name"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -90,7 +89,7 @@
                       item-value="id"
                       outline
                       :rules="[v => !!v || 'Это обязательное поле']"
-                      color="green lighten-3"
+                      color="#aa282a"
                       required
                     />
                     <input 
@@ -102,7 +101,7 @@
                       v-model="about"
                       label="Описание"
                       name="about"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -112,7 +111,7 @@
                       label="Цена"
                       mask="#####"
                       name="about"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -120,7 +119,7 @@
                     <v-select
                       v-model="grade"
                       :items="grades"
-                      color="green"
+                      color="#aa282a"
                       :menu-props="{ maxHeight: '400' }"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       label="Класс обслуживания"
@@ -137,7 +136,7 @@
                       item-value="id"
                       :rules="[v => v.length != 0 || 'Выберите язык']"
                       prepend-icon="language"
-                      color="green lighten-3"
+                      color="#aa282a"
                       multiple
                       required
                     />
@@ -153,7 +152,7 @@
                       v-model="email"
                       label="e-mail"
                       name="email"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -163,7 +162,7 @@
                       label="Телефон"
                       mask="+7 (###) ###-##-##"
                       name="phone"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -173,7 +172,7 @@
                       label="Служебный телефон"
                       mask="+7 (###) ###-##-##"
                       name="phone"
-                      color="green lighten-3"
+                      color="#aa282a"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       outline
                       required
@@ -185,7 +184,7 @@
                     justify-end
                   >
                     <v-btn 
-                      color="green"
+                      color="#aa282a"
                       class="white--text"
                       type="submit"
                     >

@@ -12,10 +12,8 @@
     >
       <template v-slot:activator="{ on }">
         <v-btn 
-          color="green" 
+          color="#aa282a" 
           fab
-          flat
-          outline
           dark 
           v-on="on"
         >

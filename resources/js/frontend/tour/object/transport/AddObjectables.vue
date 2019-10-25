@@ -17,7 +17,7 @@
           fab
           small
           title="Добавить"
-          color="green"
+          color="#aa282a"
           dark 
           v-on="on"
         >
@@ -30,7 +30,7 @@
     <v-card>
       <v-toolbar
         dark
-        color="green"
+        color="#66a5ae"
       >
         <v-btn 
           icon 
@@ -120,14 +120,14 @@
                       name="name" 
                       label="Название"
                       :rules="[v => !!v || 'Это обязательное поле']"
-                      color="green"
+                      color="#aa282a"
                       required
                     />
                     <v-text-field
                       v-model="description"
                       name="description" 
                       label="Описание"
-                      color="green"
+                      color="#aa282a"
                     />
                     <v-layout 
                       row 
@@ -139,7 +139,7 @@
                           :name="attribute + '[qnt]'" 
                           :rules="[v => !!v || 'Это обязательное поле']"
                           label="Вместимость"
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>  -->
@@ -155,7 +155,7 @@
                     <v-select
                       v-model="grade"
                       :items="grades"
-                      color="green"
+                      color="#aa282a"
                       :menu-props="{ maxHeight: '400' }"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       label="Класс обслуживания"
@@ -174,12 +174,12 @@
                   </h2>
                   <v-text-field
                     v-model="price0"
-                    color="green"
+                    color="#aa282a"
                     label="1 час"
                   />
                   <v-text-field
                     v-model="price1"
-                    color="green"
+                    color="#aa282a"
                     label="1 км"
                   />
                 </v-flex>
@@ -198,7 +198,7 @@
                     <v-btn 
                       small
                       outline
-                      color="green"
+                      color="#aa282a"
                       dark
                       @click="showScheme = !showScheme"
                     >
@@ -224,7 +224,7 @@
                 <v-btn 
                   type="submit"
                   dark
-                  color="green"
+                  color="#aa282a"
                   :form="'form' + companyId"
                 >
                   Сохранить

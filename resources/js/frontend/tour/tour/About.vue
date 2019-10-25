@@ -10,8 +10,7 @@
         v-slot:activator="{ on }"
       >
         <v-btn 
-          color="green"
-          outline 
+          color="#aa282a"
           small
           dark 
           v-on="on"
@@ -21,7 +20,8 @@
       </template>
       <v-card>
         <v-card-title
-          class="display-2"
+          style="background-color:#66a5ae;"
+          class="display-2 white--text"
         >
           Информация о туре: {{ tour.name }}
         </v-card-title>
@@ -34,10 +34,10 @@
         </v-card-text>
         <v-divider />
         <v-card-actions>
+          <v-spacer />
           <v-btn 
-            color="green"
+            color="#aa282a"
             dark 
-            text 
             @click="dialog = false"
           >
             Закрыть

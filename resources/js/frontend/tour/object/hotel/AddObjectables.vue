@@ -12,7 +12,7 @@
           <v-btn 
             fab
             small
-            color="green" 
+            color="#aa282a" 
             dark 
             v-on="on"
           >
@@ -22,10 +22,13 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-title>
+          <v-card-title
+            style="background-color: #66a5ae;"
+          >
             <v-layout 
               column
               wrap
+              class="white--text"
             >
               <h3 class="mb-4">
                 <i class="material-icons mr-2">
@@ -98,7 +101,7 @@
                       name="name" 
                       label="Название" 
                       outline
-                      color="green"
+                      color="#aa282a"
                     />
                     <v-text-field 
                       v-model="qnt"
@@ -106,7 +109,7 @@
                       label="Количество номеров" 
                       mask="#####"
                       outline
-                      color="green"
+                      color="#aa282a"
                       required
                     />
                     <h3 class="grey--text">
@@ -122,7 +125,7 @@
                           label="Основное размещение" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -132,7 +135,7 @@
                           label="Single" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -142,7 +145,7 @@
                           label="Дополнительное" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -166,7 +169,7 @@
                           label="Основное размещение" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -176,7 +179,7 @@
                           label="Дополнительное" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -200,7 +203,7 @@
                           label="Размещение" 
                           mask="#####"
                           outline
-                          color="green"
+                          color="#aa282a"
                           required
                         />
                       </v-flex>
@@ -208,7 +211,7 @@
                       <v-flex>
                         <v-checkbox
                           v-model="priceList.inf.isFree"
-                          color="green"
+                          color="#aa282a"
                           label="Бесплатно"
                         />
                       </v-flex>
@@ -216,7 +219,7 @@
                     <!-- <h5 class="subheading grey--text text-xs-center mb-2">
                       Дополнительные места: {{ additionalCount }}
                       <i 
-                        class="material-icons green--text"
+                        class="material-icons #aa282a--text"
                         style="font-size: 16px; cursor: pointer;"
                         @click="incrementAdditional" 
                       >
@@ -247,7 +250,7 @@
                             label="Ребёнок" 
                             mask="#####"
                             outline
-                            color="green"
+                            color="#aa282a"
                             required
                           />
                         </v-flex>
@@ -257,7 +260,7 @@
                             label="Взрослый" 
                             mask="#####"
                             outline
-                            color="green"
+                            color="#aa282a"
                             required
                           />
                         </v-flex>
@@ -271,22 +274,15 @@
           <v-card-actions>
             <v-spacer />
             <v-btn 
-              color="green" 
-              flat 
+              color="#aa282a" 
+              dark 
               @click="close"
             >
               Закрыть
             </v-btn>
-            <!-- <v-btn 
-              color="green" 
-              flat 
-              @click="log"
-            >
-              заложить
-            </v-btn> -->
             <v-btn 
-              color="green" 
-              flat 
+              color="#aa282a" 
+              dark 
               type="submit"
               :form="'form' + hotel.id"
             >

@@ -1,5 +1,13 @@
 <template>
   <v-container fluid>
+    <h1 class="text-center mb-5">
+      <v-icon
+        large
+      >
+        view_list
+      </v-icon>
+      Типы туристов
+    </h1>
     <v-layout 
       row 
       wrap

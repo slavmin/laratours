@@ -3,6 +3,7 @@
     fluid
     grid-list-md
     text-xs-center
+    style="background-color: #66a5ae;"
   >
     <v-layout 
       row 
@@ -10,7 +11,15 @@
       justify-center
     >  
       <v-flex> 
-        <h1>Туры</h1>
+        <h1 class="text-center white--text mb-5">
+          <v-icon
+            dark
+            large
+          >
+            view_list
+          </v-icon>
+          Туры
+        </h1>
       </v-flex>
     </v-layout>
     <Add 

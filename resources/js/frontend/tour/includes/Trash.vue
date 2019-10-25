@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-toolbar 
-      color="green lighten-2"
+      color="#66a5ae"
       dark  
     >
       <v-toolbar-title>

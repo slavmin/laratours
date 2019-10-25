@@ -6,7 +6,6 @@
             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.customer.type.management')</h6>
                         <!-- Add customer Vue-component -->
                         <customer-type-add
                             header="@lang('labels.frontend.tours.customer.type.create')"

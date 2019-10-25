@@ -11,7 +11,7 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             fab
-            color="green" 
+            color="#aa282a" 
             dark 
             v-on="on"
           >
@@ -21,8 +21,10 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-title>
-            <span class="headline">
+          <v-card-title
+            style="background-color: #66a5ae;"
+          >
+            <span class="headline white--text">
               {{ header }}
             </span>
           </v-card-title>
@@ -47,7 +49,7 @@
                   v-model="name"
                   name="name"
                   label="Название" 
-                  color="green"
+                  color="#aa282a" 
                   outline
                   required
                 />
@@ -63,7 +65,7 @@
                       label="От" 
                       mask="##"
                       outline
-                      color="green"
+                      color="#aa282a" 
                     />
                   </v-flex>
                   <v-flex xs6>
@@ -72,7 +74,7 @@
                       label="До" 
                       mask="##" 
                       outline
-                      color="green"
+                      color="#aa282a" 
                     />
                   </v-flex>
                 </v-layout>
@@ -88,7 +90,7 @@
                       label="От" 
                       mask="##"
                       outline
-                      color="green"
+                      color="#aa282a" 
                     />
                   </v-flex>
                   <v-flex xs6>
@@ -98,7 +100,7 @@
                       label="От" 
                       mask="##" 
                       outline
-                      color="green"
+                      color="#aa282a" 
                     />
                   </v-flex>
                 </v-layout>
@@ -109,7 +111,7 @@
                   <v-flex xs12>
                     <v-checkbox
                       v-model="isPens"
-                      color="green"
+                      color="#aa282a" 
                       label="Пенсионер"
                     />
                   </v-flex>  
@@ -120,15 +122,15 @@
           <v-card-actions>
             <v-spacer />
             <v-btn 
-              color="green" 
-              flat 
+              color="#aa282a"  
+              dark
               @click="close"
             >
               Закрыть
             </v-btn>
             <v-btn 
-              color="green" 
-              flat 
+              color="#aa282a"  
+              dark
               type="submit"
               form="form"
             >

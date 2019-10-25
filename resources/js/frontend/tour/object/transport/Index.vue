@@ -3,13 +3,20 @@
     fluid
     grid-list-md 
     text-xs-center
+    style="background-color: #66a5ae;"
   >
     <v-layout 
       row 
       wrap
     >
       <v-flex xs12>
-        <h1 class="mb-5">
+        <h1 class="text-center white--text mb-5">
+          <v-icon
+            dark
+            large
+          >
+            commute
+          </v-icon>
           Транспорт
           <AddCompany
             :token="token"

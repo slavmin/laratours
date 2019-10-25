@@ -3,11 +3,15 @@
     fluid
     grid-list-md
     text-xs-center
+    style="background-color: #66a5ae;"
   >
-    <h1 class="display-3 mb-5">
-      <i class="material-icons mr-2">
+    <h1 class="text-center white--text mb-5">
+      <v-icon
+        dark
+        large
+      >
         fastfood
-      </i>
+      </v-icon>
       Питание
       <Add 
         :token="token" 

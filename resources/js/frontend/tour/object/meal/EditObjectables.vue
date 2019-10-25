@@ -19,10 +19,13 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>
+      <v-card-title
+        style="background-color: #66a5ae;"
+      >
         <v-layout 
           column
           wrap
+          class="white--text"
         >
           <h3 class="mb-4">
             <i class="material-icons mr-2">
@@ -109,7 +112,7 @@
                   name="description" 
                   label="Описание" 
                   outline
-                  color="green"
+                  color="#aa282a"
                   class="mb-3"
                 />
                 <v-text-field 
@@ -118,7 +121,7 @@
                   label="Цена" 
                   mask="#####"
                   outline
-                  color="green"
+                  color="#aa282a"
                 />
               </v-flex>
             </v-layout>
@@ -128,22 +131,15 @@
       <v-card-actions>
         <v-spacer />
         <v-btn 
-          color="green" 
-          flat 
+          color="#aa282a" 
+          dark 
           @click="dialog = false"
         >
           Закрыть
         </v-btn>
-        <!-- <v-btn 
-          color="green" 
-          flat 
-          @click="log"
-        >
-          заложить
-        </v-btn> -->
         <v-btn 
-          color="green" 
-          flat 
+          color="#aa282a" 
+          dark 
           type="submit"
           :form="'form' + meal.id + event.id"
         >

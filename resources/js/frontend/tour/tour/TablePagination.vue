@@ -3,7 +3,7 @@
     {{ `${items.from}-${items.to} / ${items.total}` }}
     <v-pagination 
       v-model="items.current_page" 
-      color="green"
+      color="#aa282a"
       :length="items.last_page"
       :total-visible="7"
       @input="changePage"
