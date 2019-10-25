@@ -3,8 +3,9 @@
     fluid
     grid-list-md
     text-xs-center
+    style="background-color: #66a5ae;"
   >
-    <h1 class="display-3 mb-5">
+    <h1 class="text-center white--text mb-5">
       Музеи
       <Add 
         :token="token" 

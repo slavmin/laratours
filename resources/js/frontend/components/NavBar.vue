@@ -191,6 +191,14 @@ export default {
       type: String,
       default: 'tourclick!'
     },
+    tourMuseumIndexUrl: {
+      type: String,
+      default: '#'
+    },
+    tourMuseumIndexText: {
+      type: String,
+      default: 'tourclick!'
+    },
     tourMealIndexUrl: {
       type: String,
       default: '#'
@@ -318,6 +326,10 @@ export default {
         result.push({
           text: this.tourHotelIndexText,
           url: this.tourHotelIndexUrl
+        })
+        result.push({
+          text: this.tourMuseumIndexText,
+          url: this.tourMuseumIndexUrl
         })
         result.push({
           text: this.tourMealIndexText,

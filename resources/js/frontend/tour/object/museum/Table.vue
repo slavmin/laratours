@@ -3,6 +3,7 @@
     <v-layout 
       row
       wrap
+      class="white--text"
     >
       <v-flex
         v-for="museum in allMuseum"
@@ -93,6 +94,7 @@
             <a 
               :href="JSON.parse(museum.extra).contacts.site"
               target="_blank"
+              style="color: white;"
             >
               {{ JSON.parse(museum.extra).contacts.site }}
             </a>
