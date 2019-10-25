@@ -53,6 +53,8 @@ Vue.component('operator-order-edit', require('./tour/order/OrderTour.vue').defau
 Vue.component('agency-orders-index', require('./tour/agency/Order/Index.vue').default);
 Vue.component('agency-order-edit', require('./tour/agency/Order/OrderTour.vue').default);
 Vue.component('trash', require('./tour/includes/Trash.vue').default);
+Vue.component('nav-bar', require('./components/NavBar.vue').default);
+Vue.component('dashboard', require('./components/Dashboard.vue').default);
 /**
 /**
 /**
