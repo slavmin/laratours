@@ -2,22 +2,31 @@
   <v-container 
     grid-list-xs
     fluid
+    style="background-color: #66a5ae;"
   >
     <v-layout 
       row 
       wrap
     >
       <v-flex xs12>
-        <h1 class="text-center grey--text mb-5">
+        <h1 class="text-center white--text mb-5">
+          <v-icon
+            dark
+            large
+          >
+            view_list
+          </v-icon>
           {{ header }}
         </h1>
-        <Table
-          :items="items"
-          :token="token"
-          :tour-names="tourNames"
-          :operators="operators"
-          :statuses="statuses"
-        />
+        <v-card>
+          <Table
+            :items="items"
+            :token="token"
+            :tour-names="tourNames"
+            :operators="operators"
+            :statuses="statuses"
+          />
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>

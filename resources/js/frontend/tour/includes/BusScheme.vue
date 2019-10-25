@@ -1,10 +1,9 @@
 <template>
   <div>
     <v-btn 
-      color="green" 
+      color="#aa282a" 
       title="Схема салона"
       dark
-      flat
       small 
       @click="showScheme = true"
     >
@@ -19,7 +18,10 @@
     >
       <v-card>
         <v-card-title>
-          <span class="headline">
+          <span 
+            style="color: #868080;" 
+            class="headline"
+          >
             Схема салона: {{ transport.obj.name ? transport.obj.name : 'Default bus' }}
           </span>
         </v-card-title>
@@ -100,8 +102,8 @@
         <v-card-actions>
           <v-spacer />
           <v-btn 
-            color="green darken-1" 
-            flat 
+            color="#aa282a" 
+            dark
             @click="close"
           >
             Закрыть
@@ -162,8 +164,9 @@
               :name="attribute + '[price]'"
             >
             <v-btn 
-              color="green darken-1" 
-              flat 
+              color="#aa282a" 
+              dark 
+              class="ml-2"
               @click="save"
             >
               Выбрать

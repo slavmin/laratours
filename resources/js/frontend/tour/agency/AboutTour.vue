@@ -8,7 +8,7 @@
     >
       <template v-slot:activator="{ on }">
         <v-btn
-          color="green"
+          color="#aa282a"
           dark
           small
           flat
@@ -20,8 +20,9 @@
 
       <v-card>
         <v-card-title
-          class="headline green white--text"
+          class="headline white--text"
           primary-title
+          style="background-color: #66a5ae;"
         >
           Программа тура
         </v-card-title>
@@ -35,8 +36,8 @@
         <v-card-actions>
           <v-spacer />
           <v-btn
-            color="green"
-            flat
+            color="#aa282a"
+            dark
             @click="dialog = false"
           >
             Закрыть

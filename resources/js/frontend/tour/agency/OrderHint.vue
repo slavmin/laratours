@@ -5,8 +5,8 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        color="white"
-        flat
+        color="#aa282a"
+        dark
         small
         v-on="on"
       >
@@ -16,7 +16,8 @@
 
     <v-card>
       <v-card-title
-        class="headline green white--text"
+        style="background-color:#66a5ae;"
+        class="headline white--text"
         primary-title
       >
         Правила заполнения
@@ -76,8 +77,8 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="green"
-          flat
+          color="#aa282a"
+          dark
           @click="dialog = false"
         >
           Закрыть

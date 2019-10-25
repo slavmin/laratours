@@ -10,7 +10,7 @@
           label="Имя"
           :rules="[v => !!v || 'Укажите имя']"
           :name="isRequired ? 'customer[' + id + '][first_name]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
           :required="isRequired"
         />
         <v-text-field
@@ -18,7 +18,7 @@
           label="Фамилия"
           :rules="[v => !!v || 'Укажите фамилию']"
           :name="isRequired ? 'customer[' + id + '][last_name]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
           :required="isRequired"
         />
         <input 
@@ -86,7 +86,7 @@
             <v-date-picker
               ref="picker"
               v-model="date"
-              color="green"
+              color="#aa282a"
               locale="ru-ru"
               :max="new Date().toISOString().substr(0, 10)"
               min="1920-01-01"
@@ -105,13 +105,13 @@
             :placeholder="passportMask.placeholder"
             :rules="[v => !!v || 'Укажите данные']"
             :name="isRequired ? 'customer[' + id + '][passport]' : ''"
-            color="green lighten-3"
+            color="#aa282a"
             :required="isRequired"
           />
           <v-checkbox 
             v-if="!isForeigner"
             v-model="isRfIntPass" 
-            color="green"
+            color="#aa282a"
             label="Загран" 
           />
           <input
@@ -127,17 +127,17 @@
           <v-checkbox 
             v-model="manualPens"
             label="Пенсионер"
-            color="green"
+            color="#aa282a"
           />
           <v-checkbox 
             v-model="isForeigner"
             label="Иностранец"
-            color="green"
+            color="#aa282a"
           />  
           <v-checkbox 
             v-model="isSinglePlace"
             label="Single-размещение"
-            color="green"
+            color="#aa282a"
           />  
         </v-layout>
         <div>
@@ -152,7 +152,7 @@
           label="Адрес"
           :rules="[v => !!v || 'Укажите адрес']"
           :name="isRequired ? 'customer[' + id + '][address]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
         />
         <input 
           v-model="meal"
@@ -168,7 +168,7 @@
     </v-layout>
     <v-divider />
     <v-btn
-      color="green"
+      color="#aa282a"
       dark
       flat
       @click="showChangeMeal = !showChangeMeal"

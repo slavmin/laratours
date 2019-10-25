@@ -19,7 +19,7 @@
           type="email"
           :rules="[v => !!v || 'Укажите email']"
           required
-          color="green lighten-3"
+          color="#aa282a"
         />
       </v-flex>  
       <v-flex>
@@ -29,14 +29,14 @@
           mask="N (NNN) NNN-NN-NN"
           :rules="[v => !!v || 'Укажите телефон']"
           required
-          color="green lighten-3"
+          color="#aa282a"
         />
       </v-flex>  
       <v-flex>
         <v-text-field
           v-model="getOrderContacts.name"
           label="Имя"
-          color="green lighten-3"
+          color="#aa282a"
         />
       </v-flex>  
     </v-layout>

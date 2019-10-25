@@ -35,7 +35,6 @@
 @endcan
 
 <nav-bar
-    data-app
     login-url="{{route('frontend.auth.login')}}"
     login-text="@lang('navs.frontend.login')"
     reg-url="{{route('frontend.auth.register')}}"

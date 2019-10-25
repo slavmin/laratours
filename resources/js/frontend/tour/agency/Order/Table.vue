@@ -215,9 +215,16 @@ export default {
 table {
   td,
   th {
-    border: 1px solid gray;
     font-size: 16px;
     padding: 12px;
+  }
+  th {
+    border-bottom: 2px solid #cac8c9;
+    color: #868080;
+    padding-top: 24px;
+    padding-bottom: 36px;
+    font-size: 16px;
+    font-weight: normal;
   }
 }
 span {

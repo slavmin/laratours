@@ -90,11 +90,9 @@
             /> -->
             <v-btn
               :href="'/agency/order/create/' + item.id"
-              color="green"
-              dark
+              color="#aa282a"
               small
-              flat
-              outline
+              dark
             >
               Заказать
             </v-btn>
@@ -154,9 +152,16 @@ export default {
 table {
   td,
   th {
-    border: 1px solid gray;
     font-size: 16px;
     padding: 12px;
+  }
+  th {
+    border-bottom: 2px solid #cac8c9;
+    color: #868080;
+    padding-top: 24px;
+    padding-bottom: 36px;
+    font-size: 16px;
+    font-weight: normal;
   }
 }
 </style>

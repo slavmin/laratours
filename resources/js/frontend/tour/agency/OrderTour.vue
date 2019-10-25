@@ -1,21 +1,9 @@
 <template>
   <v-container grid-list-xs>
-    <!-- <v-layout 
-      row 
-      wrap
-      justify-center
-    > 
-      <v-flex xs2>
-        <v-select
-          v-model="count"
-          :items="items"
-          label="Туристов"
-        />
-      </v-flex>
-    </v-layout> -->
     <v-card>
       <v-card-title
-        class="headline green white--text"
+        style="background-color:#66a5ae;"
+        class="headline white--text"
         primary-title
       >
         {{ headerText }}.
@@ -97,7 +85,10 @@
                         :key="c"
                       >
                         <template v-slot:header>
-                          <div class="title">
+                          <div 
+                            class="title"
+                            style="color: #868080;"  
+                          >
                             {{ c == 1 || c == 2 ? 'Основное место ' + c : 'Дополнительное место' }}
                           </div>
                         </template>
@@ -192,7 +183,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn 
-          color="green"
+          color="#aa282a"
           type="submit"
           dark
           form="form"

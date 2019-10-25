@@ -4,8 +4,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        color="green"
-        flat
+        color="#aa282a"
         small
         dark
         v-on="on"
@@ -95,8 +94,8 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="green"
-          flat
+          color="#aa282a"
+          dark
           @click="dialog = false"
         >
           Закрыть

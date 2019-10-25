@@ -10,7 +10,7 @@
           label="Имя"
           :rules="[v => !!v || 'Укажите имя']"
           :name="isRequired ? 'customer[' + id + '][first_name]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
           :required="isRequired"
           :disabled="isDisabled"
         />
@@ -19,7 +19,7 @@
           label="Фамилия"
           :rules="[v => !!v || 'Укажите фамилию']"
           :name="isRequired ? 'customer[' + id + '][last_name]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
           :required="isRequired"
           :disabled="isDisabled"
         />
@@ -52,6 +52,7 @@
           :items="genders"
           item-text="text"
           item-name="value"
+          color="#aa282a"
           label="Пол"
           :disabled="isDisabled"
         />
@@ -90,7 +91,7 @@
             <v-date-picker
               ref="picker"
               v-model="date"
-              color="green"
+              color="#aa282a"
               locale="ru-ru"
               :max="new Date().toISOString().substr(0, 10)"
               min="1920-01-01"
@@ -109,14 +110,14 @@
             :placeholder="passportMask.placeholder"
             :rules="[v => !!v || 'Укажите данные']"
             :name="isRequired ? 'customer[' + id + '][passport]' : ''"
-            color="green lighten-3"
+            color="#aa282a"
             :required="isRequired"
             :disabled="isDisabled"
           />
           <v-checkbox 
             v-if="!profile.isForeigner"
             v-model="profile.isRfIntPass" 
-            color="green"
+            color="#aa282a"
             label="Загран" 
             :disabled="isDisabled"
           />
@@ -134,19 +135,19 @@
           <v-checkbox 
             v-model="profile.isPens"
             label="Пенсионер"
-            color="green"
+            color="#aa282a"
             :disabled="isDisabled"
           />
           <v-checkbox 
             v-model="profile.isForeigner"
             label="Иностранец"
-            color="green"
+            color="#aa282a"
             :disabled="isDisabled"
           />  
           <v-checkbox 
             v-model="profile.isSinglePlace"
             label="Single-размещение"
-            color="green"
+            color="#aa282a"
             :disabled="isDisabled"
           />  
         </v-layout>
@@ -162,7 +163,7 @@
           label="Адрес"
           :rules="[v => !!v || 'Укажите адрес']"
           :name="isRequired ? 'customer[' + id + '][address]' : ''"
-          color="green lighten-3"
+          color="#aa282a"
           :disabled="isDisabled"
         />
         <input 
@@ -180,7 +181,7 @@
     <v-divider />
     <v-btn
       v-if="!isDisabled"
-      color="green"
+      color="#aa282a"
       dark
       flat
       @click="showChangeMeal = !showChangeMeal"

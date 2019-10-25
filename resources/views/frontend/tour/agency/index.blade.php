@@ -2,7 +2,6 @@
 
 @section('content')
 
-    @include('frontend.tour.includes.agency-select-form')
     <!-- Vue component -->
     @if(count($items)>0)
         <?php $sitems = json_encode($items); ?>
@@ -15,7 +14,8 @@
         ></agency-tours-index>
     @endif
     <!-- /Vue component -->
-
     @include('frontend.tour.includes.pagination-row')
+    @include('frontend.tour.includes.agency-select-form')
+
 
 @endsection

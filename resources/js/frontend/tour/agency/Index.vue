@@ -2,16 +2,23 @@
   <v-container 
     grid-list-xs
     fluid  
+    style="background-color: #66a5ae;"
   >
     <v-layout 
       row 
       wrap
     >
       <v-flex xs12>
-        <h1 class="text-center grey--text mb-5">
+        <h1 class="text-center white--text mb-5">
+          <v-icon
+            dark
+            large
+          >
+            camera
+          </v-icon>
           Доступные туры:
         </h1>
-        <h2 class="text-center grey--text">
+        <!-- <h2 class="text-center white--text">
           Фильтры:
         </h2>
         <v-layout 
@@ -78,12 +85,14 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-        </v-layout>
-        <Table
-          :items="filterItems"
-          :cities="cities"
-          :token="token"
-        />
+        </v-layout> -->
+        <v-card>
+          <Table
+            :items="filterItems"
+            :cities="cities"
+            :token="token"
+          />
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
