@@ -1,16 +1,18 @@
 <template>
-  <v-layout column> 
-    <v-layout 
+  <div
+    style="max-width: 1600px;"
+  >
+    <v-layout>
+      <v-spacer />
+      <TablePagination
+        :items="items"
+      />
+    </v-layout>
+    <v-layout
       row
       wrap
       justify-center
     >
-      <v-layout>
-        <v-spacer />
-        <TablePagination
-          :items="items"
-        />
-      </v-layout>
       <v-data-table
         :headers="headers"
         :items="tours"
@@ -179,10 +181,9 @@
                 >
                 <v-btn 
                   color="red"
-                  flat
                   fab
-                  outline
                   small
+                  title="Удалить"
                   dark
                   type="submit"
                 >
@@ -195,34 +196,34 @@
           </td>
         </template>
       </v-data-table>
-      <v-layout>
-        <v-btn 
-          v-if="tourIdsToDel.length > 0"
-          color="red"
-          dark
-          small
-          @click="deleteTours"
-        >
-          Удалить выбранные туры ({{ tourIdsToDel.length }})
-          <v-progress-circular
-            v-if="showLoader"
-            class="ml-2"
-            :width="2"
-            :size="18"
-            color="white"
-            indeterminate
-          />
-        </v-btn>
-        <v-spacer />
-      </v-layout>
-      <v-layout>
-        <v-spacer />
-        <TablePagination
-          :items="items"
-        />
-      </v-layout>
     </v-layout>
-  </v-layout>
+    <v-layout>
+      <v-btn 
+        v-if="tourIdsToDel.length > 0"
+        color="red"
+        dark
+        small
+        @click="deleteTours"
+      >
+        Удалить выбранные туры ({{ tourIdsToDel.length }})
+        <v-progress-circular
+          v-if="showLoader"
+          class="ml-2"
+          :width="2"
+          :size="18"
+          color="white"
+          indeterminate
+        />
+      </v-btn>
+      <v-spacer />
+    </v-layout>
+    <v-layout>
+      <v-spacer />
+      <TablePagination
+        :items="items"
+      />
+    </v-layout>
+  </div>
 </template>
 
 <script>

@@ -10,23 +10,22 @@
     <template v-slot:activator="{ on }">
       <v-btn 
         color="green" 
-        fab
         small
-        flat
-        outline
+        fab
         dark 
+        title="Редактировать тур"
         v-on="on"
       >
         <i class="material-icons">
           edit
-        </i>         
+        </i>      
       </v-btn>
     </template>
     <v-card>
       <v-toolbar 
         id="toolbar"
         dark 
-        color="green"
+        color="#66a5ae"
       >
         <v-btn 
           icon 

@@ -13,7 +13,7 @@
         item-value="id"
         :rules="[v => !!v || 'Выберите тип']"
         append-outer-icon="find_in_page"
-        color="green lighten-3"
+        color="#aa282a"
         required
       />
       <v-text-field
@@ -22,7 +22,7 @@
         name="name"
         :rules="nameRules"
         append-outer-icon="title"
-        color="green lighten-3"
+        color="#aa282a"
         outline
         required
       />
@@ -34,7 +34,7 @@
         item-value="id"
         :rules="[v => v.length != 0 || 'Выберите тип']"
         append-outer-icon="location_city"
-        color="green lighten-3"
+        color="#aa282a"
         multiple
         required
       />
@@ -69,7 +69,7 @@
             <v-date-picker 
               v-model="getTour.options.dateStart" 
               :min="dateToday"
-              color="green"
+              color="#aa282a"
               locale="ru-ru"
               first-day-of-week="1"
               @input="showDateStart = false"
@@ -83,7 +83,7 @@
             :rules="[v => !!v || 'Укажите количество дней']"
             name="days"
             mask="###"
-            color="green lighten-3"
+            color="#aa282a"
           />
         </v-flex>
         <v-flex xs2>
@@ -92,7 +92,7 @@
             label="Ночей"
             name="nights"
             mask="###"
-            color="green lighten-3"
+            color="#aa282a"
           />
         </v-flex>
       </v-layout>
@@ -111,7 +111,7 @@
             item-value="id"
             :rules="[v => v.length != 0 || 'Выберите класс']"
             prepend-icon="grade"
-            color="green lighten-3"
+            color="#aa282a"
             multiple
             required
           />
@@ -128,7 +128,7 @@
             item-value="id"
             :rules="[v => v.length != 0 || 'Выберите язык']"
             prepend-icon="language"
-            color="green lighten-3"
+            color="#aa282a"
             multiple
             required
           />
@@ -144,7 +144,7 @@
             label="Количество туристов"
             name="qnt"
             mask="###"
-            color="green lighten-3"
+            color="#aa282a"
           />
         </v-flex>
       </v-layout>
@@ -155,7 +155,7 @@
       >
         <v-btn
           :disabled="!tourTypeFormValid"
-          color="green"
+          color="#aa282a"
           class="white--text"
           @click="submitType"
         >

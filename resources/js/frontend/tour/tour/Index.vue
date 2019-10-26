@@ -26,11 +26,17 @@
       :token="token"
       :tours="items.data"
     />
-    <Table
-      :token="token"
-      :tours="items.data"
-      :items="items"
-    />
+    <v-layout
+      wrap
+      row
+      justify-center
+    >
+      <Table
+        :token="token"
+        :tours="items.data"
+        :items="items"
+      />
+    </v-layout>
   </v-container>
 </template>
 

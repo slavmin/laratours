@@ -22,7 +22,7 @@
           v-model="item.daysArray"
           :items="days"
           multiple
-          color="green"
+          color="#aa282a"
           :dark="item.selected"
           :disabled="item.selected"
           label="День тура"
@@ -137,7 +137,7 @@
         v-show="!item.selected"
       >
         <v-btn 
-          color="green"
+          color="#aa282a"
           dark
           flat
           @click="showDriverDetails = !showDriverDetails"
@@ -162,7 +162,7 @@
             <v-icon>remove</v-icon>
           </v-btn>
           <v-btn 
-            color="green"
+            color="#aa282a"
             small
             fab
             dark
@@ -181,12 +181,12 @@
             <v-switch 
               v-model="drivers[i - 1].hotel"
               label="Проживание"
-              color="green" 
+              color="#aa282a" 
             />
             <v-switch 
               v-model="drivers[i - 1].meal"
               label="Питание"
-              color="green" 
+              color="#aa282a" 
             />
             <v-divider />
           </div>

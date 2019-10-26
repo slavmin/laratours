@@ -546,7 +546,7 @@
               >
                 Персонал
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="showStaff = !showStaff"
@@ -613,7 +613,7 @@
               >
                 Водители
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="showDrivers = !showDrivers"
@@ -634,7 +634,7 @@
                 <br>
                 Водитель {{ driver.driver }}
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="driver.showDetails = !driver.showDetails"
@@ -739,7 +739,7 @@
               >
                 Гиды
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="showGuides = !showGuides"
@@ -758,7 +758,7 @@
               <td>
                 {{ guide.guide.name }}
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="guide.showDetails = !guide.showDetails"
@@ -883,7 +883,7 @@
               >
                 Сопровождающие
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="showAttendant = !showAttendant"
@@ -902,7 +902,7 @@
               <td>
                 {{ attendant.attendant.name }}
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="attendant.showDetails = !attendant.showDetails"
@@ -1027,7 +1027,7 @@
               >
                 "Бесплатные взрослые"
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="showFreeAdls = !showFreeAdls"
@@ -1093,7 +1093,7 @@
               <td>
                 {{ freeAdl.name }}
                 <v-btn 
-                  color="green"
+                  color="#aa282a"
                   fab
                   flat
                   @click="freeAdl.showDetailsInSummary = !freeAdl.showDetailsInSummary"
@@ -1267,7 +1267,7 @@
       >
         <v-switch
           v-model="commissionManualMode"
-          color="green"
+          color="#aa282a"
           label="Комиссия вручную"
         />
         <v-text-field
@@ -1433,7 +1433,7 @@
               <td>
                 <v-checkbox 
                   v-model="price.isChd" 
-                  color="green"
+                  color="#aa282a"
                   name="is-chd"
                 />
               </td>
@@ -1443,7 +1443,7 @@
         <v-btn 
           v-if="showPriceForEveryCustomer"
           dark
-          color="green"
+          color="#aa282a"
           @click="calculatePriceForEveryCustomer"
         >
           Рассчитать цены для всех типов туристов
@@ -1497,7 +1497,7 @@
           > 
           <v-btn 
             dark
-            color="green"
+            color="#aa282a"
             type="submit"
           >
             Сохранить тур

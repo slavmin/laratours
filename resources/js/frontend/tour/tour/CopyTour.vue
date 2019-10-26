@@ -9,21 +9,21 @@
           color="green" 
           fab
           small
-          flat
-          outline
+          title="Копировать"
           dark 
           v-on="on"
         >
           <i class="material-icons">
             file_copy
-          </i>         
+          </i>       
         </v-btn>
       </template>
 
       <v-card>
         <v-card-title
-          class="green subheading white--text"
+          class="subheading white--text"
           primary-title
+          style="background-color: #66a5ae;"
         >
           Копировать тур
         </v-card-title>
@@ -31,7 +31,7 @@
         <v-card-text>
           <v-date-picker 
             v-model="picker" 
-            color="green"
+            color="#66a5ae"
             locale="ru-ru" 
             :min="dateToday"
             multiple

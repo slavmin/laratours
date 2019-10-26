@@ -41,9 +41,7 @@
     <v-btn 
       v-if="!tour.published"
       color="green"
-      flat
       fab
-      outline
       small
       dark
       type="submit"
@@ -58,9 +56,7 @@
     <v-btn 
       v-if="tour.published"
       color="orange"
-      flat
       fab
-      outline
       small
       dark
       type="submit"

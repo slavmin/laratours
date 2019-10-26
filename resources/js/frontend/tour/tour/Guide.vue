@@ -21,7 +21,7 @@
           v-model="guide.daysArray"
           :items="days"
           multiple
-          color="green"
+          color="#aa282a"
           :dark="guide.selected"
           :disabled="guide.selected"
           label="День тура"
@@ -35,7 +35,7 @@
           label="Стоимость"
           mask="######"
           class="mt-3"
-          color="green"
+          color="#aa282a"
         />
         <v-text-field
           v-model="about"
@@ -44,7 +44,7 @@
           label="Описание"
           append-outer-icon="description"
           class="mt-3"
-          color="green"
+          color="#aa282a"
         />
         <!-- <br>
         <span class="grey--text text--darken-1">
@@ -59,7 +59,7 @@
         v-show="!guide.selected"
       >
         <v-btn 
-          color="green"
+          color="#aa282a"
           dark
           flat
           @click="showGuideDetails = !showGuideDetails"
@@ -83,12 +83,12 @@
             <v-switch 
               v-model="options.hotel"
               label="Проживание"
-              color="green" 
+              color="#aa282a" 
             />
             <v-switch 
               v-model="options.meal"
               label="Питание"
-              color="green" 
+              color="#aa282a" 
             />
           </div>
         </div>
@@ -97,7 +97,7 @@
         v-show="!guide.selected"
       >
         <v-btn 
-          color="green"
+          color="#aa282a"
           dark
           flat
           @click="showEvents = !showEvents"
@@ -115,7 +115,7 @@
             :key="`${guide.name}-${i}`"
             v-model="museum.selected"
             :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
-            color="green" 
+            color="#aa282a" 
           />
         </div>
       </div>

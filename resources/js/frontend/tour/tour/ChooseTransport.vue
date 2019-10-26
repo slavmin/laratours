@@ -113,7 +113,7 @@
         dark
         fab
         class="done-btn"
-        color="green"
+        color="#aa282a"
         @click="done"
       >
         <i class="material-icons">

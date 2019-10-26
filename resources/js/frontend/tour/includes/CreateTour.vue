@@ -41,7 +41,7 @@
       > 
       <!-- <v-btn 
         dark
-        color="green"
+        color="#aa282a"
         type="submit"
       >
         Создать тур
@@ -54,12 +54,12 @@
     >
       <v-checkbox
         v-model="published"
-        color="green"
+        color="#aa282a"
         label="Опубликовать сразу"
       />
       <v-btn 
         dark
-        :color="showLoader ? 'grey' : 'green'"
+        :color="showLoader ? 'grey' : '#aa282a'"
         @click="sendRequest"
       >
         {{ showLoader ? 'Создаю' : 'Создать' }}

@@ -66,7 +66,7 @@
                       v-model="item.daysArray"
                       :items="days"
                       multiple
-                      color="green"
+                      color="#aa282a"
                       :dark="item.selected"
                       :disabled="item.selected"
                       label="День тура"
@@ -80,7 +80,7 @@
                       label="Описание"
                       append-outer-icon="description"
                       class="mt-3"
-                      color="green"
+                      color="#aa282a"
                     />
                     Взрослый
                     <v-layout 
@@ -192,7 +192,7 @@
         dark
         fab
         class="done-btn"
-        color="green"
+        color="#aa282a"
         @click="done"
       >
         <i class="material-icons">

@@ -26,7 +26,7 @@
         <v-toolbar 
           id="toolbar"
           dark 
-          color="green"
+          color="#66a5ae"
         >
           <v-btn 
             icon 
@@ -130,13 +130,6 @@
               />
             </v-flex>
           </v-layout>
-          <!-- <v-btn 
-            dark 
-            color="green"
-            @click="scrollToTop"
-          >
-            scroll
-          </v-btn> -->
         </v-container>    
       </v-card>
     </v-dialog>

@@ -6,14 +6,14 @@
   >
     <!-- <v-btn 
       dark 
-      color="green"
+      color="#aa282a"
       @click="addMoreGuide"
     >
       Добавить гида
     </v-btn>
     <v-btn 
       dark 
-      color="green"
+      color="#aa282a"
       @click="addMoreAttendant"
     >
       Добавить сопровождающего
@@ -25,7 +25,7 @@
     >
       <v-btn 
         dark 
-        color="green"
+        color="#aa282a"
         @click="addFreeAdl"
       >
         "Бесплатный взрослый"
@@ -63,7 +63,7 @@
                 :dark="adl.selected"
                 :disabled="adl.selected"
                 class="mt-3"
-                color="green"
+                color="#aa282a"
               />
               <v-divider />
               <v-select
@@ -72,7 +72,7 @@
                 :dark="adl.selected"
                 :disabled="adl.selected"
                 multiple
-                color="green"
+                color="#aa282a"
                 label="День тура"
                 outline
                 @change="daysSelected(adl)"
@@ -84,14 +84,14 @@
                 label="Описание"
                 append-outer-icon="description"
                 class="mt-3"
-                color="green"
+                color="#aa282a"
               />
             </div>
             <div
               v-show="!adl.selected"
             >
               <v-btn 
-                color="green"
+                color="#aa282a"
                 dark
                 flat
                 @click="adl.showAdlDetails = !adl.showAdlDetails"
@@ -115,12 +115,12 @@
                   <v-switch 
                     v-model="adl.options.hotel"
                     label="Проживание"
-                    color="green" 
+                    color="#aa282a" 
                   />
                   <v-switch 
                     v-model="adl.options.meal"
                     label="Питание"
-                    color="green" 
+                    color="#aa282a" 
                   />
                 </div>
               </div>
@@ -129,7 +129,7 @@
               v-show="!adl.selected"
             >
               <v-btn 
-                color="green"
+                color="#aa282a"
                 dark
                 flat
                 @click="adl.showEvents = !adl.showEvents"
@@ -147,7 +147,7 @@
                   :key="`${adl.id}-${i}`"
                   v-model="museum.selected"
                   :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
-                  color="green" 
+                  color="#aa282a" 
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@
             </v-btn>
             <v-spacer />
             <v-btn 
-              color="green"
+              color="#aa282a"
               flat
               :disabled="adl.name == ''"
               @click="choose(adl)"

@@ -51,7 +51,7 @@
             fab
             small
             title="Добавить"
-            color="green"
+            color="#aa282a"
             dark 
             @click="addCustomService"
           >
@@ -123,7 +123,7 @@
         >
           <v-btn
             v-if="!dialogFillEditors"
-            color="green"
+            color="#aa282a"
             dark
             @click="dialogFillEditors = true"
           >
@@ -132,7 +132,10 @@
           <v-card
             v-if="dialogFillEditors"
           >
-            <v-card-title class="headline grey--text">
+            <v-card-title 
+              class="headline white--text"
+              style="background-color: #66a5ae;"
+            >
               Автоматическое заполнение редакторов
             </v-card-title>
             <v-card-text
@@ -150,16 +153,16 @@
             </v-card-text>
             <v-card-actions>
               <v-btn
-                color="green darken-1"
-                flat="flat"
+                color="#aa282a"
+                dark
                 @click="dialogFillEditors = false"
               >
                 Нет
               </v-btn>
               <v-spacer />
               <v-btn
-                color="green darken-1"
-                flat="flat"
+                color="#aa282a"
+                dark
                 @click="fillEditorsContent"
               >
                 Да, заполнить редакторы
@@ -194,7 +197,7 @@
         dark
         fab
         class="done-btn"
-        color="green"
+        color="#aa282a"
         @click="done"
       >
         <i class="material-icons">

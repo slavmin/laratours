@@ -81,7 +81,7 @@
                       label="Описание"
                       append-outer-icon="watch"
                       class="mt-3"
-                      color="green"
+                      color="#aa282a"
                     />
                     <!-- Regular events -->
                     <div
@@ -166,7 +166,7 @@
         dark
         fab
         class="done-btn"
-        color="green"
+        color="#aa282a"
         @click="done"
       >
         <i class="material-icons">
