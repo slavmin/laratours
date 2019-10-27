@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\Auth\LoginController;
 use App\Http\Controllers\Frontend\Auth\RegisterController;
 use App\Http\Controllers\Frontend\Auth\RegisterInvitedController;
+use App\Http\Controllers\frontend\auth\SignupController;
 use App\Http\Controllers\Frontend\Auth\SocialLoginController;
 use App\Http\Controllers\Frontend\Auth\ResetPasswordController;
 use App\Http\Controllers\Frontend\Auth\ConfirmAccountController;
@@ -49,6 +50,9 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
 
         Route::get('invited/register/{token?}', [RegisterInvitedController::class, 'showRegistrationForm'])->name('invited.register');
         Route::post('invited/register', [RegisterInvitedController::class, 'register'])->name('invited.register.post');
+
+        // Personal registration
+        Route::post('signup', [SignupController::class, 'register'])->name('user.register.post');
 
         // Confirm Account Routes
         Route::get('account/confirm/{token}', [ConfirmAccountController::class, 'confirm'])->name('account.confirm');
