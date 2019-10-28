@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Frontend\Tour;
 
+use App\Events\Frontend\Order\OrderDeleted;
 use App\Exceptions\GeneralException;
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -148,6 +148,8 @@ class OrderController extends Controller
         if ($tour_order->deleted_at === null) {
             throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
         }
+
+        event(new OrderDeleted($tour_order));
 
         $tour_order->forceDelete();
 
