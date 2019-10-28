@@ -33,13 +33,15 @@
                 class="headline"
                 style="color: #979694;"
               >
-                ТурКлик начинает свою работу!
+                Вас приветствует туроператор "Алфавит"!
               </div>
             </v-card-title>
             <v-divider />
             <v-card-text>
               <span class="subheading">
-                Добро пожаловать в ТурКлик! Сейчас вы находитесь в панели управления. По вашим пожеланиям мы вынесем сюда необходимые и удобные для вас ссылки, разделы, графики и отчёты.
+                Здесь вы можете подобрать и оформить заказ на туры в Санкт-Петербург от туроператора Алфавит. 
+                <br>
+                Так же мы предлагаем школьные экскурсии , сборные туры для детей и взрослых, туристические поездки по России, Золотое кольцо и многое-многое другое! 
               </span>
             </v-card-text>
           </v-card>
@@ -133,6 +135,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   props: {
@@ -171,7 +174,7 @@ export default {
   },
   data() {
     return {
-      management: [
+      managementOperator: [
         {
           text: 'Заказы',
           url: '/operator/order',
@@ -223,7 +226,25 @@ export default {
           icon: 'nature_people',
         }
       ],
+      managementAgency: [
+        {
+          text: 'Заказы',
+          url: '/agency/order',
+          icon: 'check_circle_outline',
+        },
+        {
+          text: 'Туры',
+          url: '/agency/tours',
+          icon: 'flight_takeoff',
+        },
+      ],
+      isAgency: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      management: 'getNavLinks',
+    }),
   },
 }
 </script>

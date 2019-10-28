@@ -5,10 +5,31 @@
     style="z-index: 100;"
   >
     <v-toolbar-title>
-      <a href="http://promo.tour-click.ru">
+      <a href="/dashboard">
         <img src="/img/frontend/logo.png">
       </a>
     </v-toolbar-title>
+    <div
+      class="ml-5"
+    >
+      <span>
+        ООО "Туроператор алфавит"
+      </span>
+      <br>
+      <span>
+        г.Санкт-Петербург, Артиллерийская улица, 1 лит. А оф.131
+      </span>
+      <br>
+      <span>
+        +7 (812) 579-65-56, +7 (981) 165-65-56, 
+        <a 
+          href="mailto:info@alfavit-travel.ru"
+          style="color: white;"  
+        >
+          info@alfavit-travel.ru
+        </a>
+      </span>
+    </div>
     <v-spacer />
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn 
@@ -16,6 +37,11 @@
         :href="dashboardUrl"
         flat
       >
+        <v-icon 
+          class="mr-2"
+        >
+          dashboard
+        </v-icon>
         {{ dashboardText }}
       </v-btn>
       <v-btn 
@@ -40,6 +66,11 @@
             flat
             v-on="on"
           >
+            <v-icon 
+              class="mr-2"
+            >
+              work_outline
+            </v-icon>
             {{ managementText }}
             <v-icon>
               expand_more
@@ -47,19 +78,18 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-tile
+          <a
             v-for="item in management"
             :key="item.name"
+            class="black--text" 
+            :href="item.url"
           >
-            <v-list-tile-title>
-              <a
-                class="black--text" 
-                :href="item.url"
-              >
+            <v-list-tile>
+              <v-list-tile-title>
                 {{ item.text }}
-              </a>
-            </v-list-tile-title>
-          </v-list-tile>
+              </v-list-tile-title>
+            </v-list-tile>
+          </a>
         </v-list>
       </v-menu>
       <v-menu
@@ -70,6 +100,11 @@
             flat
             v-on="on"
           >
+            <v-icon 
+              class="mr-2"
+            >
+              account_circle
+            </v-icon>
             {{ status.userName }}
             <v-icon>
               expand_more
@@ -77,35 +112,62 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-tile
+          <a
             v-for="item in profile"
             :key="item.name"
+            class="black--text" 
+            :href="item.url"
           >
-            <v-list-tile-title>
-              <a
-                class="black--text" 
-                :href="item.url"
-              >
+            <v-list-tile>
+              <v-list-tile-title>
                 {{ item.text }}
-              </a>
-            </v-list-tile-title>
-          </v-list-tile>
+              </v-list-tile-title>
+            </v-list-tile>
+          </a>
         </v-list>
       </v-menu>
-      <v-btn 
-        :href="contactUrl"
-        flat
-      >
-        {{ contactText }}
-      </v-btn>
+      <v-menu>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            flat
+            v-on="on"
+          >
+            <v-icon 
+              class="mr-2"
+            >
+              help_outline
+            </v-icon>
+            <v-icon>
+              expand_more
+            </v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <a
+            :href="contactUrl"
+            class="black--text" 
+          >
+            <v-list-tile>
+              <v-list-tile-title>
+                {{ contactText }}
+              </v-list-tile-title>
+            </v-list-tile>
+          </a>
+          <ChangeLog />
+        </v-list>
+      </v-menu>
     </v-toolbar-items>
     <!-- <v-toolbar-side-icon /> -->
   </v-toolbar>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import ChangeLog from './ChangeLog'
 export default {
   name: 'NavBar',
+  components: {
+    ChangeLog,
+  },
   props: {
     loginUrl: {
       type: String,
@@ -294,70 +356,87 @@ export default {
     ...mapGetters({
       auth: 'getAuthStatus',
       guest: 'getGuestStatus',
-      status: 'getNavBarStatue',
+      status: 'getNavBarStatus',
     }),
     management: function() {
       let result = []
       if (this.status.operator) {
         result.push({
           text: this.orderIndexText,
-          url: this.orderIndexUrl
+          url: this.orderIndexUrl,
+          icon: 'check_circle_outline',
         })
         result.push({
           text: this.tourIndexText,
-          url: this.tourIndexUrl
+          url: this.tourIndexUrl,
+          icon: 'flight_takeoff',
         })
         result.push({
           text: this.tourTypeIndexText,
-          url: this.tourTypeIndexUrl
+          url: this.tourTypeIndexUrl,
+          icon: 'commute',
         })
         result.push({
           text: this.tourCustomerIndexText,
-          url: this.tourCustomerIndexUrl
+          url: this.tourCustomerIndexUrl,
+          icon: 'how_to_reg',
         })
         result.push({
           text: this.tourHotelCategoryIndexText,
-          url: this.tourHotelCategoryIndexUrl
+          url: this.tourHotelCategoryIndexUrl,
+          icon: 'grade',
         })
         result.push({
           text: this.tourCountryIndexText,
-          url: this.tourCountryIndexUrl
+          url: this.tourCountryIndexUrl,
+          icon: 'location_city',
         })
         result.push({
           text: this.tourHotelIndexText,
-          url: this.tourHotelIndexUrl
+          url: this.tourHotelIndexUrl,
+          icon: 'hotel',
         })
         result.push({
           text: this.tourMuseumIndexText,
-          url: this.tourMuseumIndexUrl
+          url: this.tourMuseumIndexUrl,
+          icon: 'account_balance',
         })
         result.push({
           text: this.tourMealIndexText,
-          url: this.tourMealIndexUrl
+          url: this.tourMealIndexUrl,
+          icon: 'fastfood',
         })
         result.push({
           text: this.tourTransportIndexText,
-          url: this.tourTransportIndexUrl
+          url: this.tourTransportIndexUrl,
+          icon: 'directions_bus',
         })
         result.push({
           text: this.tourGuideIndexText,
-          url: this.tourGuideIndexUrl
+          url: this.tourGuideIndexUrl,
+          icon: 'nature_people',
         })
         result.push({
           text: this.tourAttendantIndexText,
-          url: this.tourAttendantIndexUrl
+          url: this.tourAttendantIndexUrl,
+          icon: 'nature_people',
         })
+
       }
       if (this.status.agency) {
+        result = []
         result.push({
           text: this.agencyTourListText,
-          url: this.agencyTourListUrl
+          url: this.agencyTourListUrl,
+          icon: 'flight_takeoff',
         })
         result.push({
           text: this.agencyOrderIndexText,
-          url: this.agencyOrderIndexUrl
+          url: this.agencyOrderIndexUrl,
+          icon: 'check_circle_outline',
         })
       }
+      this.updateActualLinks(result)
       return result
     },
     profile: function() {
@@ -377,5 +456,10 @@ export default {
       return result
     }
   },
+  methods: {
+    ...mapActions([
+      'updateActualLinks',
+    ]),
+  }
 }
 </script>

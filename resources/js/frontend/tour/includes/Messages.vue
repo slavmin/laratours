@@ -77,6 +77,9 @@ export default {
       return this.colors.error
     }
   },
+  mounted() {
+    console.log(this.messages)
+  }
 }
 </script>
 <style lang="scss" scoped>

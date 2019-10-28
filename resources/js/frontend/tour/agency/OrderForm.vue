@@ -167,7 +167,7 @@
       </v-flex>
     </v-layout>
     <v-divider />
-    <v-btn
+    <!-- <v-btn
       color="#aa282a"
       dark
       flat
@@ -182,7 +182,7 @@
       v-show="showChangeMeal"
       :profile-id="id"
       :tour="tour"
-    />  
+    />   -->
     <v-layout 
       row 
       wrap
@@ -281,12 +281,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../includes/BusScheme'
-import ChangeMeal from './ChangeMeal'
+// import ChangeMeal from './ChangeMeal'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
-    ChangeMeal,
+    // ChangeMeal,
   },
   props: {
     tour: {

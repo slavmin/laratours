@@ -18,7 +18,7 @@ import agencyOrder from './modules/agencyOrder'
 import operatorOrder from './modules/operatorOrder'
 import orderList from './modules/orderList'
 import deleteTours from './modules/deleteTours'
-import navBarStatue from './modules/navBarStatus'
+import navBar from './modules/navBar'
 
 Vue.use(Vuex)
 
@@ -42,6 +42,6 @@ export default new Vuex.Store({
     operatorOrder,
     orderList,
     deleteTours,
-    navBarStatue,
+    navBar,
 	}
 })

@@ -162,7 +162,7 @@
         <br>
         Комиссия: {{ parseInt(getOrderCommission) }}
       </div>
-      <v-layout 
+      <!-- <v-layout 
         row 
         wrap
       >
@@ -178,7 +178,7 @@
       </v-layout>
       <div class="subheading text-xs-right mr-3">
         Остаток: {{ getOrderPrice - paid }}
-      </div>
+      </div> -->
       <v-divider />
       <v-card-actions>
         <v-spacer />
