@@ -6,7 +6,7 @@
   >
     <v-toolbar-title>
       <a href="/dashboard">
-        <img src="/img/frontend/logo.png">
+        <img src="/img/frontend/logo_small.png">
       </a>
     </v-toolbar-title>
     <div
@@ -105,13 +105,32 @@
             >
               account_circle
             </v-icon>
-            {{ status.userName }}
             <v-icon>
               expand_more
             </v-icon>
           </v-btn>
         </template>
         <v-list>
+          <v-list-tile
+            style="background-color: #aa282a; margin-top: -8px; margin-bottom: -14px;"
+          >
+            <v-list-tile-avatar>
+              <v-icon
+                color="white"
+              >
+                account_circle
+              </v-icon>
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title
+                style="color: white;"
+              >
+                {{ status.userName }}
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>  
+          <v-divider />
           <a
             v-for="item in profile"
             :key="item.name"
