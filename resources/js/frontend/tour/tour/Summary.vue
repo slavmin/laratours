@@ -1441,7 +1441,6 @@
           </tbody>
         </table>
         <v-btn 
-          v-if="showPriceForEveryCustomer"
           dark
           color="#aa282a"
           @click="calculatePriceForEveryCustomer"
@@ -1455,6 +1454,11 @@
       wrap
       justify-end
     >
+      <v-flex xs2>
+        <p>
+          Перед сохранением тура, рассчитайте цены для всех типов туристов.
+        </p>
+      </v-flex>
       <v-flex xs2> 
         <form
           method="POST" 
@@ -1498,6 +1502,7 @@
           <v-btn 
             dark
             color="#aa282a"
+            :disabled="!getCanSave"
             type="submit"
           >
             Сохранить тур
@@ -1527,7 +1532,6 @@ export default {
       correctionToAll: 0,
       commissionToAll: 0,
       currentCustomerType: 0,
-      showPriceForEveryCustomer: true,
       showStaff: false,
       showDrivers: false,
       showGuides: false,
@@ -1549,6 +1553,7 @@ export default {
       'getStaffErrors',
       'getFreeAdlErrors',
       'allState',
+      'getCanSave',
     ]),
     tourExtra: function() {
       return {
@@ -1610,24 +1615,26 @@ export default {
     },
   },
   mounted() {
-    this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
-    this.updateTourStaff()
-    this.updateTourFreeAdls()
-    this.updateTourTotalPrice()
-    this.updateCorrectedPriceValues()
-    this.updateTourCorrectedPrice()
+    if (!this.getEditMode) {
+      this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
+      this.updateTourStaff()
+      this.updateTourFreeAdls()
+      this.updateTourTotalPrice()
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
+      if (this.commissionManualMode) {
+        this.updateCommissiontoAll(0)
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
+      this.calculatePriceForEveryCustomer()
+    }
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
-    if (!this.commissionManualMode) {
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
-    }
-    if (this.commissionManualMode) {
-      this.updateCommissiontoAll(0)
-      this.updateCommissionPriceValues()
-      this.updateTourCommissionPrice()
-    }
-    this.calculatePriceForEveryCustomer()
   },
   methods: {
     ...mapActions([
@@ -1645,6 +1652,7 @@ export default {
       'updateTourFreeAdls',
       'updateManualCommissionPriceValues',
       'updateManualCommissionMode',
+      'updateCanSave',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -1727,6 +1735,7 @@ export default {
         this.correctPrice()
       }, 2000)
       console.log(this.getTour.calc)
+      this.updateCanSave(true)
     },
     customerChanged() {
       this.updateCurrentCustomerType(this.currentCustomerType)

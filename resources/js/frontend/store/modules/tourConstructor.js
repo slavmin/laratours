@@ -133,6 +133,9 @@ export default {
     },
     async updateManualCommissionMode({ commit }, flag) {
       commit('setManualCommissionMode', flag)
+    },
+    async updateCanSave({ commit }, flag) {
+      commit('setCanSave', flag)
     }
   },
   mutations: {
@@ -1686,10 +1689,14 @@ export default {
       } else {
         state.tour.calc.commissionManualMode = false
       }
+    },
+    setCanSave(state, flag) {
+      state.canSave = flag
     }
   },
   state: {
     editMode: false,
+    canSave: false,
     tourOptions: [],
     tour: {
       id: NaN,
@@ -1979,5 +1986,8 @@ export default {
     getFreeAdlErrors(state) {
       return state.freeAdlErrors
     },
+    getCanSave(state) {
+      return state.canSave
+    }
   }
 }
