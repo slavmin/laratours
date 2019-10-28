@@ -61,6 +61,7 @@ Vue.component('nav-bar', require('./components/NavBar.vue').default);
 Vue.component('nav-bar-status', require('./components/NavBarStatus.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('messages', require('./tour/includes/Messages.vue').default);
+Vue.component('footer-component', require('./components/Footer.vue').default);
 /**
 /**
 /**

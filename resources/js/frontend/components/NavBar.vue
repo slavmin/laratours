@@ -2,6 +2,7 @@
   <v-toolbar
     color="#66a5ae"
     dark
+    height="70"
     style="z-index: 100;"
   >
     <v-toolbar-title>
@@ -36,6 +37,7 @@
         v-if="auth"
         :href="dashboardUrl"
         flat
+        class="no-border"
       >
         <v-icon 
           class="mr-2"
@@ -482,3 +484,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.no-border {
+  &:hover {
+    text-decoration: none;
+  }
+}
+</style>

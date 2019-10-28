@@ -69,6 +69,18 @@ export default {
           date: moment('20191028').locale('ru-ru').format('LL'),
           changes: [
             { 
+              forAgency: true,
+              text: 'Добавлены недостающие поля в реквизитах компании.'
+            },
+            { 
+              forAgency: true,
+              text: 'Имя пользователя в меню навбара убрано внутрь выпадающего меню.'
+            },
+            { 
+              forAgency: true,
+              text: 'Уменьшен логотип TourClick.'
+            },
+            { 
               forAgency: false,
               text: 'Убран ввод суммы по заказу на стороне Агентства.'
             },

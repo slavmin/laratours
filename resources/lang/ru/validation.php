@@ -211,6 +211,10 @@ return [
                 'bik' => 'БИК',
                 'okpo' => 'ОКПО',
                 'ogrn' => 'ОГРН',
+                'bankname' => 'Банк',
+                'bankkpp' => 'КПП банка',
+                'bankaccount' => 'Расчетный счет',
+                'bankcorr' => 'Коррсчет банка'
             ],
             'customer' => [
                 'first_name' => 'Имя',

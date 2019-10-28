@@ -1,14 +1,19 @@
 <template>
-  <v-container grid-list-xs>
+  <v-container 
+    grid-list-xs
+    fluid
+    style="background-color: #66a5ae;"
+  >
     <v-layout
       row
       wrap
+      justify-center
     >
-      <v-flex xs12>
-        <div>
+      <v-flex xs8>
+        <v-card>
           <v-tabs
             v-model="active"
-            color="green"
+            color="#66a5ae"
             dark
             slider-color="yellow"
           >
@@ -47,7 +52,7 @@
                         </v-flex>
                         <v-flex xs1>
                           <v-btn
-                            color="green"
+                            color="#aa282a"
                             class="white--text"
                             :disabled="inn.length != 10"
                             @click="getCompanyInfo"
@@ -74,13 +79,14 @@
                     justify-end
                   >
                     <v-btn 
-                      v-if="!showCompanyInfo"
+                      v-show="!showCompanyInfo"
                       flat
-                      color="green" 
+                      color="#aa282a" 
                       dark
                       @click="manual"
                     >
                       Заполнить все поля вручную
+                      <v-icon>expand_more</v-icon>
                     </v-btn>
                   </v-layout>
                 </v-card-text>
@@ -106,7 +112,7 @@
             </v-tab-item>
             <!-- /Физ лицо -->
           </v-tabs>
-        </div>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>

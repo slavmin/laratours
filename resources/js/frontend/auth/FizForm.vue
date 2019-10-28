@@ -13,7 +13,7 @@
           v-model="user.name"
           label="Имя"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -22,7 +22,7 @@
           v-model="user.surname"
           label="Фамилия"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -31,7 +31,7 @@
           v-model="user.country"
           label="Страна"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -40,7 +40,7 @@
           v-model="user.region"
           label="Город"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -49,7 +49,7 @@
           v-model="user.address"
           label="Адрес"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -61,7 +61,7 @@
           label="Телефон. Знаки +, ( ), - добавляются автоматически"
           placeholder="+7"
           name=""
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           mask="+7 (###) ###-##-##"
@@ -71,7 +71,7 @@
           v-model="user.email"
           label="E-mail. Будет использоваться для входа в систему"
           name="email"
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -81,7 +81,7 @@
           label="Пароль"
           name="password"
           type="password"
-          color="green lighten-3"
+          color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -89,7 +89,7 @@
         <v-text-field
           label="Подтверждение пароля"
           name="password_confirmation"
-          color="green lighten-3"
+          color="#aa282a"
           type="password"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -106,7 +106,7 @@
             name="_token"
           >
           <v-btn 
-            color="green"
+            color="#aa282a"
             class="white--text"
             type="submit"
             disabled

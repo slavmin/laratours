@@ -13,7 +13,7 @@
           v-model="companyInfo.name"
           label="Название организации"
           name="profile[formal][company_name]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -22,7 +22,7 @@
           v-model="companyInfo.country"
           label="Страна"
           name="profile[formal][company_country]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -31,7 +31,7 @@
           v-model="companyInfo.region"
           label="Регион"
           name="profile[formal][company_city]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -40,7 +40,7 @@
           v-model="companyInfo.address"
           label="Юридический адрес"
           name="profile[formal][company_address]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -50,7 +50,7 @@
           label="ИНН"
           mask="##########"
           name="profile[formal][company_inn]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -60,7 +60,7 @@
           label="КПП"
           mask="#########"
           name="profile[formal][company_kpp]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -69,7 +69,7 @@
           v-model="companyInfo.company_email"
           label="E-mail организации"
           name="profile[formal][company_email]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -78,7 +78,7 @@
           v-model="companyInfo.bankname"
           label="Полное наименование банка"
           name="profile[formal][company_bankname]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -87,7 +87,7 @@
           v-model="companyInfo.bankaccount"
           label="Расчётный счёт"
           name="profile[formal][company_bankaccount]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -96,15 +96,16 @@
           v-model="companyInfo.bankcorr"
           label="Корреспондентский счет банка"
           name="profile[formal][company_bankcorr]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
         /><v-text-field
           v-model="companyInfo.bankkpp"
           label="КПП"
+          mask="#########"
           name="profile[formal][company_bankkpp]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -115,7 +116,7 @@
           v-model="companyInfo.staffName"
           label="Имя"
           name="first_name"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -124,7 +125,7 @@
           v-model="companyInfo.staffSurname"
           label="Фамилия"
           name="last_name"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -134,7 +135,7 @@
           label="Телефон"
           placeholder="+7"
           name="profile[formal][company_phone]"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           mask="+N (NNN) NNN-NN-NN"
@@ -144,7 +145,7 @@
           v-model="companyInfo.email"
           label="E-mail. Будет использоваться для входа в систему"
           name="email"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -160,7 +161,7 @@
           label="Пароль"
           name="password"
           type="password"
-          color="green lighten-3"
+          color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
@@ -170,7 +171,7 @@
           v-model="companyInfo.password_confirmation"
           label="Подтверждение пароля"
           name="password_confirmation"
-          :color="!error ? 'green lighten-3' : 'red'"
+          :color="!error ? '#aa282a lighten-3' : 'red'"
           type="password"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -187,7 +188,7 @@
             name="_token"
           >
           <v-btn 
-            color="green"
+            color="#aa282a"
             class="white--text"
             type="submit"
           >
