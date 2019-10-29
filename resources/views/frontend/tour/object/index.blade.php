@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+    
     <?php $scities = json_encode($cities_select); ?>
     @if ($model_alias == 'transport')
         <transport-index 

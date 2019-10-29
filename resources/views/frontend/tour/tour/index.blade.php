@@ -1,7 +1,6 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
     <?php $sitems = json_encode($items); ?>
     <tour-index 
         data-app

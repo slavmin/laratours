@@ -8,6 +8,7 @@
       row 
       wrap
     >
+      <NoData />
       <v-flex xs12>
         <h1 class="text-center white--text mb-5">
           <v-icon
@@ -31,10 +32,12 @@
 </template>
 <script>
 import Table from './Table'
+import NoData from '../../components/NoData'
 export default {
   name: 'OperatorOrderIndex',
   components: {
     Table,
+    NoData,
   },
   props: {
     items: {
