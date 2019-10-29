@@ -8,7 +8,7 @@
         ></no-data>
     @endif
     @if(count($items)>0)
-        <?php $sitems = json_encode($all_items); ?>
+        <?php $sitems = json_encode($items); ?>
         <?php $sagencies = json_encode($agencies); ?>
         <?php $sstatuses = json_encode($statuses); ?>
         <?php $stour_names = json_encode($tour_names); ?>
