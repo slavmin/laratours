@@ -3,6 +3,7 @@
     <v-spacer />
     <a 
       href="http://promo.tour-click.ru"
+      target="_blank"
       class="mr-3"  
     >
       TourClick
