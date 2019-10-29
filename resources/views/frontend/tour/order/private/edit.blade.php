@@ -1,26 +1,47 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    <!-- Vue component -->
+    @can('administer-tours')
+        <?php $sitems = json_encode($audits); ?>
+        <?php $sitem = json_encode($item); ?>   
+        <?php $stour = json_encode($tour); ?>  
+        <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
+        <?php $s_order_profiles = json_encode($profiles); ?>
+        <?php $s_tour_profiles = json_encode($tour->orderprofiles); ?>  
+        <operator-order-edit
+            data-app
+            :tour="{{ $tour }}"
+            :order="{{ $sitem }}"
+            header-text="@lang('labels.frontend.tours.order.edit')"
+            :statuses="{{ $sstatuses }}"
+            :items="{{ $sitems }}"
+            profiles-raw="{{ $s_order_profiles }}"
+            tour-profiles-raw="{{ $s_tour_profiles }}"
+            token="{{ csrf_token() }}"
+        ></operator-order-edit>
+    @else
+        <?php $sitems = json_encode($audits); ?>
+        <?php $sitem = json_encode($item); ?>   
+        <?php $sstatuses = json_encode(app('translator')->getFromJson('labels.frontend.tours.order.statuses')); ?>
+        <?php $s_order_profiles = json_encode($profiles); ?>
+        <?php $s_tour_profiles = json_encode($tour->orderprofiles); ?>  
+        <?php $stour = json_encode($tour); ?>
+        <agency-order-edit
+            data-app
+            :tour="{{ $stour }}"
+            :order="{{ $sitem }}"
+            header-text="@lang('labels.frontend.tours.order.edit')"
+            :statuses="{{ $sstatuses }}"
+            :items="{{ $sitems }}"
+            profiles-raw="{{ $s_order_profiles }}"
+            tour-profiles-raw="{{ $s_tour_profiles }}"
+            token="{{ csrf_token() }}"
+        ></agency-order-edit>
+    @endcan
+    <!-- /Vue component -->
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
-
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title mb-0">
-                                @lang('labels.frontend.tours.order.edit')
-                            </h5>
-                        </div><!--col-->
-                    </div><!--row-->
-
-                    <hr>
-
-                    @include('frontend.tour.order.private.form')
-
-                </div><!--card-body-->
-            </div><!--card-->
-
 
             @if($audits->count() > 0)
                 <div class="card mb-4">

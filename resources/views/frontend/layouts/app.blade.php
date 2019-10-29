@@ -8,8 +8,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>@yield('title', app_name())</title>
+        <title>ТурКлик | tour-click.ru</title>
         <meta name="description" content="@yield('meta_description', 'Laravel 5')">
+        <link href="https://fonts.googleapis.com/css?family=Merriweather&display=swap" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet">
         @yield('meta')
 
         {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
@@ -25,11 +27,12 @@
         <div id="app">
             @include('includes.partials.logged-in-as')
             @include('frontend.includes.nav')
+            @include('includes.partials.messages')
 
-            <div class="container">
-                @include('includes.partials.messages')
+            <div class="root-wrap">
                 @yield('content')
-            </div><!-- container -->
+                @include('includes.partials.footer')
+            </div><!-- root-wrap -->
         </div><!-- #app -->
 
         <!-- Scripts -->

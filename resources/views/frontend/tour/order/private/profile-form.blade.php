@@ -98,3 +98,33 @@
         </div><!--form-group-->
     </div><!--col-->
 </div><!--row-->
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ html()->label(__('validation.attributes.frontend.customer.passport'))->for('address') }}
+
+            {{ html()->text('customer['.$i.'][passport]', $profile['passport']??'')
+                ->class('form-control')
+                ->id('passport')
+                ->placeholder(__('validation.attributes.frontend.customer.passport'))
+                ->attribute('maxlength', 191)
+                ->required()}}
+        </div><!--form-group-->
+    </div><!--col-->
+</div><!--row-->
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ html()->label(__('validation.attributes.frontend.customer.bus_seat'))->for('address') }}
+
+            {{ html()->text('customer['.$i.'][busSeatId]', $profile['busSeatId']??'')
+                ->class('form-control')
+                ->id('busSeatId')
+                ->placeholder(__('validation.attributes.frontend.customer.bus_seat'))
+                ->attribute('maxlength', 191)
+                ->required()}}
+        </div><!--form-group-->
+    </div><!--col-->
+</div><!--row-->
