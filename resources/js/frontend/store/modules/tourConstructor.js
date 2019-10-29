@@ -494,7 +494,6 @@ export default {
       state.tour.guide.forEach((selectedGuide) => {
         state.actualGuide.forEach((actualGuide) => {
           if (actualGuide.id == selectedGuide.guide.id) {
-            console.log(selectedGuide)
             actualGuide.day = selectedGuide.guide.day
             actualGuide.daysArray = selectedGuide.guide.daysArray
             actualGuide.events = selectedGuide.guide.events
@@ -510,7 +509,6 @@ export default {
       if (index != -1) {
         state.actualGuide.splice(index, 1, updGuide)
       }
-      console.log(state.actualGuide[index])
     },  
     setTourGuide: (state) => {
       state.tour.guide = []
@@ -667,7 +665,6 @@ export default {
                 name: 'Водитель ' + driver.driver,
                 day: driverDay,
               })
-              console.log('Водитель. Нет питания.', state)
               state.staffErrors.show = true
             }
             // Remove duplicates
@@ -725,7 +722,6 @@ export default {
                 mealDay = meal
               }
               if (!_.isEqual(mealDay, {})){
-                console.log('push meal: ', mealDay, guideDay)
                 guide.mealPrice.push({
                   day: guideDay,
                   mealName: `${mealDay.meal.name}: ${mealDay.obj.name}`,
@@ -739,7 +735,6 @@ export default {
                 name: 'Гид: ' + guide.guide.name,
                 day: guideDay,
               }) 
-              console.log('Гид. Нет питания.', state)
               state.staffErrors.show = true
             } 
             // Remove duplicates
@@ -812,7 +807,6 @@ export default {
                   name: 'Сопровождающий: ' + attendant.attendant.name,
                   day: attendantDay,
                 }) 
-                console.log('Соп. Нет питания.', state)
                 state.staffErrors.show = true
               } 
               // Remove duplicates
@@ -894,7 +888,6 @@ export default {
                 name: '"Бесплатный взрослый": ' + freeAdl.name,
                 day: freeAdlDay,
               }) 
-              console.log('БВ. Нет питания.', state)
               state.staffErrors.show = true
             } 
             // Remove duplicates
@@ -965,7 +958,6 @@ export default {
       })
       state.tour.guide.forEach((guide) => {
         summ += parseInt(guide.pricePerSeat)
-        console.log(guide)
         if (guide.guide.options.totalPricePerSeat > 0) {
           summ += parseInt(guide.guide.options.totalPricePerSeat)
         }
@@ -1096,7 +1088,6 @@ export default {
             (extraPrice * hotel.obj.day)
           )
         }
-        console.log('calculate tour corrected: ', state.tour)
       })
       state.tour.options.drivers.forEach((driver) => {
         summ += driver.correctedPricePerSeat
@@ -1260,7 +1251,6 @@ export default {
       state.tour.options.freeAdls.forEach((freeAdl) => {
         freeAdl.correction = correction
       })
-      console.log('correction to all: ', state.tour)
     },
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
@@ -1411,7 +1401,6 @@ export default {
         }
         freeAdl.correctedPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
       })
-      console.log('corrected price values: ', state.tour)
     },
     setCommissionToAll: (state, commission) => {
       if (commission == NaN || commission == '') {
@@ -1624,7 +1613,6 @@ export default {
           idesArray.push(customer.id)
         }
       })
-      console.log(state, 'ides array: ', idesArray)
     },
     setFreeAdlsOptions(state, updData) {
       if (updData.delete) {
@@ -1834,8 +1822,6 @@ export default {
           })
         }
       })
-      console.log('before: ', result)
-      console.log('after: ', _.uniqWith(result, _.isEqual))
       return _.uniqWith(result, _.isEqual)
     },
     getTourCalc(state) {

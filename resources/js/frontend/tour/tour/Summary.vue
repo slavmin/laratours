@@ -1574,7 +1574,6 @@ export default {
     // },
     commissionManualValue: {
       handler(value) {
-        console.log(value)
         if (value == NaN || value == '' || value == undefined) {
           value = 0
         }
@@ -1658,7 +1657,6 @@ export default {
       console.log(this.getTour)
     },
     inputCorrection() {
-      console.log('inputCorrection: ', this. commissionManualValue, this.commissionManualMode)
       this.updateCorrectionToAll(this.correctionToAll)
       this.updateCorrectedPriceValues()
       this.updateTourCorrectedPrice()
@@ -1723,7 +1721,6 @@ export default {
     calculatePriceForEveryCustomer() {
       let prevCustomer = this.currentCustomerType
       this.getCurrentTourCustomers.forEach((customer) => {
-        console.log(customer.name)
         setTimeout(() => { 
           this.currentCustomerType = customer.id
           this.correctPrice()
@@ -1734,7 +1731,6 @@ export default {
         this.updateCurrentCustomerType(this.currentCustomerType)
         this.correctPrice()
       }, 2000)
-      console.log(this.getTour.calc)
       this.updateCanSave(true)
     },
     customerChanged() {
