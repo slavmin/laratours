@@ -224,6 +224,12 @@ export default {
           stage: 'Show services', 
           active: false,
           disabled: false, 
+        },
+        { 
+          name: 'Расчёт', 
+          stage: 'Show summary', 
+          active: false,
+          disabled: false, 
         }
       ],
       dialog: false,
