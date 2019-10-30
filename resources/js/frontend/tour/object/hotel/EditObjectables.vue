@@ -8,6 +8,7 @@
         fab
         small
         outline
+        title="Редактировать номер"
         color="green" 
         dark 
         v-on="on"
