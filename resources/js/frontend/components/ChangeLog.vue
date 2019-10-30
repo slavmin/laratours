@@ -31,7 +31,7 @@
             >
               {{ `${item.date}: ` }}
             </span>
-            <ul>
+            <ul class="changes-list">
               <li
                 v-for="(message, k) in item.changes"
                 :key="`${item.date}-${k}`"
@@ -58,6 +58,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+const allNews =  './ChangeLog.json'
 import moment from 'moment'
 export default {
   name: 'ChangeLog',
@@ -65,6 +66,15 @@ export default {
     return {
       dialog: false,
       allNews: [
+        {
+          date: moment('20191030').locale('ru-ru').format('LL'),
+          changes: [
+            { 
+              forAgency: true,
+              text: 'Исправлено отображение списка обновлений.'
+            },
+          ]
+        },
         {
           date: moment('20191028').locale('ru-ru').format('LL'),
           changes: [
@@ -130,3 +140,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.changes-list {
+  li {
+    text-align: left;
+  }
+}
+</style>

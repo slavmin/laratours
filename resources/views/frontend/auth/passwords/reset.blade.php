@@ -10,10 +10,12 @@
                     <strong>
                         @lang('labels.frontend.passwords.reset_password_box_title')
                     </strong>
-                    @lang('labels.frontend.passwords.reset_password_box_hint')
                 </div><!--card-header-->
 
                 <div class="card-body">
+                    Введите новый пароль.
+                    <br>
+                    @lang('labels.frontend.passwords.reset_password_hint')
 
                     @if(session('status'))
                         <div class="alert alert-success">
