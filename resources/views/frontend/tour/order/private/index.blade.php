@@ -2,6 +2,12 @@
 
 @section('content')
     <!-- Vue component -->
+    @if(count($items)==0)
+        <no-data
+            data-app
+            title="Заказы"
+        ></no-data
+    @endif
     @if(count($items)>0)
         <?php $sitems = json_encode($items); ?>
         <?php $sagencies = json_encode($agencies); ?>
