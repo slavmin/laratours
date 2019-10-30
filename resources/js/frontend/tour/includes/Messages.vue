@@ -15,7 +15,7 @@
           v-for="(string, k) in message"
           :key="`string-${k}`"
         >
-          {{ string }}
+          {{ formatString(string) }}
         </li>
       </ul>
     </v-alert>
@@ -79,6 +79,14 @@ export default {
   },
   mounted() {
     console.log(this.messages)
+  },
+  methods: {
+    formatString(message) {
+      if (typeof message == "object") {
+        return JSON.parse(message)
+      }
+      return message
+    }
   }
 }
 </script>

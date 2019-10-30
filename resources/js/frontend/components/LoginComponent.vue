@@ -62,7 +62,7 @@
     </div>
     <!-- /Login form -->
     <!-- Forgotten password form -->
-    <div
+    <!-- <div
       v-if="showForgottenPasswordForm"
       class="row justify-content-center align-items-center" 
     >
@@ -99,7 +99,7 @@
           </button> 
         </div> 
       </form>       
-    </div> 
+    </div>  -->
     <!-- /Forgotten password form -->
     <!-- Button switch display login form -->
     <div class="row justify-content-md-center align-items-center">
@@ -122,14 +122,14 @@
     </div>
     <!-- /Button switch display login form -->
     <div class="row justify-content-center mt-4">
-      <button 
+      <a
         v-if="showForgottenPasswordButton"
-        type="button"
         class="btn btn-outline-light"
-        @click="clickForgottenPasswordButton"
-      >
+        href="/password/reset"
+      >  
+        <!-- @click="clickForgottenPasswordButton" -->
         Забыли пароль?
-      </button> 
+      </a> 
     </div>
   </div>
 </template>
