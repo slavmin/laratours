@@ -4,6 +4,7 @@
     <!-- Vue component -->
     @if(count($items)==0)
         <no-data 
+            data-app
             title="Заказы"
         ></no-data>
     @endif

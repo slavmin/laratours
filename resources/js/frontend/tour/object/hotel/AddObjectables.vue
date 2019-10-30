@@ -12,6 +12,7 @@
           <v-btn 
             fab
             small
+            title="Добавить номер"
             color="#aa282a" 
             dark 
             v-on="on"
