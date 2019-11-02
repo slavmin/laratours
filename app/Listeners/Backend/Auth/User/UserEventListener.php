@@ -13,7 +13,7 @@ class UserEventListener
      */
     public function onCreated($event)
     {
-        \Log::info('User Created');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Created by '.auth()->user()->full_name);
     }
 
     /**
@@ -21,7 +21,7 @@ class UserEventListener
      */
     public function onUpdated($event)
     {
-        \Log::info('User Updated');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Updated by '.auth()->user()->full_name);
     }
 
     /**
@@ -29,7 +29,7 @@ class UserEventListener
      */
     public function onDeleted($event)
     {
-        \Log::info('User Deleted');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Deleted by '.auth()->user()->full_name);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserEventListener
      */
     public function onConfirmed($event)
     {
-        \Log::info('User Confirmed');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Confirmed by '.auth()->user()->full_name);
     }
 
     /**
@@ -45,7 +45,7 @@ class UserEventListener
      */
     public function onUnconfirmed($event)
     {
-        \Log::info('User Unconfirmed');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Unconfirmed by '.auth()->user()->full_name);
     }
 
     /**
@@ -53,7 +53,7 @@ class UserEventListener
      */
     public function onPasswordChanged($event)
     {
-        \Log::info('User Password Changed');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Password Changed by '.auth()->user()->full_name);
     }
 
     /**
@@ -61,7 +61,7 @@ class UserEventListener
      */
     public function onDeactivated($event)
     {
-        \Log::info('User Deactivated');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Deactivated by '.auth()->user()->full_name);
     }
 
     /**
@@ -69,7 +69,7 @@ class UserEventListener
      */
     public function onReactivated($event)
     {
-        \Log::info('User Reactivated');
+        \Log::info('User: '.$event->user->full_name.' ('.$event->user->email.') Reactivated by '.auth()->user()->full_name);
     }
 
     /**
@@ -85,7 +85,7 @@ class UserEventListener
      */
     public function onPermanentlyDeleted($event)
     {
-        \Log::warning('User: '.$event->user->name.' Permanently Deleted');
+        \Log::warning('User: '.$event->user->full_name.' ('.$event->user->email.') Permanently Deleted by '.auth()->user()->full_name);
     }
 
     /**
