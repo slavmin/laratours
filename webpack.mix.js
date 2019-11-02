@@ -1,5 +1,16 @@
 const mix = require('laravel-mix');
 
+/* ESLint
+ *
+ * shoom1337
+ */
+require('laravel-mix-eslint');
+
+/* fs module
+ */
+// mix.webpackConfig({ node: { fs: 'empty' }});
+
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -15,7 +26,10 @@ mix.setPublicPath('public')
     .setResourceRoot('../') // turns assets paths in css relative to css file
     .sass('resources/sass/frontend/app.scss', 'css/frontend.css')
     .sass('resources/sass/backend/app.scss', 'css/backend.css')
-    .js('resources/js/frontend/app.js', 'js/frontend.js')
+    .js('resources/js/frontend/app.js', 'js/frontend.js').eslint({
+        fix: false,
+        cache: false,
+    })
     .js([
         'resources/js/backend/before.js',
         'resources/js/backend/app.js',
@@ -29,7 +43,8 @@ mix.setPublicPath('public')
         'popper.js',
         'axios',
         'sweetalert2',
-        'lodash'
+        'lodash',
+        'moment'
     ])
     .sourceMaps();
 
