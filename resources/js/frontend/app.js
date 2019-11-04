@@ -27,7 +27,10 @@ window.Vue = Vue;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('login-component', require('./components/LoginComponent.vue').default);
+Vue.component('index', require('./components/Index.vue').default);
+Vue.component('login', require('./components/Login.vue').default);
+Vue.component('reset-email', require('./components/ResetEmail.vue').default);
+Vue.component('reset-password', require('./components/ResetPassword.vue').default);
 Vue.component('object-prices-component', require('./components/ObjectPricesComponent.vue').default);
 Vue.component('bus-scheme-component', require('./components/BusSchemeComponent.vue').default);
 Vue.component('object-table-component', require('./tour/object/ObjectTableComponent.vue').default);

@@ -12,10 +12,9 @@
 			<div class="col-sm-6 offset-md-3">
 				@include('includes.partials.messages')
 			</div>
-			<login-component 
+			<index 
 				data-app
-				token="{{ csrf_token() }}"
-			></login-component>
+			></index>
 		</div>	
 	</div>
 </div>
