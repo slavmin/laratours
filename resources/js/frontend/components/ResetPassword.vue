@@ -47,7 +47,7 @@
                 name="email"
               >
               <input
-                v-model="token"
+                v-model="userToken"
                 type="hidden"
                 name="token"
               >
