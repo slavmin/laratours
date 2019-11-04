@@ -12,7 +12,7 @@ class RoleEventListener
      */
     public function onCreated($event)
     {
-        \Log::info('Role Created');
+        \Log::info('Role: '.$event->role->name.' Created by '.auth()->user()->full_name);
     }
 
     /**
@@ -20,7 +20,7 @@ class RoleEventListener
      */
     public function onUpdated($event)
     {
-        \Log::info('Role Updated');
+        \Log::info('Role: '.$event->role->name.' Updated by '.auth()->user()->full_name);
     }
 
     /**
@@ -28,7 +28,7 @@ class RoleEventListener
      */
     public function onDeleted($event)
     {
-        \Log::info('Role Deleted');
+        \Log::info('Role: '.$event->role->name.' Deleted by '.auth()->user()->full_name);
     }
 
     /**
