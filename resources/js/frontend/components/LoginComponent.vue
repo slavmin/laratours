@@ -20,7 +20,7 @@
             type="email" 
             class="form-control" 
             name="email" 
-            placeholder="Enter email" 
+            placeholder="Введите email" 
             required
           >
         </div>
@@ -30,7 +30,7 @@
             type="password" 
             class="form-control" 
             name="password"
-            placeholder="Password"    
+            placeholder="Пароль"    
             required
           >
         </div>
@@ -154,13 +154,7 @@ export default {
         showForgottenPasswordForm: false
     }
   },
-  mounted() {
-    // this.sayHello()
-  },
   methods: {
-    sayHello() {
-        console.log('hello from methods!')
-    },
     toggleShowStates() {
         this.showLoginForm = !this.showLoginForm
         this.showForgottenPasswordButton = !this.showForgottenPasswordButton
@@ -169,7 +163,6 @@ export default {
         this.showLoginForm = true
         this.showLoginButton = false
         this.showForgottenPasswordButton = true
-        console.log('hello')
     },
     clickForgottenPasswordButton() {
         this.showLoginForm = false
@@ -186,21 +179,24 @@ html,
 body,
 #app,
 .root-wrap {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  margin-bottom: -106px;
 }
 .fullscreen-bg {
   background-color: #333;
   width: 100%;
   height: 100%;
+  margin-top: -106px;
   background: url('/img/frontend/bg-bridge.jpg') center center no-repeat;
   background-size: cover;
   z-index: 2;
   > .row {
     width: 100%;
     height: 100%;
-        z-index: 10;
-        position: relative;
+    margin-bottom: -106px;
+    z-index: 10;
+    position: relative;
   }
     &:before {
         display: block;
@@ -208,7 +204,7 @@ body,
         position: absolute;
         top: 0;
         right: 0;
-        bottom: 0;
+        bottom: 36px;
         left: 0;
         background-image: linear-gradient(to top,#000,rgba(0,0,0,.17));
         opacity: .7;
