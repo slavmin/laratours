@@ -204,6 +204,7 @@ export default {
       showDateEnd: false,
       dateEnd: new Date().toISOString().substr(0, 10),
       commissionManualMode: false,
+      commissionManualValue: 0,
     };
   },
   computed: {
@@ -236,6 +237,7 @@ export default {
     console.log(this.getEditMode)
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
+    this.updateCurrentCustomerType(1)
   },
   methods: {
     ...mapActions([
@@ -254,6 +256,10 @@ export default {
       'updateCorrectedPriceValues',
       'updateCommissionPriceValues',
       'updateTourCommissionPrice',
+      'updateCurrentCustomerType',
+      'updateTourStaff',
+      'updateTourFreeAdls',
+      'updateTourTransport',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
@@ -266,6 +272,11 @@ export default {
         this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')
         if (this.getEditMode) {
+          console.log('recalc', this.getTour)
+          this.updateTourTransport()
+          this.updateTourStaff()
+          this.updateTourFreeAdls()
+          this.updateTourTotalPrice()
           this.updateCorrectedPriceValues()
           this.updateTourCorrectedPrice()
           if (!this.commissionManualMode) {
