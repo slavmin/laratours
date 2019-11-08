@@ -11,23 +11,24 @@
       </a>
     </v-toolbar-title>
     <div
+      v-if="branding != []"
       class="ml-5"
     >
       <span>
-        ООО "Туроператор алфавит"
+        {{ branding.fullName }}
       </span>
       <br>
       <span>
-        г.Санкт-Петербург, Артиллерийская улица, 1 лит. А оф.131
+        {{ branding.address }}
       </span>
       <br>
       <span>
-        +7 (812) 579-65-56, +7 (981) 165-65-56, 
+        {{ branding.phones }} 
         <a 
-          href="mailto:info@alfavit-travel.ru"
+          :href="`mailto:${branding.email}`"
           style="color: white;"  
         >
-          info@alfavit-travel.ru
+          {{ branding.email }}
         </a>
       </span>
     </div>
@@ -184,6 +185,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import ChangeLog from './ChangeLog'
+import axios from 'axios'
 export default {
   name: 'NavBar',
   components: {
@@ -371,6 +373,7 @@ export default {
         { title: 'Click Me' },
         { title: 'Click Me 2' }
       ],
+      branding: [],
     }
   },
   computed: {
@@ -475,7 +478,23 @@ export default {
         url: this.authLogoutUrl
       })
       return result
-    }
+    },
+    // branding: function() {
+    //   let result = []
+      
+    //   return result
+    // }
+  },
+  mounted() {
+    axios.get('/branding.json')
+        .then((res) => {
+          res.data.forEach((item) => {
+            if (item.names.includes(this.status.userName)) {
+              this.branding = item
+            }
+          })
+        })
+        .catch(e => console.log('branding error: ', e))
   },
   methods: {
     ...mapActions([
