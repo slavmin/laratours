@@ -203,6 +203,7 @@ export default {
       showDateStart: false,
       showDateEnd: false,
       dateEnd: new Date().toISOString().substr(0, 10),
+      commissionManualMode: false,
     };
   },
   computed: {
@@ -211,6 +212,7 @@ export default {
       'allTourOptions',
       'getTour',
       'getTourName',
+      'getEditMode',
     ]),
     tourTypes: function() {
       let types = []
@@ -231,6 +233,9 @@ export default {
     this.fetchAllTourOptions()
   },
   mounted() {
+    console.log(this.getEditMode)
+    this.commissionManualMode = this.getTour.calc.commissionManualMode
+    this.commissionManualValue = this.getTour.calc.commissionManualValue
   },
   methods: {
     ...mapActions([
@@ -244,6 +249,11 @@ export default {
       'updateActualMeal',
       'updateActualGuide',
       'updateActualAttendant',
+      'updateTourTotalPrice',  
+      'updateTourCorrectedPrice',
+      'updateCorrectedPriceValues',
+      'updateCommissionPriceValues',
+      'updateTourCommissionPrice',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
@@ -255,6 +265,16 @@ export default {
         this.updateActualGuide()
         this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')
+        if (this.getEditMode) {
+          this.updateCorrectedPriceValues()
+          this.updateTourCorrectedPrice()
+          if (!this.commissionManualMode) {
+            this.updateCommissionPriceValues()
+            this.updateTourCommissionPrice()
+          } else {
+            this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+          }
+        }
       }
     },
     logCity() {
