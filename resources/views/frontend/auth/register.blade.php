@@ -5,6 +5,7 @@
 @section('content')
     @include('includes.partials.messages')
     <register-index
+        data-app
         token="{{ csrf_token() }}"
     ></register-index>
 @endsection

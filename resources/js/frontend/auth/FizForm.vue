@@ -1,6 +1,6 @@
 <template>
   <form
-    action="/register"
+    action="/signup"
     method="POST"
   >
     <v-layout
@@ -12,7 +12,7 @@
         <v-text-field
           v-model="user.name"
           label="Имя"
-          name=""
+          name="first_name"
           color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -21,7 +21,7 @@
         <v-text-field
           v-model="user.surname"
           label="Фамилия"
-          name=""
+          name="last_name"
           color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -34,7 +34,6 @@
           color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
-          required
         />
         <v-text-field
           v-model="user.region"
@@ -43,7 +42,6 @@
           color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
-          required
         />
         <v-text-field
           v-model="user.address"
@@ -52,7 +50,6 @@
           color="#aa282a"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
-          required
         />
       </v-flex>
       <v-flex xs5>
@@ -109,7 +106,6 @@
             color="#aa282a"
             class="white--text"
             type="submit"
-            disabled
           >
             Зарегистрироваться
           </v-btn>  

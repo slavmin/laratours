@@ -4,6 +4,7 @@
     fluid
     style="background-color: #66a5ae;"
   >
+    {{ url }}
     <v-layout
       row
       wrap
@@ -132,6 +133,10 @@ export default {
       type: String,
       default: ''
     },
+    url: {
+      type: String,
+      default: '',
+    }
   },
   data() {
     return {
