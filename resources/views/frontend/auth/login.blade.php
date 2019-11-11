@@ -16,3 +16,4 @@
         token="{{ csrf_token() }}"
     ></login>
 @endsection
+

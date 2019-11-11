@@ -1,12 +1,12 @@
 <template>
-  <v-container 
+  <v-container
     fluid
     grid-list-xs
     fill-height
     style="background-color: white;"
   >
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       justify-center
     >
@@ -16,7 +16,7 @@
         lg4
       >
         <v-card>
-          <v-card-title 
+          <v-card-title
             primary-title
             style="background-color: #66a5ae;"
           >
@@ -24,67 +24,61 @@
               {{ headerText }}
             </h3>
           </v-card-title>
-          <v-card-text>
-            <v-text-field
-              v-model="login"
-              :label="emailText"
-              :placeholder="emailText"
-              color="#aa282a"
-              required
-            />
-            <v-text-field
-              v-model="password"
-              :label="passwordText"
-              :placeholder="passwordText"
-              type="password"
-              color="#aa282a"
-              required
-            />
-            <v-checkbox
-              v-model="remember"
-              :label="rememberText"
-              color="#aa282a"
-            />
-          </v-card-text>
-          <v-divider />
-          <v-card-actions>
-            <v-btn 
-              color="#aa282a"
-              :href="passwordResetUrl"
-              flat
-            >
-              {{ passwordResetText }}
-            </v-btn>
-            <v-spacer />
-            <form 
-              :action="loginUrl"
-              method="POST"  
-            >
+          <form
+            id="loginForm"
+            :action="loginUrl"
+            method="POST"
+          >
+            <v-card-text>
               <input
                 type="hidden"
                 name="_token"
                 :value="token"
               >
-              <input
+              <v-text-field
                 v-model="login"
-                type="hidden"
+                :label="emailText"
+                :placeholder="emailText"
                 name="email"
-              >
-              <input
+                color="#aa282a"
+                required
+              />
+              <v-text-field
                 v-model="password"
-                type="hidden"
+                :label="passwordText"
+                :placeholder="passwordText"
+                type="password"
+                color="#aa282a"
                 name="password"
+                required
+              />
+              <v-checkbox
+                v-model="remember"
+                :label="rememberText"
+                color="#aa282a"
+              />
+            </v-card-text>
+            <v-divider />
+            <v-card-actions>
+              <v-btn
+                color="#aa282a"
+                :href="passwordResetUrl"
+                flat
               >
-              <v-btn 
+                {{ passwordResetText }}
+              </v-btn>
+              <v-spacer />
+              <v-btn
                 color="#aa282a"
                 dark
                 type="submit"
+                form="loginForm"
               >
                 {{ submitText }}
               </v-btn>
-            </form>
-          </v-card-actions>
-        </v-card> 
+            </v-card-actions>
+          </form>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
