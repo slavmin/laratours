@@ -41,6 +41,7 @@
                 :placeholder="emailText"
                 name="email"
                 color="#aa282a"
+                autofocus
                 required
               />
               <v-text-field
