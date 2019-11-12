@@ -234,7 +234,6 @@ export default {
     this.fetchAllTourOptions()
   },
   mounted() {
-    console.log(this.getEditMode)
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
     this.updateCurrentCustomerType(1)
@@ -257,9 +256,14 @@ export default {
       'updateCommissionPriceValues',
       'updateTourCommissionPrice',
       'updateCurrentCustomerType',
+      'updateTourMuseum',
+      'updateTourHotel',
+      'updateTourGuide',
+      'updateTourAttendant',
       'updateTourStaff',
       'updateTourFreeAdls',
       'updateTourTransport',
+      'updateCustomPriceWithNewPassangersCount',
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
@@ -272,10 +276,14 @@ export default {
         this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')
         if (this.getEditMode) {
-          console.log('recalc', this.getTour)
           this.updateTourTransport()
+          this.updateTourMuseum()
+          this.updateTourHotel()
+          this.updateTourGuide()
+          this.updateTourAttendant()
           this.updateTourStaff()
           this.updateTourFreeAdls()
+          this.updateCustomPriceWithNewPassangersCount()
           this.updateTourTotalPrice()
           this.updateCorrectedPriceValues()
           this.updateTourCorrectedPrice()

@@ -74,6 +74,9 @@ export default {
     async updateCustomPrice({ commit }, customPrice) {
       commit('setCustomPrice', customPrice)
     },
+    async updateCustomPriceWithNewPassangersCount({ commit }) {
+      commit('reCalcCustomPrice')
+    },
     async removeCustomPrice({ commit }, customPriceId) {
       commit('delCustomPrice', customPriceId)
     },
@@ -602,6 +605,11 @@ export default {
         pricePerSeat: parseInt(price.value / state.tour.qnt),
         correctedPricePerSeat: 0,
         commissionPricePerSeat: 0,
+      })
+    },
+    reCalcCustomPrice(state) {
+      state.tour.customPrice.forEach((customPrice) => {
+        customPrice.pricePerSeat = parseInt(customPrice.value / state.tour.qnt)
       })
     },
     delCustomPrice(state, customPriceId) {

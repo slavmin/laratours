@@ -10,6 +10,19 @@
         </div>
       </v-flex>  
     </v-layout>
+    <!--<v-layout 
+      row 
+      wrap
+    >
+      <v-spacer />
+      <v-btn 
+        dark
+        color="#aa282a"
+        @click="reCalcTour"
+      >
+        Пересчитать весь тур
+      </v-btn>  
+    </v-layout>-->
     <v-layout 
       row 
       wrap
@@ -1747,6 +1760,24 @@ export default {
       else {
         return JSON.parse(hotel.obj.extra).priceList.adl.std * hotel.obj.day
       }
+    },
+    reCalcTour() {
+      this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
+      this.updateTourStaff()
+      this.updateTourFreeAdls()
+      this.updateTourTotalPrice()
+      this.updateCorrectedPriceValues()
+      this.updateTourCorrectedPrice()
+      if (!this.commissionManualMode) {
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
+      if (this.commissionManualMode) {
+        this.updateCommissiontoAll(0)
+        this.updateCommissionPriceValues()
+        this.updateTourCommissionPrice()
+      }
+      this.calculatePriceForEveryCustomer()
     },
   },
 };
