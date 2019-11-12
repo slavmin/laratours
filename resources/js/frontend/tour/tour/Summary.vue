@@ -10,19 +10,20 @@
         </div>
       </v-flex>  
     </v-layout>
-    <!--<v-layout 
+    <v-layout 
       row 
       wrap
     >
       <v-spacer />
       <v-btn 
+        v-if="getEditMode"
         dark
         color="#aa282a"
         @click="reCalcTour"
       >
         Пересчитать весь тур
       </v-btn>  
-    </v-layout>-->
+    </v-layout>
     <v-layout 
       row 
       wrap
@@ -1665,6 +1666,13 @@ export default {
       'updateManualCommissionPriceValues',
       'updateManualCommissionMode',
       'updateCanSave',
+      'updateTourTransport',
+      'updateTourMuseum',
+      'updateTourHotel',
+      'updateTourGuide',
+      'updateTourAttendant',
+      'updateTourStaff',
+      'updateTourFreeAdls',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -1762,6 +1770,13 @@ export default {
       }
     },
     reCalcTour() {
+      this.updateTourTransport()
+      this.updateTourMuseum()
+      this.updateTourHotel()
+      this.updateTourGuide()
+      this.updateTourAttendant()
+      this.updateTourStaff()
+      this.updateTourFreeAdls()
       this.generateTourCalcCustomerTypes(this.getCurrentTourCustomers)
       this.updateTourStaff()
       this.updateTourFreeAdls()
