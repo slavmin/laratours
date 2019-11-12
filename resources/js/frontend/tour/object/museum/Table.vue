@@ -50,7 +50,6 @@
             <v-btn 
               small
               fab
-              outline
               :title="`Удалить '` + museum.name + `'`"
               color="red"
               dark 
@@ -108,6 +107,7 @@
             </i>
             <a 
               :href="'mailto:' + JSON.parse(museum.extra).contacts.email"
+              style="color: white;"
             >
               {{ JSON.parse(museum.extra).contacts.email }}
             </a>
@@ -158,6 +158,13 @@
           <template v-slot:items="props">
             <td class="text-xs-left">
               {{ props.item.name }}
+              <div
+                v-if="JSON.parse(props.item.extra).isExtra"
+                class="grey--text"
+              >
+                <v-divider />
+                Можно выбрать в допах
+              </div>
             </td>
             <td class="text-xs-center">
               {{ JSON.parse(props.item.extra).duration }} ч.
