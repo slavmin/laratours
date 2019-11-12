@@ -131,6 +131,12 @@ export default {
     async updateTourFreeAdls({ commit }) {
       commit('setTourFreeAdls')
     },
+    async updateTourExtraEvents({ commit }, updData) {
+      commit('setTourExtraEvents', updData)
+    },
+    async removeTourExtraEvent({ commit }, extraEventId) {
+      commit('delTourExtraEvent', extraEventId)
+    },
     async updateManualCommissionPriceValues({ commit }, commissionValue) {
       commit('setManualCommissionPriceValues', commissionValue)
     },
@@ -139,7 +145,7 @@ export default {
     },
     async updateCanSave({ commit }, flag) {
       commit('setCanSave', flag)
-    }
+    },
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -597,7 +603,7 @@ export default {
     setCustomPrice: (state, price) => {
       state.tour.customPrice.push({
         ...price,
-        id: state.tour.customPrice.length,
+        id: Math.random(100, 5000),
         correction: 0,
         commission: 0,
         correctedPrice: 0,
@@ -1631,6 +1637,14 @@ export default {
         state.tour.options.freeAdls.push(updData)
       }
     },
+    setTourExtraEvents(state, updData) {
+      state.tour.extraEvents.push(updData)
+    },
+    delTourExtraEvent(state, extraEventId) {
+      state.tour.extraEvents = state.tour.extraEvents.filter((item) => {
+        return item.id != extraEventId
+      })
+    },
     reset(state) {
       state.tour = {
         id: NaN,
@@ -1721,6 +1735,7 @@ export default {
       guide: [],
       attendant: [],
       customPrice: [],
+      extraEvents: [],
       editorsContent: [],
       totalPrice: NaN,
       ordered: 0,
@@ -1982,6 +1997,25 @@ export default {
     },
     getCanSave(state) {
       return state.canSave
+    },
+    getActualExtraEvents(state) {
+      let result = []
+      console.log('extra events')
+      state.actualMuseum.forEach((museum) => {
+        museum.objectables.forEach((obj) => {
+          if (JSON.parse(obj.extra).isExtra) {
+            result.push({
+              museum,
+              obj,
+            })
+          }
+        })
+      })
+      return result
+    },
+    getTourExtraEvents(state) {
+      console.log('tour extra events')
+      return state.tour.extraEvents
     }
   }
 }

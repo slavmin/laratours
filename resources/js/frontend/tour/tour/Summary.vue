@@ -1529,7 +1529,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { setTimeout } from 'timers';
+import { setTimeout } from 'timers'
 export default {
 
   name: 'Summary',

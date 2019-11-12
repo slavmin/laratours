@@ -16,10 +16,73 @@
           mt-5
         >
           <h3 class="grey--text">
-            Доп. услуги:
+            Доп. услуги: ({{ getCustomPrice.length }})
+            <v-btn 
+              color="#aa282a"
+              fab
+              small
+              dark
+              @click="showCustomPrice = !showCustomPrice"
+            >
+              <v-icon>
+                expand_{{ showCustomPrice ? 'less' : 'more' }}
+              </v-icon>
+            </v-btn>
           </h3>
         </v-layout>
         <v-layout 
+          v-show="showCustomPrice"
+          row 
+          wrap
+          justify-center
+        >
+          <v-flex 
+            v-if="showTable"
+            xs12
+          >
+            <table class="custom-price-table">
+              <thead>
+                <th>
+                  Услуга
+                </th>
+                <th>
+                  Стоимость
+                </th>  
+                <th>
+                  Действия
+                </th>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="price in getCustomPrice"
+                  :key="price.name"
+                >
+                  <td>
+                    {{ price.name }}
+                  </td>
+                  <td>
+                    {{ price.value }}
+                  </td>
+                  <td>
+                    <v-btn 
+                      color="red"
+                      fab
+                      small
+                      dark
+                      @click="removeCustomPrice(price.id)"
+                    >
+                      <i class="material-icons">
+                        delete
+                      </i>
+                    </v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </v-flex>
+        </v-layout>
+        <v-layout 
+          v-show="showCustomPrice"
           row 
           wrap
           mt-5
@@ -60,58 +123,9 @@
             </i>
           </v-btn>
         </v-layout>
-        <v-layout 
-          row 
-          wrap
-          justify-center
-        >
-          <v-flex 
-            v-if="showTable"
-            xs12
-          >
-            <table class="summary">
-              <thead>
-                <th>
-                  Услуга
-                </th>
-                <th>
-                  Стоимость
-                </th>  
-                <th>
-                  Действия
-                </th>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="price in getCustomPrice"
-                  :key="price.name"
-                >
-                  <td>
-                    {{ price.name }}
-                  </td>
-                  <td>
-                    {{ price.value }}
-                  </td>
-                  <td>
-                    <v-btn 
-                      color="red"
-                      flat
-                      fab
-                      outline
-                      small
-                      dark
-                      @click="removeCustomPrice(price.id)"
-                    >
-                      <i class="material-icons">
-                        delete
-                      </i>
-                    </v-btn>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </v-flex>
-        </v-layout>
+        <v-divider />
+        <ExtraEvents />
+        <v-divider />
         <h3 
           class="grey--text mt-5"
         >
@@ -212,12 +226,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import Editor from '@tinymce/tinymce-vue'
 import FreeAdl from './FreeAdl'
+import ExtraEvents from './ExtraEvents'
 export default {
 
   name: 'Services',
   components: {
     Editor,
     FreeAdl,
+    ExtraEvents,
   },
   data() {
     return {
@@ -238,6 +254,7 @@ export default {
       dialog: false,
       dialogFillEditors: false,
       editorsContent: [],
+      showCustomPrice: false,
     };
   },
   computed: {
@@ -384,13 +401,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.summary {
+.custom-price-table {
   margin: 0 auto;
   td,
   th {
     border: 1px solid gray;
     padding: 16px;
     font-size: 24px;
+  }
+  td {
+    background-color: #FFAB16;
+    color: white;
   }
 }
 .wrap {
