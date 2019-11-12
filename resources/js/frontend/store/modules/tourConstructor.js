@@ -1265,6 +1265,9 @@ export default {
       state.tour.options.freeAdls.forEach((freeAdl) => {
         freeAdl.correction = correction
       })
+      state.tour.extraEvents.forEach((event) => {
+        event.correction = correction
+      })
     },
     setCorrectedPriceValues(state) {
       // Add price-fields to Transport
@@ -1415,6 +1418,24 @@ export default {
         }
         freeAdl.correctedPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
       })
+      // Calculate Corrected price to ExtraEvents
+      state.tour.extraEvents.forEach((event) => {
+        // Search price by current customer Id
+        let price = JSON.parse(event.obj.extra).priceList.find((item) => {
+          return item.customerId == state.tour.calc.currentCustomer
+        })
+        // If event have no price with current customer Id set default customer
+        if (price == undefined) price = JSON.parse(event.obj.extra).priceList[state.tour.calc.defaultCustomer]
+        // Calculate corrected price
+        event.correctedPrice = 0
+        if (event.correction > 0) {
+          event.correctedPrice = 
+            price.price 
+            + (price.price * event.correction / 100) 
+        } else {
+          event.correctedPrice = price.price
+        }
+      })
     },
     setCommissionToAll: (state, commission) => {
       if (commission == NaN || commission == '') {
@@ -1451,6 +1472,9 @@ export default {
       })
       state.tour.options.freeAdls.forEach((freeAdl) => {
         freeAdl.commission = commission
+      })
+      state.tour.extraEvents.forEach((event) => {
+        event.commission = commission
       })
     },
     setCommissionPriceValues(state) {
@@ -1597,6 +1621,17 @@ export default {
           freeAdl.commissionPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
         }
         freeAdl.commissionPricePerSeat = parseFloat(freeAdl.commissionPricePerSeat.toFixed(2))
+      })
+      // Calculate commission price to ExtraEvents
+      state.tour.extraEvents.forEach((event) => {
+        if (event.commission > 0) {
+          event.commissionPrice = 
+          parseFloat(event.correctedPrice) +
+            (parseFloat(event.correctedPrice) * parseFloat(event.commission) / 100)
+        } else {
+          event.commissionPrice = parseFloat(event.correctedPrice.toFixed(2))
+        }
+        event.commissionPrice = parseFloat(event.commissionPrice.toFixed(2))
       })
     },
     setEditTour(state, tour) {

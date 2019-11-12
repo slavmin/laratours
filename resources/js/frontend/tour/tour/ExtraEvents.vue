@@ -54,11 +54,20 @@
               <td>
                 {{ event.day }}
               </td>
-              <td>
+              <td class="text-xs-left">
+                {{ event.museum.name }}
+                <br>
                 {{ event.obj.name }}
               </td>
               <td>
-                <!-- {{ event.value }} -->
+                <ul>
+                  <li
+                    v-for="(price, k) in JSON.parse(event.obj.extra).priceList"
+                    :key="k"
+                  >
+                    {{ price.customerName }}: {{ price.price }}
+                  </li>
+                </ul>
               </td>
               <td>
                 <v-btn 
@@ -213,7 +222,7 @@ export default {
   th {
     border: 1px solid gray;
     padding: 16px;
-    font-size: 24px;
+    font-size: 16px;
   }
   td {
     background-color: #FFAB16;

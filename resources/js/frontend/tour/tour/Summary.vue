@@ -1269,6 +1269,66 @@
       </v-flex>
     </v-layout>
     <v-divider />
+    <v-layout 
+      row 
+      wrap
+    >
+      <v-flex xs12>
+        <table class="summary">
+          <tr v-if="getTour.extraEvents != 0">
+            <td
+              class="text-xs-center" 
+              colspan="6"
+            >
+              Допы
+            </td>
+          </tr>
+          <tr 
+            v-for="(event, i) in getTour.extraEvents"
+            :key="`EE-${i}`"
+          >
+            <td>
+              {{ event.museum.name }}:
+              <br>
+              {{ event.obj.name }}
+              <div class="body-1 grey--text">
+                {{ customerName(event) }}
+                <br>
+                День: {{ event.day }}
+              </div>
+            </td>
+            <td class="price">
+              {{ eventPrice(event) }}
+            </td>
+            <td>
+              <v-text-field
+                v-model="event.correction"
+                name="correction"
+                @input="correctPrice"
+              />
+            </td>
+            <td>
+              {{ parseInt(event.correctedPrice).toFixed(2) }}
+            </td>
+            <td
+              v-show="!commissionManualMode"
+            >
+              <v-text-field
+                v-model="event.commission"
+                name="commision"
+                @input="correctPrice"
+              />
+            </td>
+            <td
+              v-show="!commissionManualMode"
+            >
+              {{ parseInt(event.commissionPrice).toFixed(2) }}
+            </td>
+          </tr>
+        </table>
+      </v-flex>
+    </v-layout>
+    <v-divider />
     <v-layout
       row
       wrap
