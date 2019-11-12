@@ -6,6 +6,7 @@
     >
       <template v-slot:activator="{ on }">
         <v-list-tile
+          class="black--text menu-text"
           v-on="on"
         >
           <v-list-tile-title>
@@ -144,6 +145,17 @@ export default {
 .changes-list {
   li {
     text-align: left;
+  }
+}
+.menu-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+.menu-text {
+  &:hover {
+    background-color: #66a5ae;
+    color: white !important;
   }
 }
 </style>

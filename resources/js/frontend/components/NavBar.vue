@@ -84,10 +84,10 @@
           <a
             v-for="item in management"
             :key="item.name"
-            class="black--text" 
             :href="item.url"
+            class="menu-link"
           >
-            <v-list-tile>
+            <v-list-tile class="black--text menu-text">
               <v-list-tile-title>
                 {{ item.text }}
               </v-list-tile-title>
@@ -137,10 +137,10 @@
           <a
             v-for="item in profile"
             :key="item.name"
-            class="black--text" 
             :href="item.url"
+            class="menu-link" 
           >
-            <v-list-tile>
+            <v-list-tile class="black--text menu-text">
               <v-list-tile-title>
                 {{ item.text }}
               </v-list-tile-title>
@@ -167,9 +167,9 @@
         <v-list>
           <a
             :href="contactUrl"
-            class="black--text" 
+            class="menu-link" 
           >
-            <v-list-tile>
+            <v-list-tile class="black--text menu-text">
               <v-list-tile-title>
                 {{ contactText }}
               </v-list-tile-title>
@@ -507,6 +507,17 @@ export default {
 .no-border {
   &:hover {
     text-decoration: none;
+  }
+}
+.menu-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+.menu-text {
+  &:hover {
+    background-color: #66a5ae;
+    color: white !important;
   }
 }
 </style>
