@@ -114,9 +114,11 @@
           <v-text-field
             v-model="getTour.options.nights"
             label="Ночей"
+            :rules="[v => !!v || 'Укажите количество дней']"
             name="nights"
             mask="###"
             color="#aa282a"
+            required
           />
         </v-flex>
       </v-layout>
@@ -137,7 +139,6 @@
             prepend-icon="grade"
             color="#aa282a"
             multiple
-            required
           />
         </v-flex>
         <v-flex 

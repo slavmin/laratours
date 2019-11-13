@@ -69,7 +69,7 @@
                       color="#aa282a"
                       :dark="item.selected"
                       :disabled="item.selected"
-                      label="День тура"
+                      label="Ночь тура"
                       outline
                       @change="daysSelected(item)"
                     />

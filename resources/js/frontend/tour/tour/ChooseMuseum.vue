@@ -146,6 +146,21 @@
                         </v-flex>
                       </v-layout>
                     </div>
+
+                    <div
+                      v-if="item.count"
+                      class="body-2"
+                    >
+                      <v-divider />
+                      <span class="grey--text text--darken-1">
+                        Итого: 
+                      </span>  
+                      <p 
+                        style="display: inline-block;"
+                      >
+                        {{ item.count * JSON.parse(item.extra).price }}
+                      </p>
+                    </div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
