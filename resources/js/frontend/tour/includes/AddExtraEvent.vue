@@ -115,6 +115,7 @@ export default {
       'updateProfileExtraEvents',
       'updateProfilePrice',
       'updateResetProfileFlag',
+      'updateOrderPrice',
     ]),
     choose(event) {
       this.updateProfileExtraEvents({
@@ -129,6 +130,7 @@ export default {
         profilePlace: this.profilePlace,
         name: this.name,
       })
+      this.updateOrderPrice()
     },
   }
 }

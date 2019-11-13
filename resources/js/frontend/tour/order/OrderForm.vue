@@ -168,7 +168,8 @@
       </v-flex>
     </v-layout>
     <v-divider />
-    <v-btn
+    <!-- Change Meal -->
+    <!-- <v-btn
       color="#aa282a"
       dark
       flat
@@ -183,7 +184,32 @@
       v-show="showChangeMeal"
       :profile-id="id"
       :tour="tour"
-    />  
+    />   -->
+    <!-- /Change Meal -->
+    <!-- Extra events -->
+    <v-btn
+      color="#aa282a"
+      dark
+      flat
+      @click="showAddExtraEvents = !showAddExtraEvents"
+    >
+      {{ showAddExtraEvents ? 'Скрыть' : 'Дополнительные мероприятия' }}
+      <v-icon right>
+        expand_{{ showAddExtraEvents ? 'less' : 'more' }}
+      </v-icon>
+    </v-btn>
+    <AddExtraEvent 
+      v-show="showAddExtraEvents"
+      :customer-type="profileCustomerType"
+      :customer-age="age"
+      :profile-id="id"
+      :profile-place="profilePlace"
+      :name="profile.name"
+      :profile-extra-events-id-array="profile.extraEventsIdArray"
+    />
+    <!-- /Extra events -->
+    <v-divider />
+    <!-- Choose seats on bus scheme -->
     <v-layout 
       row 
       wrap
@@ -283,12 +309,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../includes/BusScheme'
-import ChangeMeal from './ChangeMeal'
+// import ChangeMeal from './ChangeMeal'
+import AddExtraEvent from '../includes/AddExtraEvent'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
-    ChangeMeal,
+    // ChangeMeal,
+    AddExtraEvent,
   },
   props: {
     tour: {
@@ -340,6 +368,7 @@ export default {
       isSinglePlace: false,
       showChangeMeal: false,
       age: NaN,
+      showAddExtraEvents: false,
     }
   },
   computed: {

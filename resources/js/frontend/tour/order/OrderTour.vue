@@ -377,6 +377,7 @@ export default {
     this.status = this.order.status
     this.initialRoomsCount()
     this.updateMealByDay(this.tour)
+    this.updateExtraEvents(this.tour)
     this.updateProfilesData(this.profiles)
     const contacts = {
       name: this.profiles[0].contactsName,
@@ -394,6 +395,7 @@ export default {
       'updateProfilesData',
       'updateSeatsInCurrentOrder',
       'updateOrderContacts',
+      'updateExtraEvents',
     ]),
     close() {
       this.dialog = false
