@@ -27,7 +27,7 @@ export default {
     async updateProfileMeal({ commit }, data) {
       commit('setProfileMeal', data)
     },
-    async updateProfileExtraEvents({ commit }, data) {
+    updateProfileExtraEvents({ commit }, data) {
       commit('setProfileExtraEvents', data)
     },
     async updateProfilePrice({ commit }, data) {
@@ -48,7 +48,7 @@ export default {
     async updateEditMode({ commit }) {
       commit('setEditMode')
     },
-    async updateProfilesData({ commit }, data) {
+    updateProfilesData({ commit }, data) {
       commit('fillProfilesData', data)
     },
     async updateProfileBusSeatId({ commit }, data) {
@@ -344,6 +344,7 @@ export default {
         default:
         console.log('error data: ', data)
       }
+      console.log(profile.name)
       if (profile.name != '') {
         profile.price = profilePrice + profile.extraEventsPrice
         profile.commission = profileCommission + profile.extraEventsCommission
@@ -399,6 +400,10 @@ export default {
         stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
         stateProfile.isRfIntPass = dataProfile.isRfIntPass == 'true' ? true : false
+        stateProfile.extraEventsPrice = JSON.parse(dataProfile.extraEventsData).content.extraEventsPrice
+        stateProfile.extraEventsCommission = JSON.parse(dataProfile.extraEventsData).content.extraEventsCommission
+        stateProfile.extraEventsIdArray = JSON.parse(dataProfile.extraEventsData).content.extraEventsIdArray
+        console.log(stateProfile, dataProfile)
       }
     },
     setProfileBusSeatId(state, data) {
@@ -549,63 +554,54 @@ export default {
       return state.orderStatus
     },
     getExtraEvents: state => data => {
-      if (!state.editMode) {
-        let result = []
-        // console.log(data.profileCustomerType)
-        state.extraEvents.forEach((extraEvent) => {
-          const eventPriceList = JSON.parse(extraEvent.obj.extra).priceList
-          // console.log(eventPriceList, extraEvent)
-          let price = {}
-          switch (data.profileCustomerType) {
-            case 'CHD':
-              price = eventPriceList.find((price) => {
-                let age = JSON.parse(price.customerAge)
-                // console.log(data.age, age)
-                if (age && (age.ageFrom <= data.age && data.age < age.ageTo)) {
-                  return price
-                }
-              })
-              // Hack to fix no-price if child younger than prices in pricelist
-              if (!price) {
-                price = eventPriceList.find(price => price.customerName.includes('Взросл'))         
+      let result = []
+      // console.log(data.profileCustomerType)
+      state.extraEvents.forEach((extraEvent) => {
+        const eventPriceList = JSON.parse(extraEvent.obj.extra).priceList
+        // console.log(eventPriceList, extraEvent)
+        let price = {}
+        switch (data.profileCustomerType) {
+          case 'CHD':
+            price = eventPriceList.find((price) => {
+              let age = JSON.parse(price.customerAge)
+              // console.log(data.age, age)
+              if (age && (age.ageFrom <= data.age && data.age < age.ageTo)) {
+                return price
               }
-              // console.log('chd price: ', price)
+            })
+            // Hack to fix no-price if child younger than prices in pricelist
+            if (!price) {
+              price = eventPriceList.find(price => price.customerName.includes('Взросл'))         
+            }
+            // console.log('chd price: ', price)
 
-              break
-            case 'PENS':
-              price = eventPriceList.find((price) => price.customerAge && JSON.parse(price.customerAge).isPens)
-              
-              // console.log('pens price: ', price)
-              break
-            case 'FRGN':
-              price = eventPriceList.find(price => price.customerName.includes('Иностр'))
-              
-              // console.log('frgn price: ', price)
-            case 'ADL':
-              // console.log(eventPriceList)
-              price = eventPriceList.find(price => price.customerName.includes('Взросл'))
-              
-              // console.log('adl price: ', price)
-              break
-            default:
-            // console.log('error in extra events: ', data)
-          }
-          let recalculatedEvent = Object.assign({}, extraEvent)
-          recalculatedEvent.correctedPrice = price.price + 
-            price.price * parseFloat(recalculatedEvent.correction) / 100
-          recalculatedEvent.commissionPrice = recalculatedEvent.correctedPrice +
-            recalculatedEvent.correctedPrice * parseFloat(recalculatedEvent.commission) / 100
-          result.push(recalculatedEvent)
-        })
-        return result
-      }
-      if (state.editMode) {
-        let profile = state.profiles.find(p => p.id == data.profileId)
-        // If empty profile, return default extra events
-        // if (profile.extraEvents.length == 0) {} 
-        // // Else, return extra events from profile
-        // else {}
-      }
+            break
+          case 'PENS':
+            price = eventPriceList.find((price) => price.customerAge && JSON.parse(price.customerAge).isPens)
+            
+            // console.log('pens price: ', price)
+            break
+          case 'FRGN':
+            price = eventPriceList.find(price => price.customerName.includes('Иностр'))
+            
+            // console.log('frgn price: ', price)
+          case 'ADL':
+            // console.log(eventPriceList)
+            price = eventPriceList.find(price => price.customerName.includes('Взросл'))
+            
+            // console.log('adl price: ', price)
+            break
+          default:
+          // console.log('error in extra events: ', data)
+        }
+        let recalculatedEvent = Object.assign({}, extraEvent)
+        recalculatedEvent.correctedPrice = price.price + 
+          price.price * parseFloat(recalculatedEvent.correction) / 100
+        recalculatedEvent.commissionPrice = recalculatedEvent.correctedPrice +
+          recalculatedEvent.correctedPrice * parseFloat(recalculatedEvent.commission) / 100
+        result.push(recalculatedEvent)
+      })
+      return result
     },
     getProfileExtraEventsData: state => profileId => {
       const profile = state.profiles.find(profile => profile.id == profileId)

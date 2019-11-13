@@ -266,11 +266,13 @@ export default {
   mounted() {
     this.orderedSeats()
     this.updateMealByDay(this.tour)
+    this.updateExtraEvents(this.tour)
   },
   methods: {
     ...mapActions([
       'updateOrderedSeats',
       'updateMealByDay',
+      'updateExtraEvents',
     ]),
     close() {
       this.dialog = false

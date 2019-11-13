@@ -179,6 +179,8 @@
       </v-flex>
     </v-layout>
     <v-divider />
+    <!-- Change meal -->
+    <!-- 
     <v-btn
       v-if="!isDisabled"
       color="#aa282a"
@@ -195,7 +197,31 @@
       v-show="showChangeMeal"
       :profile-id="id"
       :tour="tour"
-    />  
+    />   -->
+    <!-- /Change Meal --><!-- Extra events -->
+    <v-divider />
+    <v-btn
+      color="#aa282a"
+      dark
+      flat
+      @click="showAddExtraEvents = !showAddExtraEvents"
+    >
+      {{ showAddExtraEvents ? 'Скрыть' : 'Дополнительные мероприятия' }}
+      <v-icon right>
+        expand_{{ showAddExtraEvents ? 'less' : 'more' }}
+      </v-icon>
+    </v-btn>
+    <AddExtraEvent 
+      v-show="showAddExtraEvents"
+      :customer-type="profileCustomerType"
+      :customer-age="age"
+      :profile-id="id"
+      :profile-place="profilePlace"
+      :name="profile.name"
+      :profile-extra-events-id-array="profile.extraEventsIdArray"
+    />
+    <!-- /Extra events -->
+    <v-divider />
     <v-layout 
       row 
       wrap
@@ -275,6 +301,11 @@
           :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
           :value="profile.isSinglePlace"
         >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][extraEventsData]' : ''"
+          :value="JSON.stringify({content: profileExtraEventsData})"
+        >
       </v-flex>
     </v-layout>
     <v-layout 
@@ -298,12 +329,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../../includes/BusScheme'
-import ChangeMeal from './ChangeMeal'
+// import ChangeMeal from './ChangeMeal'
+import AddExtraEvent from '../../includes/AddExtraEvent'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
-    ChangeMeal,
+    // ChangeMeal,
+    AddExtraEvent,
   },
   props: {
     tour: {
@@ -356,6 +389,7 @@ export default {
       showChangeMeal: false,
       age: NaN,
       isRfIntPass: false,
+      showAddExtraEvents: false,
     }
   },
   computed: {
@@ -440,6 +474,9 @@ export default {
     },
     profileMealData: function() {
       return this.$store.getters.getProfileMealData(this.id)
+    },
+    profileExtraEventsData: function() {
+      return this.$store.getters.getProfileExtraEventsData(this.id)
     },
     profileBusSeatId: function() {
       return this.$store.getters.getProfileBusSeatId(this.id)
@@ -534,12 +571,8 @@ export default {
     if (this.id > 2) console.log('second page')
     this.updateOrderProfiles(this.id)
   },
-  updated() {
-    console.log(this.profile)
-  },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
-    console.log(this.priceList)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)

@@ -37,7 +37,7 @@
           </v-switch>
         </v-layout>
       </li>
-    </ul>
+    </ul> 
   </v-layout>
 </template>
 
@@ -71,6 +71,12 @@ export default {
     name: {
       type: String,
       default: '',
+    },
+    profileExtraEventsIdArray: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data() {
@@ -98,6 +104,11 @@ export default {
         this.updateResetProfileFlag(this.profileId)
       }
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.choosenExtraEvents = this.profileExtraEventsIdArray
+    }, 500)
   },
   methods: {
     ...mapActions([

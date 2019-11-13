@@ -345,7 +345,7 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../includes/BusScheme'
 // import ChangeMeal from './ChangeMeal'
-import AddExtraEvent from './AddExtraEvent'
+import AddExtraEvent from '../includes/AddExtraEvent'
 export default {
   name: 'OrderForm',
   components: {
@@ -570,7 +570,6 @@ export default {
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
-    this.updateExtraEvents(this.tour)
   },
   methods: {
     ...mapActions([
@@ -585,7 +584,6 @@ export default {
       'resetProfile',
       'updateResetProfileFlag',
       'removeBusSeatIdFromCurrent',
-      'updateExtraEvents',
     ]),
     ...mapGetters([
       'getChdPrice',
