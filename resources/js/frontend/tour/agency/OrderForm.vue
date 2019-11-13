@@ -167,6 +167,7 @@
       </v-flex>
     </v-layout>
     <v-divider />
+    <!-- Change Meal -->
     <!-- <v-btn
       color="#aa282a"
       dark
@@ -183,6 +184,47 @@
       :profile-id="id"
       :tour="tour"
     />   -->
+    <!-- /Change Meal -->
+    <v-divider />
+    <!-- Extra events -->
+    <v-btn
+      color="#aa282a"
+      dark
+      flat
+      @click="showAddExtraEvents = !showAddExtraEvents"
+    >
+      {{ showAddExtraEvents ? 'Скрыть' : 'Дополнительные мероприятия' }}
+      <v-icon right>
+        expand_{{ showAddExtraEvents ? 'less' : 'more' }}
+      </v-icon>
+    </v-btn>
+    <v-tooltip
+      v-if="profilePrice == 0" 
+      bottom
+    >
+      <template v-slot:activator="{ on }">
+        <v-icon 
+          color="grey"
+          v-on="on"
+        >
+          info
+        </v-icon>
+      </template>
+      <span>
+        Для расчёта цены заполните ФИО и укажите пол и дату рождения туриста.
+      </span>
+    </v-tooltip>
+    <AddExtraEvent 
+      v-show="showAddExtraEvents"
+      :customer-type="profileCustomerType"
+      :customer-age="age"
+      :profile-id="id"
+      :profile-place="profilePlace"
+      :name="order.name"
+    />
+    <!-- /Extra events -->
+    <v-divider />
+    <!-- Choose seat on bus scheme -->
     <v-layout 
       row 
       wrap
@@ -222,6 +264,22 @@
             Цена:
           </span> 
           {{ parseInt(profilePrice) }}
+          <v-tooltip
+            v-if="profilePrice == 0" 
+            bottom
+          >
+            <template v-slot:activator="{ on }">
+              <v-icon 
+                color="grey"
+                v-on="on"
+              >
+                info
+              </v-icon>
+            </template>
+            <span>
+              Для расчёта цены заполните ФИО и укажите пол и дату рождения туриста.
+            </span>
+          </v-tooltip>
           <br>
           <span class="grey--text">
             Комиссия:
@@ -259,6 +317,11 @@
           :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
           :value="isSinglePlace"
         >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][extraEventsData]' : ''"
+          :value="JSON.stringify({content: profileExtraEventsData})"
+        >
       </v-flex>
     </v-layout>
     <v-layout 
@@ -282,11 +345,13 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import BusScheme from '../includes/BusScheme'
 // import ChangeMeal from './ChangeMeal'
+import AddExtraEvent from './AddExtraEvent'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
     // ChangeMeal,
+    AddExtraEvent,
   },
   props: {
     tour: {
@@ -339,6 +404,7 @@ export default {
       isSinglePlace: false,
       showChangeMeal: false,
       isRfIntPass: false,
+      showAddExtraEvents: false,
     }
   },
   computed: {
@@ -421,6 +487,9 @@ export default {
     profileBusSeatId: function() {
       return this.$store.getters.getProfileBusSeatId(this.id)
     },
+    profileExtraEventsData: function() {
+      return this.$store.getters.getProfileExtraEventsData(this.id)
+    },
     passportMask: function() {
       const foreignerPass = {
         label: 'Паспорт иностранца',
@@ -496,11 +565,12 @@ export default {
   },
   mounted() {
     this.priceList = JSON.parse(this.tour.extra).calc.priceList
-    console.log(this.priceList)
+    console.log(JSON.parse(this.tour.extra))
     this.updateOrderProfiles(this.id)
     this.updatePriceList(this.priceList)
     this.updateChdRange(this.priceList)
     this.updatePensRange(this.priceList)
+    this.updateExtraEvents(this.tour)
   },
   methods: {
     ...mapActions([
@@ -515,6 +585,7 @@ export default {
       'resetProfile',
       'updateResetProfileFlag',
       'removeBusSeatIdFromCurrent',
+      'updateExtraEvents',
     ]),
     ...mapGetters([
       'getChdPrice',
@@ -535,6 +606,7 @@ export default {
       this.manualPens = false
       this.isForeigner = false
       this.date = undefined
+      this.showAddExtraEvents = false
       this.resetProfile(this.id)
     },
     log() {

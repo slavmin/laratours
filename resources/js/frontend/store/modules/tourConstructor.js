@@ -1726,6 +1726,9 @@ export default {
         price.commissionStandardPrice = parseFloat(price.standardPrice) + parseFloat(com)
         price.commissionSinglePrice = parseFloat(price.singlePrice) + parseFloat(com)
       })
+      state.tour.extraEvents.forEach((extraEvent) => {
+        extraEvent.commissionPrice = parseFloat(extraEvent.price) + parseFloat(com)
+      })
       state.tour.calc.commissionManualValue = com
     },
     setManualCommissionMode(state, flag) {

@@ -3,7 +3,7 @@
     <v-dialog
       v-if="show"
       v-model="dialog"
-      width="500"
+      width="900"
       lazy
     >
       <template v-slot:activator="{ on }">

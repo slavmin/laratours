@@ -1,0 +1,124 @@
+<template>
+  <v-layout
+    row
+    wrap
+    justify-space-around
+  >
+    <ul
+      style="list-style: none;"
+    >
+      <li
+        v-for="event in extraEventsArray"
+        :key="event.id"
+      >
+        <v-layout
+          row
+          wrap
+          justify-start
+          class="text-xs-left"
+        >
+          <v-switch 
+            v-model="choosenExtraEvents"
+            :value="event.id"
+            color="#aa282a"
+            @change="choose(event)"
+          >
+            <template v-slot:label>
+              <div>
+                {{ event.museum.name }}
+                <div style="color: black; font-size: 14px;">
+                  {{ event.obj. name }}
+                </div>
+                <div style="color: green; font-size: 12px;">
+                  +{{ event.commissionPrice }} руб.
+                </div>
+              </div>
+            </template>
+          </v-switch>
+        </v-layout>
+      </li>
+    </ul>
+  </v-layout>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+export default {
+  name: 'AddExtraEvent',
+  props: {
+    // tour: {
+    //   type: Object,
+    //   default: () => {
+    //     return {}
+    //   }
+    // },
+    profileId: {
+      type: Number,
+      default: 0
+    },
+    customerType: {
+      type: String,
+      default: '',
+    },
+    customerAge: {
+      type: Number,
+      default: 0
+    },
+    profilePlace: {
+      type: String,
+      default: '',
+    },
+    name: {
+      type: String,
+      default: '',
+    }
+  },
+  data() {
+    return {
+      choosenExtraEvents: [],
+    }
+  },
+  computed: {
+    extraEventsArray: function() {
+      return this.$store.getters.getExtraEvents({
+        profileCustomerType: this.customerType,
+        profileId: this.profileId,
+        age: this.customerAge,
+      })
+    },
+    resetProfileFlag: function() {
+      return this.$store.getters.getResetProfileFlag(this.profileId)
+    },
+  },
+  watch: {
+    resetProfileFlag(val) {
+      if (val) {
+        console.log('clear')
+        this.choosenExtraEvents = []
+        this.updateResetProfileFlag(this.profileId)
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      'updateProfileExtraEvents',
+      'updateProfilePrice',
+      'updateResetProfileFlag',
+    ]),
+    choose(event) {
+      this.updateProfileExtraEvents({
+        profileId: this.profileId,
+        profileChoosenExtraEvents: this.choosenExtraEvents,
+        event: event,
+      })
+      this.updateProfilePrice({
+        profileId: this.profileId,
+        profileCustomerType: this.customerType,
+        age: this.customerAge,
+        profilePlace: this.profilePlace,
+        name: this.name,
+      })
+    },
+  }
+}
+</script>
