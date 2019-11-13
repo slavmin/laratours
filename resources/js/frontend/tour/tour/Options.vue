@@ -26,7 +26,7 @@
         outline
         required
       />
-      <v-select
+      <!-- <v-select
         v-model="getTour.options.cities"
         :items="allCities"
         label="Тур по городам:"
@@ -37,7 +37,31 @@
         color="#aa282a"
         multiple
         required
-      />
+      /> -->
+      <v-autocomplete
+        v-model="getTour.options.cities"
+        item-text="name"
+        item-value="id"
+        :items="allCities"
+        :rules="[v => v.length != 0 || 'Выберите тип']"
+        append-outer-icon="location_city"
+        label="Тур по городам:"
+        color="#aa282a"
+        multiple
+        chips
+        required
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            :selected="data.selected"
+            close
+            class="chip--select-multi"
+            @input="chipRemove(data.item.id)"
+          >
+            {{ data.item.name }}
+          </v-chip>
+        </template>
+      </v-autocomplete>
       <v-divider />
       <v-layout 
         row 
@@ -296,7 +320,10 @@ export default {
         }
       }
     },
-    logCity() {
+    chipRemove(cityId) {
+      console.log(cityId, this.getTour.options.cities)
+      const index = this.getTour.options.cities.indexOf(cityId)
+      if (index >= 0)  this.getTour.options.cities.splice(index, 1)
     }
   },
 };
