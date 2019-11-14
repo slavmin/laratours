@@ -277,7 +277,7 @@ export default {
   },
   created() {
     for (let city in this.citiesSelect.Россия) {
-      this.cities.push({'id': city, 'name': this.citiesSelect.Россия[city]})
+      this.cities.push({'id': parseInt(city), 'name': this.citiesSelect.Россия[city]})
     }
     this.city = parseInt(this.museum.city_id)
     const museumInfo = JSON.parse(this.museum.extra)
