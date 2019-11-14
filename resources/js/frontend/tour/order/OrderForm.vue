@@ -287,6 +287,11 @@
           :name="isRequired ? 'customer[' + id + '][isSinglePlace]' : ''"
           :value="profile.isSinglePlace"
         >
+        <input 
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][extraEventsData]' : ''"
+          :value="JSON.stringify({content: profileExtraEventsData})"
+        >
       </v-flex>
     </v-layout>
     <v-layout 
@@ -452,6 +457,9 @@ export default {
     },
     profileMealData: function() {
       return this.$store.getters.getProfileMealData(this.id)
+    },
+    profileExtraEventsData: function() {
+      return this.$store.getters.getProfileExtraEventsData(this.id)
     },
     profileBusSeatId: function() {
       return this.$store.getters.getProfileBusSeatId(this.id)
