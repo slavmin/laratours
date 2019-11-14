@@ -126,7 +126,6 @@ export default {
   created() {
     this.fetchAttendant()
     this.fetchCities()
-    console.log(this.allAttendant)
   },
   methods: {
     ...mapActions([

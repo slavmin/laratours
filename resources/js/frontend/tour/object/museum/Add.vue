@@ -81,12 +81,21 @@
                       outline
                       required
                     />
-                    <v-select
-                      v-model="city"
-                      :items="cities"
+                    <!-- <v-select
                       label="Город"
                       item-text="name"
                       item-value="id"
+                      outline
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      color="#aa282a"
+                      required
+                    /> -->
+                    <v-autocomplete
+                      v-model="city"
+                      :items="cities"
+                      item-text="name"
+                      item-value="id"
+                      label="Город"
                       outline
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
@@ -276,6 +285,14 @@ export default {
       console.log(this.details)
     },
     setDefaults(){},
+    customFilter (item, queryText, itemText) {
+      const textOne = item.name.toLowerCase()
+      const textTwo = item.abbr.toLowerCase()
+      const searchText = queryText.toLowerCase()
+
+      return textOne.indexOf(searchText) > -1 ||
+        textTwo.indexOf(searchText) > -1
+    },
   }
 };
 </script>

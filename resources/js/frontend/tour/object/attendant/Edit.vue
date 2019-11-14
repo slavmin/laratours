@@ -5,7 +5,6 @@
     lazy
     hide-overlay 
     transition="dialog-bottom-transition"
-    @input="setDefaults"
   >
     <template v-slot:activator="{ on }">
       <v-btn 
@@ -87,7 +86,7 @@
                       outline
                       required
                     />
-                    <v-select
+                    <!-- <v-select
                       v-model="city"
                       :items="allCities"
                       label="Город"
@@ -97,6 +96,19 @@
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
                       multiple
+                      required
+                    /> -->
+                    <v-autocomplete
+                      v-model="city"
+                      :items="allCities"
+                      item-text="name"
+                      item-value="id"
+                      label="Город"
+                      outline
+                      multiple
+                      chips
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      color="#aa282a"
                       required
                     />
                     <input 
@@ -290,16 +302,13 @@ export default {
       this.languages = data.languages
       this.secretPhone = data.contacts.secretPhone
     }
+    console.log(this.city, this.allCities, JSON.parse(this.attendant.extra))
   },
   methods: {
     ...mapActions([
       'fetchCities',
       'fetchMeal'
     ]),
-    log() {
-      console.log(this.details)
-    },
-    setDefaults(){},
   }
 };
 </script>

@@ -81,13 +81,25 @@
                       outline
                       required
                     />
-                    <v-select
+                    <!-- <v-select
                       v-model="city"
                       :items="allCities"
                       label="Город"
                       item-text="name"
                       item-value="id"
                       outline
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      color="#aa282a"
+                      required
+                    /> -->
+                    <v-autocomplete
+                      v-model="city"
+                      :items="allCities"
+                      item-text="name"
+                      item-value="id"
+                      label="Город"
+                      outline
+                      multiple
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
                       required

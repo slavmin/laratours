@@ -342,7 +342,7 @@ export default {
           }
           break
         default:
-        console.log('error data: ', data, profile, priceList)
+        console.log('error data: ', data, profile)
       }
       // console.log(profile.name)
       if (profile.name != '') {
@@ -400,9 +400,11 @@ export default {
         stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
         stateProfile.isRfIntPass = dataProfile.isRfIntPass == 'true' ? true : false
-        stateProfile.extraEventsPrice = JSON.parse(dataProfile.extraEventsData).content.extraEventsPrice
-        stateProfile.extraEventsCommission = JSON.parse(dataProfile.extraEventsData).content.extraEventsCommission
-        stateProfile.extraEventsIdArray = JSON.parse(dataProfile.extraEventsData).content.extraEventsIdArray
+        if (dataProfile.extraEventsData) {
+          stateProfile.extraEventsPrice = JSON.parse(dataProfile.extraEventsData).content.extraEventsPrice
+          stateProfile.extraEventsCommission = JSON.parse(dataProfile.extraEventsData).content.extraEventsCommission
+          stateProfile.extraEventsIdArray = JSON.parse(dataProfile.extraEventsData).content.extraEventsIdArray
+        }
         console.log(stateProfile, dataProfile)
       }
     },

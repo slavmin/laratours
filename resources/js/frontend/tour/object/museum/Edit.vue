@@ -88,12 +88,23 @@
                       outline
                       required
                     />
-                    <v-select
+                    <!-- <v-select
                       v-model="city"
                       :items="cities"
                       label="Город"
                       item-text="name"
                       item-value="id"
+                      outline
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      color="#aa282a"
+                      required
+                    /> -->
+                    <v-autocomplete
+                      v-model="city"
+                      :items="cities"
+                      item-text="name"
+                      item-value="id"
+                      label="Город"
                       outline
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
@@ -289,10 +300,6 @@ export default {
     this.phone = museumInfo.contacts.phone
     this.staffName = museumInfo.staff.name
     this.staffPhone = museumInfo.staff.phone
-  },
-  mounted() {
-    console.log('museum mounted: ', this.museum)
-    console.log('cities list:', this.city_id, this.cities)
   },
   methods: {
     setDefaults() {
