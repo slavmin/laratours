@@ -292,6 +292,7 @@ export default {
   },
   mounted() {
     console.log('museum mounted: ', this.museum)
+    console.log('cities list:', this.city_id, this.cities)
   },
   methods: {
     setDefaults() {
