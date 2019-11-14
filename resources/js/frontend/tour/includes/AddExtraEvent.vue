@@ -38,6 +38,28 @@
         </v-layout>
       </li>
     </ul> 
+    <v-btn
+      color="red"
+      dark
+      flat
+      @click="showDetails = !showDetails"
+    >
+      {{ showDetails ? 'Скрыть' : 'Дебаг' }}
+      <v-icon right>
+        expand_{{ showDetails ? 'less' : 'more' }}
+      </v-icon>
+    </v-btn>
+    <div v-if="showDetails">
+      {{ `customer type: ${customerType}` }}
+      <br>
+      {{ `customer age: ${customerAge}` }}
+      <v-btn 
+        color="red"
+        @click="logPrice"
+      >
+        Price to console
+      </v-btn>
+    </div>
   </v-layout>
 </template>
 
@@ -82,6 +104,7 @@ export default {
   data() {
     return {
       choosenExtraEvents: [],
+      showDetails: false,
     }
   },
   computed: {
@@ -132,6 +155,9 @@ export default {
       })
       this.updateOrderPrice()
     },
+    logPrice() {
+      console.log(this.extraEventsArray)
+    }
   }
 }
 </script>

@@ -338,13 +338,13 @@ export default {
               profileCommission = price.commissionStandardPrice - price.standardPrice
               break
             default:
-              console.log('error')
+              console.log('error', profile, priceList)
           }
           break
         default:
-        console.log('error data: ', data)
+        console.log('error data: ', data, profile, priceList)
       }
-      console.log(profile.name)
+      // console.log(profile.name)
       if (profile.name != '') {
         profile.price = profilePrice + profile.extraEventsPrice
         profile.commission = profileCommission + profile.extraEventsCommission
@@ -573,23 +573,24 @@ export default {
             if (!price) {
               price = eventPriceList.find(price => price.customerName.includes('Взросл'))         
             }
-            // console.log('chd price: ', price)
+            // console.log('chd price: ', price, eventPriceList)
 
             break
           case 'PENS':
             price = eventPriceList.find((price) => price.customerAge && JSON.parse(price.customerAge).isPens)
             
-            // console.log('pens price: ', price)
+            // console.log('pens price: ', price, eventPriceList)
             break
           case 'FRGN':
             price = eventPriceList.find(price => price.customerName.includes('Иностр'))
             
-            // console.log('frgn price: ', price)
+            // console.log('frgn price: ', price, eventPriceList)
+            break
           case 'ADL':
             // console.log(eventPriceList)
             price = eventPriceList.find(price => price.customerName.includes('Взросл'))
             
-            // console.log('adl price: ', price)
+            // console.log('adl price: ', price, eventPriceList)
             break
           default:
           // console.log('error in extra events: ', data)
