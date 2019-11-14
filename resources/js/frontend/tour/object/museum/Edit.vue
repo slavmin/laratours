@@ -290,6 +290,9 @@ export default {
     this.staffName = museumInfo.staff.name
     this.staffPhone = museumInfo.staff.phone
   },
+  mounted() {
+    console.log('museum mounted: ', this.museum)
+  },
   methods: {
     setDefaults() {
 
