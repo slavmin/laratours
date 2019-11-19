@@ -101,6 +101,12 @@
                 label="Стаж категории D"
               />
             </v-flex>
+            <v-flex xs12>
+              <v-text-field
+                v-model="driver.license"
+                label="Водительское удостоверение"
+              />
+            </v-flex>
           </v-layout>
           <v-layout 
             row 
@@ -228,6 +234,7 @@ export default {
         name: '',
         dob: '',
         exp: 0,
+        license: '',
       },
       drivers: [],
       bus: {
@@ -259,6 +266,7 @@ export default {
         name: '',
         dob: '',
         exp: 0,
+        license: '',
       }
     },
     clearBus() {

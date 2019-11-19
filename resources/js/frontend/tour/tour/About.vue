@@ -15,7 +15,7 @@
           dark 
           v-on="on"
         >
-          О туре
+          Программа
         </v-btn>
       </template>
       <v-card>

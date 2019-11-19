@@ -132,6 +132,9 @@
             <About 
               :tour="props.item"
             />
+            <BusNotify
+              :tour="props.item"
+            />
           </td>
           <td
             :class="props.item.published ? '' : 'unpublished'"
@@ -234,6 +237,7 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import CopyTour from './CopyTour'
 import TablePagination from './TablePagination'
+import BusNotify from '../includes/documents/BusNotify'
 export default {
 
   name: 'TourTable',
@@ -243,6 +247,7 @@ export default {
     Publish,
     CopyTour,
     TablePagination,
+    BusNotify,
   },
   props: {
     token: {
@@ -277,7 +282,7 @@ export default {
         { text: 'Тип тура', value: 'type' },
         { text: 'Дней', value: 'days' },
         { text: 'Стоимость', value: 'price' },
-        { text: 'Описание', value: 'about' },
+        { text: 'Документы', value: 'docs' },
         { text: 'Забронировано', value: 'ordered' },
         { text: 'Создан', value: 'created' },
         { text: 'Действия', value: 'actions' },
