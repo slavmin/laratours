@@ -244,7 +244,9 @@
                     </v-btn>
                   </v-layout>
                   <div v-if="showDocs">
-                    <TransportDocs />
+                    <TransportDocs 
+                      @update="updateTransportData"
+                    />
                   </div>
                 </v-flex>
               </v-layout>
@@ -372,6 +374,8 @@ export default {
       showScheme: false,
       currentScheme: {},
       showDocs: false,
+      drivers: [],
+      busDocs: {},
     }
   },
   computed: {
@@ -381,6 +385,8 @@ export default {
       result.prices = this.getPricesArray()
       result.grade = this.grade
       result.scheme = this.currentScheme
+      result.drivers = this.drivers
+      result.busDocs = this.busDocs
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
@@ -507,6 +513,10 @@ export default {
     updateScheme(scheme) {
       this.currentScheme = scheme
     },
+    updateTransportData(data) {
+      this.drivers = data.drivers
+      this.busDocs = data.bus
+    }
   }
 };
 </script>

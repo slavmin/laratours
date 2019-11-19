@@ -182,12 +182,15 @@
                   >
                     <v-btn 
                       small
-                      outline
+                      flat
                       color="#aa282a"
                       dark
                       @click="showScheme = !showScheme"
                     >
                       {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
+                      <v-icon right>
+                        expand_{{ showScheme ? 'less' : 'more' }}
+                      </v-icon>
                     </v-btn>
                   </v-layout>
                   <div v-if="showScheme">
@@ -199,6 +202,39 @@
                     />
                   </div>
                 </v-flex>   
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                mt-5
+              >
+                <v-flex>
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-start  
+                  >
+                    <v-btn 
+                      small
+                      flat
+                      color="#aa282a"
+                      dark
+                      @click="showDocs = !showDocs"
+                    >
+                      {{ showDocs ? 'Скрыть' : 'Документы' }}
+                      <v-icon right>
+                        expand_{{ showDocs ? 'less' : 'more' }}
+                      </v-icon>
+                    </v-btn>
+                  </v-layout>
+                  <div v-if="showDocs">
+                    <TransportDocs 
+                      edit-mode
+                      :bus-data="JSON.parse(item.extra)"
+                      @update="updateTransportData"
+                    />
+                  </div>
+                </v-flex>
               </v-layout>
               <v-layout 
                 row 
@@ -226,11 +262,13 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Scheme from './Scheme'
+import TransportDocs from './TransportDocs'
 export default {
 
   name: 'EditObjectables',
   components: {
     Scheme,
+    TransportDocs,
   },
   props: {
     citiesSelect: {
@@ -318,6 +356,9 @@ export default {
       currentScheme: {},
       initialScheme: {},
       showScheme: false,
+      showDocs: false,
+      drivers: [],
+      busDocs: {},
     }
   },
   computed: {
@@ -327,6 +368,8 @@ export default {
       result.prices = this.getPricesArray()
       result.grade = this.grade
       result.scheme = this.currentScheme
+      result.drivers = this.drivers
+      result.busDocs = this.busDocs
       // if (JSON.parse(this.editItem.extra).scheme != undefined) {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
@@ -386,6 +429,10 @@ export default {
       extra.scheme = scheme
       this.item.extra = JSON.stringify(extra)
       console.log(scheme)
+    },
+    updateTransportData(data) {
+      this.drivers = data.drivers
+      this.busDocs = data.bus
     }
   }
 };

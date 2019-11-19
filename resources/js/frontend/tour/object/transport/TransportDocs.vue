@@ -29,7 +29,7 @@
             row 
             wrap
           > 
-            <table class="grey--text drivers-table">
+            <table class="grey--text drivers-table mb-5">
               <th>
                 ФИО
               </th>
@@ -70,7 +70,9 @@
             </table>
             <v-divider />
           </v-layout>
-          Добавить водителя:
+          <h4 class="grey--text text--darken-1 mb-2">
+            Добавить водителя:
+          </h4>
           <v-layout 
             row 
             wrap
@@ -133,8 +135,75 @@
           <h4 class="grey--text text--darken-1 mb-2">
             Данные по транспортному средству:
           </h4>
-          Номер Диагностическая карта Свидетельство регистрации ТС
-          Наличие Глонасс Эраглонасс Страховка
+          <v-layout 
+            row 
+            wrap
+          >
+            <v-flex 
+              xs12
+              md6  
+            >
+              <v-text-field
+                v-model="bus.regNumber"
+                label="Госномер"
+              />
+            </v-flex>
+            <v-flex 
+              xs12
+              md6  
+            >
+              <v-text-field
+                v-model="bus.diagCard"
+                label="Диагностическая карта"
+              />
+            </v-flex>  
+            <v-flex 
+              xs12
+              md6  
+            >
+              <v-text-field
+                v-model="bus.regCert"
+                label="Свидетельство о регистрации ТС"
+              />
+            </v-flex>
+            <v-flex 
+              xs12
+              md6  
+            >
+              <v-text-field
+                v-model="bus.insurance"
+                label="Страховка"
+              />
+            </v-flex>
+            <v-flex>
+              <v-switch
+                v-model="bus.glonass"
+                color="#aa282a"
+                label="Глонасс"
+              />
+            </v-flex>
+            <v-flex>
+              <v-switch
+                v-model="bus.eraGlonass"
+                color="#aa282a"
+                label="Эра-глонасс"
+              />
+            </v-flex>
+          </v-layout>
+          <v-layout 
+            row 
+            wrap
+          >
+            <v-btn 
+              color="#aa282a"
+              dark
+              flat
+              @click="clearBus"
+            >
+              Очистить
+            </v-btn>
+            <v-spacer />
+          </v-layout>
         </v-flex> 
       </v-layout>
     </v-card-text>
@@ -144,6 +213,15 @@
 <script>
 export default {
   name: 'TransportDocs',
+  props: {
+    editMode: Boolean,
+    busData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       driver: {
@@ -152,6 +230,27 @@ export default {
         exp: 0,
       },
       drivers: [],
+      bus: {
+        regNumber: '',
+        diagCard: '',
+        regCert: '',
+        glonass: false,
+        eraGlonass: false,
+        insurance: '',
+      }
+    }
+  },
+  updated() {
+    this.$emit('update', {
+      drivers: this.drivers,
+      bus: this.bus,
+    })
+  },
+  mounted() {
+    if (this.editMode) {
+    //  console.log(this.busData)
+      this.drivers = this.busData.drivers
+      this.bus = this.busData.busDocs
     }
   },
   methods: {
@@ -160,6 +259,16 @@ export default {
         name: '',
         dob: '',
         exp: 0,
+      }
+    },
+    clearBus() {
+      this.bus = {
+        regNumber: '',
+        diagCard: '',
+        regCert: '',
+        glonass: false,
+        eraGlonass: false,
+        insurance: '',
       }
     },
     addDriver() {
