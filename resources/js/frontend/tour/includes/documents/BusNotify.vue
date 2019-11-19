@@ -141,7 +141,7 @@ export default {
           let textArray = []
           console.log(driverNumber)
           textArray.push(new TextRun({
-            text: `${driverNumber}. `,
+            text: `${driverNumber + 1}. `,
             bold: true
           }))
           textArray.push(new TextRun({
