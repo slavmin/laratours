@@ -197,12 +197,15 @@
                   >
                     <v-btn 
                       small
-                      outline
+                      flat
                       color="#aa282a"
                       dark
                       @click="showScheme = !showScheme"
                     >
                       {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
+                      <v-icon right>
+                        expand_{{ showScheme ? 'less' : 'more' }}
+                      </v-icon>
                     </v-btn>
                   </v-layout>
                   <div v-if="showScheme">
@@ -215,6 +218,35 @@
                     />
                   </div>
                 </v-flex>   
+              </v-layout>
+              <v-layout 
+                row 
+                wrap
+                mt-5
+              >
+                <v-flex>
+                  <v-layout 
+                    row 
+                    wrap
+                    justify-start  
+                  >
+                    <v-btn 
+                      small
+                      flat
+                      color="#aa282a"
+                      dark
+                      @click="showDocs = !showDocs"
+                    >
+                      {{ showDocs ? 'Скрыть' : 'Документы' }}
+                      <v-icon right>
+                        expand_{{ showDocs ? 'less' : 'more' }}
+                      </v-icon>
+                    </v-btn>
+                  </v-layout>
+                  <div v-if="showDocs">
+                    <TransportDocs />
+                  </div>
+                </v-flex>
               </v-layout>
               <v-layout 
                 row 
@@ -242,11 +274,13 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import Scheme from './Scheme'
+import TransportDocs from './TransportDocs'
 export default {
 
   name: 'AddObjectables',
   components: {
     Scheme,
+    TransportDocs,
   },
   props: {
     citiesSelect: {
@@ -337,6 +371,7 @@ export default {
       },
       showScheme: false,
       currentScheme: {},
+      showDocs: false,
     }
   },
   computed: {
