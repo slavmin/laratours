@@ -139,6 +139,7 @@ export default {
       'updateProfilePrice',
       'updateResetProfileFlag',
       'updateOrderPrice',
+      'updateOrderCommission'
     ]),
     choose(event) {
       this.updateProfileExtraEvents({
@@ -154,6 +155,7 @@ export default {
         name: this.name,
       })
       this.updateOrderPrice()
+      this.updateOrderCommission()
     },
     logPrice() {
       console.log(this.extraEventsArray)
