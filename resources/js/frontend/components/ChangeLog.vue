@@ -30,7 +30,7 @@
             <span
               class="body-2"
             >
-              {{ `${item.date}: ` }}
+              {{ `${formatDate(item.date)}: ` }}
             </span>
             <ul class="changes-list">
               <li
@@ -59,6 +59,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 const allNews =  './ChangeLog.json'
 import moment from 'moment'
 export default {
@@ -66,55 +67,7 @@ export default {
   data () {
     return {
       dialog: false,
-      allNews: [
-        {
-          date: moment('20191030').locale('ru-ru').format('LL'),
-          changes: [
-            { 
-              forAgency: true,
-              text: 'Исправлено отображение списка обновлений.'
-            },
-          ]
-        },
-        {
-          date: moment('20191028').locale('ru-ru').format('LL'),
-          changes: [
-            { 
-              forAgency: true,
-              text: 'Добавлены недостающие поля в реквизитах компании.'
-            },
-            { 
-              forAgency: true,
-              text: 'Имя пользователя в меню навбара убрано внутрь выпадающего меню.'
-            },
-            { 
-              forAgency: true,
-              text: 'Уменьшен логотип TourClick.'
-            },
-            { 
-              forAgency: false,
-              text: 'Убран ввод суммы по заказу на стороне Агентства.'
-            },
-            { 
-              forAgency: false,
-              text: 'Добавлено брендирование "Алфавит".'
-            },
-            { 
-              forAgency: false,
-              text: 'Скрыт выбор питания при оформлении заказа.'
-              
-            },
-            { 
-              forAgency: true,
-              text: 'Убраны лишние ссылки из "Управления" у Агентства.'
-            },
-            { 
-              forAgency: true,
-              text:'Добавлен этот компонент.',
-            }
-          ]
-        }
-      ]
+      allNews: [],
     }
   },
   computed: {
@@ -137,6 +90,18 @@ export default {
         result = this.allNews
       }
       return result
+    }
+  },
+  mounted() {
+    axios.get('/changelog.json')
+      .then((res) => {
+        this.allNews = res.data
+      })
+      .catch(e => console.log('changelog error: ', e))
+  },
+  methods: {
+    formatDate(date) {
+      return moment(date).locale('ru-ru').format('LL')
     }
   }
 }
