@@ -37,6 +37,9 @@
                 Дата рождения
               </th>
               <th>
+                Вод. удостоверение
+              </th>
+              <th>
                 Стаж
               </th>
               <th>
@@ -51,6 +54,9 @@
                 </td>
                 <td>
                   {{ item.dob }}
+                </td>
+                <td>
+                  {{ item.license }}
                 </td>
                 <td>
                   {{ item.exp }}
