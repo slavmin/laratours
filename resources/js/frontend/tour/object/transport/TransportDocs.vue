@@ -65,6 +65,16 @@
                   <v-btn 
                     small
                     fab
+                    flat
+                    dark
+                    color="yellow"
+                    @click="editDriver(item)"
+                  >
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <v-btn 
+                    small
+                    fab
                     dark
                     color="red"
                     @click="removeDriver(item)"
@@ -127,17 +137,37 @@
               Очистить
             </v-btn>
             <v-spacer />
+            <!-- Add new driver -->
             <v-btn 
-              v-if="driver.name != ''"
+              v-if="!editDriverMode"
               color="#aa282a"
               dark
+              :disable="driver.name == ''"
               @click="addDriver"
             >
               Добавить
               <v-icon right>
                 add
               </v-icon>
+            </v-btn> 
+            <!-- Edit driver -->
+            <v-btn 
+              v-if="editDriverMode"
+              color="#aa282a"
+              dark
+              flat
+              @click="cancelEditDriver"
+            >
+              Отменить изменения
             </v-btn>  
+            <v-btn 
+              v-if="editDriverMode"
+              color="#aa282a"
+              dark
+              @click="addDriver"
+            >
+              Сохранить
+            </v-btn> 
           </v-layout>
         </v-flex>
         <v-flex
@@ -250,7 +280,9 @@ export default {
         glonass: false,
         eraGlonass: false,
         insurance: '',
-      }
+      },
+      editDriverMode: false,
+      prevDriverData: {},
     }
   },
   updated() {
@@ -258,6 +290,9 @@ export default {
       drivers: this.drivers,
       bus: this.bus,
     })
+  },
+  updated() {
+    console.log(this.prevDriverData, this.driver)
   },
   mounted() {
     if (this.editMode) {
@@ -291,6 +326,18 @@ export default {
     },
     removeDriver(item) {
       this.drivers = this.drivers.filter(driver => driver != item)
+    },
+    editDriver(driver) {
+      this.editDriverMode = true
+      this.prevDriverData = Object.assign({}, driver)
+      this.removeDriver(driver)
+      this.driver = driver
+    },
+    cancelEditDriver() {
+      this.drivers.push(this.prevDriverData)
+      this.prevDriverData = {}
+      this.driver = {}
+      this.editDriverMode = false
     }
   }
 }
