@@ -514,6 +514,7 @@ export default {
       this.currentScheme = scheme
     },
     updateTransportData(data) {
+      console.log('transportdata updated')
       this.drivers = data.drivers
       this.busDocs = data.bus
     }

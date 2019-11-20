@@ -291,9 +291,6 @@ export default {
       bus: this.bus,
     })
   },
-  updated() {
-    console.log(this.prevDriverData, this.driver)
-  },
   mounted() {
     if (this.editMode) {
     //  console.log(this.busData)
