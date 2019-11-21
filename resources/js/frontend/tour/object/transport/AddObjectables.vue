@@ -421,11 +421,9 @@ export default {
       this.price0 = 0
       this.price1 = 0
       this.showScheme = false
-      console.log('closed', this.currentScheme)
     },
     save() {
       this.dialog = false
-      console.log('saved!')
     },
     mode() {
       this.edit ? this.editModeOn() : this.setDefaultValues()
@@ -443,7 +441,6 @@ export default {
       this.cityId = 0
       this.description = ''
       this.companyIsNotSelected = false
-      // console.log('set to default')
     },
     showAddCompany() {
       this.show.company = false
@@ -483,7 +480,6 @@ export default {
       this.result.description = this.description
       this.result.transportCompanyId = this.selectedCompany
       this.result.prices = this.getPricesArray()
-      console.log(this.result)
       this.addTransport(this.result)
       this.addTransportAlert = true
       this.result = {}
@@ -514,7 +510,6 @@ export default {
       this.currentScheme = scheme
     },
     updateTransportData(data) {
-      console.log('transportdata updated')
       this.drivers = data.drivers
       this.busDocs = data.bus
     }

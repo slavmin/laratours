@@ -415,7 +415,6 @@ export default {
       this.cityId = 0
       this.description = ''
       this.companyIsNotSelected = false
-      // console.log('set to default')
     },
     getPricesArray() {
       return [ 
@@ -428,10 +427,8 @@ export default {
       let extra = JSON.parse(this.item.extra)
       extra.scheme = scheme
       this.item.extra = JSON.stringify(extra)
-      console.log(scheme)
     },
     updateTransportData(data) {
-      console.log('transportdata is updated: ', data)
       this.drivers = data.drivers
       this.busDocs = data.bus
     }

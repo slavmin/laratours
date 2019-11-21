@@ -293,7 +293,6 @@ export default {
   },
   mounted() {
     if (this.editMode) {
-    //  console.log(this.busData)
       this.drivers = this.busData.drivers
       this.bus = this.busData.busDocs
     }
