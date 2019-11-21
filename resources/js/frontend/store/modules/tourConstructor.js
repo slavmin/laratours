@@ -230,6 +230,7 @@ export default {
                   busName: obj.name,
                   driver: n + 1,
                   hotel: undefined,
+                  isHotelSngl: driver.isHotelSngl,
                   meal: undefined,
                   correction: 0,
                   commission: 0,
@@ -486,6 +487,7 @@ export default {
               events: [],
               options: {
                 hotel: false,
+                isHotelSngl: guide.isHotelSngl,
                 meal: false,
                 correction: 0,
                 commission: 0,
@@ -548,6 +550,7 @@ export default {
             events: [],
             options: {
               hotel: false,
+              isHotelSngl: attendant.isHotelSngl,
               meal: false,
               correction: 0,
               commission: 0,
@@ -689,7 +692,16 @@ export default {
       state.tour.options.drivers.forEach((driver) => {
         let total = 0
         if (driver.hotelPrice) {
-          driver.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+          driver.hotelPrice.forEach((room) => {
+            switch(driver.isHotelSngl) {
+              case true:
+                total += parseFloat(room.hotelSnglPrice)
+                break
+              default: 
+                total += parseFloat(room.hotelStdPrice)
+                break
+            }
+          })
         }
         if (driver.mealPrice) {
           driver.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
@@ -758,7 +770,19 @@ export default {
         state.tour.guide.forEach((guide) => {
           let total = 0
           if (guide.hotelPrice) {
-            guide.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+            guide.hotelPrice.forEach((room) => {
+              console.log(guide)
+              switch(guide.guide.options.isHotelSngl) {
+                case true:
+                  console.log('guide single price')
+                  total += parseFloat(room.hotelSnglPrice)
+                  break
+                default: 
+                  console.log('guide std price')
+                  total += parseFloat(room.hotelStdPrice)
+                  break
+              }
+            })
           }
           if (guide.mealPrice) {
             guide.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
@@ -830,7 +854,19 @@ export default {
           state.tour.attendant.forEach((attendant) => {
             let total = 0
             if (attendant.hotelPrice) {
-              attendant.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+              attendant.hotelPrice.forEach((room) => {
+                console.log(attendant)
+                switch(attendant.attendant.options.isHotelSngl) {
+                  case true:
+                    console.log('attendant single price')
+                    total += parseFloat(room.hotelSnglPrice)
+                    break
+                  default: 
+                    console.log('attendant std price')
+                    total += parseFloat(room.hotelStdPrice)
+                    break
+                }
+              })
             }
             if (attendant.mealPrice) {
               attendant.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))

@@ -85,6 +85,13 @@
               label="Проживание"
               color="#aa282a" 
             />
+            <v-checkbox
+              v-if="options.hotel"
+              v-model="options.isHotelSngl"
+              label="Сингл"
+              color="#aa282a" 
+            />
+            <v-divider />
             <v-switch 
               v-model="options.meal"
               label="Питание"
@@ -150,6 +157,7 @@ export default {
       showAttendantDetails: false,
       options: {
         hotel: false,
+        isHotelSngl: true,
         meal: false,
       },
       showEvents: false,

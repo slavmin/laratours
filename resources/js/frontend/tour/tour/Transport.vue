@@ -183,6 +183,13 @@
               label="Проживание"
               color="#aa282a" 
             />
+            <v-checkbox
+              v-if="drivers[i - 1].hotel"
+              v-model="drivers[i - 1].isHotelSngl"
+              label="Сингл"
+              color="#aa282a" 
+            />
+            <v-divider />
             <v-switch 
               v-model="drivers[i - 1].meal"
               label="Питание"
@@ -234,7 +241,7 @@ export default {
     return {
       showDriverDetails: false,
       driversCount: 1,
-      drivers: [{hotel: false, meal: false,}],
+      drivers: [{hotel: false, isHotelSngl: true, meal: false,}],
     }
   },
   computed: {
@@ -291,6 +298,7 @@ export default {
       this.driversCount += 1
       this.drivers.push({
         hotel: false,
+        isHotelSngl: true,
         meal: false,
       })
     },

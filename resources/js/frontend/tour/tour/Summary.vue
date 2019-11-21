@@ -676,9 +676,12 @@
                       </span>
                       <br>
                       <span class="body-1 grey--text">
-                        Цена (стандарт): {{ room.hotelStdPrice }}
-                        <br>
-                        Цена (сингл): {{ room.hotelSnglPrice }}
+                        <div v-if="!driver.isHotelSngl">
+                          Цена (в двухместном): {{ room.hotelStdPrice }}
+                        </div>
+                        <div v-if="driver.isHotelSngl">
+                          Цена (сингл): {{ room.hotelSnglPrice }}
+                        </div>
                       </span>
                     </div>
                   </div>
@@ -800,9 +803,12 @@
                       </span>
                       <br>
                       <span class="body-1 grey--text">
-                        Цена (стандарт): {{ room.hotelStdPrice }}
-                        <br>
-                        Цена (сингл): {{ room.hotelSnglPrice }}
+                        <div v-if="!guide.guide.options.isHotelSngl">
+                          Цена (в двухместном): {{ room.hotelStdPrice }}
+                        </div>
+                        <div v-if="guide.guide.options.isHotelSngl">
+                          Цена (сингл): {{ room.hotelSnglPrice }}
+                        </div>
                       </span>
                     </div>
                   </div>
@@ -944,9 +950,12 @@
                       </span>
                       <br>
                       <span class="body-1 grey--text">
-                        Цена (стандарт): {{ room.hotelStdPrice }}
-                        <br>
-                        Цена (сингл): {{ room.hotelSnglPrice }}
+                        <div v-if="!attendant.attendant.options.isHotelSngl">
+                          Цена (в двухместном): {{ room.hotelStdPrice }}
+                        </div>
+                        <div v-if="attendant.attendant.options.isHotelSngl">
+                          Цена (сингл): {{ room.hotelSnglPrice }}
+                        </div>
                       </span>
                     </div>
                   </div>
