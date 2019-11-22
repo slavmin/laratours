@@ -146,6 +146,9 @@ export default {
     async updateCanSave({ commit }, flag) {
       commit('setCanSave', flag)
     },
+    async updateRoundPrices({ commit, getters }, roundData) {
+      commit('setRoundPrices', { getters, roundData })
+    }
   },
   mutations: {
     setAllTourOptions(state, tourOptions) {
@@ -771,14 +774,11 @@ export default {
           let total = 0
           if (guide.hotelPrice) {
             guide.hotelPrice.forEach((room) => {
-              console.log(guide)
               switch(guide.guide.options.isHotelSngl) {
                 case true:
-                  console.log('guide single price')
                   total += parseFloat(room.hotelSnglPrice)
                   break
                 default: 
-                  console.log('guide std price')
                   total += parseFloat(room.hotelStdPrice)
                   break
               }
@@ -855,14 +855,11 @@ export default {
             let total = 0
             if (attendant.hotelPrice) {
               attendant.hotelPrice.forEach((room) => {
-                console.log(attendant)
                 switch(attendant.attendant.options.isHotelSngl) {
                   case true:
-                    console.log('attendant single price')
                     total += parseFloat(room.hotelSnglPrice)
                     break
                   default: 
-                    console.log('attendant std price')
                     total += parseFloat(room.hotelStdPrice)
                     break
                 }
@@ -948,14 +945,11 @@ export default {
           let total = 0
           if (freeAdl.hotelPrice) {
             freeAdl.hotelPrice.forEach((room) => {
-              console.log(freeAdl)
               switch(freeAdl.options.isHotelSngl) {
                 case true:
-                  console.log('freeAdl single price')
                   total += parseFloat(room.hotelSnglPrice)
                   break
                 default: 
-                  console.log('freeAdl std price')
                   total += parseFloat(room.hotelStdPrice)
                   break
               }
@@ -1729,7 +1723,6 @@ export default {
       })
     },
     reset(state) {
-      console.log('reset: ', state)
       state = {
         editMode: false,
         canSave: false,
@@ -1793,7 +1786,6 @@ export default {
           show: true,
         },
       }
-      console.log('reseted: ', state)
     },
     setManualCommissionPriceValues(state, commissionValue) {
       let com = parseFloat(commissionValue).toFixed(2)
@@ -1816,7 +1808,56 @@ export default {
     },
     setCanSave(state, flag) {
       state.canSave = flag
-    }
+    },
+    setRoundPrices(state, { getters, roundData }) {
+      state.tour.calc.priceList.forEach((price) => {
+        price.nettoStandardPrice = getters.roundFunction({
+          price: price.nettoStandardPrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        })
+        price.nettoSinglePrice = getters.roundFunction({
+          price: price.nettoSinglePrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        })
+        price.nettoAddPrice = getters.roundFunction({
+          price: price.nettoAddPrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        })
+        price.standardPrice = getters.roundFunction({
+          price: price.standardPrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        })
+        price.singlePrice = getters.roundFunction({
+          price: price.singlePrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        }) 
+        price.addPrice = getters.roundFunction({
+          price: price.addPrice,
+          parameter: roundData.parameter, 
+          minusValue: roundData.minusValue, 
+        }) 
+        price.commissionStandardPrice = getters.roundFunction({
+          price: price.commissionStandardPrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        }) 
+        price.commissionSinglePrice = getters.roundFunction({
+          price: price.commissionSinglePrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        }) 
+        price.commissionExtraPrice = getters.roundFunction({
+          price: price.commissionExtraPrice,
+          parameter: roundData.parameter,  
+          minusValue: roundData.minusValue,
+        }) 
+      })
+    },
   },
   state: {
     editMode: false,
@@ -1883,7 +1924,6 @@ export default {
   },
   getters: {
     allState(state) {
-      console.log('req allState')
       return state
     },
     allTourOptions(state) {
@@ -2115,7 +2155,6 @@ export default {
     },
     getActualExtraEvents(state) {
       let result = []
-      console.log('extra events')
       state.actualMuseum.forEach((museum) => {
         museum.objectables.forEach((obj) => {
           if (JSON.parse(obj.extra).isExtra) {
@@ -2129,8 +2168,69 @@ export default {
       return result
     },
     getTourExtraEvents(state) {
-      console.log('tour extra events')
       return state.tour.extraEvents
+    },
+    roundFunction: state => data => {
+      let digitsArray = parseInt(data.price).toString().split('')
+      digitsArray.forEach((digit, i) => {
+        digitsArray[i] = parseInt(digit)
+      })
+      const length = digitsArray.length
+      let result = ''
+      switch (data.parameter) {
+        case '100':
+          // If price is 56, 64, etc. return 100
+          if (digitsArray.length <= 2) {
+            result = 100
+            break
+          }
+          // If already round, ex. 12500
+          if (digitsArray[length - 1] == 0 && 
+              digitsArray[length - 2] == 0) {
+            return (parseInt(data.price) - parseInt(data.minusValue))
+          }
+          // If price is 159, 122, 798
+          digitsArray[length - 1] = 0
+          digitsArray[length - 2] = 0
+          digitsArray[length - 3] += 1
+          for (let k = length - 3; k > 0; k --) {
+            if (digitsArray[k] == 10) {
+              digitsArray[k] = 0
+              digitsArray[k - 1] += 1
+            }
+          }
+          break
+        case '1000':
+          // If price is 856, 164, etc. return 1000
+          if (digitsArray.length <= 3) {
+            result = 1000
+            break
+          }
+          // If already round, ex. 25000
+          if (digitsArray[length - 1] == 0 && 
+              digitsArray[length - 2] == 0 && 
+              digitsArray[length - 3] == 0) {
+            return (parseInt(data.price) - parseInt(data.minusValue))
+          }
+          // If price is 1159, 2122, 8798
+          digitsArray[length - 1] = 0
+          digitsArray[length - 2] = 0
+          digitsArray[length - 3] = 0
+          digitsArray[length - 4] += 1
+          for (let k = length - 4; k > 0; k --) {
+            if (digitsArray[k] == 10) {
+              digitsArray[k] = 0
+              digitsArray[k - 1] += 1
+            }
+          }
+          break
+        default: 
+          return (parseInt(data.price) - parseInt(data.minusValue))
+      }
+      digitsArray.forEach((digit) => {
+        result += digit.toString()
+      })
+      return (parseInt(result) - parseInt(data.minusValue))
     }
   }
 }

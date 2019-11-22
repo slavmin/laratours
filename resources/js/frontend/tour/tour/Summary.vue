@@ -1533,6 +1533,58 @@
         >
           Рассчитать цены для всех типов туристов
         </v-btn>
+        <br>
+        <br>
+        <v-btn
+          dark
+          color="#aa282a"
+          @click="roundPrices"
+        >
+          Округлить цены
+        </v-btn>
+        <br>
+        <v-layout
+          row
+          wrap
+        >
+          <v-spacer />
+          <v-radio-group 
+            v-model="roundPricesParameter" 
+            row
+          >
+            <v-radio 
+              label="до 100" 
+              value="100" 
+            />
+            <v-radio 
+              label="до 1000" 
+              value="1000" 
+            />
+          </v-radio-group>
+        </v-layout>
+        <v-layout
+          row
+          wrap
+        >
+          <v-spacer />
+          <v-radio-group 
+            v-model="roundPricesMinusValue" 
+            row
+          >
+            <v-radio 
+              label="не вычитать" 
+              value="0" 
+            />
+            <v-radio 
+              label="минус 10" 
+              value="10" 
+            />
+            <v-radio 
+              label="минус 100" 
+              value="100" 
+            />
+          </v-radio-group>
+        </v-layout>
       </v-flex>  
     </v-layout>
     <v-layout 
@@ -1625,6 +1677,8 @@ export default {
       showFreeAdls: false,
       commissionManualMode: false,
       commissionManualValue: 0,
+      roundPricesParameter: '100',
+      roundPricesMinusValue: '0',
     };
   },
   computed: {
@@ -1745,6 +1799,7 @@ export default {
       'updateTourAttendant',
       'updateTourStaff',
       'updateTourFreeAdls',
+      'updateRoundPrices',
     ]),
     saveTour() {
       console.log(this.getTour)
@@ -1865,6 +1920,12 @@ export default {
         this.updateTourCommissionPrice()
       }
       this.calculatePriceForEveryCustomer()
+    },
+    roundPrices() {
+      this.updateRoundPrices({
+        parameter: this.roundPricesParameter, 
+        minusValue: this.roundPricesMinusValue
+      })
     },
   },
 };
