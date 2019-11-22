@@ -78,53 +78,55 @@
             class="text-xs-right grey--text"
             :class="props.item.published ? '' : 'unpublished'"
           >
-            Тип туриста:
-            {{ 
-              props.item.extra 
-                ? JSON.parse(props.item.extra).calc.priceList[0].name
-                : '' 
-            }}
-            <br>
-            Нетто:
-            {{ 
-              props.item.extra 
-                ? JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
-                : '' 
-            }}
-            <br>
-            С наценкой:
-            {{ 
-              props.item.extra 
-                ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].standardPrice).toFixed(2)
-                : '' 
-            }}
-            <br>
-            С комиссией:
-            {{ 
-              props.item.extra 
-                ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
-                : '' 
-            }}
-            <v-divider />
-            Комиссия:
-            {{ 
-              props.item.extra 
-                ? parseFloat(
-                  JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice 
-                    - JSON.parse(props.item.extra).calc.priceList[0].standardPrice
-                ).toFixed(2)
-                : '' 
-            }}
-            <br>
-            Прибыль:
-            {{ 
-              props.item.extra 
-                ? parseFloat(
-                  JSON.parse(props.item.extra).calc.priceList[0].standardPrice 
-                    - JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
-                ).toFixed(2)
-                : '' 
-            }}
+            <div v-if="JSON.parse(props.item.extra).calc.priceList[0]">
+              Тип туриста:
+              {{ 
+                props.item.extra 
+                  ? JSON.parse(props.item.extra).calc.priceList[0].name
+                  : '' 
+              }}
+              <br>
+              Нетто:
+              {{ 
+                props.item.extra 
+                  ? JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
+                  : '' 
+              }}
+              <br>
+              С наценкой:
+              {{ 
+                props.item.extra 
+                  ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].standardPrice).toFixed(2)
+                  : '' 
+              }}
+              <br>
+              С комиссией:
+              {{ 
+                props.item.extra 
+                  ? parseFloat(JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
+                  : '' 
+              }}
+              <v-divider />
+              Комиссия:
+              {{ 
+                props.item.extra 
+                  ? parseFloat(
+                    JSON.parse(props.item.extra).calc.priceList[0].commissionStandardPrice 
+                      - JSON.parse(props.item.extra).calc.priceList[0].standardPrice
+                  ).toFixed(2)
+                  : '' 
+              }}
+              <br>
+              Прибыль:
+              {{ 
+                props.item.extra 
+                  ? parseFloat(
+                    JSON.parse(props.item.extra).calc.priceList[0].standardPrice 
+                      - JSON.parse(props.item.extra).calc.priceList[0].nettoStandardPrice
+                  ).toFixed(2)
+                  : '' 
+              }}
+            </div>
           </td>
           <td
             :class="props.item.published ? '' : 'unpublished'"

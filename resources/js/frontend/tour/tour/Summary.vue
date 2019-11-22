@@ -126,7 +126,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(transport.correctedPricePerSeat).toFixed(2) }}  
+                {{ parseInt(transport.correctedPricePerSeat) }}  
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -140,7 +140,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(transport.commissionPricePerSeat).toFixed(2) }}
+                {{ parseInt(transport.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.museum.length != 0">
@@ -176,7 +176,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(event.correctedPrice).toFixed(2) }}
+                {{ parseInt(event.correctedPrice) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -190,7 +190,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(event.commissionPrice).toFixed(2) }}
+                {{ parseInt(event.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.museumCustomOrder.length != 0">
@@ -244,7 +244,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(order.correctedPricePerSeat).toFixed(2) }}
+                {{ parseInt(order.correctedPricePerSeat) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -258,7 +258,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(order.commissionPricePerSeat).toFixed(2) }}
+                {{ parseInt(order.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.hotel.length != 0">
@@ -297,7 +297,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(hotel.correctedPrice).toFixed(2) }}
+                {{ parseInt(hotel.correctedPrice) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -311,7 +311,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(hotel.commissionPrice).toFixed(2) }}
+                {{ parseInt(hotel.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.meal.length != 0">
@@ -361,7 +361,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(meal.correctedPrice).toFixed(2) }}
+                {{ parseInt(meal.correctedPrice) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -375,7 +375,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(meal.commissionPrice).toFixed(2) }}
+                {{ parseInt(meal.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.guide.length != 0">
@@ -421,7 +421,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(guide.correctedPricePerSeat).toFixed(2) }}
+                {{ parseInt(guide.correctedPricePerSeat) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -435,7 +435,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(guide.commissionPricePerSeat).toFixed(2) }}
+                {{ parseInt(guide.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.attendant.length != 0">
@@ -478,7 +478,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(attendant.correctedPricePerSeat).toFixed(2) }}
+                {{ parseInt(attendant.correctedPricePerSeat) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -492,7 +492,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(attendant.commissionPricePerSeat).toFixed(2) }}
+                {{ parseInt(attendant.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.customPrice.length != 0">
@@ -535,7 +535,7 @@
                 />
               </td>
               <td>
-                {{ parseInt(price.correctedPricePerSeat).toFixed(2) }}
+                {{ parseInt(price.correctedPricePerSeat) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -549,7 +549,7 @@
               <td
                 v-show="!commissionManualMode"
               >
-                {{ parseInt(price.commissionPricePerSeat).toFixed(2) }}
+                {{ parseInt(price.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.options.drivers != 0 || getTour.guide.length != 0 || getTour.attendant.length != 0">
@@ -1243,7 +1243,7 @@
                 </div>
               </td>
               <td>
-                {{ getTour.totalPrice.toFixed(2) }}
+                {{ getTour.totalPrice }}
               </td>
               <td>
                 Наценка, %
@@ -1256,7 +1256,7 @@
                 /> 
               </td>
               <td>
-                {{ (getTour.correctedPrice).toFixed(2) }}
+                {{ (getTour.correctedPrice) }}
               </td>
               <td
                 v-show="!commissionManualMode"
@@ -1320,7 +1320,7 @@
               />
             </td>
             <td>
-              {{ parseInt(event.correctedPrice).toFixed(2) }}
+              {{ parseInt(event.correctedPrice) }}
             </td>
             <td
               v-show="!commissionManualMode"
@@ -1334,7 +1334,7 @@
             <td
               v-show="!commissionManualMode"
             >
-              {{ parseInt(event.commissionPrice).toFixed(2) }}
+              {{ parseInt(event.commissionPrice) }}
             </td>
           </tr>
         </table>
@@ -1889,7 +1889,7 @@ export default {
       let customer = this.getTour.calc.priceList.find((item) => {
         return item.id == this.currentCustomerType
       })
-      if (customer.isChd) {
+      if (customer && customer.isChd) {
         return JSON.parse(hotel.obj.extra).priceList.chd.std * hotel.obj.day
       }
       else {

@@ -300,25 +300,25 @@ export default {
         this.updateActualGuide()
         this.updateActualAttendant()
         this.updateConstructorCurrentStage('Options are set')
-        if (this.getEditMode) {
-          this.updateTourTransport()
-          this.updateTourMuseum()
-          this.updateTourHotel()
-          this.updateTourGuide()
-          this.updateTourAttendant()
-          this.updateTourStaff()
-          this.updateTourFreeAdls()
-          this.updateCustomPriceWithNewPassangersCount()
-          this.updateTourTotalPrice()
-          this.updateCorrectedPriceValues()
-          this.updateTourCorrectedPrice()
-          if (!this.commissionManualMode) {
-            this.updateCommissionPriceValues()
-            this.updateTourCommissionPrice()
-          } else {
-            this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
-          }
-        }
+        //if (this.getEditMode) {
+        //  this.updateTourTransport()
+        //  this.updateTourMuseum()
+        //  this.updateTourHotel()
+        //  this.updateTourGuide()
+        //  this.updateTourAttendant()
+        //  this.updateTourStaff()
+        //  this.updateTourFreeAdls()
+        //  this.updateCustomPriceWithNewPassangersCount()
+        //  this.updateTourTotalPrice()
+        //  this.updateCorrectedPriceValues()
+        //  this.updateTourCorrectedPrice()
+        //  if (!this.commissionManualMode) {
+        //    this.updateCommissionPriceValues()
+        //    this.updateTourCommissionPrice()
+        //  } else {
+        //    this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+        //  }
+        //}
       }
     },
     chipRemove(cityId) {

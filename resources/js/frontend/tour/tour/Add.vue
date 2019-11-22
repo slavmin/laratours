@@ -130,7 +130,16 @@
               />
             </v-flex>
           </v-layout>
-        </v-container>    
+          <v-layout
+            class="bottom-sheet"
+            row
+            wrap
+          >
+            <BottomSheet 
+              :token="token"
+            />
+          </v-layout>
+        </v-container>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -146,6 +155,7 @@ import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
 import Services from './Services'
 import Summary from './Summary'
+import BottomSheet from './BottomSheet'
 // import DayConstructor from './DayConstructor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -161,6 +171,7 @@ export default {
     ChooseAttendant,
     Services,
     Summary,
+    BottomSheet,
     // DayConstructor,
   },
   props: {
@@ -377,5 +388,9 @@ export default {
       color: white;
     }
   }
+}
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
 }
 </style>
