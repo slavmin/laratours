@@ -272,7 +272,6 @@ export default {
       'getConstructorCurrentStage',
       'allState',
       'getTour',
-      
     ]),
     showOptions: function() {
       // return false
@@ -335,9 +334,9 @@ export default {
       console.log(this.allTourOptions)
     },
     close() {
-      this.dialog = false
-      this.updateConstructorCurrentStage('Initial stage')
       this.clearStore()
+      console.log(this.allState)
+      this.dialog = false
       // this.reset()
     },
     submitType() {

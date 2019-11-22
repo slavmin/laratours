@@ -119,7 +119,7 @@ export default {
     async updateCommissionPriceValues({ commit }) {
       commit('setCommissionPriceValues')
     },
-    async clearStore({ commit }) {
+    clearStore({ commit }) {
       commit('reset')
     },
     async updateTourStaff({ commit }) {
@@ -947,7 +947,19 @@ export default {
         state.tour.options.freeAdls.forEach((freeAdl) => {
           let total = 0
           if (freeAdl.hotelPrice) {
-            freeAdl.hotelPrice.forEach(room => total += parseFloat(room.hotelStdPrice))
+            freeAdl.hotelPrice.forEach((room) => {
+              console.log(freeAdl)
+              switch(freeAdl.options.isHotelSngl) {
+                case true:
+                  console.log('freeAdl single price')
+                  total += parseFloat(room.hotelSnglPrice)
+                  break
+                default: 
+                  console.log('freeAdl std price')
+                  total += parseFloat(room.hotelStdPrice)
+                  break
+              }
+            })  
           }
           if (freeAdl.mealPrice) {
             freeAdl.mealPrice.forEach(meal => total += parseFloat(meal.mealPrice))
@@ -1717,43 +1729,71 @@ export default {
       })
     },
     reset(state) {
-      state.tour = {
-        id: NaN,
-        options: {
-          name: '',
-          tourType: 0,
-          cities: [],
-          tourGrade: [],
-          tourLanguages: [1],
-          days: NaN,
-          nights: NaN,
-          dateStart: new Date().toISOString().substr(0, 10),
-          qnt: 0,
-          drivers: {
-            hotel: [],
-            meal: [],
+      console.log('reset: ', state)
+      state = {
+        editMode: false,
+        canSave: false,
+        tourOptions: [],
+        tour: {
+          id: NaN,
+          options: {
+            name: '',
+            tourType: 0,
+            cities: [],
+            tourGrade: [],
+            tourLanguages: [1],
+            days: NaN,
+            nights: NaN,
+            dateStart: new Date().toISOString().substr(0, 10),
+            qnt: 0,
+            drivers: {
+              hotel: [],
+              meal: [],
+            },
+            freeAdls: [],
           },
-          freeAdls: [],
+          transport: [],
+          museum: [],
+          museumCustomOrder: [],
+          hotel: [],
+          meal: [],
+          alternativeMeal: [],
+          guide: [],
+          attendant: [],
+          customPrice: [],
+          extraEvents: [],
+          editorsContent: [],
+          totalPrice: NaN,
+          ordered: 0,
+          qnt: 0,
+          calc: {
+            currentCustomer: 0,
+            priceList: [],
+          },
+          correctedPrice: 0,
+          commissionPrice: 0,
         },
-        transport: [],
-        museum: [],
-        museumCustomOrder: [],
-        hotel: [],
-        meal: [],
-        alternativeMeal: [],
-        guide: [],
-        attendant: [],
-        customPrice: [],
-        editorsContent: [],
-        totalPrice: NaN,
-        ordered: 0,
-        qnt: 0,
-        calc: {
-          currentCustomer: 0,
-          priceList: [],
+        constructorCurrentStage: 'Initial stage',
+        // constructorCurrentStage: 'Guide is set',
+        actualCities: [],
+        actualMuseum: [],
+        actualHotel: [],
+        actualMeal: [],
+        actualGuide: [],
+        actualAttendant: [],
+        actualTransport: [],
+        staffErrors: {
+          noHotel: [],
+          noMeal: [],
+          show: true,
         },
-        commissionPrice: 0,
+        freeAdlErrors: {
+          noHotel: [],
+          noMeal: [],
+          show: true,
+        },
       }
+      console.log('reseted: ', state)
     },
     setManualCommissionPriceValues(state, commissionValue) {
       let com = parseFloat(commissionValue).toFixed(2)
@@ -1843,6 +1883,7 @@ export default {
   },
   getters: {
     allState(state) {
+      console.log('req allState')
       return state
     },
     allTourOptions(state) {

@@ -1144,9 +1144,12 @@
                       </span>
                       <br>
                       <span class="body-1 grey--text">
-                        Цена (стандарт): {{ room.hotelStdPrice }}
-                        <br>
-                        Цена (сингл): {{ room.hotelSnglPrice }}
+                        <div v-if="!freeAdl.options.isHotelSngl">
+                          Цена (в двухместном): {{ room.hotelStdPrice }}
+                        </div>
+                        <div v-if="freeAdl.options.isHotelSngl">
+                          Цена (сингл): {{ room.hotelSnglPrice }}
+                        </div>
                       </span>
                     </div>
                   </div>

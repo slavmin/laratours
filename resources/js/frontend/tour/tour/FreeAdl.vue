@@ -117,6 +117,13 @@
                     label="Проживание"
                     color="#aa282a" 
                   />
+                  <v-checkbox
+                    v-if="adl.options.hotel"
+                    v-model="adl.options.isHotelSngl"
+                    label="Сингл"
+                    color="#aa282a" 
+                  />
+                  <v-divider />
                   <v-switch 
                     v-model="adl.options.meal"
                     label="Питание"
@@ -238,6 +245,7 @@ export default {
         daysArray: [],
         options: {
           hotel: false,
+          isHotelSngl: false,
           meal: false,
         },
         showAdlDetails: false,
