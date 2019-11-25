@@ -86,6 +86,7 @@
         <v-text-field
           v-model="companyInfo.bankaccount"
           label="Расчётный счёт"
+          mask="####################"
           name="profile[formal][company_bankaccount]"
           color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
@@ -95,6 +96,7 @@
         <v-text-field
           v-model="companyInfo.bankcorr"
           label="Корреспондентский счет банка"
+          mask="####################"
           name="profile[formal][company_bankcorr]"
           color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"

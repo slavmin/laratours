@@ -36,10 +36,10 @@
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][contactsName]' : ''"
         >
-        <v-checkbox
+        <!-- <v-checkbox
           label="Квота"
           disabled
-        />
+        /> -->
       </v-flex>
       <v-flex 
         xs5

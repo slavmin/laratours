@@ -45,7 +45,7 @@
     },
     "browserslist": {
         "development": "last 1 version",
-        "production": ">2%, Firefox ESR"
+        "production": ">1%, Firefox ESR"
     },
     "jest": {
         "testURL": "http://localhost",

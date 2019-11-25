@@ -38,7 +38,7 @@
         </v-layout>
       </li>
     </ul> 
-    <v-btn
+    <!-- <v-btn
       color="red"
       dark
       flat
@@ -59,7 +59,7 @@
       >
         Price to console
       </v-btn>
-    </div>
+    </div> -->
   </v-layout>
 </template>
 
