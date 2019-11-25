@@ -223,7 +223,7 @@ export default {
     ]),
     days: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
+      for (let i = 1; i <= this.getTour.options.nights; i++) {
         result.push(i)
       } 
       return result

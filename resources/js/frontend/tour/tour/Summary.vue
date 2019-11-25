@@ -585,13 +585,13 @@
                     >
                       hotel
                     </v-icon>
-                    Не выбран отель на нужный день для:
+                    Не выбран отель на нужную ночь для:
                     <ul style="list-style: none;">
                       <li
                         v-for="(error, i) in getStaffErrors.noHotel"
                         :key="`${error.name}-${i}`"
                       >
-                        {{ error.name }}, день: {{ error.day }}
+                        {{ error.name }}, ночь: {{ error.day }}
                       </li>
                     </ul>
                   </p>
@@ -611,7 +611,7 @@
                         v-for="(error, i) in getStaffErrors.noMeal"
                         :key="`${error.name}-${i}`"
                       >
-                        {{ error.name }}, день: {{ error.day }}
+                        {{ error.name }}, ночь: {{ error.day }}
                       </li>
                     </ul>
                   </p>
@@ -669,7 +669,7 @@
                       v-for="(room, r) in driver.hotelPrice"
                       :key="`Room-${r}`"
                     >
-                      День: {{ room.day }}
+                      Ночь: {{ room.day }}
                       <br>
                       <span class="body-1 grey--text">
                         {{ room.hotelName }}, {{ room.roomName }}
@@ -796,7 +796,7 @@
                       v-for="(room, r) in guide.hotelPrice"
                       :key="`Room-${r}`"
                     >
-                      День: {{ room.day }}
+                      Ночь: {{ room.day }}
                       <br>
                       <span class="body-1 grey--text">
                         {{ room.hotelName }}, {{ room.roomName }}
@@ -943,7 +943,7 @@
                       v-for="(room, r) in attendant.hotelPrice"
                       :key="`Room-${r}`"
                     >
-                      День: {{ room.day }}
+                      Ночь: {{ room.day }}
                       <br>
                       <span class="body-1 grey--text">
                         {{ room.hotelName }}, {{ room.roomName }}
@@ -1075,13 +1075,13 @@
                     >
                       hotel
                     </v-icon>
-                    Не выбран отель на нужный день для:
+                    Не выбран отель на нужную Ночь для:
                     <ul style="list-style: none;">
                       <li
                         v-for="(error, i) in getFreeAdlErrors.noHotel"
                         :key="`${error.name}-${i}`"
                       >
-                        {{ error.name }}, день: {{ error.day }}
+                        {{ error.name }}, ночь: {{ error.day }}
                       </li>
                     </ul>
                   </p>
@@ -1137,7 +1137,7 @@
                       v-for="(room, r) in freeAdl.hotelPrice"
                       :key="`FreeAdlRoom-${r}`"
                     >
-                      День: {{ room.day }}
+                      Ночь: {{ room.day }}
                       <br>
                       <span class="body-1 grey--text">
                         {{ room.hotelName }}, {{ room.roomName }}
