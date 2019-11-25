@@ -15,13 +15,8 @@
             {{ props.item.name }}
           </td>
           <td class="text-xs-right">
-            <span 
-              v-for="cityId in JSON.parse(props.item.description).city"
-              :key="cityId"
-              class="grey--text"
-            >
-              {{ getCityName(cityId) }}
-              <br>
+            <span>
+              {{ getCityName(JSON.parse(props.item.description).city) }}
             </span>
           </td>
           <td class="text-xs-right">

@@ -99,9 +99,17 @@
                       item-value="id"
                       label="Город"
                       outline
-                      multiple
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
+                      required
+                    />
+                    <v-text-field
+                      v-model="address"
+                      label="Адрес"
+                      name="address"
+                      color="#aa282a"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
                       required
                     />
                     <input 
@@ -156,6 +164,11 @@
                       v-model="details"
                       type="hidden" 
                       name="description" 
+                    > 
+                    <input 
+                      v-model="details"
+                      type="hidden" 
+                      name="extra" 
                     > 
                     <div class="display-1 mb-3">
                       Контакты:
@@ -250,6 +263,7 @@ export default {
         { id: 7, name: 'Итальянский'},
         { id: 8, name: 'Финский'}
       ],
+      address: '',
     };
   },
   computed: {
@@ -260,6 +274,7 @@ export default {
       return JSON.stringify({
         city: this.city,
         attendant: this.type,
+        address: this.address,
         about: this.about,
         grade: this.grade,
         languages: this.languages,

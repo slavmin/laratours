@@ -81,7 +81,7 @@
                       outline
                       required
                     />
-                    <v-select
+                    <v-autocomplete
                       v-model="city"
                       :items="allCities"
                       label="Город"
@@ -90,6 +90,15 @@
                       outline
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
+                      required
+                    />
+                    <v-text-field
+                      v-model="address"
+                      label="Адрес"
+                      name="address"
+                      color="#aa282a"
+                      :rules="[v => !!v || 'Это обязательное поле']"
+                      outline
                       required
                     />
                     <input 
@@ -221,6 +230,7 @@ export default {
       phone: '+7-',
       staffName: '',
       staffPhone: '+7-',
+      address: '',
     };
   },
   computed: {
@@ -231,6 +241,7 @@ export default {
     details: function () {
       return JSON.stringify({
         mealType: this.type,
+        address: this.address,
         about: this.about,
         contacts: {
           site: this.site,
