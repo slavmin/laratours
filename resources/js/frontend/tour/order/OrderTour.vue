@@ -102,7 +102,7 @@
                         <template v-slot:header>
                           <div 
                             class="title"
-                            style="color: #868080;"
+                            style="color: #aa282a;" 
                           >
                             {{ c == 1 || c == 2 ? 'Основное место ' + c : 'Дополнительное место' }}
                           </div>
