@@ -1211,7 +1211,8 @@ export default {
           (stdPrice * hotel.obj.day * hotel.correction) / 100
         )
         commissionStandardHotel += correctedStandardHotel 
-          + (correctedStandardHotel * hotel.commission / 100)
+          / ((100 -  hotel.commission) / 100)
+        console.log(data, stdPrice, correctedStandardHotel, commissionStandardHotel, hotel)
         const singlePrice = parseInt(data.priceList.adl.sngl)
         correctedSingleHotel += parseInt(
           (singlePrice * hotel.obj.day)
@@ -1219,7 +1220,7 @@ export default {
           (singlePrice * hotel.obj.day * hotel.correction) / 100
         )
         commissionSingleHotel += correctedSingleHotel
-          + (correctedSingleHotel * hotel.commission / 100)
+          / ((100 -  hotel.commission) / 100)
         const extraPrice = parseInt(data.priceList.adl.extra)
         correctedExtraHotel += parseInt(
           (extraPrice * hotel.obj.day)
@@ -1227,7 +1228,7 @@ export default {
           (extraPrice * hotel.obj.day * hotel.correction) / 100
         )
         commissionExtraHotel += correctedExtraHotel
-          + (correctedExtraHotel * hotel.commission / 100)
+          / ((100 -  hotel.commission) / 100)
         // CHD prices
         let isChd = false
         let currentPrice = state.tour.calc.priceList.find((item) => {
@@ -1246,7 +1247,7 @@ export default {
             (stdPrice * hotel.obj.day * hotel.correction) / 100
           )
           commissionStandardHotel = correctedStandardHotel
-            + (correctedStandardHotel * hotel.commission / 100)
+            / ((100 -  hotel.commission) / 100)
           const extraPrice = parseInt(data.priceList.chd.extra)
           correctedExtraHotel += parseInt(
             (extraPrice * hotel.obj.day)
@@ -1254,7 +1255,7 @@ export default {
             (extraPrice * hotel.obj.day * hotel.correction) / 100
           )
           commissionExtraHotel = correctedExtraHotel
-            + (correctedExtraHotel * hotel.commission / 100)
+            / ((100 -  hotel.commission) / 100)
         }
       })
       let calcCustomer = state.tour.calc.priceList.find((item) => {
@@ -1526,8 +1527,9 @@ export default {
         if (transport.commission > 0) {
           transport.commissionPricePerSeat = 
           parseInt(
-            (transport.correctedPricePerSeat + 
-              transport.correctedPricePerSeat * parseInt(transport.commission) / 100)
+            (transport.correctedPricePerSeat / 
+              ((100 - parseInt(transport.commission)) / 100)
+            )
           )
         }
         else {
@@ -1547,7 +1549,7 @@ export default {
         if (museum.commission > 0) {
           museum.commissionPrice = 
             museum.correctedPrice 
-            + (museum.correctedPrice * museum.commission / 100) 
+            / ((100 - museum.commission) / 100) 
         } else {
           museum.commissionPrice = museum.correctedPrice
         }
@@ -1556,8 +1558,8 @@ export default {
       state.tour.museumCustomOrder.forEach((order) => {
         if (order.commission > 0) {
           order.commissionPricePerSeat = 
-            order.correctedPricePerSeat +
-            (order.correctedPricePerSeat * order.commission / 100)
+            order.correctedPricePerSeat /
+            ((100 - order.commission) / 100)
         } else {
           order.commissionPricePerSeat = order.correctedPricePerSeat
         }
@@ -1566,8 +1568,8 @@ export default {
       state.tour.hotel.forEach((hotel) => {
         if (hotel.commission > 0) {
           hotel.commissionPrice = 
-            hotel.correctedPrice + 
-            (hotel.correctedPrice * hotel.commission / 100) 
+            hotel.correctedPrice / 
+            ((100 - hotel.commission) / 100) 
         } else {
           hotel.commissionPrice = hotel.correctedPrice
         }
@@ -1576,8 +1578,8 @@ export default {
       state.tour.meal.forEach((meal) => {
         if (meal.commission > 0) {
           meal.commissionPrice = 
-            meal.correctedPrice + 
-            (meal.correctedPrice * meal.commission / 100) 
+            meal.correctedPrice / 
+            ((100 - meal.commission) / 100) 
         } else {
           meal.commissionPrice = meal.correctedPrice
         }
@@ -1587,8 +1589,8 @@ export default {
         if (guide.commission > 0) {
           // Guide price for customers
           guide.commissionPricePerSeat = 
-            guide.correctedPricePerSeat + 
-            (guide.correctedPricePerSeat * guide.commission / 100) 
+            guide.correctedPricePerSeat / 
+            ((100 - guide.commission) / 100) 
         } else {
           // Guide price for customers
           guide.commissionPricePerSeat = guide.correctedPricePerSeat
@@ -1597,9 +1599,8 @@ export default {
           // Staff
           // Guide options: hotel, meal, events.
           guide.guide.options.commissionPricePerSeat = 
-            guide.guide.options.correctedPricePerSeat + 
-            (guide.guide.options.correctedPricePerSeat 
-              * guide.guide.options.commission / 100)
+            guide.guide.options.correctedPricePerSeat / 
+            ((100 - guide.guide.options.commission) / 100)
               guide.guide.options.commissionPricePerSeat = parseFloat(guide.guide.options.commissionPricePerSeat.toFixed(2))
         } else {
           // Staff
@@ -1612,8 +1613,8 @@ export default {
       state.tour.attendant.forEach((attendant) => {
         if (attendant.commission > 0) {
           attendant.commissionPricePerSeat = 
-            attendant.correctedPricePerSeat + 
-            (attendant.correctedPricePerSeat * attendant.commission / 100) 
+            attendant.correctedPricePerSeat / 
+            ((100 - attendant.commission) / 100) 
         } else {
           attendant.commissionPricePerSeat = attendant.correctedPricePerSeat
         }
@@ -1621,9 +1622,8 @@ export default {
           // Staff
           // Attendant options: hotel, meal, events.
           attendant.attendant.options.commissionPricePerSeat = 
-            attendant.attendant.options.correctedPricePerSeat + 
-            (attendant.attendant.options.correctedPricePerSeat 
-              * attendant.attendant.options.commission / 100)
+            attendant.attendant.options.correctedPricePerSeat / 
+            ((100 - attendant.attendant.options.commission) / 100)
               attendant.attendant.options.commissionPricePerSeat = parseFloat(attendant.attendant.options.commissionPricePerSeat.toFixed(2))
         } else {
           // Staff
@@ -1636,8 +1636,8 @@ export default {
       state.tour.customPrice.forEach((price) => {
         if (price.commission > 0) {
           price.commissionPricePerSeat = 
-          price.correctedPricePerSeat + 
-            (price.correctedPricePerSeat * price.commission / 100) 
+          price.correctedPricePerSeat / 
+            ((100 - price.commission) / 100) 
         } else {
           price.commissionPricePerSeat = price.correctedPricePerSeat
         }
@@ -1646,8 +1646,8 @@ export default {
       state.tour.options.drivers.forEach((driver) => {
         if (driver.commission > 0) {
           driver.commissionPricePerSeat = 
-          parseFloat(driver.correctedPricePerSeat) +
-            (parseFloat(driver.correctedPricePerSeat) * parseFloat(driver.commission) / 100)
+          parseFloat(driver.correctedPricePerSeat) /
+            ((100 - parseFloat(driver.commission)) / 100)
         } else {
           driver.commissionPricePerSeat = parseFloat(driver.correctedPricePerSeat.toFixed(2))
         }
@@ -1657,8 +1657,8 @@ export default {
       state.tour.options.freeAdls.forEach((freeAdl) => {
         if (freeAdl.commission > 0) {
           freeAdl.commissionPricePerSeat = 
-          parseFloat(freeAdl.correctedPricePerSeat) +
-            (parseFloat(freeAdl.correctedPricePerSeat) * parseFloat(freeAdl.commission) / 100)
+          parseFloat(freeAdl.correctedPricePerSeat) /
+            ((100 - parseFloat(freeAdl.commission)) / 100)
         } else {
           freeAdl.commissionPricePerSeat = parseFloat(freeAdl.correctedPricePerSeat.toFixed(2))
         }
@@ -1668,8 +1668,8 @@ export default {
       state.tour.extraEvents.forEach((event) => {
         if (event.commission > 0) {
           event.commissionPrice = 
-          parseFloat(event.correctedPrice) +
-            (parseFloat(event.correctedPrice) * parseFloat(event.commission) / 100)
+          parseFloat(event.correctedPrice) /
+            ((100 - parseFloat(event.commission)) / 100)
         } else {
           event.commissionPrice = parseFloat(event.correctedPrice.toFixed(2))
         }
