@@ -1632,6 +1632,11 @@
             name="duration" 
             :value="getTour.options.days"
           > 
+          <input
+            type="hidden"
+            name="dates[]"
+            :value="getTour.options.dateStart"
+          >
           <input 
             type="hidden"
             :value="JSON.stringify(tourExtra)"
