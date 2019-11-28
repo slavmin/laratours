@@ -1738,6 +1738,7 @@ export default {
             days: NaN,
             nights: NaN,
             dateStart: new Date().toISOString().substr(0, 10),
+            dates: [],
             qnt: 0,
             drivers: {
               hotel: [],
@@ -1874,6 +1875,7 @@ export default {
         days: NaN,
         nights: NaN,
         dateStart: new Date().toISOString().substr(0, 10),
+        dates: [],
         qnt: 0,
         drivers: {
           hotel: [],

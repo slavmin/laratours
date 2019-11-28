@@ -9,7 +9,7 @@ import '../bootstrap';
 import '../plugins';
 import Vue from 'vue';
 import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import '../../../public/css/vuetify.min.css'
 
 Vue.use(Vuetify)
 

@@ -26,18 +26,6 @@
         outline
         required
       />
-      <!-- <v-select
-        v-model="getTour.options.cities"
-        :items="allCities"
-        label="Тур по городам:"
-        item-text="name"
-        item-value="id"
-        :rules="[v => v.length != 0 || 'Выберите тип']"
-        append-outer-icon="location_city"
-        color="#aa282a"
-        multiple
-        required
-      /> -->
       <v-autocomplete
         v-model="getTour.options.cities"
         item-text="name"
@@ -66,9 +54,8 @@
       <v-layout 
         row 
         wrap
-        justify-content-between
       >
-        <v-flex xs3>
+        <v-flex>
           <v-menu
             v-model="showDateStart"
             :close-on-content-click="false"
@@ -81,8 +68,8 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="getTour.options.dateStart"
-                label="Дата начала"
+                v-model="datesPrettyString"
+                label="Даты начала"
                 :rules="[v => !!v || 'Выберите дату']"
                 prepend-icon="event"
                 readonly
@@ -91,15 +78,68 @@
               />
             </template>
             <v-date-picker 
-              v-model="getTour.options.dateStart" 
+              v-model="startDates" 
               :min="dateToday"
               color="#aa282a"
               locale="ru-ru"
               first-day-of-week="1"
-              @input="showDateStart = false"
+              multiple
             />
           </v-menu>
         </v-flex>
+      </v-layout>
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-flex>
+          <div class="subheading grey--text">
+            Время начала
+          </div>
+          <v-chip
+            v-for="(time, i) in startTimes"
+            :key="i"
+            close
+            @input="removeStartTime(time)"
+          >
+            <strong>{{ time }}</strong>&nbsp;
+          </v-chip>
+          <v-layout
+            row
+            wrap
+            justify-center
+          >
+            <v-flex xs1>
+              <v-text-field
+                v-model="newStartTime"
+                placeholder="12:30"
+                @keydown.enter="addStartTime"
+              />
+            </v-flex>
+            <v-flex xs1>
+              <v-btn 
+                fab 
+                dark 
+                small 
+                color="#aa282a"
+                @click="addStartTime"
+              >
+                <v-icon 
+                  dark
+                >
+                  add
+                </v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-flex>  
+      </v-layout>
+      <v-divider />
+      <v-layout 
+        row 
+        wrap
+        justify-content-between
+      >
         <v-flex xs2>
           <v-text-field
             v-model="getTour.options.days"
@@ -121,8 +161,17 @@
             required
           />
         </v-flex>
+        <v-flex xs4>
+          <v-text-field
+            v-model="getTour.qnt"
+            label="Количество туристов"
+            name="qnt"
+            mask="###"
+            color="#aa282a"
+          />
+        </v-flex>
       </v-layout>
-      <v-layout 
+      <!-- <v-layout 
         row 
         wrap
         justify-content-between
@@ -158,21 +207,7 @@
             required
           />
         </v-flex>
-      </v-layout>
-      <v-layout 
-        row 
-        wrap
-      >
-        <v-flex xs12>
-          <v-text-field
-            v-model="getTour.qnt"
-            label="Количество туристов"
-            name="qnt"
-            mask="###"
-            color="#aa282a"
-          />
-        </v-flex>
-      </v-layout>
+      </v-layout> -->
       <v-layout 
         row 
         wrap
@@ -230,6 +265,9 @@ export default {
       dateEnd: new Date().toISOString().substr(0, 10),
       commissionManualMode: false,
       commissionManualValue: 0,
+      startDates: [],
+      startTimes: [],
+      newStartTime: '09:00',
     };
   },
   computed: {
@@ -253,6 +291,21 @@ export default {
     dateToday: function() {
       return moment().format('YYYY-MM-DD')
       // return '2019-09-21'
+    },
+    datesPrettyString: function() {
+      let result = ''
+      this.startDates.forEach((date) => {
+        result += `${moment(date).format('ll')}, `
+      })
+      return result.substring(0, result.length - 2)
+    }
+  },
+  watch: {
+    startTimes: function() {
+      this.setTourDateTimes()
+    },
+    startDates: function() {
+      this.setTourDateTimes()
     }
   },
   created() {
@@ -262,6 +315,18 @@ export default {
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
     this.updateCurrentCustomerType(1)
+    if (this.getEditMode) {
+      this.getTour.options.dates.forEach((item) => {
+        const date = item.substring(0, 10)
+        const time = item.substring(11, 19)
+        if (!this.startDates.includes(date)) {
+          this.startDates.push(date)
+        }
+        if (!this.startTimes.includes(time)) {
+          this.startTimes.push(time)
+        }
+      })
+    }
   },
   methods: {
     ...mapActions([
@@ -325,6 +390,30 @@ export default {
       console.log(cityId, this.getTour.options.cities)
       const index = this.getTour.options.cities.indexOf(cityId)
       if (index >= 0)  this.getTour.options.cities.splice(index, 1)
+    },
+    removeStartTime(time) {
+      this.startTimes = this.startTimes.filter(i => i != time)
+    },
+    addStartTime() {
+      if (this.newStartTime != '' && !this.startTimes.includes(this.newStartTime)) {
+        this.startTimes.push(this.newStartTime)
+        this.newStartTime = ''
+      }
+    },
+    setTourDateTimes() {
+      if (this.startDates.length != 0) {
+        this.getTour.options.dates = []
+        this.startDates.forEach((date) => {
+          if (this.startTimes.length != 0) {
+            this.startTimes.forEach((time) => {
+              this.getTour.options.dates.push(`${date} ${time}`)
+            })
+          }
+          else {
+            this.getTour.options.dates.push(`${date} 00:00`)
+          }
+        })
+      }
     }
   },
 };
