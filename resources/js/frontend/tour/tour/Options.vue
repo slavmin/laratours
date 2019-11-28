@@ -315,7 +315,7 @@ export default {
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
     this.updateCurrentCustomerType(1)
-    if (this.getEditMode) {
+    if (this.getEditMode && this.getTour.options.dates.length != 0) {
       this.getTour.options.dates.forEach((item) => {
         const date = item.substring(0, 10)
         const time = item.substring(11, 19)
