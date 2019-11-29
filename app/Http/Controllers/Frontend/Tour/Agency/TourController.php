@@ -8,6 +8,7 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourType;
 use Illuminate\Http\Request;
+use App\Filters\ToursFilter;
 
 class TourController extends Controller
 {
@@ -28,40 +29,18 @@ class TourController extends Controller
         $agent_id = auth()->user()->currentTeam->getKey();
         $city_id = $this->getCityId($request, $subscriptions);
         $type_id = $this->getTourTypeId($request, $subscriptions);
-        $tour_name_substring = $this->getTourNameSubstring($request);
-        // dd("%{$tour_name_substring}%");
-        // dd($request);
+        $name = $this->getTourName($request);
 
         $orderBy = 'id';
         $sort = 'desc';
 
         $model_alias = Tour::getModelAliasAttribute();
         
-        if (!is_null($city_id) && !is_null($type_id)) {
+        $items = Tour::with(['orderprofiles' => function ($query) {
+            $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        }]);
 
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->where('city_id', $city_id)
-                ->where('tour_type_id', $type_id)
-                ->orderBy($orderBy, $sort)->AllTeams()->paginate();
-
-        } elseif (!is_null($type_id)) {
-
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->where('tour_type_id', $type_id)
-            ->where('name', 'like', "%{$tour_name_substring}%")   
-            ->orderBy($orderBy, $sort)->AllTeams()->paginate();
-
-        } else {
-
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)
-            ->where('name', 'like', "%{$tour_name_substring}%")  
-            ->orderBy($orderBy, $sort)->AllTeams()->paginate();
-
-        }
+        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         $cities_names = TourCity::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->get()->pluck('name', 'id')->toArray();
         // Form filters
@@ -74,7 +53,7 @@ class TourController extends Controller
             ->with('operator_id', (int) $operator_id)
             ->with('city_id', (int) $city_id)
             ->with('type_id', (int) $type_id)
-            ->with('tour_name_substring', $tour_name_substring)
+            ->with('name', $name)
             ->with('route', route('frontend.agency.tour-list'))
             ->with('cancel_route', route('frontend.agency.tour-list'))
             ->with('model_alias', $model_alias);
@@ -109,8 +88,8 @@ class TourController extends Controller
         && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
     }
 
-    public static function getTourNameSubstring(Request $request)
+    public static function getTourName(Request $request)
     {
-        return $request->has('tour_name_substring') ? $request->query('tour_name_substring') : null;
+        return $request->has('name') ? $request->query('name') : null;
     }
 }
