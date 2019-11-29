@@ -28,12 +28,15 @@ class TourController extends Controller
         $agent_id = auth()->user()->currentTeam->getKey();
         $city_id = $this->getCityId($request, $subscriptions);
         $type_id = $this->getTourTypeId($request, $subscriptions);
+        $tour_name_substring = $this->getTourNameSubstring($request);
+        // dd("%{$tour_name_substring}%");
+        // dd($request);
 
         $orderBy = 'id';
         $sort = 'desc';
 
         $model_alias = Tour::getModelAliasAttribute();
-
+        
         if (!is_null($city_id) && !is_null($type_id)) {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
@@ -47,13 +50,16 @@ class TourController extends Controller
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
             }])->whereIn('team_id', [$operator_id])->where('published', 1)->where('tour_type_id', $type_id)
-                ->orderBy($orderBy, $sort)->AllTeams()->paginate();
+            ->where('name', 'like', "%{$tour_name_substring}%")   
+            ->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         } else {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->whereIn('team_id', [$operator_id])->where('published', 1)->orderBy($orderBy, $sort)->AllTeams()->paginate();
+            }])->whereIn('team_id', [$operator_id])->where('published', 1)
+            ->where('name', 'like', "%{$tour_name_substring}%")  
+            ->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         }
 
@@ -68,6 +74,7 @@ class TourController extends Controller
             ->with('operator_id', (int) $operator_id)
             ->with('city_id', (int) $city_id)
             ->with('type_id', (int) $type_id)
+            ->with('tour_name_substring', $tour_name_substring)
             ->with('route', route('frontend.agency.tour-list'))
             ->with('cancel_route', route('frontend.agency.tour-list'))
             ->with('model_alias', $model_alias);
@@ -100,5 +107,10 @@ class TourController extends Controller
         $type_ids = TourType::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->pluck('id')->all();
         return $request->has('type_id') && $request->query('type_id') != 0
         && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
+    }
+
+    public static function getTourNameSubstring(Request $request)
+    {
+        return $request->has('tour_name_substring') ? $request->query('tour_name_substring') : null;
     }
 }
