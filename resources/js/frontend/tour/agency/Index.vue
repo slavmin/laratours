@@ -18,77 +18,95 @@
           </v-icon>
           Доступные туры:
         </h1>
-        <!-- <h2 class="text-center white--text">
+        <h2 class="text-center white--text">
           Фильтры:
         </h2>
-        <v-layout 
-          row 
-          wrap
-          justify-center
-        >
-          <v-flex xs2>
-            <v-select
-              v-model="selectedCities"
-              :items="citiesArray"
-              color="green"
-              label="Город"
-            />
-          </v-flex>
-          <v-flex xs4>
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="dates"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-combobox
-                  v-model="dates"
-                  multiple
-                  chips
-                  small-chips
-                  label="Даты"
-                  prepend-icon="event"
-                  readonly
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker 
-                v-model="dates" 
-                multiple 
-                no-title 
-                scrollable
+        <form>
+          <v-layout 
+            row 
+            wrap
+            justify-center
+          >
+            <v-flex xs2>
+              <v-text-field
+                id="name"
+                v-model="tourName"
+                name="name"
+                placeholder="Название тура"
+                @input="filter"
+              />
+              <v-btn 
                 color="green"
-                locale="ru-ru"
+                type="submit"
+                @click.prevent="filter"  
               >
-                <v-spacer />
-                <v-btn 
-                  flat 
-                  color="primary" 
-                  @click="menu = false"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn 
-                  flat 
-                  color="primary" 
-                  @click="$refs.menu.save(dates)"
-                >
-                  OK
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
-          </v-flex>
-        </v-layout> -->
+                filter
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </form>
+        <!-- <v-flex xs2>
+          <v-select
+            v-model="selectedCities"
+            :items="citiesArray"
+            color="green"
+            label="Город"
+          />
+        </v-flex>
+        <v-flex xs4>
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            :return-value.sync="dates"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-combobox
+                v-model="dates"
+                multiple
+                chips
+                small-chips
+                label="Даты"
+                prepend-icon="event"
+                readonly
+                v-on="on"
+              />
+            </template>
+            <v-date-picker 
+              v-model="dates" 
+              multiple 
+              no-title 
+              scrollable
+              color="green"
+              locale="ru-ru"
+            >
+              <v-spacer />
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="menu = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="$refs.menu.save(dates)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu> 
+        </v-flex>-->
         <v-card>
           <Table
-            :items="filterItems"
+            :items="filteredItems"
             :cities="cities"
             :token="token"
           />
@@ -129,6 +147,8 @@ export default {
       selectedCities: [],
       dates: [],
       menu: false,
+      filteredItems: [],
+      tourName: '',
     }
   },
   computed: {
@@ -165,8 +185,21 @@ export default {
   created() {
     console.log(this.items)
   },
+  mounted() {
+    this.fetch()
+  },
   methods: {
     datePicked() {
+    },
+    fetch() {
+      axios.get(`/agency/tours?name=${this.tourName}`)
+        .then((response) => {
+          console.log(response.data)
+          this.filteredItems = response.data.data
+        })
+    },
+    filter() {
+      this.fetch()
     }
   }
 }

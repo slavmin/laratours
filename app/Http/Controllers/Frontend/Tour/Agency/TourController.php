@@ -38,7 +38,7 @@ class TourController extends Controller
         
         $items = Tour::with(['orderprofiles' => function ($query) {
             $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-        }]);
+        }])->where('published', 1);
 
         $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
@@ -48,6 +48,10 @@ class TourController extends Controller
         $tour_types = TourType::whereIn('team_id', [$operator_id])->orderBy($orderBy, $sort)->AllTeams()->get()->pluck('name', 'id')->toArray();
         $types_options = [0 => __('validation.attributes.frontend.general.select')];
         $tour_types = array_replace($types_options, $tour_types);
+
+        if ($request->expectsJson()) {
+            return response()->json($items->toArray());
+        }
 
         return view('frontend.tour.agency.index', compact('items', 'operators', 'cities_names', 'tour_types'))
             ->with('operator_id', (int) $operator_id)

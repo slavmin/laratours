@@ -128,13 +128,9 @@ export default {
       }
     },
   },
-  mounted() {
-    console.log(JSON.parse(this.items[0].extra))
-  },
   methods: {
     getCitiesNames(cities) {
       let cityName = ''
-      console.log(cities)
       cities.forEach((cityId) => {
         _.toArray(this.cities).forEach((city, i) => {
           if (i == cityId) {

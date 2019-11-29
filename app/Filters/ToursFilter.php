@@ -9,7 +9,7 @@ class ToursFilter
 
   public function __construct($builder, $request) 
   {
-    $this->builder = $builder->where('published', 1);
+    $this->builder = $builder;
     $this->request = $request;
   }
 
