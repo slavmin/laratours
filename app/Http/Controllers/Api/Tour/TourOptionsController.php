@@ -54,7 +54,7 @@ class TourOptionsController extends Controller
         } elseif($team && $team->roles->contains('name', config('access.teams.operator_role'))){
             $subscribers = $team->subscribers->pluck('name','id')->toArray();
         }
-
+        
         return response()->json([
             compact('countries_cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options', 'subscribers', 'subscriptions')
         ]);

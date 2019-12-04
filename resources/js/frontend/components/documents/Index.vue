@@ -61,6 +61,9 @@
               {{ document.description }}
             </td>
             <td>
+              <Preview 
+                :document="document"
+              />
               <v-btn 
                 color="yellow"
                 fab
@@ -104,8 +107,12 @@
   </v-container>
 </template>
 <script>
+import Preview from './Preview'
 export default {
   name: 'DocumentsIndex',
+  components: {
+    Preview,
+  },
   props: {
     token: {
       type: String,

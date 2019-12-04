@@ -50,6 +50,8 @@
           <div class="subheading">
             Удалён: {{ document.deleted_at }}
           </div>
+          <v-divider />
+          <Labels />
         </v-card>
       </v-flex>
     </v-layout>
@@ -57,10 +59,12 @@
 </template>
 <script>
 import Form from './Form'
+import Labels from './Labels'
 export default {
   name: 'DocumentEdit',
   components: {
     Form,
+    Labels,
   },
   props: {
     token: {

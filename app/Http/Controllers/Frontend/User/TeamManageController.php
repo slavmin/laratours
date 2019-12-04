@@ -39,7 +39,7 @@ class TeamManageController extends Controller
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
         $profiles = $team->getProfilesAttribute();
-
+        
         return view('frontend.user.team.index')
             ->with('team', $team)
             ->with('profiles', $profiles);

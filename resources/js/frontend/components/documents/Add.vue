@@ -48,6 +48,8 @@
           >
             Сохранить  
           </v-btn>
+          <v-divider />
+          <Labels />
         </v-card>
       </v-flex>
     </v-layout>
@@ -55,10 +57,12 @@
 </template>
 <script>
 import Form from './Form'
+import Labels from './Labels'
 export default {
   name: 'DocumentAdd',
   components: {
     Form,
+    Labels,
   },
   props: {
     token: {

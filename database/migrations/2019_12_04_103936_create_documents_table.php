@@ -17,16 +17,16 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->json('template');
+            $table->text('template')->nullable();
             $table->unsignedBigInteger('team_id')->nullable()->index();
             $table->boolean('published')->default(0);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('team_id')
-                ->references('id')
-                ->on(\Config::get( 'teamwork.teams_table' ));
-                // ->onDelete('cascade');
+            // $table->foreign('team_id')
+            //     ->references('id')
+            //     ->on(\Config::get( 'teamwork.teams_table' ));
+            //     // ->onDelete('cascade');
         });
     }
 

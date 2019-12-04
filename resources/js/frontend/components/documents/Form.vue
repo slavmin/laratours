@@ -13,10 +13,15 @@
         name="description"
         label="Описание"
       />
-      <v-textarea
+      <input
         v-model="content"
-        outline
+        type="hidden"
         name="template"
+      >
+      <froala 
+        v-model="content"
+        :tag="'textarea'"
+        :config="config"
       />
     </v-card-text>
   </v-card>
@@ -39,9 +44,17 @@ export default {
   },
   data() {
     return {
-        name: '',
-        description: '',
-        content: '',
+      name: '',
+      description: '',
+      content: '',
+      config: {
+        events: {
+          initialized: function () {
+            console.log('froala initialized')
+          }
+        },
+        attribution: false,
+      },
     }
   },
   mounted() {
@@ -52,7 +65,7 @@ export default {
       this.name = this.document.name
       this.description = this.document.description
       this.content = this.document.template
-    }
+    },
   }
 }
 </script>
