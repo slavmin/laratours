@@ -26,7 +26,8 @@ use App\Http\Controllers\Frontend\Tour\ObjectAttributeController;
 // Agency controllers
 use App\Http\Controllers\Frontend\Tour\Agency\TourController as AgencyTourController;
 use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderController;
-
+// Document template engine controllers
+use App\Http\Controllers\Frontend\Document\DocumentController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -204,6 +205,13 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
                 Route::delete('delete', [AgencyOrderController::class, 'delete'])->name('order.delete-permanently');
 
             });
+        });
+    });
+
+    // Document template engine
+    Route::group(['prefix' => 'modules'] ,function () {
+        Route::group(['namespace' => 'Document'], function() {
+            Route::resource('document', 'DocumentController');
         });
     });
 
