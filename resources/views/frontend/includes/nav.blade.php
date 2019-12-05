@@ -78,4 +78,6 @@
     agency-tour-list-text="@lang('labels.frontend.tours.tour.management')"
     agency-order-index-url="{{ route('frontend.agency.order.index') }}"
     agency-order-index-text="@lang('labels.frontend.tours.order.management')"
+    documents-index-url="{{ route('frontend.document.index') }}"
+    documents-index-text="@lang('labels.frontend.document.management')"
 ></nav-bar>

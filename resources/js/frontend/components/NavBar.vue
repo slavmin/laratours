@@ -364,6 +364,14 @@ export default {
       type: String,
       default: 'tourclick!'
     },
+    documentsIndexText: {
+      type: String,
+      default: '#'
+    },
+    documentsIndexUrl: {
+      type: String,
+      default: 'tourclick!'
+    },
   },
   data() {
     return {
@@ -472,6 +480,10 @@ export default {
       result.push({
         text: this.userAccountText,
         url: this.userAccountUrl
+      })
+      result.push({
+        text: this.documentsIndexText,
+        url: this.documentsIndexUrl,
       })
       result.push({
         text: this.authLogoutText,
