@@ -10,13 +10,8 @@ import '../plugins';
 import Vue from 'vue';
 import Vuetify from 'vuetify'
 import '../../../public/css/vuetify.min.css'
-// Import Froala Editor css files.
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-// Import and use Vue Froala lib.
-import VueFroala from 'vue-froala-wysiwyg'
 
 Vue.use(Vuetify)
-Vue.use(VueFroala)
 
 window.Vue = Vue;
 

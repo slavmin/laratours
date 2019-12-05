@@ -18,18 +18,22 @@
         type="hidden"
         name="template"
       >
-      <froala 
+      <Editor 
         v-model="content"
-        :tag="'textarea'"
-        :config="config"
+        :api-key="tiny.apiKey"
+        :init="tiny.init"
       />
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import Editor from '@tinymce/tinymce-vue'
 export default {
   name: 'DocumentForm',
+  components: {
+    Editor,
+  },
   props: {
     editMode: {
       type: Boolean,
@@ -47,13 +51,15 @@ export default {
       name: '',
       description: '',
       content: '',
-      config: {
-        events: {
-          initialized: function () {
-            console.log('froala initialized')
-          }
-        },
-        attribution: false,
+      tiny: {
+        apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
+        init: {
+          min_width: '600',
+          branding: false, 
+          language: 'ru',
+          language_url: '/fonts/vendor/tinymce/ru.js',
+          height: 500,
+        }
       },
     }
   },

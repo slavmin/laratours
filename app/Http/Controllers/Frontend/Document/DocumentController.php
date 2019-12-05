@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Frontend\Document;
 
 use Illuminate\Http\Request;
-use App\Models\Document\Document;
 use App\Http\Requests\Frontend\Document\DocumentUpdateRequest;
 use App\Http\Requests\Frontend\Document\DocumentCreateRequest;
+use App\Models\Document\Document;
 
 class DocumentController extends BaseController
 {
