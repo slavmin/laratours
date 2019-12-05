@@ -17,7 +17,7 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->text('template')->nullable();
+            $table->longText('template')->nullable();
             $table->unsignedBigInteger('team_id')->nullable()->index();
             $table->boolean('published')->default(0);
             $table->timestamps();
