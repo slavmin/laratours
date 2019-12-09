@@ -34,6 +34,7 @@
                 @include('includes.partials.footer')
             </div><!-- root-wrap -->
         </div><!-- #app -->
+        @yield('contacts')
 
         <!-- Scripts -->
         @stack('before-scripts')
