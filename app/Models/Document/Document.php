@@ -14,5 +14,7 @@ class Document extends Model
         'name',
         'description',
         'template',
+        'pdfIsActive',
+        'wordIsActive',
     ];
 }

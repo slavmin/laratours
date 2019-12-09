@@ -7,6 +7,7 @@
       <v-btn
         color="green lighten-2"
         dark
+        small
         v-on="on"
       >
         preview
@@ -60,7 +61,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.document)
     this.fill()
     this.getLabels()
   },
@@ -72,12 +72,10 @@ export default {
       axios.get('/api/label-options')
         .then(response => {
           this.labels = response.data[0].labels
-          console.log(this.labels)
         })
         .then(response => {
           for (let key in this.labels) {
             if (this.rawHtml.includes(key)) {
-              console.log('{' + key + '}', this.labels[key])
               this.rawHtml = this.rawHtml.replace('{' + key + '}', this.labels[key])
             }
           }

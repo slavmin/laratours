@@ -50,6 +50,27 @@
           </v-btn>
           <v-divider />
           <Labels />
+          <v-divider />
+          <v-switch 
+            v-model="pdfIsActive"
+            color="#aa282a"
+            label="PDF"  
+          />
+          <input
+            type="text"
+            name="pdfIsActive"
+            :value="pdfIsActive"
+          >
+          <v-switch 
+            v-model="wordIsActive"
+            color="#aa282a"
+            label="word"  
+          />
+          <input
+            type="text"
+            name="wordIsActive"
+            :value="wordIsActive"
+          >
         </v-card>
       </v-flex>
     </v-layout>
@@ -77,7 +98,10 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      pdfIsActive: false,
+      wordIsActive: false,
+    }
   },
 }
 </script>
