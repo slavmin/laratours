@@ -26,7 +26,7 @@
         @stack('after-styles')
     </head>
     <body>
-        <div id="app">
+        <div id="app" style="height: 250px;">
             @include('includes.partials.logged-in-as')
             @include('frontend.includes.nav')
             @include('includes.partials.messages')
