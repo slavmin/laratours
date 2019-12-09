@@ -53,26 +53,10 @@
           <v-divider />
           <Labels />
           <v-divider />
-          <v-switch 
-            v-model="pdfIsActive"
-            color="#aa282a"
-            label="PDF"  
+          <Controls
+            edit-mode
+            :document="document"
           />
-          <input
-            type="text"
-            name="pdfIsActive"
-            :value="pdfIsActive"
-          >
-          <v-switch 
-            v-model="wordIsActive"
-            color="#aa282a"
-            label="word"  
-          />
-          <input
-            type="text"
-            name="wordIsActive"
-            :value="wordIsActive"
-          >
         </v-card>
       </v-flex>
     </v-layout>
@@ -81,11 +65,13 @@
 <script>
 import Form from './Form'
 import Labels from './Labels'
+import Controls from './Controls'
 export default {
   name: 'DocumentEdit',
   components: {
     Form,
     Labels,
+    Controls,
   },
   props: {
     token: {
@@ -105,14 +91,6 @@ export default {
       wordIsActive: false,
     }
   },
-  mounted() {
-    this.fill()
-  },
-  methods: {
-    fill() {
-      this.pdfIsActive = this.document.pdfIsActive
-      this.wordIsActive = this.document.wordIsActive
-    }
-  }
+  
 }
 </script>

@@ -51,26 +51,7 @@
           <v-divider />
           <Labels />
           <v-divider />
-          <v-switch 
-            v-model="pdfIsActive"
-            color="#aa282a"
-            label="PDF"  
-          />
-          <input
-            type="text"
-            name="pdfIsActive"
-            :value="pdfIsActive"
-          >
-          <v-switch 
-            v-model="wordIsActive"
-            color="#aa282a"
-            label="word"  
-          />
-          <input
-            type="text"
-            name="wordIsActive"
-            :value="wordIsActive"
-          >
+          <Controls />
         </v-card>
       </v-flex>
     </v-layout>
@@ -79,11 +60,13 @@
 <script>
 import Form from './Form'
 import Labels from './Labels'
+import Controls from './Controls'
 export default {
   name: 'DocumentAdd',
   components: {
     Form,
     Labels,
+    Controls,
   },
   props: {
     token: {
@@ -98,10 +81,7 @@ export default {
     }
   },
   data() {
-    return {
-      pdfIsActive: false,
-      wordIsActive: false,
-    }
+    return {}
   },
 }
 </script>

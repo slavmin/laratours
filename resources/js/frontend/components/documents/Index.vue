@@ -65,8 +65,8 @@
                 {{ document.description }}
               </td>
               <td>
-                {{ document.pdfIsActive ? 'PDF' : '' }}
-                {{ document.wordIsActive ? 'Word' : '' }}
+                {{ parseInt(document.pdfIsActive) ? 'PDF' : '' }}
+                {{ parseInt(document.wordIsActive) ? 'Word' : '' }}
               </td>
               <td>
                 <v-layout 
