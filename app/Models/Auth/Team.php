@@ -3,12 +3,16 @@
 namespace App\Models\Auth;
 
 use App\Events\Backend\Auth\Team\TeamDeleted;
+use App\Filters\ToursFilter;
 use App\Models\Auth\Traits\Attribute\TeamAttribute;
 use App\Models\Auth\Traits\Method\TeamMethod;
+use App\Models\Document\Document;
+use App\Models\Tour\Tour;
 use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mpociot\Teamwork\TeamworkTeam;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Request;
 use Spatie\Permission\Traits\HasRoles;
 
 //use Mpociot\Teamwork\Facades\Teamwork;
@@ -109,6 +113,15 @@ class Team extends TeamworkTeam
     public function getProfilesAttribute()
     {
         return array_merge($this->getFormalProfileAttribute(), $this->getRealProfileAttribute());
+    }
+
+    public function getSharedDocuments()
+    {
+        $operators = $this->getTeamSubscriptions();
+        $subscriptions = array_keys($operators);
+        $documents = Document::whereIn('team_id', $subscriptions)->where('pdfIsActive', 1);
+        
+        return $documents->AllTeams()->get();
     }
 
 }

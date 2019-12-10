@@ -69,6 +69,7 @@ Vue.component('no-data', require('./components/NoData.vue').default);
 Vue.component('documents-index', require('./components/documents/Index.vue').default);
 Vue.component('document-add', require('./components/documents/Add.vue').default);
 Vue.component('document-edit', require('./components/documents/Edit.vue').default);
+Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
 /**
 /**
 /**

@@ -8,11 +8,12 @@ use App\Models\Auth\Team;
 use App\Mail\Team\SendTeamInvite;
 use App\Events\Frontend\Team\TeamMemberDeleted;
 use App\Http\Requests\Frontend\Team\ManageTeamRequest;
+use App\Models\Tour\Tour;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Http\Request;
+use Illuminate\Http\Request;
 
 
 /**
@@ -34,15 +35,18 @@ class TeamManageController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $team = Team::findOrFail(auth()->user()->current_team_id);
 
         $profiles = $team->getProfilesAttribute();
         
+        $documents = $team->getSharedDocuments();
+
         return view('frontend.user.team.index')
             ->with('team', $team)
-            ->with('profiles', $profiles);
+            ->with('profiles', $profiles)
+            ->with('documents', $documents);
     }
 
 

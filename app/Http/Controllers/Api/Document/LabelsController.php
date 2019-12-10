@@ -21,6 +21,7 @@ class LabelsController extends Controller
     }
 
     public static function formatLabels($profiles) {
+
         $labels = [
             'адрес юридический компании' => $profiles['formal']['company_address'], 
             'инн компании' => $profiles['formal']['company_inn'],
@@ -29,6 +30,7 @@ class LabelsController extends Controller
             'банк компании' => $profiles['formal']['company_bankname'],
             'корреспондентский счет компании' => $profiles['formal']['company_bankcorr'],
         ];
+        
         return $labels;
     }
 }

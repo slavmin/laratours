@@ -1,12 +1,10 @@
 <template>
-  <v-btn 
-    small
-    dark
-    color="#aa282a"
-    @click="getPdf()"
-  >
-    pdf
-  </v-btn>
+  <button @click="getPdf()">
+    <img 
+      src="/img/frontend/icons/pdf.png" 
+      width="32"
+    >
+  </button>
 </template>
 
 <script>
