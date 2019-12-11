@@ -24,5 +24,5 @@ Route::post('/login', [AuthController::class, 'login'])->name('api-login');
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('api-logout');
     Route::get('/tour-options', [TourOptionsController::class, 'getOptions'])->name('api-tour-options');
-    Route::get('/label-options', [LabelsController::class, 'getLabels'])->name('api-label-options');
+    Route::get('/label-options', [LabelsController::class, 'getInfo'])->name('api-label-options');
 });

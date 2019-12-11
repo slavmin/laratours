@@ -29,7 +29,7 @@ export default {
         .then(response => {
           // console.log(response)
           for (let key in response.data[0].labels) {
-            console.log()
+            // console.log()
             this.labelNames.push(`{${key}}`)
           }
         })
