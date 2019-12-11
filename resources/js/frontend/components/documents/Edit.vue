@@ -25,6 +25,7 @@
     <v-layout
       row
       wrap
+      justify-center
     >
       <v-flex xs8>
         <Form 

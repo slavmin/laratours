@@ -14,7 +14,9 @@ class Document extends Model
         'name',
         'description',
         'template',
-        'pdfIsActive',
-        'wordIsActive',
+        'pdf_for_agent',
+        'word_for_agent',
+        'pdf_for_tourist',
+        'word_for_tourist',
     ];
 }

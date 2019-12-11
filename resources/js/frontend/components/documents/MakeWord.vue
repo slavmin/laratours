@@ -1,18 +1,17 @@
 <template>
-  <div>
-    <v-btn 
-      small
-      dark
-      color="#aa282a"
-      @click="getWord()"
-    >
-      word
-    </v-btn>
-    <div
+  <div class="ml-1">
+    <button @click="getWord()">
+      <img 
+        src="/img/frontend/icons/word.png" 
+        width="32"
+        style="margin-top: 10px;"
+      >
+    </button>
+    <!-- <div
       class="document-render"
       style="display: none;"
       v-html="rawHtml"
-    />
+    /> -->
   </div>
 </template>
 
@@ -62,7 +61,7 @@ export default {
         .then(response => {
           for (let key in this.labels) {
             if (this.rawHtml.includes(key)) {
-              console.log("TCL: getLabels -> key", key)
+              // console.log("TCL: getLabels -> key", key)
               this.rawHtml = this.rawHtml.replace('{' + key + '}', this.labels[key])
             }
           }
