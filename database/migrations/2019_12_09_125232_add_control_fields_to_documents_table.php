@@ -14,8 +14,10 @@ class AddControlFieldsToDocumentsTable extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->boolean('pdfIsActive')->default(0);
-            $table->boolean('wordIsActive')->default(0);
+            $table->boolean('pdf_for_agent')->default(0);
+            $table->boolean('word_for_agent')->default(0);
+            $table->boolean('pdf_for_tourist')->default(0);
+            $table->boolean('word_for_tourist')->default(0);
         });
     }
 
@@ -27,8 +29,10 @@ class AddControlFieldsToDocumentsTable extends Migration
     public function down()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->dropColumn('pdfIsActive');
-            $table->dropColumn('wordIsActive');
+            $table
+                ->dropColumn(
+                    'pdf_for_agent', 'word_for_agent', 'pdf_for_tourist', 'word_for_tourist'
+                );
         });
     }
 }
