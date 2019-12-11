@@ -119,7 +119,7 @@ class Team extends TeamworkTeam
     {
         $operators = $this->getTeamSubscriptions();
         $subscriptions = array_keys($operators);
-        $documents = Document::whereIn('team_id', $subscriptions)->where('pdfIsActive', 1);
+        $documents = Document::whereIn('team_id', $subscriptions)->where('pdf_for_agent', 1);
         
         return $documents->AllTeams()->get();
     }

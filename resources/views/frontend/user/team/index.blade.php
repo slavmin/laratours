@@ -212,15 +212,12 @@
             @endif
 
             @if($documents->count())
-
-                {{-- {{ dd($documents )}} --}}
             
                 <div class="list-group mb-4">
                     <h6 class="list-group-item text-info py-3">@lang('labels.frontend.teams.documents')</h6>
 
                     @foreach($documents as $document)
                         <div class="d-flex justify-content-between py-3 list-group-item">
-                            {{-- <div class="email-send">{{ $document->name }}</div> --}}
                             <pdf
                                 :team="{{ $team }}"
                                 :document="{{ $document }}"

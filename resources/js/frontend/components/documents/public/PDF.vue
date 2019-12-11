@@ -36,14 +36,18 @@ export default {
   },
   methods: {
     getPdf() {
-      axios.get('/api/label-options')
+      axios.get('/api/label-options', {
+        params: { team_id: this.document.team_id}
+      })
         .then(response => {
+          console.log(response)
           this.labels = response.data[0].labels
         })
         .then(response => {
+          this.result = this.document.template
           for (let key in this.labels) {
-            if (this.document.template.includes(key)) {
-              this.result = this.document.template.replace('{' + key + '}', this.labels[key])
+            while (this.result.includes(key)) {
+              this.result = this.result.replace('{' + key + '}', this.labels[key])
             }
           }
           let opt = {

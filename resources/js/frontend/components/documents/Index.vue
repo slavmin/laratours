@@ -47,9 +47,6 @@
               Описание
             </th>
             <th>
-              Доступ
-            </th>
-            <th>
               Действия
             </th>
           </thead>
@@ -65,10 +62,6 @@
                 {{ document.description }}
               </td>
               <td>
-                {{ parseInt(document.pdfIsActive) ? 'PDF' : '' }}
-                {{ parseInt(document.wordIsActive) ? 'Word' : '' }}
-              </td>
-              <td>
                 <v-layout 
                   row 
                   wrap
@@ -76,12 +69,12 @@
                   <Preview 
                     :document="document"
                   />
-                  <MakePDF
+                  <!-- <MakePDF
                     :document="document"
                   />
                   <MakeWord
                     :document="document"
-                  />
+                  /> -->
                   <v-btn 
                     color="yellow"
                     fab
@@ -128,14 +121,10 @@
 </template>
 <script>
 import Preview from './Preview'
-import MakePDF from './MakePDF'
-import MakeWord from './MakeWord'
 export default {
   name: 'DocumentsIndex',
   components: {
     Preview,
-    MakePDF,
-    MakeWord,
   },
   props: {
     token: {

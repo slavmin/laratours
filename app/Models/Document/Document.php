@@ -18,5 +18,6 @@ class Document extends Model
         'word_for_agent',
         'pdf_for_tourist',
         'word_for_tourist',
+        'operator_id',
     ];
 }

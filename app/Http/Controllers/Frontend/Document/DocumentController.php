@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Document;
 use Illuminate\Http\Request;
 use App\Http\Requests\Frontend\Document\DocumentUpdateRequest;
 use App\Http\Requests\Frontend\Document\DocumentCreateRequest;
+use App\Models\Auth\Team;
 use App\Models\Document\Document;
 
 class DocumentController extends BaseController
