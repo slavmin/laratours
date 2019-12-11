@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\Team;
 
 /**
  * Class DashboardController.
@@ -14,6 +15,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('frontend.user.dashboard');
+        $team = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
+    
+        return view('frontend.user.dashboard', compact('team'));
     }
 }

@@ -32,13 +32,13 @@
               class="headline"
               style="color: #979694;"
             >
-              Вас приветствует туроператор "Алфавит"!
+              Вас приветствует туроператор "{{ team.name }}"!
             </div>
           </v-card-title>
           <v-divider />
           <v-card-text>
             <span class="subheading">
-              Здесь вы можете подобрать и оформить заказ на туры в Санкт-Петербург от туроператора Алфавит. 
+              Здесь вы можете подобрать и оформить заказ на туры в Санкт-Петербург от туроператора {{ team.name }}. 
               <br>
               Так же мы предлагаем школьные экскурсии , сборные туры для детей и взрослых, туристические поездки по России, Золотое кольцо и многое-многое другое! 
             </span>
@@ -127,6 +127,12 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   props: {
+    team: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     headerText: {
       type: String,
       default: 'Header'
