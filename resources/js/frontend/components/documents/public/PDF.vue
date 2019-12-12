@@ -7,11 +7,15 @@
         width="32"
       >
     </button>
+    <!-- <div
+      id="document"
+      v-html="document.template"
+    /> -->
   </div>
 </template>
 
 <script>
-import html2pdf from 'html2pdf.js'
+import html2pdf from 'html2pdf-fix-jspdf'
 export default {
   name: 'PublicPDF',
   props: {
@@ -37,7 +41,7 @@ export default {
   methods: {
     getPdf() {
       axios.get('/api/label-options', {
-        params: { team_id: this.document.team_id}
+        params: { team_id: this.document.team_id }
       })
         .then(response => {
           console.log(response)
@@ -52,6 +56,7 @@ export default {
           }
           let opt = {
             margin:       1,
+            pagebreak:    { mode: 'avoid-all', before: '#page2el' },
             filename:     `${this.document.name}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 1, width: 900 },

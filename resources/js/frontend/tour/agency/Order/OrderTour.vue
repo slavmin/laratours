@@ -194,15 +194,27 @@
         </v-tabs>
       </v-card-text>
       <v-divider />
-      <div
+      <v-layout
         v-if="showDocuments"
+        row
+        wrap
+        justify-space-around
       >
-        <VaucherWord
+        <!-- <VaucherWord
           :profiles="Object.assign({}, JSON.parse(profilesRaw))"
           :tour="tour"
           :order="order"
-        />
-      </div>
+        /> -->
+        <v-flex 
+          v-for="(document, i) in documents"
+          :key="i"
+          xs2
+        >
+          <PDF 
+            :document="document"
+          />
+        </v-flex>
+      </v-layout>
       <v-spacer />
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ parseInt(getOrderPrice) }}
@@ -250,13 +262,15 @@ import moment from 'moment'
 import OrderForm from './OrderForm'
 import OrderContacts from '../../includes/OrderContacts'
 import VaucherWord from '../../includes/documents/VaucherWord'
+import PDF from '../../../components/documents/public/PDF'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
   components: {
     OrderForm,
     OrderContacts,
-    VaucherWord,
+    // VaucherWord,
+    PDF,
     // Total,
   },
   props: {
@@ -300,6 +314,12 @@ export default {
         return []
       }
     },
+    documents: {
+      type: Array,
+      default: () => {
+        return {}
+      }
+    }
   },
   data () {
     return {
@@ -325,7 +345,6 @@ export default {
       'getOrderStatus',
     ]),
     prevChat: function() {
-      console.log(this.profiles)
       if (this.profiles[0]) {
         const result = JSON.parse(this.profiles[0].chat)
         for (let key in result) {
@@ -380,10 +399,10 @@ export default {
     // this.initialRoomsCount()
   },
   mounted() {
+    console.log('documents: ', this.documents)
     this.updateEditMode()
     this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
-    console.log(this.profiles)
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
@@ -445,7 +464,6 @@ export default {
       //     orderedBusSeatId: JSON.parse(this.profilesRaw)[key],
       //   })
       // }
-      // console.log(seatsOrderedInCurrentOrder)
     },
     initialRoomsCount() {
       let result = 1

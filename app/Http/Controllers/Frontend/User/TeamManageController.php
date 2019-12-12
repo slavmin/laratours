@@ -42,7 +42,7 @@ class TeamManageController extends Controller
         $profiles = $team->getProfilesAttribute();
         
         $documents = $team->getSharedDocuments();
-
+        
         return view('frontend.user.team.index')
             ->with('team', $team)
             ->with('profiles', $profiles)

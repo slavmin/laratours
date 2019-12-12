@@ -35,13 +35,6 @@
                 placeholder="Название тура"
                 @input="filter"
               />
-              <v-btn 
-                color="green"
-                type="submit"
-                @click.prevent="filter"  
-              >
-                filter
-              </v-btn>
             </v-flex>
           </v-layout>
         </form>

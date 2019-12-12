@@ -37,6 +37,7 @@
             profiles-raw="{{ $s_order_profiles }}"
             tour-profiles-raw="{{ $s_tour_profiles }}"
             token="{{ csrf_token() }}"
+            :documents="{{ $documents }}"
         ></agency-order-edit>
     @endcan
     <!-- /Vue component -->
