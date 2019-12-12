@@ -46,9 +46,11 @@ export default {
   },
   methods: {
     getLabels() {
-      axios.get('/api/label-options')
+      axios.get('/api/label-options', {
+        params: { for_editor: true },
+      })
         .then(response => {
-          // console.log(response)
+          console.log(response)
           for (let key in response.data[0].labels) {
             // console.log()
             this.labelNames.push(`{${response.data[0].labels[key]}}`)

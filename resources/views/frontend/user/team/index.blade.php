@@ -219,6 +219,7 @@
                     @foreach($documents as $document)
                         <div class="d-flex justify-content-between py-3 list-group-item">
                             <pdf
+                                :team-mode="true"
                                 :team="{{ $team }}"
                                 :document="{{ $document }}"
                             ></pdf>

@@ -112,11 +112,7 @@ class TourOrder extends Model implements AuditableInterface
      */
     public function getSharedDocuments($order_id)
     {
-        // dd('tourorder model getshareddocs', $tour_id, $order_id);
-        // 
-        // $profiles = $order->profiles()->get()->pluck('content')->first();
-        // $tour = Tour::whereId($tour_id)->AllTeams()->first();
-        // dd($order, $profiles, $tour);
+        
         $order = TourOrder::where('id', $order_id)->first();
         $documents = new Collection;
 

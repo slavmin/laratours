@@ -3,7 +3,9 @@
 namespace App\Repositories\Frontend\Api\Document;
 
 use App\Models\Auth\Team;
-
+use App\Models\Tour\Tour;
+use App\Models\Tour\TourOrder;
+use Carbon\Carbon;
 
 /**
  *  Class DocumentRepository
@@ -21,7 +23,7 @@ class LabelsRepository
    * 
    * @return array
    */
-  public function getLabels($team_id) 
+  public function getTeamLabelsWithValues($team_id) 
   {
     $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
         
@@ -87,27 +89,113 @@ class LabelsRepository
     ];
     
     return compact('labels');
-    // $columns = [
-    //   'id',
-    //   'title',
-    //   'slug',
-    //   'is_published',
-    //   'published_at',
-    //   'user_id',
-    //   'category_id',
-    // ];
+  }
 
-    // $result = $this
-    //   ->startConditions()
-    //   ->select($columns)
-    //   ->orderBy('id', 'DESC')
-    //   ->with([
-    //     'category:id,title',
-    //     'user:id,name'
-    //   ])
-    //   ->paginate($perPage);
-      
-    // return $result;
+  public function getTouristLabelsWithValues($order_id, $tour_id) {
+
+    $order = TourOrder::where('id', $order_id)->first();
+    $profiles = $order->profiles()->get()->pluck('content')->first();
+
+    $tour = Tour::whereId($tour_id)->AllTeams()->first();
+
+    $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
+    $agent_profiles = $agent->getProfilesAttribute();
+    
+    $labels = [
+      // Order info 
+      'внутренний номер заявки'
+        => $order->id,
+      'дата печати'
+        => $order->updated_at,
+      'стоимость тура'
+        => $order->total_price,
+
+      // Agent info
+      'город компании'
+        => $agent_profiles['formal']['company_city'],
+      'компания компании'
+        => $agent->name,
+      'адрес юридический компании'
+        => $agent_profiles['formal']['company_address'],
+      // 'адрес фактический компании'
+      //   => $agent_profiles['real']['company_address'],
+      'инн компании'
+        => $agent_profiles['formal']['company_inn'],
+      'кпп компании'
+        => $agent_profiles['formal']['company_kpp'],
+      'телефоны компании'
+        => $agent_profiles['formal']['company_phone'],
+      'e-mail компании'
+        => $agent_profiles['formal']['company_email'],
+      'рассчетный счет компании'
+        => $agent_profiles['formal']['company_bankaccount'],
+      'банк компании'
+        => $agent_profiles['formal']['company_bankname'],
+      'корреспондентский счет компании'
+        => $agent_profiles['formal']['company_bankcorr'],
+
+
+      // Tourist info
+      'ФИО покупателя'
+        => $profiles[0]['first_name']." ".$profiles[0]['last_name'],
+      'паспортные данные покупателя'
+        => $profiles[0]['passport'],
+      'адрес покупателя'
+        => $profiles[0]['address'],
+      'телефон покупателя'
+        => $profiles[0]['phone'],
+      'e-mail покупателя'
+          => $profiles[0]['email'],
+    ];
+
+    return compact('order', 'profiles', 'tour', 'agent', 'agent_profiles', 'labels');
+  }
+
+  public function labelsList() {
+    $labels = [
+      'компания покупателя',
+      'инн покупателя',
+      'кпп покупателя',
+      'адрес юридический покупателя',
+      'адрес покупателя',
+      'телефон покупателя',
+      'рассчетный счет покупателя',
+      'банк покупателя',
+      'корреспондентский счет покупателя',
+      'бик покупателя',
+      'огрн покупателя',
+      'оквэд покупателя',
+      'полное название компании',
+      'инн компании',
+      'кпп компании',
+      'адрес юридический компании',
+      'адрес фактический компании',
+      'телефоны компании',
+      'рассчетный счет компании',
+      'банк компании',
+      'корреспондентский счет компании',
+      'бик компании',
+      'огрн компании',
+      'оквэд компании',
+      'город компании',
+      'внутренний номер заявки',
+      'дата печати',
+      'полное название компании',
+      'ФИО генерального директора в родительном падеже',
+      'стоимость тура',
+      'внутренний номер заявки',
+      'дата печати',
+      'офис менеджера, адрес и телефон',
+      'ФИО генерального директора',
+      'печать и подпись генерального директора',
+      'ФИО покупателя',
+      'паспортные данные покупателя',
+      'адрес покупателя',
+      'телефон покупателя',
+      'e-mail покупателя',
+    ];
+
+    return $labels;
   }
 
 }

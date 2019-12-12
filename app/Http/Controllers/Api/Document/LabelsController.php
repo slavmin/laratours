@@ -24,42 +24,24 @@ class LabelsController extends Controller
     
     public function getInfo(Request $request) 
     {
-        
-        if (!$request->team_id) 
+        if ($request->for_editor) 
         {
-            $labels = [
-                'компания покупателя',
-                'инн покупателя',
-                'кпп покупателя',
-                'адрес юридический покупателя',
-                'адрес покупателя',
-                'телефон покупателя',
-                'рассчетный счет покупателя',
-                'банк покупателя',
-                'корреспондентский счет покупателя',
-                'бик покупателя',
-                'огрн покупателя',
-                'оквэд покупателя',
-                'полное название компании',
-                'инн компании',
-                'кпп компании',
-                'адрес юридический компании',
-                'адрес фактический компании',
-                'телефоны компании',
-                'рассчетный счет компании',
-                'банк компании',
-                'корреспондентский счет компании',
-                'бик компании',
-                'огрн компании',
-                'оквэд компании',
-            ];
+            $labels = $this->labelsRepository->labelsList();
 
             return response()->json([compact('labels')]);
         }
 
-        if ($request->team_id) 
+        if ($request->team_mode) 
         {
-            $labels = $this->labelsRepository->getLabels($request->team_id);
+            $labels = $this->labelsRepository->getTeamLabelsWithValues($request->team_id);
+        }
+
+        if ($request->tourist_mode)
+        {
+            $order_id = $request->order_id;
+            $tour_id = $request->tour_id;
+
+            $labels = $this->labelsRepository->getTouristLabelsWithValues($order_id, $tour_id);
         }
 
         return response()->json([$labels]);

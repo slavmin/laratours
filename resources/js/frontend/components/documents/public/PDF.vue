@@ -30,6 +30,22 @@ export default {
       default: () => {
         return {}
       }
+    },
+    teamMode: {
+      type: Boolean,
+      default: false,
+    },
+    touristMode: {
+      type: Boolean,
+      default: false,
+    },
+    orderId: {
+      type: Number,
+      default: NaN,
+    },
+    tourId: {
+      type: Number,
+      default: NaN,
     }
   },
   data() {
@@ -38,19 +54,43 @@ export default {
       result: '',
     }
   },
+  computed: {
+    requestParameters: function() {
+      let result = {}
+      if (this.teamMode) {
+        result =  { 
+          team_mode: true,
+          team_id: this.document.team_id, 
+        }
+      }
+      if (this.touristMode) {
+        result = {
+          tourist_mode: true,
+          order_id: this.orderId,
+          tour_id: this.tourId,
+        }
+      }
+      return result
+    }
+  },
+  mounted() {
+    console.log(this.document)
+  },
   methods: {
     getPdf() {
       axios.get('/api/label-options', {
-        params: { team_id: this.document.team_id }
+        params: this.requestParameters,
       })
         .then(response => {
           console.log(response)
           this.labels = response.data[0].labels
+          console.log(this.labels)
         })
         .then(response => {
           this.result = this.document.template
           for (let key in this.labels) {
-            while (this.result.includes(key)) {
+            while (this.result.includes('{' + key + '}')) {
+              console.log(key)
               this.result = this.result.replace('{' + key + '}', this.labels[key])
             }
           }

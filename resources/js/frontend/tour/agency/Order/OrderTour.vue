@@ -211,7 +211,10 @@
           xs2
         >
           <PDF 
+            tourist-mode
             :document="document"
+            :order-id="order.id"
+            :tour-id="tour.id"
           />
         </v-flex>
       </v-layout>
@@ -399,7 +402,6 @@ export default {
     // this.initialRoomsCount()
   },
   mounted() {
-    console.log('documents: ', this.documents)
     this.updateEditMode()
     this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))

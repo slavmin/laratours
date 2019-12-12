@@ -43,10 +43,10 @@
         {!! script(mix('js/frontend.js')) !!}
         @stack('after-scripts')
 
-        <script type="text/javascript">
+        {{-- <script type="text/javascript">
             snow_img = "/img/frontend/snow.gif";                                       
             snow_no = 10;   // quantity                                            
-            var timeszimaon = 1;    // on/off                                          
+            var timeszimaon = 0;    // on/off                                          
             if (typeof(window.pageYOffset) == "number") {
             snow_browser_width = window.innerWidth;
             snow_browser_height = window.innerHeight; }
@@ -91,7 +91,7 @@
             document.getElementById("snow_flake"+i).style.left=snow_xp[i] + snow_am[i]*Math.sin(snow_dx[i])+"px";}
             snow_time = setTimeout("SnowStart()", 10); }
             if (timeszimaon == 1) { SnowStart(); }
-            </script>
+            </script> --}}
 
         @include('includes.partials.ga')
     </body>
