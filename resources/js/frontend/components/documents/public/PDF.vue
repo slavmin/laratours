@@ -94,10 +94,13 @@ export default {
               this.result = this.result.replace('{' + key + '}', this.labels[key])
             }
             while (this.result.includes('\n')) {
-              this.result = this.result.replace('\n', '{\add_newline}')
+              this.result = this.result.replace('\n', '')
             }
             while (this.result.includes('\r')) {
-              this.result = this.result.replace('\r', '{\add_newline}')
+              this.result = this.result.replace('\r', '')
+            }
+            while (this.result.includes('"')) {
+              this.result = this.result.replace('"', '')
             }
           }
           const startHtml = "<html><head><title>Test html 2 pdf.</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style>@page { margin: 24px;}* { font-family: Arial, \"DejaVu Sans\", monospace;}</style><body>"
