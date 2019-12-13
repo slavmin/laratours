@@ -93,16 +93,27 @@ export default {
               console.log(key)
               this.result = this.result.replace('{' + key + '}', this.labels[key])
             }
+            while (this.result.includes('\n')) {
+              this.result = this.result.replace('\n', '{\add_newline}')
+            }
+            while (this.result.includes('\r')) {
+              this.result = this.result.replace('\r', '{\add_newline}')
+            }
           }
-          let opt = {
-            margin:       1,
-            pagebreak:    { mode: 'avoid-all', before: '#page2el' },
-            filename:     `${this.document.name}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 1, width: 900 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          }
-          html2pdf().from(this.result).set(opt).save()
+          const startHtml = "<html><head><title>Test html 2 pdf.</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style>@page { margin: 24px;}* { font-family: Arial, \"DejaVu Sans\", monospace;}</style><body>"
+          const endHtml = "</body></html>"
+          let htmlString = `${startHtml}${this.result}${endHtml}`
+          console.log(htmlString)
+          window.location.replace(`/modules/get-pdf?string=${htmlString}`)
+        //  let opt = {
+        //    margin:       1,
+        //    pagebreak:    { mode: 'avoid-all', before: '#page2el' },
+        //    filename:     `${this.document.name}.pdf`,
+        //    image:        { type: 'jpeg', quality: 0.98 },
+        //    html2canvas:  { scale: 1, width: 900 },
+        //    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        //  }
+        //  html2pdf().from(this.result).set(opt).save()
         })
     }
   }

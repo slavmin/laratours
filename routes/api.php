@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Tour\TourOptionsController;
 use App\Http\Controllers\Api\Document\LabelsController;
+use App\Http\Controllers\Api\Document\PdfController;
 use Illuminate\Http\Request;
 
 /*
