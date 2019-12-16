@@ -177,7 +177,7 @@
         <v-text-field
           v-model="companyInfo.ceoName"
           label="ФИО генерального"
-          name="profile[formal][ceo_name]"
+          name="profile[formal][company_ceo_name]"
           color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
