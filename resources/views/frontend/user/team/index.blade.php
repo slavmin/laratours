@@ -83,6 +83,12 @@
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.name') :</span> {{ $profile['company_name']??'' }}</div>
                         <div class="list-group-item">
+                                <span class="text-secondary">@lang('validation.attributes.frontend.company.full_name') :</span> {{ $profile['company_full_name']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.ceo_name') :</span> {{ $profile['company_ceo_name']??'' }}</div>
+                        <div class="list-group-item">
+                                <span class="text-secondary">@lang('validation.attributes.frontend.company.ceo_name_genetive') :</span> {{ $profile['company_ceo_name_genetive']??'' }}</div>
+                        <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.phone') :</span> {{ $profile['company_phone']??'' }}</div>
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.email') :</span> {{ $profile['company_email']??'' }}</div>
@@ -104,7 +110,16 @@
                             <span class="text-secondary">Коррсчет банка :</span> {{ $profile['company_bankcorr']??'' }}</div>
                         <div class="list-group-item">
                             <span class="text-secondary">КПП :</span> {{ $profile['company_bankkpp']??'' }}</div>
-            
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.bik') :</span> {{ $profile['company_bik']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.okpo') :</span> {{ $profile['company_okpo']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.ogrn') :</span> {{ $profile['company_ogrn']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.okved') :</span> {{ $profile['company_okved']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.manager') :</span> {{ $profile['company_manager']??'' }}</div>
             </div><!--/list-group-->
 
           @endforeach

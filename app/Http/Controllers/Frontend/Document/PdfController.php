@@ -32,7 +32,7 @@ class PdfController extends BaseController
 
         $labels = $order_info['labels'];
 
-        $start_html = "<html><head><title>Test html 2 pdf.</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style>@page { margin: 24px;}* { font-family: Arial, \"DejaVu Sans\", monospace;}</style><body>";
+        $start_html = "<html><head><title>$document->name</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><style>@page { margin: 24px;}* { font-family: Arial, \"DejaVu Sans\", monospace;}</style><body>";
         $end_html = "</body></html>";
         $html_string = $start_html.$document->template.$end_html;
         foreach ($labels as $key => $value) {
@@ -44,6 +44,6 @@ class PdfController extends BaseController
         $dompdf->set_paper('A4');
         $dompdf->loadHtml($html_string);
         $dompdf->render();
-        $dompdf->stream("dompdf.pdf");
+        $dompdf->stream($document->name);
     }
 }
