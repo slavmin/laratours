@@ -118,10 +118,13 @@ class Team extends TeamworkTeam
     public function getSharedDocuments()
     {
         $operators = $this->getTeamSubscriptions();
-        $subscriptions = array_keys($operators);
-        $documents = Document::whereIn('team_id', $subscriptions)->where('pdf_for_agent', 1);
-        
-        return $documents->AllTeams()->get();
+        $documents = [];
+        if ($operators)
+        {
+            $subscriptions = array_keys($operators);
+            $documents = Document::whereIn('team_id', $subscriptions)->where('pdf_for_agent', 1)->AllTeams()->get();
+        }
+        return $documents;
     }
 
 }

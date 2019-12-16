@@ -46,6 +46,16 @@
           required
         />
         <v-text-field
+          v-model="companyInfo.ogrn"
+          label="ОГРН"
+          mask="##########"
+          name="profile[formal][company_ogrn]"
+          color="#aa282a lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
           v-model="companyInfo.inn"
           label="ИНН"
           mask="##########"
@@ -60,6 +70,26 @@
           label="КПП"
           mask="#########"
           name="profile[formal][company_kpp]"
+          color="#aa282a lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.bik"
+          label="БИК"
+          mask="####################"
+          name="profile[formal][company_bik]"
+          color="#aa282a lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.okved"
+          label="ОКВЭД"
+          mask="##########"
+          name="profile[formal][company_okved]"
           color="#aa282a lighten-3"
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
@@ -102,7 +132,8 @@
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           required
-        /><v-text-field
+        />
+        <v-text-field
           v-model="companyInfo.bankkpp"
           label="КПП"
           mask="#########"
@@ -141,6 +172,15 @@
           :rules="[v => !!v || 'Это обязательное поле']"
           outline
           mask="+N (NNN) NNN-NN-NN"
+          required
+        />
+        <v-text-field
+          v-model="companyInfo.ceoName"
+          label="ФИО генерального"
+          name="profile[formal][ceo_name]"
+          color="#aa282a lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
           required
         />
         <v-text-field
@@ -242,8 +282,12 @@ export default {
         'profile[formal][company_country]': d.country,
         'profile[formal][company_city]': d.region,
         'profile[formal][company_address]': d.address,
+        'profile[formal][company_ogrn]': d.ogrn,
         'profile[formal][company_inn]': d.inn,
         'profile[formal][company_kpp]': d.kpp,
+        'profile[formal][company_okved]': d.okved,
+        'profile[formal][company_bik]': d.bik,
+        'profile[formal][company_ceo_name]': d.ceoName,
         'first_name': d.staffName,
         'last_name': d.staffSurname,
         'email': d.email,

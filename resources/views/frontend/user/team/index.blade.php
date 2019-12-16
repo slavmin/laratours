@@ -226,7 +226,7 @@
 
             @endif
 
-            @if($documents->count())
+            @if($documents)
             
                 <div class="list-group mb-4">
                     <h6 class="list-group-item text-info py-3">@lang('labels.frontend.teams.documents')</h6>

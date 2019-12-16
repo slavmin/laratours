@@ -180,14 +180,19 @@ export default {
       })
         .then(r => {
           const data = r.data.suggestions[0]
+          console.log(data)
           const result = {
             name: data.value,
             country: data.data.address.data.country,
             region: data.data.address.data.region_with_type,
             address: data.data.address.value,
+            ogrn: data.data.ogrn,
             inn: data.data.inn,
-            kpp: data.data.kpp
+            kpp: data.data.kpp,
+            okved: data.data.okved,
+            ceoName: data.data.management.name,
           }
+          console.log(result)
           this.companyInfo = result
         })
         .catch(e => console.log(e))
