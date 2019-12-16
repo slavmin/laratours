@@ -99,6 +99,8 @@
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.address') :</span> {{ $profile['company_address']??'' }}</div>
                         <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.real_address') :</span> {{ $profile['company_real_address']??'' }}</div>
+                        <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.inn') :</span> {{ $profile['company_inn']??'' }}</div>
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>

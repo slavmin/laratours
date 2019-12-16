@@ -112,7 +112,8 @@ class Team extends TeamworkTeam
      */
     public function getProfilesAttribute()
     {
-        return array_merge($this->getFormalProfileAttribute(), $this->getRealProfileAttribute());
+        // return array_merge($this->getFormalProfileAttribute(), $this->getRealProfileAttribute());
+        return array_merge($this->getFormalProfileAttribute());
     }
 
     public function getSharedDocuments()

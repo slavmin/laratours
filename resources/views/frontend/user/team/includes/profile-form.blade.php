@@ -143,6 +143,21 @@
         </div><!--row-->
 
         <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ html()->label(__('validation.attributes.frontend.company.real_address'))->for('company_real_address') }}
+
+                    {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_real_address]', $profile['company_real_address']??'')
+                        ->class('form-control')
+                        ->id('company_real_address')
+                        ->placeholder(__('validation.attributes.frontend.company.real_address'))
+                        ->attribute('maxlength', 191)
+                        ->required()}}
+                </div><!--form-group-->
+            </div><!--col-->
+        </div><!--row-->
+
+        <div class="row">
             <div class="col-12 col-md-6">
                 <div class="form-group">
                     {{ html()->label(__('validation.attributes.frontend.company.inn'))->for('company_inn') }}

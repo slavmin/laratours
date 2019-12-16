@@ -49,8 +49,8 @@ class LabelsRepository
         => $operator_profiles['formal']['company_kpp'],
       'адрес юридический компании'
         => $operator_profiles['formal']['company_address'],
-      // 'адрес фактический компании'
-      //   => $operator_profiles['real']['company_address'],
+      'адрес фактический компании'
+        => $operator_profiles['formal']['company_real_address'],
       'телефоны компании'
         => $operator_profiles['formal']['company_phone'],
       'рассчетный счет компании'
@@ -84,6 +84,8 @@ class LabelsRepository
         => $agent_profiles['formal']['company_kpp'],
       'адрес юридический покупателя'
         => $agent_profiles['formal']['company_address'],
+      'адрес фактический покупателя'
+        => $agent_profiles['formal']['company_real_address'],
       'телефоны покупателя'
         => $agent_profiles['formal']['company_phone'],
       'рассчетный счет покупателя'
@@ -109,8 +111,81 @@ class LabelsRepository
 
     $order = TourOrder::where('id', $order_id)->first();
     $profiles = $order->profiles()->get()->pluck('content')->first();
+    $all_tourists_info = '';
+    $count_adl = 0;
+    $count_chld = 0;
+    foreach($profiles as $profile)
+    {
+      $all_tourists_info = $all_tourists_info
+        .$profile['first_name']." "
+        .$profile['last_name'].", "
+        ."документ: "
+        .$profile['passport'].", "
+        ."дата рождения: "
+        .$profile['dob'].". ";
+      $today = Carbon::now();
+      $profile_dob =  new Carbon($profile['dob']);
+      $result = $today->diffInYears($profile_dob);
+      if ($result > 18) 
+      {
+        $count_adl++;
+      }
+      else 
+      {
+        $count_chld++;
+      }
+    }
 
     $tour = Tour::whereId($tour_id)->AllTeams()->first();
+    $tour_options = json_decode($tour->extra);
+    // dd($tour_options);
+
+    $hotels_info = '';
+    if ($tour_options->hotel)
+    {
+      foreach($tour_options->hotel as $hotel) 
+      {
+        $hotels_info = 
+          $hotels_info
+          .$hotel->hotel->name.": "
+          .$hotel->obj->name.". <br>";
+      }
+    }
+
+    $excursions_info = '';
+    if ($tour_options->museum)
+    {
+      foreach($tour_options->museum as $museum)
+      {
+        $excursions_info = 
+          $excursions_info
+          .$museum->museum->name.": "
+          .$museum->obj->name.". <br>";
+      }
+    }
+
+    $transport_info = '';
+    if ($tour_options->transport)
+    {
+      foreach($tour_options->transport as $transport)
+      {
+        $transport_info = 
+          $transport_info
+          .$transport->transport->name.": "
+          .$transport->obj->name.". <br>";
+      }
+    }
+
+    $additional_services_info = '';
+    if ($tour_options->customPrice)
+    {
+      foreach($tour_options->customPrice as $additional_service)
+      {
+        $additional_services_info = 
+          $additional_services_info
+          .$additional_service->name.". <br>";
+      }
+    }
 
     $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
     $agent_profiles = $agent->getProfilesAttribute();
@@ -122,6 +197,22 @@ class LabelsRepository
         => (new Carbon($order->updated_at))->isoFormat('d MMM Y'),
       'стоимость тура'
         => $order->total_price,
+      'информация по туристам, без полученных документов'
+        => $all_tourists_info,
+      'количество туристов, взрослые'
+        => $count_adl,
+      'количество туристов, дети'
+        => $count_chld,
+      // 'информация по пакетному туру'
+      //   => 'информация по пакетному туру не заполнена',
+      'информация по отелям'
+        => $hotels_info,
+      'информация по экскурсиям'
+        => $excursions_info,
+      'информация по трансферам'
+        => $transport_info,
+      'информация по доп.услугам'
+        => $additional_services_info,
 
       // Agent info
       'город компании'
@@ -136,6 +227,8 @@ class LabelsRepository
         => $agent_profiles['formal']['company_ceo_name_genetive'],
       'адрес юридический компании'
         => $agent_profiles['formal']['company_address'],
+      'адрес фактический компании'
+        => $agent_profiles['formal']['company_real_address'],
       'инн компании'
         => $agent_profiles['formal']['company_inn'],
       'кпп компании'
@@ -184,6 +277,7 @@ class LabelsRepository
       'инн покупателя',
       'кпп покупателя',
       'адрес юридический покупателя',
+      'адрес фактический покупателя',
       'адрес покупателя',
       'телефон покупателя',
       'рассчетный счет покупателя',
@@ -214,12 +308,27 @@ class LabelsRepository
       'дата печати',
       'офис менеджера, адрес и телефон',
       'ФИО генерального директора',
-      'печать и подпись генерального директора',
+      // 'печать и подпись генерального директора',
       'ФИО покупателя',
       'паспортные данные покупателя',
       'адрес покупателя',
       'телефон покупателя',
       'e-mail покупателя',
+      'информация по туристам, без полученных документов',
+      'количество туристов, взрослые',
+      'количество туристов, дети',
+      // 'информация по пакетному туру',
+      'информация по отелям',
+      'информация по экскурсиям',
+      'информация по трансферам',
+      // 'информация по страховке',
+      // 'информация по визам',
+      'информация по доп.услугам',
+      // 'стоимость тура в валюте',
+      // 'сумма оплаты клиента в заявке, предоплата',
+      // 'сумма оплаты клиента в заявке, доплата',
+      // 'финансовые гарантии туроператора',
+
     ];
 
     return $labels;
