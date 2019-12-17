@@ -135,7 +135,7 @@ class OrderController extends Controller
         $audits = $item->audits->sortByDesc('created_at');
 
         $documents = $item->getSharedDocuments($item->id);
-
+        
         return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')

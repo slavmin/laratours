@@ -208,7 +208,7 @@
         <v-flex 
           v-for="(document, i) in documents"
           :key="i"
-          xs2
+          xs1
         >
           <PDF 
             tourist-mode
@@ -318,7 +318,7 @@ export default {
       }
     },
     documents: {
-      type: Array,
+      type: String,
       default: () => {
         return {}
       }

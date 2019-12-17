@@ -16,7 +16,7 @@
                         <small class="text-muted">@lang('labels.backend.access.teams.active')</small>
                     </h4>
                 </div><!--col-->
-
+                
                 <div class="col-sm-7 pull-right">
                     @include('backend.auth.team.includes.header-buttons')
                 </div><!--col-->

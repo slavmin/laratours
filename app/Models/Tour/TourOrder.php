@@ -10,7 +10,6 @@ use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 use App\Models\Traits\HasPagination;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableInterface;
@@ -105,21 +104,36 @@ class TourOrder extends Model implements AuditableInterface
     }
 
     /**
-     * Возвращает документы для туриста.
-     * Принимает id тура и id заказа
+     * Возвращает документы для туриста и агентства.
+     * Принимает id заказа
      * 
-     * @param tour_id, order_id
+     * @param $order_id
      */
     public function getSharedDocuments($order_id)
     {
         
         $order = TourOrder::where('id', $order_id)->first();
-        $documents = new Collection;
 
         // Если статус "оплачено" и выше
         if ($order->status >= 2) 
         {
-            $documents = Document::where('team_id', $order->team_id)->where('pdf_for_tourist', 1)->AllTeams()->get();
+            // $documents_for_tourist = 
+            //     Document::whereIn('team_id', [$order->team_id, $order->operator_id])
+            //         ->where('pdf_for_tourist', 1)
+            //         ->AllTeams()
+            //         ->get();
+
+            // $documents_for_agency =
+            //     Document::where('team_id', [$order->operator_id])
+            //     ->where('pdf_for_agent', 1)
+            //     ->AllTeams()
+            //     ->get();
+            $documents =
+                Document::where('team_id', [$order->operator_id])
+                ->where('pdf_for_agent', 1)
+                ->orwhere('pdf_for_tourist', 1)
+                ->AllTeams()
+                ->get();
         }
         
         return $documents;

@@ -26,9 +26,9 @@ class LabelsRepository
   public function getTeamLabelsWithValues($team_id) 
   {
     $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
-        
+    
     $agent_profiles = $agent->getProfilesAttribute();
-
+    
     $operator = Team::where('id', $team_id)->first();
 
     $operator_profiles = $operator->getProfilesAttribute();
@@ -74,9 +74,9 @@ class LabelsRepository
         => $agent->name,
       'полное название компании'
         => $agent_profiles['formal']['company_full_name'],
-      'ФИО генерального директора'
+      'ФИО генерального директора покупателя'
         => $agent_profiles['formal']['company_ceo_name'],
-      'ФИО генерального директора в родительном падеже'
+      'ФИО генерального директора в родительном падеже покупателя'
         => $agent_profiles['formal']['company_ceo_name_genetive'],
       'инн покупателя'
         => $agent_profiles['formal']['company_inn'],
@@ -111,9 +111,11 @@ class LabelsRepository
 
     $order = TourOrder::where('id', $order_id)->first();
     $profiles = $order->profiles()->get()->pluck('content')->first();
+
     $all_tourists_info = '';
     $count_adl = 0;
     $count_chld = 0;
+
     foreach($profiles as $profile)
     {
       $all_tourists_info = $all_tourists_info
@@ -187,8 +189,12 @@ class LabelsRepository
       }
     }
 
+    $operator = Team::where('id', $order->operator_id)->first();
+    $operator_profiles = $operator->getProfilesAttribute();
+
     $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
     $agent_profiles = $agent->getProfilesAttribute();
+    // dd($agent, $agent_profiles);
     $labels = [
       // Order info 
       'внутренний номер заявки'
@@ -214,44 +220,82 @@ class LabelsRepository
       'информация по доп.услугам'
         => $additional_services_info,
 
-      // Agent info
-      'город компании'
-        => $agent_profiles['formal']['company_city'],
+      // Operator info
       'название компании'
-        => $agent->name,
+        => $operator_profiles['formal']['company_name'],
       'полное название компании'
-        => $agent_profiles['formal']['company_full_name'],
+        => $operator_profiles['formal']['company_full_name'],
+      'город компании'
+        => $operator_profiles['formal']['company_city'],
       'ФИО генерального директора'
-        => $agent_profiles['formal']['company_ceo_name'],
+        => $operator_profiles['formal']['company_ceo_name'],
       'ФИО генерального директора в родительном падеже'
-        => $agent_profiles['formal']['company_ceo_name_genetive'],
-      'адрес юридический компании'
-        => $agent_profiles['formal']['company_address'],
-      'адрес фактический компании'
-        => $agent_profiles['formal']['company_real_address'],
+        => $operator_profiles['formal']['company_ceo_name_genetive'],
       'инн компании'
-        => $agent_profiles['formal']['company_inn'],
+        => $operator_profiles['formal']['company_inn'],
       'кпп компании'
-        => $agent_profiles['formal']['company_kpp'],
+        => $operator_profiles['formal']['company_kpp'],
+      'адрес юридический компании'
+        => $operator_profiles['formal']['company_address'],
+      'адрес фактический компании'
+        => $operator_profiles['formal']['company_real_address'],
       'телефоны компании'
-        => $agent_profiles['formal']['company_phone'],
-      'e-mail компании'
-        => $agent_profiles['formal']['company_email'],
+        => $operator_profiles['formal']['company_phone'],
       'рассчетный счет компании'
-        => $agent_profiles['formal']['company_bankaccount'],
+        => $operator_profiles['formal']['company_bankaccount'],
       'банк компании'
-        => $agent_profiles['formal']['company_bankname'],
+        => $operator_profiles['formal']['company_bankname'],
       'корреспондентский счет компании'
-        => $agent_profiles['formal']['company_bankcorr'],
+        => $operator_profiles['formal']['company_bankcorr'],
       'бик компании'
-        => $agent_profiles['formal']['company_bik'],
-      'окпо компании'
-        => $agent_profiles['formal']['company_okpo'],
+        => $operator_profiles['formal']['company_bik'],
+      'окпо покупателя'
+        => $operator_profiles['formal']['company_okpo'],
       'огрн компании'
-        => $agent_profiles['formal']['company_ogrn'],
+        => $operator_profiles['formal']['company_ogrn'],
       'оквэд компании'
-        => $agent_profiles['formal']['company_okved'],
+        => $operator_profiles['formal']['company_okved'],
       'офис менеджера, адрес и телефон'
+        => $operator_profiles['formal']['company_manager'],
+
+      // Agent info
+      'город покупателя'
+        => $agent_profiles['formal']['company_city'],
+      'компания покупателя'
+        => $agent_profiles['formal']['company_name'],
+      'полное название компании покупателя'
+        => $agent_profiles['formal']['company_full_name'],
+      'ФИО генерального директора покупателя'
+        => $agent_profiles['formal']['company_ceo_name'],
+      'ФИО генерального директора в родительном падеже покупателя'
+        => $agent_profiles['formal']['company_ceo_name_genetive'],
+      'адрес юридический покупателя'
+        => $agent_profiles['formal']['company_address'],
+      'адрес фактический покупателя'
+        => $agent_profiles['formal']['company_real_address'],
+      'инн покупателя'
+        => $agent_profiles['formal']['company_inn'],
+      'кпп покупателя'
+        => $agent_profiles['formal']['company_kpp'],
+      'телефоны покупателя'
+        => $agent_profiles['formal']['company_phone'],
+      'e-mail покупателя'
+        => $agent_profiles['formal']['company_email'],
+      'рассчетный счет покупателя'
+        => $agent_profiles['formal']['company_bankaccount'],
+      'банк покупателя'
+        => $agent_profiles['formal']['company_bankname'],
+      'корреспондентский счет покупателя'
+        => $agent_profiles['formal']['company_bankcorr'],
+      'бик покупателя'
+        => $agent_profiles['formal']['company_bik'],
+      'окпо покупателя'
+        => $agent_profiles['formal']['company_okpo'],
+      'огрн покупателя'
+        => $agent_profiles['formal']['company_ogrn'],
+      'оквэд покупателя'
+        => $agent_profiles['formal']['company_okved'],
+      'офис менеджера, адрес и телефон покупателя'
         => $agent_profiles['formal']['company_manager'],
 
 
@@ -273,20 +317,21 @@ class LabelsRepository
 
   public function labelsList() {
     $labels = [
-      'компания покупателя',
-      'инн покупателя',
-      'кпп покупателя',
-      'адрес юридический покупателя',
-      'адрес фактический покупателя',
-      'адрес покупателя',
-      'телефон покупателя',
-      'рассчетный счет покупателя',
-      'банк покупателя',
-      'корреспондентский счет покупателя',
-      'бик покупателя',
-      'огрн покупателя',
-      'оквэд покупателя',
+      'внутренний номер заявки',
+      'дата печати',
+      'стоимость тура',
+      'информация по туристам, без полученных документов',
+      'количество туристов, взрослые',
+      'количество туристов, дети',
+      'информация по отелям',
+      'информация по экскурсиям',
+      'информация по трансферам',
+      'информация по доп.услугам',
+      'название компании',
       'полное название компании',
+      'город компании',
+      'ФИО генерального директора',
+      'ФИО генерального директора в родительном падеже',
       'инн компании',
       'кпп компании',
       'адрес юридический компании',
@@ -296,39 +341,34 @@ class LabelsRepository
       'банк компании',
       'корреспондентский счет компании',
       'бик компании',
+      'окпо покупателя',
       'огрн компании',
       'оквэд компании',
-      'город компании',
-      'внутренний номер заявки',
-      'дата печати',
-      'полное название компании',
-      'ФИО генерального директора в родительном падеже',
-      'стоимость тура',
-      'внутренний номер заявки',
-      'дата печати',
       'офис менеджера, адрес и телефон',
-      'ФИО генерального директора',
-      // 'печать и подпись генерального директора',
+      'город покупателя',
+      'компания покупателя',
+      'полное название компании покупателя',
+      'ФИО генерального директора покупателя',
+      'ФИО генерального директора в родительном падеже покупателя',
+      'адрес юридический покупателя',
+      'адрес фактический покупателя',
+      'инн покупателя',
+      'кпп покупателя',
+      'телефоны покупателя',
+      'e-mail покупателя',
+      'рассчетный счет покупателя',
+      'банк покупателя',
+      'корреспондентский счет покупателя',
+      'бик покупателя',
+      'окпо покупателя',
+      'огрн покупателя',
+      'оквэд покупателя',
+      'офис менеджера, адрес и телефон покупателя',
       'ФИО покупателя',
       'паспортные данные покупателя',
       'адрес покупателя',
       'телефон покупателя',
       'e-mail покупателя',
-      'информация по туристам, без полученных документов',
-      'количество туристов, взрослые',
-      'количество туристов, дети',
-      // 'информация по пакетному туру',
-      'информация по отелям',
-      'информация по экскурсиям',
-      'информация по трансферам',
-      // 'информация по страховке',
-      // 'информация по визам',
-      'информация по доп.услугам',
-      // 'стоимость тура в валюте',
-      // 'сумма оплаты клиента в заявке, предоплата',
-      // 'сумма оплаты клиента в заявке, доплата',
-      // 'финансовые гарантии туроператора',
-
     ];
 
     return $labels;

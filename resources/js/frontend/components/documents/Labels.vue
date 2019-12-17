@@ -51,7 +51,7 @@ export default {
       })
         .then(response => {
           console.log(response)
-          for (let key in response.data[0].labels) {
+          for (let key in response.data[0].labels.sort()) {
             // console.log()
             this.labelNames.push(`{${response.data[0].labels[key]}}`)
           }
