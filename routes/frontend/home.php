@@ -233,6 +233,8 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::group(['namespace' => 'Document'], function() {
             Route::resource('document', 'DocumentController');
             Route::get('get-pdf', 'PdfController@getPdf');
+            Route::get('get-word', 'WordController@getWord');
+            Route::get('get-word-gibdd', 'GibddNotifyController@getWord');
         });
     });
 

@@ -1,12 +1,19 @@
 <template>
-  <v-btn 
-    color="green"
-    dark
-    small
-    @click="getWord"
-  >
-    Уведомление ГИБДД.docx
-  </v-btn>
+  <form action="/modules/get-word-gibdd">
+    <input
+      type="hidden"
+      name="tour_id"
+      :value="tour.id"
+    >
+    <v-btn 
+      color="green"
+      dark
+      small
+      type="submit"
+    >
+      Уведомление ГИБДД.docx
+    </v-btn>
+  </form>
 </template>
 <script>
 import { mapGetters } from 'vuex'
