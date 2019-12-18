@@ -192,9 +192,9 @@ class LabelsRepository
     $operator = Team::where('id', $order->operator_id)->first();
     $operator_profiles = $operator->getProfilesAttribute();
 
-    $agent = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
+    $agent = Team::whereId($order->team_id)->first();
     $agent_profiles = $agent->getProfilesAttribute();
-    // dd($agent, $agent_profiles);
+    
     $labels = [
       // Order info 
       'внутренний номер заявки'
@@ -311,7 +311,7 @@ class LabelsRepository
       'e-mail покупателя'
           => $profiles[0]['email'],
     ];
-    // dd($labels);
+    
     return compact('order', 'profiles', 'tour', 'agent', 'agent_profiles', 'labels');
   }
 

@@ -17,9 +17,6 @@
         Статус оператора
       </th>
       <th>
-        Документы
-      </th>
-      <th>
         Действия
       </th>
     </thead>
@@ -64,22 +61,6 @@
           >
             {{ statusesTranslated[order.status] }}
           </span>
-        </td>
-        <td>
-          <v-btn 
-            color="green"
-            dark
-            @click="getPdf(order)"
-          >
-            pdf
-          </v-btn>
-          <v-btn 
-            color="green"
-            dark
-            @click="getWord(order)"
-          >
-            word
-          </v-btn>
         </td>
         <td>
           <v-layout 

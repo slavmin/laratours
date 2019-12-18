@@ -33,11 +33,7 @@ class OrderController extends Controller
         $tour_names = TourOrder::getTourNames();
 
         $items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate();
-        // // shoom
-        // // vvvvvvvv
-        // $all_items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate(100);
-        // // ^^^^^^^^
-        // // /shoom
+
         $deleted = TourOrder::where('team_id', auth()->user()->current_team_id)->onlyTrashed()->get();
 
         return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names'))
@@ -85,7 +81,9 @@ class OrderController extends Controller
 
         $audits = $item->audits->sortByDesc('created_at');
 
-        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits'))
+        $documents = $item->getSharedDocuments($item->id);
+
+        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))

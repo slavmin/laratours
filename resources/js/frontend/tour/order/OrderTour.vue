@@ -203,6 +203,26 @@
         </v-tabs>
       </v-card-text>
       <v-divider />
+      <v-layout
+        v-if="showDocuments"
+        row
+        wrap
+        justify-space-around
+      >
+        <v-flex 
+          v-for="(document, i) in documents"
+          :key="i"
+          xs1
+        >
+          <PDF 
+            tourist-mode
+            :document="document"
+            :order-id="order.id"
+            :tour-id="tour.id"
+          />
+        </v-flex>
+      </v-layout>
+      <v-divider />
       <div class="subheading text-xs-right mr-3">
         Цена заказа: {{ parseInt(getOrderPrice) }}
         <br>
@@ -248,6 +268,7 @@ import { mapActions, mapGetters } from 'vuex'
 import OrderForm from './OrderForm'
 import OrderContacts from '../includes/OrderContacts'
 import moment from 'moment'
+import PDF from '../../components/documents/public/PDF'
 // import Total from './Total'
 export default {
   name: 'OrderTour',
@@ -255,6 +276,7 @@ export default {
     OrderForm,
     OrderContacts,
     // Total,
+    PDF,
   },
   props: {
     order: {
@@ -297,6 +319,12 @@ export default {
         return []
       }
     },
+    documents: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
   },
   data () {
     return {
@@ -320,6 +348,7 @@ export default {
       'getOrderPrice',
       'getOrderCommission',
       'getOrderContacts',
+      'getOrderStatus',
     ]),
     prevChat: function() {
       console.log(this.profiles)
@@ -363,6 +392,14 @@ export default {
         text: this.statuses[index]
       }))
       return result
+    },
+    showDocuments: function() {
+      if (this.getOrderStatus != 'Не подтвержден' 
+          && this.getOrderStatus != 'Подтвержден') {
+        return true
+      } else {
+        return false
+      }
     },
   },
   created() {

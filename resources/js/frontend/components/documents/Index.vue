@@ -66,9 +66,9 @@
                   row 
                   wrap
                 >
-                  <Preview 
+                  <!-- <Preview 
                     :document="document"
-                  />
+                  /> -->
                   <!-- <MakePDF
                     :document="document"
                   />
@@ -120,11 +120,11 @@
   </v-container>
 </template>
 <script>
-import Preview from './Preview'
+// import Preview from './Preview'
 export default {
   name: 'DocumentsIndex',
   components: {
-    Preview,
+    // Preview,
   },
   props: {
     token: {

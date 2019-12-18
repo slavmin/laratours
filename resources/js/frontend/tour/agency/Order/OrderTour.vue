@@ -318,9 +318,9 @@ export default {
       }
     },
     documents: {
-      type: String,
+      type: Array,
       default: () => {
-        return {}
+        return []
       }
     }
   },

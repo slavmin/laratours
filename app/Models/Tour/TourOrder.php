@@ -117,25 +117,15 @@ class TourOrder extends Model implements AuditableInterface
         // Если статус "оплачено" и выше
         if ($order->status >= 2) 
         {
-            // $documents_for_tourist = 
-            //     Document::whereIn('team_id', [$order->team_id, $order->operator_id])
-            //         ->where('pdf_for_tourist', 1)
-            //         ->AllTeams()
-            //         ->get();
-
-            // $documents_for_agency =
-            //     Document::where('team_id', [$order->operator_id])
-            //     ->where('pdf_for_agent', 1)
-            //     ->AllTeams()
-            //     ->get();
             $documents =
-                Document::where('team_id', [$order->operator_id])
+                Document::whereIn('team_id', [$order->team_id, $order->operator_id])
                 ->where('pdf_for_agent', 1)
-                ->orwhere('pdf_for_tourist', 1)
+                ->orWhere('pdf_for_tourist', 1)
                 ->AllTeams()
                 ->get();
+                
         }
-        
+
         return $documents;
     }
 

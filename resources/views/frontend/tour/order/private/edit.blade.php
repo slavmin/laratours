@@ -19,6 +19,7 @@
             profiles-raw="{{ $s_order_profiles }}"
             tour-profiles-raw="{{ $s_tour_profiles }}"
             token="{{ csrf_token() }}"
+            :documents="{{ $documents }}"
         ></operator-order-edit>
     @else
         <?php $sitems = json_encode($audits); ?>
