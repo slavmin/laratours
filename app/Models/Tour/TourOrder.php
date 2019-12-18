@@ -10,6 +10,7 @@ use App\Models\Traits\HasProfile;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\UsedByTeams;
 use App\Models\Traits\HasPagination;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableInterface;
@@ -114,7 +115,8 @@ class TourOrder extends Model implements AuditableInterface
         
         $order = TourOrder::where('id', $order_id)->first();
 
-        $documents = [];
+        $documents = new Collection();
+        
         // Если статус "оплачено" и выше
         if ($order->status >= 2) 
         {
