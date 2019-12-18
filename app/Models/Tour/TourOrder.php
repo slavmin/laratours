@@ -114,6 +114,7 @@ class TourOrder extends Model implements AuditableInterface
         
         $order = TourOrder::where('id', $order_id)->first();
 
+        $documents = [];
         // Если статус "оплачено" и выше
         if ($order->status >= 2) 
         {
