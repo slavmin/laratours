@@ -36,7 +36,7 @@
     <input
       v-for="(date, i) in getTour.options.dates"
       :key="i"
-      type="text"
+      type="hidden"
       name="dates[]"
       :value="date"
     >

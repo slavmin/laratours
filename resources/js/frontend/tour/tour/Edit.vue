@@ -128,6 +128,14 @@
               :token="token"
             />
           </v-flex>
+          <v-flex 
+            v-if="showPartnerTour"
+            xs12
+          >
+            <PartnerTour 
+              @scrollme="scrollToTop"
+            />
+          </v-flex>
         </v-layout>
         <v-layout
           class="bottom-sheet"
@@ -153,6 +161,7 @@ import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
 import Services from './Services'
 import Summary from './Summary'
+import PartnerTour from './PartnerTour'
 import BottomSheet from './BottomSheet'
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -168,6 +177,7 @@ export default {
     ChooseAttendant,
     Services,
     Summary,
+    PartnerTour,
     BottomSheet,
     // DayConstructor,
   },
@@ -311,6 +321,9 @@ export default {
     },
     showSummary: function() {
       return this.getConstructorCurrentStage == 'Show summary' ? true : false
+    },
+    showPartnerTour: function() {
+      return this.getConstructorCurrentStage == 'Partner tour' ? true : false
     },
     showTransports: function() {
       if (this.choosenCities.length === 0) {

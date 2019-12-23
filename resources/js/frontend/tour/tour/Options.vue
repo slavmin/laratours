@@ -1,5 +1,10 @@
 <template>
   <v-flex>
+    <v-select
+      v-model="getTour.constructorType"
+      :items="constructorTypes"
+      label="Тип конструктора:"
+    />
     <v-form
       ref="tourTypeForm"
       v-model="tourTypeFormValid"
@@ -51,7 +56,36 @@
         </template>
       </v-autocomplete>
       <v-divider />
-      <v-layout 
+      <v-menu
+        v-model="showDateStart"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="datesPrettyString"
+            label="Дата начала"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          />
+        </template>
+        <v-date-picker 
+          v-model="startDate" 
+          :min="dateToday"
+          color="#aa282a"
+          locale="ru-ru"
+          first-day-of-week="1"
+          @input="showDateStart = false"
+        />
+      </v-menu>
+      <!-- Multiple dates vvv -->
+      <!-- <v-layout 
         row 
         wrap
       >
@@ -69,7 +103,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="datesPrettyString"
-                label="Даты начала"
+                label="Дата начала"
                 :rules="[v => !!v || 'Выберите дату']"
                 prepend-icon="event"
                 readonly
@@ -87,8 +121,10 @@
             />
           </v-menu>
         </v-flex>
-      </v-layout>
-      <v-layout 
+      </v-layout> -->
+      <!-- Multiple dates ^^^^ -->
+      <!-- Multiple times vvv -->
+      <!-- <v-layout 
         row 
         wrap
       >
@@ -133,8 +169,9 @@
             </v-flex>
           </v-layout>
         </v-flex>  
-      </v-layout>
-      <v-divider />
+      </v-layout> -->
+      <!-- <v-divider /> -->
+      <!-- Multiple times ^^^^ -->
       <v-layout 
         row 
         wrap
@@ -265,9 +302,15 @@ export default {
       dateEnd: new Date().toISOString().substr(0, 10),
       commissionManualMode: false,
       commissionManualValue: 0,
+      startDate: '',
       startDates: [],
       startTimes: [],
       newStartTime: '09:00',
+      selectedConstructorType: 'Подробный',
+      constructorTypes: [
+        'Подробный',
+        'Тур от партнёра',
+      ],
     };
   },
   computed: {
@@ -294,9 +337,12 @@ export default {
     },
     datesPrettyString: function() {
       let result = ''
-      this.startDates.forEach((date) => {
-        result += `${moment(date).format('ll')}, `
-      })
+      // this.startDates.forEach((date) => {
+      //   result += `${moment(date).format('ll')}, `
+      // })
+      if (this.startDate != '') {
+        result += `${moment(this.startDate).format('ll')}, `
+      }
       return result.substring(0, result.length - 2)
     }
   },
@@ -305,6 +351,9 @@ export default {
       this.setTourDateTimes()
     },
     startDates: function() {
+      this.setTourDateTimes()
+    },
+    startDate: function() {
       this.setTourDateTimes()
     }
   },
@@ -315,16 +364,20 @@ export default {
     this.commissionManualMode = this.getTour.calc.commissionManualMode
     this.commissionManualValue = this.getTour.calc.commissionManualValue
     this.updateCurrentCustomerType(1)
+    if (this.getEditMode) {
+      this.selectedConstructorType = this.getTour.options.constructorType
+    }
     if (this.getEditMode && this.getTour.options.dates.length != 0) {
       this.getTour.options.dates.forEach((item) => {
         const date = item.substring(0, 10)
         const time = item.substring(11, 19)
-        if (!this.startDates.includes(date)) {
-          this.startDates.push(date)
-        }
-        if (!this.startTimes.includes(time)) {
-          this.startTimes.push(time)
-        }
+        // if (!this.startDates.includes(date)) {
+        //   this.startDates.push(date)
+        // }
+        // if (!this.startTimes.includes(time)) {
+        //   this.startTimes.push(time)
+        // }
+        this.startDate = date
       })
     }
   },
@@ -357,14 +410,20 @@ export default {
     ]),
     submitType() {
       if (this.$refs.tourTypeForm.validate()) {
-        this.snackbar = true
-        this.updateActualTransport()
-        this.updateActualMuseum()
-        this.updateActualHotel()
-        this.updateActualMeal()
-        this.updateActualGuide()
-        this.updateActualAttendant()
-        this.updateConstructorCurrentStage('Options are set')
+        if (this.getTour.constructorType == 'Тур от партнёра') {
+          console.log('tour partner')
+          this.updateConstructorCurrentStage('Partner tour')
+        } 
+        else {
+          this.snackbar = true
+          this.updateActualTransport()
+          this.updateActualMuseum()
+          this.updateActualHotel()
+          this.updateActualMeal()
+          this.updateActualGuide()
+          this.updateActualAttendant()
+          this.updateConstructorCurrentStage('Options are set')
+        }
         //if (this.getEditMode) {
         //  this.updateTourTransport()
         //  this.updateTourMuseum()
@@ -413,6 +472,10 @@ export default {
             this.getTour.options.dates.push(`${date} 00:00`)
           }
         })
+      }
+      if (this.startDate != ''){
+        this.getTour.options.dates = []
+        this.getTour.options.dates.push(`${this.startDate} 00:00`)
       }
     }
   },
