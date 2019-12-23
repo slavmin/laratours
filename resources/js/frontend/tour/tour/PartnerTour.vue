@@ -4,40 +4,72 @@
       row
       wrap
       class="wrap"
+      justify-center
     >
-      <v-flex>
+      <v-flex 
+        xs12
+        md4
+      >
         <h2 class="text-xs-center grey--text">
           Тур от партнёра
         </h2>
+        <v-text-field
+          v-model="getPartnerTour.partnerName"
+          label="Название партнёра"
+        />
       </v-flex>
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
+    </v-layout>
+    <v-layout 
+      row 
+      wrap
+      justify-center
+    >
+      <v-flex 
+        xs12
+        md6  
       >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
+        <Prices />
+      </v-flex>  
+      <v-flex 
+        xs12
+        md6
+      >
+        <Extra />
+      </v-flex>
+    </v-layout>
+    <v-layout 
+      row 
+      wrap
+      justify-center
+    >
+      <v-flex xs12>
+        <Editor />
+      </v-flex>  
     </v-layout>
   </div>
 </template>
 
 <script>
+import Prices from './partner/Prices'
+import Extra from './partner/Extra'
+import Editor from './partner/Editor'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PartnerTour',
+  components: {
+    Prices,
+    Extra,
+    Editor
+  },
   data() {
     return {
+      partner: '',
     };
   },
   computed: {
     ...mapGetters([
-      'allCities',
-      'getActualGuide',
-      'getTour'
+      'getEditMode',
+      'getPartnerTour',
     ]),
   },
   methods: {

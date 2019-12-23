@@ -148,6 +148,9 @@ export default {
     },
     async updateRoundPrices({ commit, getters }, roundData) {
       commit('setRoundPrices', { getters, roundData })
+    },
+    async updatePartnerTour({ commit }, data) {
+      commit('setPartnerTour', data)
     }
   },
   mutations: {
@@ -1859,6 +1862,9 @@ export default {
         }) 
       })
     },
+    setPartnerTour(state, data) {
+      console.log(data, state)
+    }
   },
   state: {
     editMode: false,
@@ -1903,6 +1909,12 @@ export default {
       },
       correctedPrice: 0,
       commissionPrice: 0,
+      partnerTour: {
+        partnerName: '',
+        prices: [],
+        extra: [],
+        editor: '',
+      }
     },
     constructorCurrentStage: 'Initial stage',
     // constructorCurrentStage: 'Guide is set',
@@ -2233,6 +2245,9 @@ export default {
         result += digit.toString()
       })
       return (parseInt(result) - parseInt(data.minusValue))
+    },
+    getPartnerTour(state) {
+      return state.tour.partnerTour
     }
   }
 }
