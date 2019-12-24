@@ -43,9 +43,6 @@
         {!! script(mix('js/frontend.js')) !!}
         @stack('after-scripts')
 
-        {{-- VK pixel --}}
-        <script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?162",t.onload=function(){VK.Retargeting.Init("VK-RTRG-439728-fu4Dd"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-439728-fu4Dd" style="position:fixed; left:-999px;" alt=""/></noscript>
-        
         {{-- <script type="text/javascript">
             snow_img = "/img/frontend/snow.gif";                                       
             snow_no = 10;   // quantity                                            
