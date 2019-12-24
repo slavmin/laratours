@@ -185,9 +185,18 @@
       :tour="tour"
     />   -->
     <!-- /Change Meal -->
+    <PartnerPrices
+      v-if="partnerMode"
+      :profile-id="id"
+    />
     <v-divider />
     <!-- Extra events -->
+    <PartnerExtra
+      v-if="partnerMode"
+      :profile-id="id"
+    />
     <v-btn
+      v-if="!partnerMode"
       color="#aa282a"
       dark
       flat
@@ -199,7 +208,7 @@
       </v-icon>
     </v-btn>
     <v-tooltip
-      v-if="profilePrice == 0" 
+      v-if="!partnerMode && profilePrice == 0" 
       bottom
     >
       <template v-slot:activator="{ on }">
@@ -215,6 +224,7 @@
       </span>
     </v-tooltip>
     <AddExtraEvent 
+      v-if="!partnerMode"
       v-show="showAddExtraEvents"
       :customer-type="profileCustomerType"
       :customer-age="age"
@@ -229,7 +239,10 @@
       row 
       wrap
     >
-      <v-flex xs6>
+      <v-flex 
+        v-if="!partnerMode"
+        xs6
+      >
         <div>
           <BusScheme 
             :transport="transport"
@@ -258,6 +271,7 @@
       <v-spacer />
       <v-flex>
         <div
+          v-if="!partnerMode"
           class="subheading"
         >
           <span class="grey--text">
@@ -293,14 +307,22 @@
           :value="profilePrice"
         >
         <input 
+          v-if="!partnerMode"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
           :value="JSON.stringify({content: profileMealData.mealByDay})"
         >
         <input 
+          v-if="!partnerMode"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
           :value="JSON.stringify({content: profileMealData.mealPriceArray})"
+        >
+        <input 
+          v-if="partnerMode"
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][choosenExtraEvents]' : ''"
+          :value="JSON.stringify({content: choosenPartnerExtraEvents})"
         >
         <input 
           type="hidden"
@@ -346,12 +368,16 @@ import moment from 'moment'
 import BusScheme from '../includes/BusScheme'
 // import ChangeMeal from './ChangeMeal'
 import AddExtraEvent from '../includes/AddExtraEvent'
+import PartnerPrices from './PartnerTour/Prices'
+import PartnerExtra from './PartnerTour/Extra'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
     // ChangeMeal,
     AddExtraEvent,
+    PartnerPrices,
+    PartnerExtra,
   },
   props: {
     tour: {
@@ -482,13 +508,22 @@ export default {
       return this.$store.getters.getProfileCommission(this.id)
     },
     profileMealData: function() {
-      return this.$store.getters.getProfileMealData(this.id)
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileMealData(this.id)
+      }
+      return []
     },
     profileBusSeatId: function() {
-      return this.$store.getters.getProfileBusSeatId(this.id)
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileBusSeatId(this.id)
+      }
+      return 0
     },
     profileExtraEventsData: function() {
-      return this.$store.getters.getProfileExtraEventsData(this.id)
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileExtraEventsData(this.id)
+      }
+      return []
     },
     passportMask: function() {
       const foreignerPass = {
@@ -520,6 +555,18 @@ export default {
       else {
         return rfLocalPass
       }
+    },
+    partnerMode: function() {
+      if (JSON.parse(this.tour.extra).constructorType == "Тур от партнёра") {
+        return true
+      }
+      return false
+    },
+    choosenPartnerExtraEvents: function() {
+      if (this.partnerMode) {
+        return this.$store.getters.getProfilePartnerExtraEvents(this.profileId)
+      }
+      return []
     }
   },
   watch: {
@@ -527,49 +574,57 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
     age() {
-      this.updateProfilePrice({
-        profileId: this.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.order.name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.order.name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     },
     profileCustomerType() {
-      this.updateProfilePrice({
-        profileId: this.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.order.name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.order.name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     },
     date(val) {
       if (!val) this.age = NaN
     },
     profilePlace() {
-      this.updateProfilePrice({
-        profileId: this.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.order.name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.order.name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     }
   },
   mounted() {
-    this.priceList = JSON.parse(this.tour.extra).calc.priceList
-    console.log(JSON.parse(this.tour.extra))
     this.updateOrderProfiles(this.id)
-    this.updatePriceList(this.priceList)
-    this.updateChdRange(this.priceList)
-    this.updatePensRange(this.priceList)
+    if (!this.partnerMode) {
+      this.priceList = JSON.parse(this.tour.extra).calc.priceList
+      console.log(JSON.parse(this.tour.extra))
+      this.updatePriceList(this.priceList)
+      this.updateChdRange(this.priceList)
+      this.updatePensRange(this.priceList)
+    }
   },
   methods: {
     ...mapActions([

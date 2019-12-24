@@ -17,6 +17,10 @@
           v-model="getPartnerTour.partnerName"
           label="Название партнёра"
         />
+        <v-text-field
+          v-model.number="getPartnerTour.commission"
+          label="Комиссия"
+        />
       </v-flex>
     </v-layout>
     <v-layout 
@@ -46,6 +50,9 @@
         <Editor />
       </v-flex>  
     </v-layout>
+    <SaveTourForm
+      :token="token"
+    />
   </div>
 </template>
 
@@ -53,13 +60,21 @@
 import Prices from './partner/Prices'
 import Extra from './partner/Extra'
 import Editor from './partner/Editor'
+import SaveTourForm from './SaveTourForm'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PartnerTour',
   components: {
     Prices,
     Extra,
-    Editor
+    Editor,
+    SaveTourForm,
+  },
+  props: {
+    token: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {

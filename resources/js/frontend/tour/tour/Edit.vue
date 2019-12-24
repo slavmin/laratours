@@ -133,6 +133,7 @@
             xs12
           >
             <PartnerTour 
+              :token="token"
               @scrollme="scrollToTop"
             />
           </v-flex>
@@ -199,62 +200,6 @@ export default {
       tourName: '',
       nameRules: [
         v => !!v || 'Введите название тура',
-      ],
-      nav: [
-        { 
-          name: 'Настройки', 
-          stage: 'Initial stage', 
-          active: false,
-          disabled: false,
-        },
-        { 
-          name: 'Транспорт', 
-          stage: 'Options are set', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Экскурсии', 
-          stage: 'Transport is set', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Проживание', 
-          stage: 'Museum is set', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Питание', 
-          stage: 'Hotel is set', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Гиды', 
-          stage: 'Meal is set', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Сопровождающие', 
-          stage: 'Show attendant', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Допы', 
-          stage: 'Show services', 
-          active: false,
-          disabled: false, 
-        },
-        { 
-          name: 'Расчёт', 
-          stage: 'Show summary', 
-          active: false,
-          disabled: false, 
-        }
       ],
       dialog: false,
       firstSlide: true,
@@ -331,6 +276,81 @@ export default {
       } 
       return true
     },
+    nav: function() {
+      if (this.getTour.constructorType == "Тур от партнёра") {
+        console.log('asdfsadf', this.getTour)
+        return [
+          { 
+            name: 'Настройки', 
+            stage: 'Initial stage', 
+            active: false,
+            disabled: false,
+          },
+          { 
+            name: 'Тур', 
+            stage: 'Partner tour', 
+            active: false,
+            disabled: false, 
+          },
+        ]
+      } else {
+        return [
+          { 
+            name: 'Настройки', 
+            stage: 'Initial stage', 
+            active: false,
+            disabled: false,
+          },
+          { 
+            name: 'Транспорт', 
+            stage: 'Options are set', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Экскурсии', 
+            stage: 'Transport is set', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Проживание', 
+            stage: 'Museum is set', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Питание', 
+            stage: 'Hotel is set', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Гиды', 
+            stage: 'Meal is set', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Сопровождающие', 
+            stage: 'Show attendant', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Допы', 
+            stage: 'Show services', 
+            active: false,
+            disabled: false, 
+          },
+          { 
+            name: 'Расчёт', 
+            stage: 'Show summary', 
+            active: false,
+            disabled: false, 
+          }]
+      }
+    }
   },
   created() {
     this.fetchCities()

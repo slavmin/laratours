@@ -1911,6 +1911,7 @@ export default {
       commissionPrice: 0,
       partnerTour: {
         partnerName: '',
+        commision: 0,
         prices: [],
         extra: [],
         editor: '',

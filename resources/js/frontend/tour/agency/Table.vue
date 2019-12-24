@@ -65,7 +65,7 @@
           <td>
             от
             {{ 
-              item.extra
+              JSON.parse(item.extra).constructorType != "Тур от партнёра"
                 ? parseFloat(JSON.parse(item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
                 : ''  
             }}

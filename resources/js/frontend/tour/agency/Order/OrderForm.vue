@@ -198,9 +198,19 @@
       :profile-id="id"
       :tour="tour"
     />   -->
-    <!-- /Change Meal --><!-- Extra events -->
+    <!-- /Change Meal -->
+    <PartnerPrices
+      v-if="partnerMode"
+      :profile-id="id"
+    />
     <v-divider />
+    <!-- Extra events -->
+    <PartnerExtra
+      v-if="partnerMode"
+      :profile-id="id"
+    />
     <v-btn
+      v-if="!partnerMode"
       color="#aa282a"
       dark
       flat
@@ -212,6 +222,7 @@
       </v-icon>
     </v-btn>
     <AddExtraEvent 
+      v-if="!partnerMode"
       v-show="showAddExtraEvents"
       :customer-type="profileCustomerType"
       :customer-age="age"
@@ -226,7 +237,10 @@
       row 
       wrap
     >
-      <v-flex xs6>
+      <v-flex 
+        v-if="!partnerMode"
+        xs6
+      >
         <div>
           <BusScheme 
             v-if="!isDisabled"
@@ -258,6 +272,7 @@
       <v-spacer />
       <v-flex>
         <div
+          v-if="!partnerMode"
           class="subheading"
         >
           <span class="grey--text">
@@ -277,14 +292,22 @@
           :value="profilePrice"
         >
         <input 
+          v-if="!partnerMode"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealByDay]' : ''"
           :value="profileMealData ? JSON.stringify({content: profileMealData.mealByDay}) : ''"
         >
         <input 
+          v-if="!partnerMode"
           type="hidden"
           :name="isRequired ? 'customer[' + id + '][mealPriceArray]' : ''"
           :value="profileMealData ? JSON.stringify({content: profileMealData.mealPriceArray}) : ''"
+        >
+        <input 
+          v-if="partnerMode"
+          type="hidden"
+          :name="isRequired ? 'customer[' + id + '][choosenExtraEvents]' : ''"
+          :value="JSON.stringify({content: choosenPartnerExtraEvents})"
         >
         <input 
           type="hidden"
@@ -331,12 +354,16 @@ import moment from 'moment'
 import BusScheme from '../../includes/BusScheme'
 // import ChangeMeal from './ChangeMeal'
 import AddExtraEvent from '../../includes/AddExtraEvent'
+import PartnerPrices from '../PartnerTour/Prices'
+import PartnerExtra from '../PartnerTour/Extra'
 export default {
   name: 'OrderForm',
   components: {
     BusScheme,
     // ChangeMeal,
     AddExtraEvent,
+    PartnerPrices,
+    PartnerExtra,
   },
   props: {
     tour: {
@@ -473,13 +500,22 @@ export default {
       return this.$store.getters.getProfileCommission(this.id)
     },
     profileMealData: function() {
-      return this.$store.getters.getProfileMealData(this.id)
-    },
-    profileExtraEventsData: function() {
-      return this.$store.getters.getProfileExtraEventsData(this.id)
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileMealData(this.id)
+      }
+      return []
     },
     profileBusSeatId: function() {
-      return this.$store.getters.getProfileBusSeatId(this.id)
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileBusSeatId(this.id)
+      }
+      return 0
+    },
+    profileExtraEventsData: function() {
+      if (!this.partnerMode) {
+        return this.$store.getters.getProfileExtraEventsData(this.id)
+      }
+      return []
     },
     passportMask: function() {
       const foreignerPass = {
@@ -520,47 +556,64 @@ export default {
         return false
       }
     },
-    
+    partnerMode: function() {
+      if (JSON.parse(this.tour.extra).constructorType == "Тур от партнёра") {
+        return true
+      }
+      return false
+    },
+    choosenPartnerExtraEvents: function() {
+      if (this.partnerMode) {
+        return this.$store.getters.getProfilePartnerExtraEvents(this.profileId)
+      }
+      return []
+    }
   },
   watch: {
     menu (val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
     age() {
-      this.updateProfilePrice({
-        profileId: this.profile.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.profile.first_name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.profile.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.profile.first_name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     },
     profileCustomerType() {
-      this.updateProfilePrice({
-        profileId: this.profile.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.profile.first_name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.profile.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.profile.first_name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     },
     date(val) {
       if (!val) this.age = NaN
     },
     profilePlace() {
-      this.updateProfilePrice({
-        profileId: this.profile.id,
-        profileCustomerType: this.profileCustomerType,
-        age: this.age,
-        profilePlace: this.profilePlace,
-        name: this.profile.name,
-      })
-      this.updateOrderPrice()
-      this.updateOrderCommission()
+      if (!this.partnerMode) {
+        this.updateProfilePrice({
+          profileId: this.profile.id,
+          profileCustomerType: this.profileCustomerType,
+          age: this.age,
+          profilePlace: this.profilePlace,
+          name: this.profile.name,
+        })
+        this.updateOrderPrice()
+        this.updateOrderCommission()
+      }
     },
     profile() {
       this.age = moment().diff(this.profile.dob, 'years')
@@ -572,10 +625,12 @@ export default {
     this.updateOrderProfiles(this.id)
   },
   mounted() {
-    this.priceList = JSON.parse(this.tour.extra).calc.priceList
-    this.updatePriceList(this.priceList)
-    this.updateChdRange(this.priceList)
-    this.updatePensRange(this.priceList)
+    if (!this.partnerMode) {
+      this.priceList = JSON.parse(this.tour.extra).calc.priceList
+      this.updatePriceList(this.priceList)
+      this.updateChdRange(this.priceList)
+      this.updatePensRange(this.priceList)
+    }
   },
   methods: {
     ...mapActions([

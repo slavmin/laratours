@@ -401,20 +401,32 @@ export default {
         return false
       }
     },
+    partnerMode: function() {
+      if (JSON.parse(this.tour.extra).constructorType == "Тур от партнёра") {
+        return true
+      }
+      return false
+    }
   },
   created() {
     // this.initialRoomsCount()
   },
   mounted() {
     this.updateEditMode()
-    this.orderedSeats()
     this.profiles = Object.assign({}, JSON.parse(this.profilesRaw))
-    console.log(this.profiles)
     this.agencyStatus = this.profiles[0].orderStatus
     this.status = this.order.status
     this.initialRoomsCount()
-    this.updateMealByDay(this.tour)
-    this.updateExtraEvents(this.tour)
+    if (!this.partnerMode) {
+      this.orderedSeats()
+      this.updateMealByDay(this.tour)
+      this.updateExtraEvents(this.tour)
+    }
+    if (this.partnerMode) {
+      this.updatePartnerMode()
+      this.updatePartnerPrices(this.tour)
+      this.updatePartnerExtra(this.tour)
+    }
     this.updateProfilesData(this.profiles)
     const contacts = {
       name: this.profiles[0].contactsName,
@@ -433,6 +445,9 @@ export default {
       'updateSeatsInCurrentOrder',
       'updateOrderContacts',
       'updateExtraEvents',
+      'updatePartnerMode',
+      'updatePartnerPrices',
+      'updatePartnerExtra',
     ]),
     close() {
       this.dialog = false

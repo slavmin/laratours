@@ -48,6 +48,9 @@ export default {
     async updateEditMode({ commit }) {
       commit('setEditMode')
     },
+    async updatePartnerMode({ commit }) {
+      commit('setPartnerMode')
+    },
     updateProfilesData({ commit }, data) {
       commit('fillProfilesData', data)
     },
@@ -66,10 +69,25 @@ export default {
     async updateExtraEvents({ commit }, tour) {
       commit('setExtraEvents', tour)
     },
+    async updatePartnerPrices({ commit }, tour) {
+      commit('setPartnerPrices', tour)
+    },
+    async updateProfilePartnerPrice({commit }, data) {
+      commit('setProfilePartnerPrice', data)
+    },
+    async updatePartnerExtra({ commit }, tour) {
+      commit('setPartnerExtra', tour)
+    },
+    async updateProfilePartnerExtra({ commit }, data) {
+      commit('setProfilePartnerExtra', data)
+    },
   },
   mutations: {
     setEditMode(state) {
       state.editMode = true
+    },
+    setPartnerMode(state) {
+      state.partnerMode = true
     },
     setOrderedSeats(state, seats) {
       state.orderedSeats = seats
@@ -103,6 +121,7 @@ export default {
         extraEventsPrice: 0,
         extraEventsCommission: 0,
         extraEventsIdArray: [],
+        choosenExtraEvents: [],
       })
       if (state.editMode) {
         let profile = _.last(state.profiles)
@@ -354,7 +373,15 @@ export default {
     },
     setOrderPrice(state) {
       let result = 0
-      state.profiles.forEach(profile => result += parseInt(profile.price))
+      state.profiles.forEach((profile) => {
+        result += parseInt(profile.price)
+        if (state.partnerMode) {
+          profile.choosenExtraEvents.forEach((event) => {
+            result += event.value
+          })
+          result += profile.commission
+        }
+      })
       state.orderPrice = result
     },
     setOrderCommission(state) {
@@ -384,15 +411,11 @@ export default {
         let dataProfile = data[index]
         console.log(stateProfile)
         stateProfile.address = dataProfile.address
-        stateProfile.busSeatId = dataProfile.busSeatId
         stateProfile.dob = dataProfile.dob
         stateProfile.email = dataProfile.email
         stateProfile.gender = dataProfile.gender
         stateProfile.first_name = dataProfile.first_name
         stateProfile.last_name = dataProfile.last_name
-        stateProfile.meal = dataProfile.meal
-        stateProfile.mealByDay = JSON.parse(dataProfile.mealByDay).content
-        stateProfile.mealPriceArray = JSON.parse(dataProfile.mealPriceArray).content
         stateProfile.passport = dataProfile.passport
         stateProfile.price = dataProfile.price
         stateProfile.room = dataProfile.room
@@ -400,10 +423,18 @@ export default {
         stateProfile.isForeigner = dataProfile.isForeigner == 'true' ? true : false
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
         stateProfile.isRfIntPass = dataProfile.isRfIntPass == 'true' ? true : false
-        if (dataProfile.extraEventsData) {
-          stateProfile.extraEventsPrice = JSON.parse(dataProfile.extraEventsData).content.extraEventsPrice
-          stateProfile.extraEventsCommission = JSON.parse(dataProfile.extraEventsData).content.extraEventsCommission
-          stateProfile.extraEventsIdArray = JSON.parse(dataProfile.extraEventsData).content.extraEventsIdArray
+        if (!state.partnerMode) {
+          stateProfile.busSeatId = dataProfile.busSeatIdstateProfile.meal = dataProfile.meal
+          stateProfile.mealByDay = JSON.parse(dataProfile.mealByDay).content
+          stateProfile.mealPriceArray = JSON.parse(dataProfile.mealPriceArray).content
+          if (dataProfile.extraEventsData) {
+            stateProfile.extraEventsPrice = JSON.parse(dataProfile.extraEventsData).content.extraEventsPrice
+            stateProfile.extraEventsCommission = JSON.parse(dataProfile.extraEventsData).content.extraEventsCommission
+            stateProfile.extraEventsIdArray = JSON.parse(dataProfile.extraEventsData).content.extraEventsIdArray
+          }
+        }
+        if (state.partnerMode) {
+          stateProfile.choosenExtraEvents = JSON.parse(dataProfile.choosenExtraEvents).content
         }
         console.log(stateProfile, dataProfile)
       }
@@ -427,10 +458,27 @@ export default {
     },
     setExtraEvents(state, tour) {
       state.extraEvents = JSON.parse(tour.extra).extraEvents
-    }
+    },
+    setPartnerPrices(state, tour) {
+      state.partnerPrices = JSON.parse(tour.extra).partnerTour.prices
+      state.partnerCommission = JSON.parse(tour.extra).partnerTour.commission
+    },
+    setProfilePartnerPrice(state, data) {
+      let profile = state.profiles.find(profile => profile.id == data.profileId)
+      profile.price = data.price
+      profile.commission = state.partnerCommission
+    },
+    setPartnerExtra(state, tour) {
+      state.partnerExtra = JSON.parse(tour.extra).partnerTour.extra
+    },
+    setProfilePartnerExtra(state, data) {
+      let profile = state.profiles.find(profile => profile.id == data.profileId)
+      profile.choosenExtraEvents = data.choosenExtraEvents
+    },
   },
   state: {
     editMode: false,
+    partnerMode: false,
     orderStatus: '',
     orderedSeats: [],
     seatsInCurrentOrder: [],
@@ -456,8 +504,13 @@ export default {
       name: '',
     },
     extraEvents: [],
+    partnerPrices: [],
+    partnerExtra: [],
   },
   getters: {
+    getOrderEditMode(state) {
+      return state.editMode
+    },
     getOrderedSeats(state) {
       return state.orderedSeats
     },
@@ -614,6 +667,18 @@ export default {
           extraEventsCommission: profile.extraEventsCommission,
           extraEventsIdArray: profile.extraEventsIdArray,
         }
+      }
+    },
+    getPartnerPrices(state) {
+      return state.partnerPrices
+    },
+    getPartnerExtra(state) {
+      return state.partnerExtra
+    },
+    getProfilePartnerExtraEvents: state => profileId => {
+      const profile = state.profiles.find(profile => profile.id == profileId)
+      if (profile) {
+        return profile.choosenExtraEvents
       }
     },
   },

@@ -262,17 +262,33 @@ export default {
       }
       return ''
     },
+    partnerMode: function() {
+      if (JSON.parse(this.tour.extra).constructorType == "Тур от партнёра") {
+        return true
+      }
+      return false
+    }
   },
   mounted() {
-    this.orderedSeats()
-    this.updateMealByDay(this.tour)
-    this.updateExtraEvents(this.tour)
+    if (!this.partnerMode) {
+      this.orderedSeats()
+      this.updateMealByDay(this.tour)
+      this.updateExtraEvents(this.tour)
+    }
+    if (this.partnerMode) {
+      this.updatePartnerMode()
+      this.updatePartnerPrices(this.tour)
+      this.updatePartnerExtra(this.tour)
+    }
   },
   methods: {
     ...mapActions([
       'updateOrderedSeats',
       'updateMealByDay',
       'updateExtraEvents',
+      'updatePartnerPrices',
+      'updatePartnerExtra',
+      'updatePartnerMode',
     ]),
     close() {
       this.dialog = false
