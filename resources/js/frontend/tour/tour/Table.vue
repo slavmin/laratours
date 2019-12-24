@@ -127,6 +127,12 @@
                   : '' 
               }}
             </div>
+            <div
+              v-if="JSON.parse(props.item.extra).constructorType == 'Тур от партнёра'"
+            >
+              от {{ getPartnerMinPrice(JSON.parse(props.item.extra)) }} 
+              Партнёрский тур 
+            </div>
           </td>
           <td
             :class="props.item.published ? '' : 'unpublished'"
@@ -367,6 +373,16 @@ export default {
         this.tourIdsToDel.push(id)
       }
     },
+    getPartnerMinPrice(tourExtra) {
+      let price = 'Уточняйте'
+      if (tourExtra.partnerTour.prices) {
+        price = tourExtra.partnerTour.prices.find((item) => {
+          return item.name.toLowerCase().includes('взр') || item.name.toLowerCase().includes('двухместн')
+        })
+        price = price.value + tourExtra.partnerTour.commission
+      }
+      return price
+    }
   },
   
 };

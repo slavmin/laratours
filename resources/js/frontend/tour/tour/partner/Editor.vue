@@ -43,6 +43,7 @@ export default {
   watch: {
     editor: function() {
       this.getPartnerTour.editor = this.editor
+      this.updateEditorsContent([this.editor])
     }
   },
   mounted() {
@@ -50,5 +51,8 @@ export default {
       this.editor = this.getPartnerTour.editor
     }
   },
+  methods: {
+    ...mapActions(['updateEditorsContent']),
+  }
 }
 </script>

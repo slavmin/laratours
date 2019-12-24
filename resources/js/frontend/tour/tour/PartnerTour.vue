@@ -17,10 +17,28 @@
           v-model="getPartnerTour.partnerName"
           label="Название партнёра"
         />
-        <v-text-field
-          v-model.number="getPartnerTour.commission"
-          label="Комиссия"
-        />
+        <v-layout 
+          row 
+          wrap
+        >
+          <v-text-field
+            v-model.number="getPartnerTour.commission"
+            label="Комиссия в рублях"
+          />
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon 
+                color="grey"
+                v-on="on"
+              >
+                info
+              </v-icon>
+            </template>
+            <span>
+              Сумма выплачивается с одного проданного места, вне зависимости от типа туриста
+            </span>
+          </v-tooltip>
+        </v-layout>
       </v-flex>
     </v-layout>
     <v-layout 

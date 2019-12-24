@@ -67,7 +67,7 @@
             {{ 
               JSON.parse(item.extra).constructorType != "Тур от партнёра"
                 ? parseFloat(JSON.parse(item.extra).calc.priceList[0].commissionStandardPrice).toFixed(2)
-                : ''  
+                : getPartnerMinPrice(JSON.parse(item.extra))  
             }}
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -140,6 +140,17 @@ export default {
       })
       return cityName
     },
+    getPartnerMinPrice(tourExtra) {
+      let price = 'Уточняйте'
+      if (tourExtra.partnerTour.prices) {
+        price = tourExtra.partnerTour.prices.find((item) => {
+          return item.name.toLowerCase().includes('взр') || item.name.toLowerCase().includes('двухместн')
+        })
+        price = price.value + tourExtra.partnerTour.commission
+      }
+      console.log(price)
+      return price
+    }
   },
 }
 </script>
