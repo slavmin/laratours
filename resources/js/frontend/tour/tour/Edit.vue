@@ -278,7 +278,6 @@ export default {
     },
     nav: function() {
       if (this.getTour.constructorType == "Тур от партнёра") {
-        console.log('asdfsadf', this.getTour)
         return [
           { 
             name: 'Настройки', 
@@ -379,7 +378,6 @@ export default {
     },
     close() {
       this.clearStore()
-      console.log(this.allState)
       this.dialog = false
       // this.reset()
     },

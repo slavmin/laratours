@@ -55,7 +55,7 @@
             :class="props.item.published ? '' : 'unpublished'"
           >
             <span> 
-              {{ getCitiesNames(props.item.cities_list) }}
+              {{ getCitiesNames(JSON.parse(props.item.extra).options.cities) }}
             </span>
           </td>
           <td 
@@ -321,9 +321,8 @@ export default {
       'fetchTourTypes',
     ]),
     getCitiesNames(cities) {
-      const citiesArray = Array.from(cities[0])
       let result = ''
-      citiesArray.forEach((id) => {
+      cities.forEach((id) => {
         result += this.getCityName(id) + ' '
       })
       return result
