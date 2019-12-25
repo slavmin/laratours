@@ -379,7 +379,6 @@ export default {
           profile.choosenExtraEvents.forEach((event) => {
             result += event.value
           })
-          result += profile.commission
         }
       })
       state.orderPrice = result

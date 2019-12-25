@@ -46,7 +46,7 @@
           <td>
             {{ 
               item.extra
-                ? JSON.parse(item.extra).options.dateStart
+                ? formatDate(JSON.parse(item.extra).options.dateStart)
                 : ''  
             }}
           </td>
@@ -105,6 +105,7 @@
 
 <script>
 import AboutTour from './AboutTour'
+import moment from 'moment'
 export default {
   name: 'Table',
   components: {
@@ -150,6 +151,9 @@ export default {
       }
       console.log(price)
       return price
+    },
+    formatDate(date) {
+      return moment(date).format('LL')
     }
   },
 }

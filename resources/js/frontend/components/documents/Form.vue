@@ -59,6 +59,7 @@ export default {
           language: 'ru',
           language_url: '/fonts/vendor/tinymce/ru.js',
           height: 500,
+          plugins: "table",
         }
       },
     }
