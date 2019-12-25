@@ -147,9 +147,8 @@ export default {
         price = tourExtra.partnerTour.prices.find((item) => {
           return item.name.toLowerCase().includes('взр') || item.name.toLowerCase().includes('двухместн')
         })
-        price = price.value + tourExtra.partnerTour.commission
+        price = price.value
       }
-      console.log(price)
       return price
     },
     formatDate(date) {
