@@ -86,6 +86,7 @@ export default {
         result.forEach((item) => {
           item.changes = item.changes.filter(message => message.forAgency)
         })
+        result = result.filter(item => item.changes.length > 0)
       } else {
         result = this.allNews
       }
