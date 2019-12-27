@@ -1,5 +1,28 @@
 <template>
   <div>
+    <v-layout 
+      row 
+      wrap
+      justify-center
+    >
+      <v-btn
+        color="#aa282a"
+        dark
+        flat
+        @click="showEditor = !showEditor"
+      >
+        {{ showEditor ? 'Скрыть' : 'Программа тура' }}
+        <v-icon right>
+          expand_{{ showEditor ? 'less' : 'more' }}
+        </v-icon>
+      </v-btn>
+      <v-flex 
+        v-if="showEditor"
+        xs12
+      >
+        <Editor />
+      </v-flex>  
+    </v-layout>
     <v-layout
       row
       wrap
@@ -59,15 +82,6 @@
         <Extra />
       </v-flex>
     </v-layout>
-    <v-layout 
-      row 
-      wrap
-      justify-center
-    >
-      <v-flex xs12>
-        <Editor />
-      </v-flex>  
-    </v-layout>
     <SaveTourForm
       :token="token"
     />
@@ -97,6 +111,7 @@ export default {
   data() {
     return {
       partner: '',
+      showEditor: false,
     };
   },
   computed: {
