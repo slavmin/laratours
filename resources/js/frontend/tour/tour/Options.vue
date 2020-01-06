@@ -476,6 +476,7 @@ export default {
       if (this.startDate != ''){
         this.getTour.options.dates = []
         this.getTour.options.dates.push(`${this.startDate} 00:00`)
+        this.getTour.options.dateStart = `${this.startDate} 00:00`
       }
     }
   },
