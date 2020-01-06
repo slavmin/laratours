@@ -209,6 +209,13 @@
         {{ item.selected ? 'Убрать' : 'Выбрать' }}
       </v-btn>
     </v-card-actions>
+    <v-alert
+      :value="showAttention"
+      color="blue"
+    >
+      <strong>Внимание!</strong>
+      Выбран один водитель без питания и проживания.
+    </v-alert>
   </v-card>
 </template>
 <script>
@@ -249,6 +256,17 @@ export default {
       'getActualTransport',
       'getTour',
     ]),
+    showAttention: function() {
+      // If default driver options choosen
+      // drivers = [{hotel: false, isHotelSngl: true, meal: false,}]
+      if (this.item.selected && 
+          this.driversCount == 1 &&
+          !this.drivers[0].hotel &&
+          !this.drivers[0].meal) {
+        return true
+      }
+      return false
+    }
   },
   mounted() {
     if (this.item.drivers) {
@@ -261,6 +279,7 @@ export default {
       'updateNewTransportOptions',
     ]),
     choose(transport, item) {
+      // On unselect transport set drivers to default
       if (item.selected) {
         this.driversCount = 1
         this.drivers = [{hotel: false, isHotelSngl: true, meal: false,}]
