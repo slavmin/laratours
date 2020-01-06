@@ -261,6 +261,10 @@ export default {
       'updateNewTransportOptions',
     ]),
     choose(transport, item) {
+      if (item.selected) {
+        this.driversCount = 1
+        this.drivers = [{hotel: false, isHotelSngl: true, meal: false,}]
+      }
       let updData = {
         'company': transport,
         'item': {
