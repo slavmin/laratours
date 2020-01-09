@@ -49,6 +49,7 @@
                                     </td>
                                     <td>
                                         @forelse($user->teams as $team)
+                                            {{-- {{ dd($user) }} --}}
                                             <div class="mb-2">
                                                 <a href="{{route('admin.auth.team.show', $team->id)}}"
                                                    class="btn btn-outline-info btn-sm">{{$team->name}}</a>

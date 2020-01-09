@@ -18,6 +18,20 @@
           outline
           required
         />
+        <input
+          type="hidden"
+          name="profile[formal][company_type]"
+          :value="companyInfo.type"
+        >
+        <v-select
+          v-model="companyInfo.type"
+          :items="companyTypes"
+          label="Укажите ваш вид деятельности"
+          color="#aa282a lighten-3"
+          :rules="[v => !!v || 'Это обязательное поле']"
+          outline
+          required
+        />
         <v-text-field
           v-model="companyInfo.country"
           label="Страна"
@@ -219,8 +233,8 @@
           outline
           required
         />
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-end
         >
@@ -229,13 +243,13 @@
             type="hidden"
             name="_token"
           >
-          <v-btn 
+          <v-btn
             color="#aa282a"
             class="white--text"
             type="submit"
           >
             Зарегистрироваться
-          </v-btn>  
+          </v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -248,19 +262,28 @@ export default {
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     companyInfo: {
       type: Object,
       default: () => {
-        return {
-        }
-      }
+        return {}
+      },
     },
   },
   data() {
     return {
       tooltip: false,
+      companyTypes: [
+        'Туристическое агентство',
+        'Туроператор',
+        'Агентство-туроператор',
+        'Транспортная компания',
+        'Музей, туристический объект',
+        'Гостиничные услуги',
+        'Выставочный комплекс',
+        'Другое',
+      ],
     }
   },
   computed: {
@@ -269,13 +292,13 @@ export default {
         return true
       }
       return false
-    }
+    },
   },
   methods: {
     register() {
       const d = this.companyInfo
       const data = {
-        '_token': this.token,
+        _token: this.token,
         'profile[formal][company_name]': d.name,
         'profile[formal][company_phone]': d.phone,
         'profile[formal][company_email]': d.email,
@@ -288,22 +311,23 @@ export default {
         'profile[formal][company_okved]': d.okved,
         'profile[formal][company_bik]': d.bik,
         'profile[formal][company_ceo_name]': d.ceoName,
-        'first_name': d.staffName,
-        'last_name': d.staffSurname,
-        'email': d.email,
-        'password': d.password,
-        'password_confirmation': d.password,
+        'profile[formal][company_type]': d.companyType,
+        first_name: d.staffName,
+        last_name: d.staffSurname,
+        email: d.email,
+        password: d.password,
+        password_confirmation: d.password,
       }
-      axios.post('/register', data)
+      axios
+        .post('/register', data)
         .then(r => console.log(r))
         .catch(e => console.log(e))
       console.log(this.companyInfo)
       console.log(data)
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-
 </style>
