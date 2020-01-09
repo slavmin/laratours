@@ -221,6 +221,7 @@ return [
                 'bankaccount' => 'Расчетный счет',
                 'bankcorr' => 'Коррсчет банка',
                 'manager' => 'Офис менеджера, адрес и телефон',
+                'company_type' => 'Вид деятельности',
             ],
             'customer' => [
                 'first_name' => 'Имя',
