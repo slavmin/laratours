@@ -284,7 +284,10 @@ export default {
               return price.isChd
             })
           }
-          console.log(price)
+          // If still no price, use ADL price
+          if (!price) {
+            price = state.priceList.find(price => price.name.includes('Взросл'))
+          }
           switch (data.profilePlace) {
             case 'EXTRA':
               profilePrice = price.commissionExtraPrice
@@ -305,6 +308,10 @@ export default {
           break
         case 'PENS':
           price = state.priceList.find((price) => price.age && JSON.parse(price.age).isPens)
+          // If still no price, use ADL price
+          if (!price) {
+            price = state.priceList.find(price => price.name.includes('Взросл'))
+          }
           switch (data.profilePlace) {
             case 'EXTRA':
               profilePrice = price.commissionExtraPrice
@@ -324,6 +331,10 @@ export default {
           break
         case 'FRGN':
           price = state.priceList.find(price => price.name.includes('Иностр'))
+          // If still no price, use ADL price
+          if (!price) {
+            price = state.priceList.find(price => price.name.includes('Взросл'))
+          }
           switch (data.profilePlace) {
             case 'EXTRA':
               profilePrice = price.commissionExtraPrice
