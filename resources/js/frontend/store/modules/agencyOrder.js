@@ -36,7 +36,7 @@ export default {
     async updateOrderPrice({ commit }) {
       commit('setOrderPrice')
     },
-    async updateOrderCommission({ commit }){
+    async updateOrderCommission({ commit }) {
       commit('setOrderCommission')
     },
     async resetProfile({ commit }, profileId) {
@@ -60,7 +60,7 @@ export default {
     async removeBusSeatIdFromCurrent({ commit }, data) {
       commit('delBusSeatIdFromCurrent', data)
     },
-    async updateOrderContacts({commit}, contacts) {
+    async updateOrderContacts({ commit }, contacts) {
       commit('setOrderContacts', contacts)
     },
     async updateOrderStatus({ commit }, status) {
@@ -72,7 +72,7 @@ export default {
     async updatePartnerPrices({ commit }, tour) {
       commit('setPartnerPrices', tour)
     },
-    async updateProfilePartnerPrice({commit }, data) {
+    async updateProfilePartnerPrice({ commit }, data) {
       commit('setProfilePartnerPrice', data)
     },
     async updatePartnerExtra({ commit }, tour) {
@@ -97,7 +97,7 @@ export default {
       state.seatsInCurrentOrder = _.uniq(state.seatsInCurrentOrder)
     },
     filterCurrentSeats(state, choosenSeat) {
-      if (choosenSeat){
+      if (choosenSeat) {
         state.seatsInCurrentOrder = state.seatsInCurrentOrder.filter(seat => seat != choosenSeat)
       }
     },
@@ -158,7 +158,7 @@ export default {
       const daysCount = parseInt(JSON.parse(tour.extra).options.days)
       for (let i = 0; i < daysCount; i++) {
         result.push([])
-      } 
+      }
       JSON.parse(tour.extra).meal.forEach((meal) => {
         meal.obj.daysArray.forEach((day) => {
           let mealWithAlternatives = []
@@ -253,14 +253,14 @@ export default {
         // add event.commissionPrice to profile.price
         profile.extraEventsIdArray = data.profileChoosenExtraEvents
         profile.extraEventsPrice = profile.extraEventsPrice + data.event.commissionPrice
-        profile.extraEventsCommission = profile.extraEventsCommission + 
+        profile.extraEventsCommission = profile.extraEventsCommission +
           (data.event.commissionPrice - data.event.correctedPrice)
       }
       else {
         // remove event.commissionPrice from profile.price
         profile.extraEventsIdArray = data.profileChoosenExtraEvents
         profile.extraEventsPrice = profile.extraEventsPrice - data.event.commissionPrice
-        profile.extraEventsCommission = profile.extraEventsCommission - 
+        profile.extraEventsCommission = profile.extraEventsCommission -
           (data.event.commissionPrice - data.event.correctedPrice)
       }
     },
@@ -361,15 +361,15 @@ export default {
           }
           break
         default:
-        console.log('error data: ', data, profile)
+          console.log('error data: ', data, profile)
       }
       // console.log(profile.name)
       if (profile.name != '') {
         profile.price = profilePrice + profile.extraEventsPrice
         profile.commission = profileCommission + profile.extraEventsCommission
       }
-      profile.priceWithoutMeal = 
-        profilePrice - state.defaultMealPrice 
+      profile.priceWithoutMeal =
+        profilePrice - state.defaultMealPrice
     },
     setOrderPrice(state) {
       let result = 0
@@ -423,7 +423,8 @@ export default {
         stateProfile.isSinglePlace = dataProfile.isSinglePlace == 'true' ? true : false
         stateProfile.isRfIntPass = dataProfile.isRfIntPass == 'true' ? true : false
         if (!state.partnerMode) {
-          stateProfile.busSeatId = dataProfile.busSeatIdstateProfile.meal = dataProfile.meal
+          stateProfile.busSeatId = dataProfile.busSeatId
+          stateProfile.meal = dataProfile.meal
           stateProfile.mealByDay = JSON.parse(dataProfile.mealByDay).content
           stateProfile.mealPriceArray = JSON.parse(dataProfile.mealPriceArray).content
           if (dataProfile.extraEventsData) {
@@ -530,7 +531,7 @@ export default {
       state.priceList.forEach((item) => {
         if (item.age && !JSON.parse(item.age).isPens) {
           const data = JSON.parse(item.age)
-          if (age >= data.ageFrom && age < data.ageTo ) {
+          if (age >= data.ageFrom && age < data.ageTo) {
             price = item
           }
         }
@@ -552,7 +553,7 @@ export default {
         // If empty profile, return default meal
         if (profile.mealPriceArray.length == 0) {
           return state.mealByDay[data.day - 1]
-        } 
+        }
         // Else, return meal by day from profile
         else {
           return profile.mealByDay[data.day - 1]
@@ -625,32 +626,32 @@ export default {
             })
             // Hack to fix no-price if child younger than prices in pricelist
             if (!price) {
-              price = eventPriceList.find(price => price.customerName.includes('Взросл'))         
+              price = eventPriceList.find(price => price.customerName.includes('Взросл'))
             }
             // console.log('chd price: ', price, eventPriceList)
 
             break
           case 'PENS':
             price = eventPriceList.find((price) => price.customerAge && JSON.parse(price.customerAge).isPens)
-            
+
             // console.log('pens price: ', price, eventPriceList)
             break
           case 'FRGN':
             price = eventPriceList.find(price => price.customerName.includes('Иностр'))
-            
+
             // console.log('frgn price: ', price, eventPriceList)
             break
           case 'ADL':
             // console.log(eventPriceList)
             price = eventPriceList.find(price => price.customerName.includes('Взросл'))
-            
+
             // console.log('adl price: ', price, eventPriceList)
             break
           default:
           // console.log('error in extra events: ', data)
         }
         let recalculatedEvent = Object.assign({}, extraEvent)
-        recalculatedEvent.correctedPrice = price.price + 
+        recalculatedEvent.correctedPrice = price.price +
           price.price * parseFloat(recalculatedEvent.correction) / 100
         recalculatedEvent.commissionPrice = recalculatedEvent.correctedPrice +
           recalculatedEvent.correctedPrice * parseFloat(recalculatedEvent.commission) / 100
