@@ -70,6 +70,8 @@ Vue.component('documents-index', require('./components/documents/Index.vue').def
 Vue.component('document-add', require('./components/documents/Add.vue').default);
 Vue.component('document-edit', require('./components/documents/Edit.vue').default);
 Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
+Vue.component('tour-add', require('./tour/tour/Add.vue').default);
+Vue.component('tour-edit', require('./tour/tour/Edit.vue').default);
 /**
 /**
 /**

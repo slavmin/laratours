@@ -1,12 +1,8 @@
 <template>
-  <div
-    style="max-width: 1600px;"
-  >
+  <div style="max-width: 1600px;">
     <v-layout>
       <v-spacer />
-      <TablePagination
-        :items="items"
-      />
+      <TablePagination :items="items" />
     </v-layout>
     <v-layout
       row
@@ -21,18 +17,14 @@
         :pagination.sync="pagination"
       >
         <template v-slot:items="props">
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
-            <v-checkbox 
-              v-model="props.item.del" 
+          <td :class="props.item.published ? '' : 'unpublished'">
+            <v-checkbox
+              v-model="props.item.del"
               color="red"
               @change="tourToDel(props.item.id)"
             />
           </td>
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
+          <td :class="props.item.published ? '' : 'unpublished'">
             {{ props.item.name }}
             <div
               v-if="!props.item.published"
@@ -42,29 +34,29 @@
               Тур не опубликован
             </div>
           </td>
-          <td 
+          <td
             class="text-xs-right"
             :class="props.item.published ? '' : 'unpublished'"
           >
             {{ props.item.extra 
               ? JSON.parse(props.item.extra).options.dateStart 
               : '' }}
-          </td> 
-          <td 
+          </td>
+          <td
             class="text-xs-right"
             :class="props.item.published ? '' : 'unpublished'"
           >
-            <span> 
+            <span>
               {{ getCitiesNames(JSON.parse(props.item.extra).options.cities) }}
             </span>
           </td>
-          <td 
+          <td
             class="text-xs-right"
             :class="props.item.published ? '' : 'unpublished'"
           >
             {{ getTourTypes[props.item.tour_type_id] }}
           </td>
-          <td 
+          <td
             class="text-xs-right"
             :class="props.item.published ? '' : 'unpublished'"
           >
@@ -74,7 +66,7 @@
                 : '' 
             }}
           </td>
-          <td 
+          <td
             class="text-xs-right grey--text"
             :class="props.item.published ? '' : 'unpublished'"
           >
@@ -130,37 +122,25 @@
             <div
               v-if="JSON.parse(props.item.extra).constructorType == 'Тур от партнёра'"
             >
-              от {{ getPartnerMinPrice(JSON.parse(props.item.extra)) }} 
-              Партнёрский тур 
+              от {{ getPartnerMinPrice(JSON.parse(props.item.extra)) }}
+              Партнёрский тур
             </div>
           </td>
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
-            <About 
-              :tour="props.item"
-            />
-            <BusNotify
-              :tour="props.item"
-            />
+          <td :class="props.item.published ? '' : 'unpublished'">
+            <About :tour="props.item" />
+            <BusNotify :tour="props.item" />
           </td>
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
+          <td :class="props.item.published ? '' : 'unpublished'">
             {{ getOrdersCount(props.item.orderprofiles) }}
             /
             {{ JSON.parse(props.item.extra).qnt }}
           </td>
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
+          <td :class="props.item.published ? '' : 'unpublished'">
             {{ getCreatedFormattedDate(props.item.created_at) }}
           </td>
-          <td
-            :class="props.item.published ? '' : 'unpublished'"
-          >
-            <v-layout 
-              row 
+          <td :class="props.item.published ? '' : 'unpublished'">
+            <v-layout
+              row
               wrap
               align-top
             >
@@ -168,29 +148,37 @@
                 :tour="props.item"
                 :token="token"
               />
-              <Edit
+              <v-btn
+                color="green"
+                small
+                fab
+                dark
+                title="Редактировать тур"
+                :href="`/operator/tour/${props.item.id}/edit`"
+              >
+                <i class="material-icons">
+                  edit
+                </i>
+              </v-btn>
+              <Publish
                 :tour="props.item"
                 :token="token"
               />
-              <Publish 
-                :tour="props.item"
-                :token="token"
-              />  
-              <form 
+              <form
                 :action="'/operator/tour/' + props.item.id"
                 method="POST"
-              > 
-                <input 
+              >
+                <input
                   type="hidden"
                   name="_method"
                   value="DELETE"
                 >
-                <input 
+                <input
                   type="hidden"
                   name="_token"
                   :value="token"
                 >
-                <v-btn 
+                <v-btn
                   color="red"
                   fab
                   small
@@ -209,7 +197,7 @@
       </v-data-table>
     </v-layout>
     <v-layout>
-      <v-btn 
+      <v-btn
         v-if="tourIdsToDel.length > 0"
         color="red"
         dark
@@ -230,16 +218,13 @@
     </v-layout>
     <v-layout>
       <v-spacer />
-      <TablePagination
-        :items="items"
-      />
+      <TablePagination :items="items" />
     </v-layout>
   </div>
 </template>
 
 <script>
 import About from './About'
-import Edit from './Edit'
 import Publish from './Publish'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
@@ -247,11 +232,9 @@ import CopyTour from './CopyTour'
 import TablePagination from './TablePagination'
 import BusNotify from '../includes/documents/BusNotify'
 export default {
-
   name: 'TourTable',
   components: {
     About,
-    Edit,
     Publish,
     CopyTour,
     TablePagination,
@@ -260,22 +243,22 @@ export default {
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     tours: {
       type: Array,
       default: () => {
         return []
-      }
+      },
     },
     items: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
   },
-  data () {
+  data() {
     return {
       headers: [
         {},
@@ -283,7 +266,7 @@ export default {
           text: 'Название тура',
           align: 'left',
           sortable: false,
-          value: 'name'
+          value: 'name',
         },
         { text: 'Дата', value: 'date' },
         { text: 'Города', value: 'сity' },
@@ -303,10 +286,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'getTourTypes',
-    ]),
+    ...mapGetters(['allCities', 'getTourTypes']),
   },
   created() {
     this.fetchAttendant()
@@ -315,14 +295,10 @@ export default {
     console.log(JSON.parse(this.items.data[0].extra))
   },
   methods: {
-    ...mapActions([
-      'fetchAttendant',
-      'fetchCities',
-      'fetchTourTypes',
-    ]),
+    ...mapActions(['fetchAttendant', 'fetchCities', 'fetchTourTypes']),
     getCitiesNames(cities) {
       let result = ''
-      cities.forEach((id) => {
+      cities.forEach(id => {
         result += this.getCityName(id) + ' '
       })
       return result
@@ -343,21 +319,22 @@ export default {
     },
     getOrdersCount(orders) {
       let result = 0
-      orders.forEach((order) => {
-        order.content.forEach(profile => result += 1)
+      orders.forEach(order => {
+        order.content.forEach(profile => (result += 1))
       })
       return result
     },
     deleteTours() {
       this.showLoader = true
-      this.tourIdsToDel.forEach((tourId) => {
+      this.tourIdsToDel.forEach(tourId => {
         const url = '/operator/tour/' + tourId
         const tour = {
-          '_token': this.token,
-          '_method': 'DELETE',
-          id: tourId
+          _token: this.token,
+          _method: 'DELETE',
+          id: tourId,
         }
-        axios.post(url, tour)
+        axios
+          .post(url, tour)
           .then()
           .catch(e => console.log(e))
       })
@@ -375,20 +352,22 @@ export default {
     getPartnerMinPrice(tourExtra) {
       let price = 'Уточняйте'
       if (tourExtra.partnerTour.prices) {
-        price = tourExtra.partnerTour.prices.find((item) => {
-          return item.name.toLowerCase().includes('взр') || item.name.toLowerCase().includes('двухместн')
+        price = tourExtra.partnerTour.prices.find(item => {
+          return (
+            item.name.toLowerCase().includes('взр') ||
+            item.name.toLowerCase().includes('двухместн')
+          )
         })
         price = price.value
       }
       return price
-    }
+    },
   },
-  
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .unpublished {
-  background-color: #f8f8f8,
+  background-color: #f8f8f8;
 }
 </style>

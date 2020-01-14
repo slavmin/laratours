@@ -1,16 +1,16 @@
 <template>
-  <v-container 
+  <v-container
     fluid
     grid-list-md
     text-xs-center
     style="background-color: #66a5ae;"
   >
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       justify-center
-    >  
-      <v-flex> 
+    >
+      <v-flex>
         <h1 class="text-center white--text mb-5">
           <v-icon
             dark
@@ -22,10 +22,20 @@
         </h1>
       </v-flex>
     </v-layout>
-    <Add 
+    <!-- <Add 
       :token="token"
       :tours="items.data"
-    />
+    /> -->
+    <v-btn
+      color="#aa282a"
+      fab
+      dark
+      href="/operator/tour/create"
+    >
+      <i class="material-icons">
+        add
+      </i>
+    </v-btn>
     <v-layout
       wrap
       row
@@ -41,36 +51,31 @@
 </template>
 
 <script>
-import Add from './Add'
 import Table from './Table'
 export default {
-
   name: 'TourIndex',
   components: {
-    Add,
-    Table
+    Table,
   },
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     items: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
-    return {
-
-    };
+    return {}
   },
   mounted() {
     console.log(this.items)
-  }
-};
+  },
+}
 </script>
 
 <style lang="css" scoped>

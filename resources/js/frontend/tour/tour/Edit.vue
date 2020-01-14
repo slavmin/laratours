@@ -1,155 +1,124 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    fullscreen 
-    hide-overlay 
-    lazy
-    transition="dialog-bottom-transition"
-    @input="fillStore"
+  <v-container
+    fluid
+    grid-list-xs
   >
-    <template v-slot:activator="{ on }">
-      <v-btn 
-        color="green" 
-        small
-        fab
-        dark 
-        title="Редактировать тур"
-        v-on="on"
-      >
-        <i class="material-icons">
-          edit
-        </i>      
-      </v-btn>
-    </template>
-    <v-card>
-      <v-toolbar 
-        id="toolbar"
-        dark 
-        color="#66a5ae"
-      >
-        <v-btn 
-          icon 
-          dark 
-          @click="close"
+    <v-layout
+      row
+      justify-center
+    >
+      <v-card>
+        <v-toolbar
+          id="toolbar"
+          dark
+          color="#66a5ae"
         >
-          <v-icon>
-            close
-          </v-icon>
-        </v-btn>
-        <v-toolbar-title>
-          Редактирование
-        </v-toolbar-title>
-        <v-spacer />
-        <v-toolbar-items>
-          <v-btn 
-            v-for="item in nav" 
-            :key="item.name"
-            dark 
-            flat
-            @click="changeConstructorStage(item.stage)"
+          <v-btn
+            icon
+            dark
+            href="/operator/tour"
           >
-            {{ item.name }}
+            <v-icon>
+              close
+            </v-icon>
           </v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <v-container fluid>
-        <v-layout 
-          row 
-          wrap
-          justify-center
-        >
-          <v-flex
-            v-if="showOptions"
-            xs6 
+          <v-toolbar-title>
+            Редактирование
+          </v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items>
+            <v-btn
+              v-for="item in nav"
+              :key="item.name"
+              dark
+              flat
+              @click="changeConstructorStage(item.stage)"
+            >
+              {{ item.name }}
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-container fluid>
+          <v-layout
+            row
+            wrap
+            justify-center
           >
-            <Options />
-          </v-flex>
-          <v-flex 
-            v-if="showChooseTransport"
-            xs12
+            <v-flex
+              v-if="showOptions"
+              xs6
+            >
+              <Options />
+            </v-flex>
+            <v-flex
+              v-if="showChooseTransport"
+              xs12
+            >
+              <ChooseTransport @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showChooseMuseum"
+              xs12
+            >
+              <ChooseMuseum @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showChooseHotel"
+              xs12
+            >
+              <ChooseHotel @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showChooseMeal"
+              xs12
+            >
+              <ChooseMeal @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showChooseGuide"
+              xs12
+            >
+              <ChooseGuide @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showServices"
+              xs12
+            >
+              <Services @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showChooseAttendant"
+              xs12
+            >
+              <ChooseAttendant @scrollme="scrollToTop" />
+            </v-flex>
+            <v-flex
+              v-if="showSummary"
+              xs12
+            >
+              <Summary :token="token" />
+            </v-flex>
+            <v-flex
+              v-if="showPartnerTour"
+              xs12
+            >
+              <PartnerTour
+                :token="token"
+                @scrollme="scrollToTop"
+              />
+            </v-flex>
+          </v-layout>
+          <v-layout
+            class="bottom-sheet"
+            row
+            wrap
           >
-            <ChooseTransport 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showChooseMuseum"
-            xs12
-          >
-            <ChooseMuseum 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showChooseHotel"
-            xs12
-          >
-            <ChooseHotel 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex
-            v-if="showChooseMeal"
-            xs12
-          >
-            <ChooseMeal 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showChooseGuide"
-            xs12
-          >
-            <ChooseGuide 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showServices"
-            xs12
-          >
-            <Services 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showChooseAttendant"
-            xs12
-          >
-            <ChooseAttendant 
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showSummary"
-            xs12
-          >
-            <Summary 
-              :token="token"
-            />
-          </v-flex>
-          <v-flex 
-            v-if="showPartnerTour"
-            xs12
-          >
-            <PartnerTour 
-              :token="token"
-              @scrollme="scrollToTop"
-            />
-          </v-flex>
-        </v-layout>
-        <v-layout
-          class="bottom-sheet"
-          row
-          wrap
-        >
-          <BottomSheet 
-            :token="token"
-          />
-        </v-layout>
-      </v-container>    
-    </v-card>
-  </v-dialog>
+            <BottomSheet :token="token" />
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -166,7 +135,6 @@ import PartnerTour from './PartnerTour'
 import BottomSheet from './BottomSheet'
 import { mapActions, mapGetters } from 'vuex'
 export default {
-
   name: 'TourEdit',
   components: {
     Options,
@@ -185,22 +153,20 @@ export default {
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     tour: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       tourTypeFormValid: false,
       tourName: '',
-      nameRules: [
-        v => !!v || 'Введите название тура',
-      ],
+      nameRules: [v => !!v || 'Введите название тура'],
       dialog: false,
       firstSlide: true,
       showDateStart: false,
@@ -208,19 +174,19 @@ export default {
       secondSlide: false,
       tourType: '',
       tourGrades: [
-        { id: 1, name: 'Стандарт'},
-        { id: 2, name: 'VIP'}
+        { id: 1, name: 'Стандарт' },
+        { id: 2, name: 'VIP' },
       ],
       tourGrade: [],
       availableLanguages: [
-        { id: 1, name: 'Русский'},
-        { id: 2, name: 'Английский'},
-        { id: 3, name: 'Немецкий'},
-        { id: 4, name: 'Французский'},
-        { id: 5, name: 'Китайский'},
-        { id: 6, name: 'Испанский'},
-        { id: 7, name: 'Итальянский'},
-        { id: 8, name: 'Финский'}
+        { id: 1, name: 'Русский' },
+        { id: 2, name: 'Английский' },
+        { id: 3, name: 'Немецкий' },
+        { id: 4, name: 'Французский' },
+        { id: 5, name: 'Китайский' },
+        { id: 6, name: 'Испанский' },
+        { id: 7, name: 'Итальянский' },
+        { id: 8, name: 'Финский' },
       ],
       tourLanguages: [],
       dateStart: new Date().toISOString().substr(0, 10),
@@ -228,11 +194,11 @@ export default {
       choosenCities: [],
       choosenTransport: [],
       transportCount: 2,
-    };
+    }
   },
   computed: {
     ...mapGetters([
-      'allCities', 
+      'allCities',
       'allTransports',
       'allTourOptions',
       'getConstructorCurrentStage',
@@ -247,7 +213,9 @@ export default {
       return this.getConstructorCurrentStage == 'Options are set' ? true : false
     },
     showChooseMuseum: function() {
-      return this.getConstructorCurrentStage == 'Transport is set' ? true : false
+      return this.getConstructorCurrentStage == 'Transport is set'
+        ? true
+        : false
     },
     showChooseHotel: function() {
       return this.getConstructorCurrentStage == 'Museum is set' ? true : false
@@ -273,90 +241,92 @@ export default {
     showTransports: function() {
       if (this.choosenCities.length === 0) {
         return false
-      } 
+      }
       return true
     },
     nav: function() {
-      if (this.getTour.constructorType == "Тур от партнёра") {
+      if (this.getTour.constructorType == 'Тур от партнёра') {
         return [
-          { 
-            name: 'Настройки', 
-            stage: 'Initial stage', 
+          {
+            name: 'Настройки',
+            stage: 'Initial stage',
             active: false,
             disabled: false,
           },
-          { 
-            name: 'Тур', 
-            stage: 'Partner tour', 
+          {
+            name: 'Тур',
+            stage: 'Partner tour',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
         ]
       } else {
         return [
-          { 
-            name: 'Настройки', 
-            stage: 'Initial stage', 
+          {
+            name: 'Настройки',
+            stage: 'Initial stage',
             active: false,
             disabled: false,
           },
-          { 
-            name: 'Транспорт', 
-            stage: 'Options are set', 
+          {
+            name: 'Транспорт',
+            stage: 'Options are set',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Экскурсии', 
-            stage: 'Transport is set', 
+          {
+            name: 'Экскурсии',
+            stage: 'Transport is set',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Проживание', 
-            stage: 'Museum is set', 
+          {
+            name: 'Проживание',
+            stage: 'Museum is set',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Питание', 
-            stage: 'Hotel is set', 
+          {
+            name: 'Питание',
+            stage: 'Hotel is set',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Гиды', 
-            stage: 'Meal is set', 
+          {
+            name: 'Гиды',
+            stage: 'Meal is set',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Сопровождающие', 
-            stage: 'Show attendant', 
+          {
+            name: 'Сопровождающие',
+            stage: 'Show attendant',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Допы', 
-            stage: 'Show services', 
+          {
+            name: 'Допы',
+            stage: 'Show services',
             active: false,
-            disabled: false, 
+            disabled: false,
           },
-          { 
-            name: 'Расчёт', 
-            stage: 'Show summary', 
+          {
+            name: 'Расчёт',
+            stage: 'Show summary',
             active: false,
-            disabled: false, 
-          }]
+            disabled: false,
+          },
+        ]
       }
-    }
+    },
   },
   created() {
     this.fetchCities()
     this.fetchTransport()
     this.fetchAllTourOptions()
   },
-  updated() {
+  mounted() {
+    this.fillStore()
   },
   methods: {
     ...mapActions([
@@ -371,7 +341,7 @@ export default {
       'updateActualMeal',
       'updateActualGuide',
       'updateActualAttendant',
-      'clearStore'
+      'clearStore',
     ]),
     log() {
       console.log(this.allTourOptions)
@@ -387,7 +357,7 @@ export default {
         this.firstSlide = false
       }
     },
-    reset () {
+    reset() {
       this.tourTypeFormValid = false
       this.tourName = ''
       this.firstSlide = true
@@ -428,18 +398,19 @@ export default {
       this.updateActualAttendant()
       console.log(this.getTour)
     },
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 1s;
   transform: scale(1);
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
-  transform: scale(0.1)
+  transform: scale(0.1);
 }
 .navigator {
   text-align: left;

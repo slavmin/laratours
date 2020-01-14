@@ -36,25 +36,21 @@ class TourController extends Controller
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
             }])->where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-
         } elseif (!is_null($type_id)) {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
             }])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-
         } elseif (!is_null($city_id)) {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
             }])->where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
-
         } else {
 
             $items = Tour::with(['orderprofiles' => function ($query) {
                 $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
             }])->orderBy($orderBy, $sort)->paginate();
-
         }
 
         $deleted = Tour::onlyTrashed()->get();
@@ -223,7 +219,7 @@ class TourController extends Controller
             }
         });
 
-        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
+        return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.updated'));
     }
 
     /**
@@ -272,13 +268,13 @@ class TourController extends Controller
     {
         $city_ids = Tour::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
-        && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
 
     public static function getTourTypeId(Request $request)
     {
         $type_ids = Tour::getTourTypeIds();
         return $request->has('type_id') && $request->query('type_id') != 0
-        && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
+            && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
     }
 }
