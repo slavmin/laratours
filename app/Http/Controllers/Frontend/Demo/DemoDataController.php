@@ -21,7 +21,7 @@ class DemoDataController extends Controller
       'Взрослый'      => (new TourCustomerType())->create([
         'name'        => 'Взрослый',
         'team_id'     => $team_id,
-        'description' => '{"ageFrom":18,"ageTo":500,"isPens":false}',
+        'description' => '{"ageFrom":18,"ageTo":99,"isPens":false}',
       ]),
       'Младенец'      => (new TourCustomerType())->create([
         'name'        => 'Младенец 0-3',
@@ -49,7 +49,7 @@ class DemoDataController extends Controller
         'description' => '',
       ]),
       'Пенсионер'      => (new TourCustomerType())->create([
-        'name'        => 'Иностранец',
+        'name'        => 'Пенсионер',
         'team_id'     => $team_id,
         'description' => '{"isPens":true,"agePensMale":60,"agePensFemale":55}',
       ]),

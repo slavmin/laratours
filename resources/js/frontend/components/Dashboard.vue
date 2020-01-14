@@ -120,18 +120,43 @@
           </v-card-actions>
         </v-card>
         <v-layout
-          v-if="showFillDemo"
           row
           wrap
           justify-center
         >
           <v-btn
+            v-if="showFillDemo && dataIsNotLoaded"
             color="green"
             dark
             @click="fillDemoData"
           >
             Заполнить профиль демо данными
           </v-btn>
+          <v-alert
+            v-model="showFillDemoDataSuccess"
+            type="success"
+            color="green"
+            dismissible
+          >
+            В ваш аккаунт добавлены демонстрационные данные:
+            <ul>
+              <li>
+                Типы туристов
+              </li>
+              <li>
+                Категории размещения
+              </li>
+              <li>
+                Отели и номера
+              </li>
+              <li>
+                Гид
+              </li>
+              <li>
+                Сопровождающий
+              </li>
+            </ul>
+          </v-alert>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -252,6 +277,8 @@ export default {
         },
       ],
       isAgency: false,
+      dataIsNotLoaded: true,
+      showFillDemoDataSuccess: false,
     }
   },
   computed: {
@@ -268,6 +295,8 @@ export default {
         .post(`/modules/fill-demo-data?team_id=${this.team.id}`)
         .then(response => {
           console.log(response)
+          this.dataIsNotLoaded = false
+          this.showFillDemoDataSuccess = true
         })
     },
   },

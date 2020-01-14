@@ -1,15 +1,13 @@
 <template>
   <v-container fluid>
     <h1 class="text-center mb-5">
-      <v-icon
-        large
-      >
+      <v-icon large>
         view_list
       </v-icon>
       Типы туристов
     </h1>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
@@ -29,16 +27,16 @@
               {{ getDescription(props.item.description) }}
             </td>
             <td class="text-xs-right">
-              <v-layout 
-                row 
+              <v-layout
+                row
                 wrap
                 justify-end
               >
-                <customer-type-edit 
+                <customer-type-edit
                   :item="props.item"
                   :token="token"
                 />
-                <customer-type-delete 
+                <customer-type-delete
                   :item="props.item"
                   :token="token"
                 />
@@ -53,23 +51,22 @@
 
 <script>
 export default {
-
   name: 'CustomerTable',
   props: {
     items: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     headerEdit: {
       type: String,
-      default: ''
+      default: '',
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -77,40 +74,44 @@ export default {
         {
           text: 'Название',
           align: 'left',
-          value: 'name'
+          value: 'name',
         },
         {
           text: 'Возраст',
           align: 'center',
-          value: 'description'
+          value: 'description',
         },
         {
           text: 'Действия',
           align: 'center',
-          value: 'actions'
+          value: 'actions',
         },
       ],
       pagintaion: {
-        rowsPerPage: -1 // -1 for All",
-      }
-    };
+        rowsPerPage: -1, // -1 for All",
+      },
+    }
   },
   methods: {
     getDescription(item) {
+      // If no data
+      if (!item) {
+        return ''
+      }
       const data = JSON.parse(item)
       if (data) {
-        if (!data.isPens){
-          return data.ageFrom 
-                  ? `от ${data.ageFrom} до ${data.ageTo}` 
-                  : `до ${data.ageTo}` 
+        if (!data.isPens) {
+          return data.ageFrom
+            ? `от ${data.ageFrom} до ${data.ageTo}`
+            : `до ${data.ageTo}`
         }
         if (data.isPens) {
           return `Мужчины от ${data.agePensMale}, женщины от ${data.agePensFemale}`
         }
       }
-    }
+    },
   },
-};
+}
 </script>
 
 <style lang="css" scoped>
