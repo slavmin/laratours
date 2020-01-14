@@ -6,39 +6,37 @@
       </span>
     </v-card-title>
     <v-card-text>
-      <v-layout 
+      <v-layout
         row
         justify-space-between
       >
-        <v-flex
-          xs2
-        >
+        <v-flex xs2>
           <v-spacer />
           <!-- Bus scheme -->
           <div class="bus">
             <div
               v-for="row in bus.rows"
-              :key="row" 
+              :key="row"
               class="d-flex flex-row mb-1"
             >
-              <div 
+              <div
                 v-for="col in bus.cols"
                 :key="col"
               >
-                <div 
+                <div
                   :id="[row + '-' + col]"
                   class="seat"
                   @click="chooseSeat(row + '-' + col)"
                 >
                   |__|
-                </div>                
-              </div>    
+                </div>
+              </div>
             </div>
           </div>
           <!-- /Bus scheme -->
           <!-- Passengers seats count -->
-          <div 
-            class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+          <div
+            class="container-fluid d-flex justify-content-between align-items-center mb-1"
             style="height: 38px;"
           >
             <p class="mb-0">
@@ -47,9 +45,9 @@
           </div>
           <!-- /Passengers seats count -->
           <!-- Unavailable seats count -->
-          <div 
+          <div
             v-if="bus.unavailable.length > 0"
-            class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            class="container-fluid d-flex justify-content-between align-items-center mb-1"
             style="height: 38px;"
           >
             <p class="mb-0">
@@ -59,18 +57,16 @@
           <!-- /Unavailable seats count -->
         </v-flex>
         <v-spacer />
-        <v-flex
-          xs3
-        >
+        <v-flex xs3>
           <!-- Controls -->
           <div class="controls d-flex flex-column">
             <!-- Add/remove rows -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <!-- Add button -->
-              <button 
+              <button
                 class="btn btn-primary rounded mr-2"
                 :disabled="bus.rows == 50"
                 @click="addRow"
@@ -82,7 +78,7 @@
                 Строк: {{ bus.rows }}
               </p> <!-- Show rows count -->
               <!-- Remove button -->
-              <button 
+              <button
                 class="btn btn-primary rounded ml-2"
                 :disabled="bus.rows == 1"
                 @click="removeRow"
@@ -93,12 +89,12 @@
             </div>
             <!-- /Add/remove rows -->
             <!-- Add/remove cols -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <!-- Add button -->
-              <button 
+              <button
                 class="btn btn-primary rounded mr-2"
                 :disabled="bus.cols == 40"
                 @click="addCol"
@@ -110,7 +106,7 @@
                 Мест: {{ bus.cols }}
               </p> <!-- Show rows count -->
               <!-- Remove button -->
-              <button 
+              <button
                 class="btn btn-primary rounded ml-2"
                 :disabled="bus.cols == 1"
                 @click="removeCol"
@@ -119,12 +115,12 @@
               </button>
               <!-- /Remove button -->
             </div>
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 12px;"
             >
-              <p 
-                class="mb-0 text-align-right" 
+              <p
+                class="mb-0 text-align-right"
                 style="font-size: 10px;"
               >
                 Мест в ряду, включая проходы.
@@ -132,18 +128,18 @@
             </div>
             <!-- /Add/remove cols -->
             <!-- Selected seats -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
-              <p class="mb-0">  
+              <p class="mb-0">
                 Выделено мест: {{ choosenSeats.length }}
               </p>
             </div>
             <!-- /Selected seats -->
             <!-- Set driver seats button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -155,8 +151,8 @@
             </div>
             <!-- /Set driver seats button -->
             <!-- Set doors button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -168,8 +164,8 @@
             </div>
             <!-- /Set doors button -->
             <!-- Set guide seats button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -181,8 +177,8 @@
             </div>
             <!-- /Set guide seats button -->
             <!-- Set common seats button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -194,8 +190,8 @@
             </div>
             <!-- /Set common seats button -->
             <!-- Set driver seats button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -207,8 +203,8 @@
             </div>
             <!-- /Set driver seats button -->
             <!-- Set unavailable seats button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center mb-1" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center mb-1"
               style="height: 38px;"
             >
               <button
@@ -220,8 +216,8 @@
             </div>
             <!-- /Set unavailable seats button -->
             <!-- Make all seats common button -->
-            <div 
-              class="container-fluid d-flex justify-content-between align-items-center" 
+            <div
+              class="container-fluid d-flex justify-content-between align-items-center"
               style="height: 38px;"
             >
               <button
@@ -317,36 +313,35 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 export default {
-
   name: 'Scheme',
   props: {
     id: {
       type: Number,
       default: () => {
         return 0
-      }
+      },
     },
     object: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     currentScheme: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     companyId: {
       type: Number,
       default: () => {
         return 0
-      }
+      },
     },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     new: Boolean,
   },
@@ -362,7 +357,7 @@ export default {
         pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
         unavailable: [],
         service: [],
-        totalPassengersCount: 0
+        totalPassengersCount: 0,
       },
       defaultScheme: {
         rows: 10,
@@ -373,7 +368,7 @@ export default {
         pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
         unavailable: [],
         service: [],
-        totalPassengersCount: 0
+        totalPassengersCount: 0,
       },
       defaultClasses: 'seat btn mr-1 ',
       commonSeatClass: 'common-seat',
@@ -386,19 +381,17 @@ export default {
       unavailableSeatClass: 'unavailable-seat',
       extra: {},
       attribute: '',
-      initialScheme: {}
-    };
+      initialScheme: {},
+    }
   },
-  created() {
-    
-  },
+  created() {},
   mounted() {
     console.log(this.new)
     if (!this.new) {
       this.extra = JSON.parse(this.object.extra)
       this.initialScheme = Object.assign({}, this.extra.scheme)
       this.bus = Object.assign({}, this.extra.scheme)
-    } 
+    }
     if (this.new) {
       this.bus = this.currentScheme
     }
@@ -434,19 +427,29 @@ export default {
       this.bus.cols--
     },
     removeExtraSeats(indicator) {
-      this.bus.driver = this.bus.driver.filter(seat => !seat.includes(indicator))
+      this.bus.driver = this.bus.driver.filter(
+        seat => !seat.includes(indicator)
+      )
       this.bus.doors = this.bus.doors.filter(seat => !seat.includes(indicator))
       this.bus.guide = this.bus.guide.filter(seat => !seat.includes(indicator))
       this.bus.pass = this.bus.pass.filter(seat => !seat.includes(indicator))
-      this.bus.unavailable = this.bus.unavailable.filter(seat => !seat.includes(indicator))
-      this.choosenSeats = this.choosenSeats.filter(seat => !seat.includes(indicator))
+      this.bus.unavailable = this.bus.unavailable.filter(
+        seat => !seat.includes(indicator)
+      )
+      this.choosenSeats = this.choosenSeats.filter(
+        seat => !seat.includes(indicator)
+      )
     },
     removeSeatsFromAllTypes(indicator) {
-      this.bus.driver = this.bus.driver.filter(seat => !seat.includes(indicator))
+      this.bus.driver = this.bus.driver.filter(
+        seat => !seat.includes(indicator)
+      )
       this.bus.doors = this.bus.doors.filter(seat => !seat.includes(indicator))
       this.bus.guide = this.bus.guide.filter(seat => !seat.includes(indicator))
       this.bus.pass = this.bus.pass.filter(seat => !seat.includes(indicator))
-      this.bus.unavailable = this.bus.unavailable.filter(seat => !seat.includes(indicator))
+      this.bus.unavailable = this.bus.unavailable.filter(
+        seat => !seat.includes(indicator)
+      )
     },
     reset() {
       this.bus.driver = []
@@ -500,8 +503,12 @@ export default {
       })
     },
     chooseSeat(seatId) {
-      if (this.choosenSeats.find(choosenSeat => { return choosenSeat === seatId }) === undefined) {
-      this.choosenSeats.push(seatId)
+      if (
+        this.choosenSeats.find(choosenSeat => {
+          return choosenSeat === seatId
+        }) === undefined
+      ) {
+        this.choosenSeats.push(seatId)
       } else {
         this.choosenSeats = this.choosenSeats.filter(seat => seat != seatId)
       }
@@ -533,9 +540,9 @@ export default {
       this.choosenSeats = []
     },
     setCommonSeats() {
-      this.choosenSeats.forEach((seatId) => {
+      this.choosenSeats.forEach(seatId => {
         this.removeSeatsFromAllTypes(seatId)
-      }) 
+      })
       this.choosenSeats = []
       this.drawScheme()
     },
@@ -581,14 +588,14 @@ export default {
     exportBusScheme() {
       this.assignNewScheme({
         id: this.id,
-        scheme: this.bus
+        scheme: this.bus,
       })
     },
     setTotalPassengersCount() {
       let commonSeats = document.getElementsByClassName('common-seat')
       this.bus.totalPassengersCount = commonSeats.length
     },
-    close () {
+    close() {
       this.choosenSeats = []
       this.bus = Object.assign({}, this.initialScheme)
       this.showScheme = false
@@ -605,9 +612,9 @@ export default {
       setTimeout(() => {
         this.showScheme = false
       }, 2000)
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>
@@ -616,11 +623,11 @@ export default {
   padding: 6px;
   max-width: 225px;
   position: relative;
-  z-index: 10
+  z-index: 10;
 }
 .spaces {
   position: relative;
-  z-index: 1
+  z-index: 1;
 }
 .seat {
   cursor: pointer;
@@ -640,9 +647,9 @@ export default {
   border-color: gray;
 }
 .pass {
-  background-color: #F3F3F3;
-  border-color: #F3F3F3;
-  color: #F3F3F3;
+  background-color: #f3f3f3;
+  border-color: #f3f3f3;
+  color: #f3f3f3;
 }
 .pass.control {
   color: gray;
@@ -660,8 +667,8 @@ export default {
   border-color: #ffc107;
 }
 .guide-seat {
-  background-color: #A1A1A1;
-  border-color: #A1A1A1;
+  background-color: #a1a1a1;
+  border-color: #a1a1a1;
 }
 .unavailable-seat {
   background-color: #212121;

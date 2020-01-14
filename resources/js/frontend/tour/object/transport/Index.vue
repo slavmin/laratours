@@ -1,12 +1,12 @@
 <template>
-  <v-container 
+  <v-container
     fluid
-    grid-list-md 
+    grid-list-md
     text-xs-center
     style="background-color: #66a5ae;"
   >
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
@@ -20,7 +20,7 @@
           Транспорт
           <AddCompany
             :token="token"
-            :transport="transport" 
+            :transport="transport"
           />
         </h1>
         <Table :token="token" />
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
@@ -38,7 +38,6 @@ Vue.use(Vuetify)
 import Table from './Table'
 import AddCompany from './AddCompany'
 export default {
-
   name: 'ObjectTransportIndex',
   components: {
     Table,
@@ -49,20 +48,20 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
   data() {
     return {
-      transport: {}
-    };
+      transport: {},
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
