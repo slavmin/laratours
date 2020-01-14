@@ -29,19 +29,22 @@ use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderCont
 // Document template engine controllers
 use App\Http\Controllers\Frontend\Document\DocumentController;
 use App\Http\Controllers\Api\Document\PdfController;
+// Demo data
+use App\Http\Controllers\Frontend\Demo\DemoDataController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
  */
+
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
 // Public Tour Order
 //Route::group(['prefix' => 'guest'], function () {
 
-    // Route::get is public order form for testing only
-    Route::get('order', [TourOrderController::class, 'index'])->name('guest.order');
-    Route::post('order/store', [TourOrderController::class, 'store'])->name('guest.order.store');
+// Route::get is public order form for testing only
+Route::get('order', [TourOrderController::class, 'index'])->name('guest.order');
+Route::post('order/store', [TourOrderController::class, 'store'])->name('guest.order.store');
 
 //});
 
@@ -184,27 +187,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
             // Tour Objects attributes Management
             Route::resource('attribute', \ObjectAttributeController::class, ['except' => ['index', 'create', 'show', 'edit']]);
-        
         });
-
-        // // Operator as agency
-        // Route::group(['namespace' => 'Tour\Agency', 'as' => 'agency.', 'prefix' => 'test'], function () {
-
-        //     // Tours listed by Agency
-        //     Route::get('tours', [AgencyTourController::class, 'index'])->name('tour-list');
-
-        //     // Tour Orders Management
-        //     Route::resource('order', 'OrderController')->except(['create', 'show', 'store']);
-        //     Route::get('order/create/{tour_id}', [AgencyOrderController::class, 'create'])->name('order.create');
-        //     Route::post('order/store', [AgencyOrderController::class, 'store'])->name('order.store');
-        //     // Handle Soft Deleted
-        //     Route::group(['prefix' => 'order/{order}'], function () {
-        //         Route::get('restore', [AgencyOrderController::class, 'restore'])->name('order.restore');
-        //         Route::delete('delete', [AgencyOrderController::class, 'delete'])->name('order.delete-permanently');
-
-        //     });
-        // });
-
     });
 
 
@@ -223,19 +206,21 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::group(['prefix' => 'order/{order}'], function () {
                 Route::get('restore', [AgencyOrderController::class, 'restore'])->name('order.restore');
                 Route::delete('delete', [AgencyOrderController::class, 'delete'])->name('order.delete-permanently');
-
             });
         });
     });
 
-    // Document template engine
-    Route::group(['prefix' => 'modules'] ,function () {
-        Route::group(['namespace' => 'Document'], function() {
+    Route::group(['prefix' => 'modules'], function () {
+        // Document template engine
+        Route::group(['namespace' => 'Document'], function () {
             Route::resource('document', 'DocumentController');
             Route::get('get-pdf', 'PdfController@getPdf');
             Route::get('get-word', 'WordController@getWord');
             Route::get('get-word-gibdd', 'GibddNotifyController@getWord');
         });
+        // Demo data
+        Route::group(['namespace' => 'Demo'], function () {
+            Route::post('fill-demo-data', 'DemoDataController@writeDemoDataToDB');
+        });
     });
-
 });

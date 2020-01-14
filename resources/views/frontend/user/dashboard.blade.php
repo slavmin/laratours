@@ -14,6 +14,7 @@
     account-url="{{ route('frontend.user.account')}}"
     account-text="@lang('navs.frontend.user.account')"
     account-img-url="{{ $logged_in_user->picture }}"
+    show-fill-demo="{{ $show_fill_demo }}"
 ></dashboard>
     
 @endsection

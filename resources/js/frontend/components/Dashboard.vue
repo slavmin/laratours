@@ -1,17 +1,17 @@
 <template>
-  <v-container 
+  <v-container
     fluid
     grid-list-xs
     style="background-color: #66a5ae;"
   >
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       justify-center
     >
       <v-flex xs12>
         <h1 class="text-xs-center white--text mb-4">
-          <v-icon 
+          <v-icon
             color="white"
             large
           >
@@ -19,10 +19,10 @@
           </v-icon>
           {{ headerText }}
         </h1>
-      </v-flex>  
+      </v-flex>
     </v-layout>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex sm7>
@@ -38,9 +38,12 @@
           <v-divider />
           <v-card-text>
             <span class="subheading">
-              Здесь вы можете подобрать и оформить заказ на туры в Санкт-Петербург от туроператора {{ team.name }}. 
+              Здесь вы можете подобрать и оформить заказ на туры в
+              Санкт-Петербург от туроператора {{ team.name }}.
               <br>
-              Так же мы предлагаем школьные экскурсии , сборные туры для детей и взрослых, туристические поездки по России, Золотое кольцо и многое-многое другое! 
+              Так же мы предлагаем школьные экскурсии , сборные туры для детей и
+              взрослых, туристические поездки по России, Золотое кольцо и
+              многое-многое другое!
             </span>
           </v-card-text>
         </v-card>
@@ -66,9 +69,9 @@
                   :key="item.text"
                   flat
                 >
-                  <a 
+                  <a
                     :href="item.url"
-                    class="link" 
+                    class="link"
                   >
                     <v-icon>
                       {{ item.icon }}
@@ -84,9 +87,7 @@
       <v-spacer />
       <v-flex sm4>
         <v-card>
-          <v-img
-            :src="accountImgUrl"
-          />
+          <v-img :src="accountImgUrl" />
           <v-card-title primary-title>
             <div style="color: #979694;">
               <h3 class="headline mb-2">
@@ -98,26 +99,40 @@
               </div>
               <div>
                 <v-icon>calendar_today</v-icon>
-                <span class="subheading">{{ `${joinedText}: ${joinedTime}` }}</span>
+                <span class="subheading">
+                  {{ `${joinedText}: ${joinedTime}` }}
+                </span>
               </div>
             </div>
           </v-card-title>
 
           <v-card-actions>
             <v-spacer />
-            <v-btn 
+            <v-btn
               :href="accountUrl"
               dark
               color="#ac2728"
             >
-              <span
-                style="color: #ffc5c3;"
-              >
+              <span style="color: #ffc5c3;">
                 {{ accountText }}
               </span>
             </v-btn>
           </v-card-actions>
         </v-card>
+        <v-layout
+          v-if="showFillDemo"
+          row
+          wrap
+          justify-center
+        >
+          <v-btn
+            color="green"
+            dark
+            @click="fillDemoData"
+          >
+            Заполнить профиль демо данными
+          </v-btn>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>
@@ -131,39 +146,43 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     headerText: {
       type: String,
-      default: 'Header'
+      default: 'Header',
     },
     userName: {
       type: String,
-      default: 'UserName'
+      default: 'UserName',
     },
     userEmail: {
       type: String,
-      default: 'user@tour-click.ru'
+      default: 'user@tour-click.ru',
     },
     joinedText: {
       type: String,
-      default: 'user@tour-click.ru'
+      default: 'user@tour-click.ru',
     },
     joinedTime: {
       type: String,
-      default: '01.07.2019'
+      default: '01.07.2019',
     },
     accountUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     accountText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     accountImgUrl: {
       type: String,
-      default: '#'
+      default: '#',
+    },
+    showFillDemo: {
+      type: String,
+      default: 'false',
     },
   },
   data() {
@@ -218,7 +237,7 @@ export default {
           text: 'Сопровождающие',
           url: '/operator/attendant',
           icon: 'nature_people',
-        }
+        },
       ],
       managementAgency: [
         {
@@ -239,6 +258,18 @@ export default {
     ...mapGetters({
       management: 'getNavLinks',
     }),
+  },
+  mounted() {
+    console.log(this.team)
+  },
+  methods: {
+    fillDemoData() {
+      axios
+        .post(`/modules/fill-demo-data?team_id=${this.team.id}`)
+        .then(response => {
+          console.log(response)
+        })
+    },
   },
 }
 </script>
