@@ -21,7 +21,10 @@ export default {
     },
   },
   mounted() {
-    this.buildMap()
+    setTimeout(() => {
+      this.buildMap()
+    }, 1000)
+    // this.buildMap()
   },
   methods: {
     buildMap() {
