@@ -1,11 +1,11 @@
 <template>
-  <v-container 
+  <v-container
     grid-list-xs
     fluid
     style="background-color: #66a5ae;"
   >
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
@@ -18,8 +18,9 @@
           </v-icon>
           {{ header }}
         </h1>
+        <Filters />
+        <v-divider />
         <Table
-          :items="items"
           :token="token"
           :tour-names="tourNames"
           :agencies="agencies"
@@ -31,17 +32,20 @@
 </template>
 <script>
 import Table from './Table'
+import Filters from './Filters'
+import { mapActions } from 'vuex'
 export default {
   name: 'OperatorOrderIndex',
   components: {
     Table,
+    Filters,
   },
   props: {
     items: {
       type: Object,
       default: () => {
         return {}
-      } 
+      },
     },
     header: {
       type: String,
@@ -76,12 +80,13 @@ export default {
       },
     },
   },
-  data() {
-    return {
-    }
+  mounted() {
+    this.updateTours(this.items.data)
+  },
+  methods: {
+    ...mapActions(['updateTours']),
   },
 }
 </script>
 <style lang="scss" scoped>
-  
 </style>

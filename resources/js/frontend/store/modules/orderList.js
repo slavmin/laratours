@@ -6,11 +6,12 @@ export default {
   },
   mutations: {
     setTours(state, orders) {
+      state.tours = []
       orders.forEach((order) => {
         if (state.tours.length === 0) {
           state.tours.push({
             tourId: order.tour_id,
-            orders: [{...order}],
+            orders: [{ ...order }],
           })
         }
         else {
@@ -21,7 +22,7 @@ export default {
           else {
             state.tours.push({
               tourId: order.tour_id,
-              orders: [{...order}]
+              orders: [{ ...order }]
             })
           }
         }

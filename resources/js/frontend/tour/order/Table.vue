@@ -11,12 +11,12 @@
       </template>
       <v-card>
         <v-card-text>
-          <v-layout 
-            row 
+          <v-layout
+            row
             wrap
             justify-center
           >
-            <Profiles 
+            <Profiles
               :tour="tour"
               :token="token"
               :agencies="agencies"
@@ -39,47 +39,33 @@ export default {
     Profiles,
   },
   props: {
-    items: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
     agencies: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     statuses: {
       type: Array,
       default: () => {
         return []
-      }
+      },
     },
     tourNames: {
       type: Object,
       default: () => {
         return []
-      }
+      },
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   computed: {
-    ...mapGetters([
-      'getTours'
-    ]),
-  },
-  mounted() {
-    this.updateTours(this.items.data)
+    ...mapGetters(['getTours']),
   },
   methods: {
-    ...mapActions([
-      'updateTours'
-    ]),  
     touristsCount(content) {
       let count = 0
       for (let key in content) {
@@ -87,6 +73,6 @@ export default {
       }
       return count
     },
-  }
+  },
 }
 </script>

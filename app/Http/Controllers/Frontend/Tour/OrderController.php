@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Events\Frontend\Order\OrderDeleted;
 use App\Exceptions\GeneralException;
+use App\Filters\ToursFilter;
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
@@ -19,7 +20,7 @@ class OrderController extends Controller
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $agencies = Team::getTeamSubscriptions();
         $subscribers = array_keys($agencies);
@@ -32,14 +33,20 @@ class OrderController extends Controller
         $statuses = TourOrder::getStatusesAttribute();
         $tour_names = TourOrder::getTourNames();
 
-        $items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate();
+        $items = TourOrder::with('profiles');
+
+        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         $deleted = TourOrder::where('team_id', auth()->user()->current_team_id)->onlyTrashed()->get();
+
+        if ($request->expectsJson()) {
+            return response()->json($items->toArray());
+        }
 
         return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names'))
             ->with('statuses', $statuses)
             ->with('model_alias', $model_alias);
-            // ->with('all_items', $all_items);
+        // ->with('all_items', $all_items);
     }
 
 
@@ -73,7 +80,7 @@ class OrderController extends Controller
 
         $profiles = $item->profiles()->get()->pluck('content')->first();
 
-        if(!is_array($profiles)){
+        if (!is_array($profiles)) {
             $profiles = [0 => []];
         }
 
@@ -86,8 +93,8 @@ class OrderController extends Controller
         return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
-            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
 
@@ -96,8 +103,8 @@ class OrderController extends Controller
     {
         $request->validate([
             'customer.*.first_name' => 'required|min:3|max:191',
-            'customer.*.last_name'=> 'required|min:3|max:191',
-            'customer.*.email'=> 'required|email|max:191',
+            'customer.*.last_name' => 'required|min:3|max:191',
+            'customer.*.email' => 'required|email|max:191',
             //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
@@ -110,7 +117,8 @@ class OrderController extends Controller
         // Update or Create customer profile
         $tour_order->profiles()->updateOrCreate(
             ['type' => 'customer'],
-            ['type' => 'customer', 'content' => $profile]);
+            ['type' => 'customer', 'content' => $profile]
+        );
 
         return redirect()->route('frontend.tour.order.index')->withFlashSuccess(__('alerts.general.updated'));
     }

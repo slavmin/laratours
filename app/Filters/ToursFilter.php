@@ -7,25 +7,32 @@ class ToursFilter
   protected $builder;
   protected $request;
 
-  public function __construct($builder, $request) 
+  public function __construct($builder, $request)
   {
     $this->builder = $builder;
     $this->request = $request;
   }
 
-  public function apply() 
+  public function apply()
   {
-    foreach($this->filters() as $filter => $value) {
-      if(method_exists($this, $filter)) {
+    // dd($this->request->all(), $this->builder->first());
+    foreach ($this->filters() as $filter => $value) {
+      if (method_exists($this, $filter)) {
         $this->$filter($value);
       }
     }
+    // dd($this->builder->first());
     return $this->builder;
   }
 
-  public function filters() 
+  public function filters()
   {
     return $this->request->all();
+  }
+
+  public function id($value)
+  {
+    $this->builder->where('id', 'like', "%$value%");
   }
 
   public function name($value)
@@ -42,5 +49,10 @@ class ToursFilter
   {
     if (!$value) return;
     $this->builder->where('tour_type_id', $value);
+  }
+
+  public function status($value)
+  {
+    $this->builder->where('status', $value);
   }
 }

@@ -33,17 +33,17 @@
           <br>
           <i
             v-for="n in touristsCount(order.profiles[0].content)"
-            :key="n" 
+            :key="n"
             class="material-icons body-2"
           >
             accessibility_new
           </i>
           <br>
-          <Details 
+          <Details
             :profiles="order.profiles"
             :order-id="order.id"
           />
-          <HasNewMessage 
+          <HasNewMessage
             :chat="JSON.parse(order.profiles[0].content[0].chat)"
             recipient="Оператор"
           />
@@ -55,7 +55,7 @@
           {{ order.profiles[0].content[0].orderStatus }}
         </td>
         <td>
-          <span 
+          <span
             class="status"
             :class="statuses[order.status]"
           >
@@ -63,8 +63,8 @@
           </span>
         </td>
         <td>
-          <v-layout 
-            row 
+          <v-layout
+            row
             wrap
           >
             <v-btn
@@ -80,22 +80,21 @@
                 edit
               </i>
             </v-btn>
-            <form 
+            <form
               :action="'/operator/order/' + order.id"
               method="POST"
             >
-              <input 
-                id="_method" 
-                type="hidden" 
-                name="_method" 
+              <input
+                name="_method"
+                type="hidden"
                 value="DELETE"
               >
-              <input 
-                type="hidden" 
-                name="_token" 
+              <input
+                type="hidden"
+                name="_token"
                 :value="token"
               >
-              <v-btn 
+              <v-btn
                 fab
                 small
                 outline
@@ -114,10 +113,18 @@
   </table>
 </template>
 <script>
-import pdfMake from "pdfmake/build/pdfmake"
-import pdfFonts from "pdfmake/build/vfs_fonts"
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
-import { Document, Paragraph, Packer, TextRun, TableOfContents, StyleLevel, HeadingLevel } from "docx"
+import {
+  Document,
+  Paragraph,
+  Packer,
+  TextRun,
+  TableOfContents,
+  StyleLevel,
+  HeadingLevel,
+} from 'docx'
 import { saveAs } from 'file-saver'
 import Details from './Details'
 import HasNewMessage from '../includes/HasNewMessage'
@@ -132,45 +139,44 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     agencies: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     statuses: {
       type: Array,
       default: () => {
         return []
-      }
+      },
     },
     tourNames: {
       type: Object,
       default: () => {
         return []
-      }
+      },
     },
   },
   data() {
     return {
       statusesTranslated: [
-        'Не подтвержден', 
-        'Подтвержден', 
+        'Не подтвержден',
+        'Подтвержден',
         'Оплачен',
         'Отменен',
         'Отклонен',
         'Завершен',
-      ]
+      ],
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     touristsCount(content) {
       let count = 0
@@ -183,51 +189,55 @@ export default {
       console.log(order)
       let dd = {
         content: [
-          "ООО «Туроператор Алфавит» www.alfavit-travel.ru",
-          "ИНН 7840055086 / КПП 784001001",
-          "191014, г. Санкт-Петербург, Артиллерийская улица, 1, лит. А, оф. 132",
+          'ООО «Туроператор Алфавит» www.alfavit-travel.ru',
+          'ИНН 7840055086 / КПП 784001001',
+          '191014, г. Санкт-Петербург, Артиллерийская улица, 1, лит. А, оф. 132',
           '______________________',
           order.profiles[0].content[0].first_name,
           order.profiles[0].content[0].last_name,
           order.profiles[0].content[0].dob,
           order.profiles[0].content[0].email,
           order.profiles[0].content[0].passport,
-        ]   
+        ],
       }
-      pdfMake.createPdf(dd).open();
+      pdfMake.createPdf(dd).open()
     },
     getWord(order) {
-      const doc = new Document();
+      const doc = new Document()
       doc.addSection({
         children: [
           // new Paragraph({
           //   text: "Header #1",
           //   heading: HeadingLevel.HEADING_1,
           // }),
-          new Paragraph("ООО «Туроператор Алфавит» www.alfavit-travel.ru"),
-          new Paragraph("ИНН 7840055086 / КПП 784001001"),
-          new Paragraph("191014, г. Санкт-Петербург, Артиллерийская улица, 1, лит. А, оф. 132"),
+          new Paragraph('ООО «Туроператор Алфавит» www.alfavit-travel.ru'),
+          new Paragraph('ИНН 7840055086 / КПП 784001001'),
+          new Paragraph(
+            '191014, г. Санкт-Петербург, Артиллерийская улица, 1, лит. А, оф. 132'
+          ),
           new Paragraph({
             border: {
               bottom: {
-                color: "auto",
+                color: 'auto',
                 space: 1,
-                value: "single",
+                value: 'single',
                 size: 6,
               },
             },
-            text: "Тел.: +7 (812) 579-65-56 info@alfavit-travel.ru",
+            text: 'Тел.: +7 (812) 579-65-56 info@alfavit-travel.ru',
           }),
           new Paragraph({
-            text: "ВАУЧЕР No 18/07/19",
+            text: 'ВАУЧЕР No 18/07/19',
             // pageBreakBefore: true,
           }),
-          new Paragraph(`Турист: ${order.profiles[0].content[0].first_name} ${order.profiles[0].content[0].last_name} ${order.profiles[0].content[0].dob}`),
-      ],
+          new Paragraph(
+            `Турист: ${order.profiles[0].content[0].first_name} ${order.profiles[0].content[0].last_name} ${order.profiles[0].content[0].dob}`
+          ),
+        ],
       })
-      Packer.toBlob(doc).then((blob) => {
-        saveAs(blob, "word.docx");
-      });
+      Packer.toBlob(doc).then(blob => {
+        saveAs(blob, 'word.docx')
+      })
     },
   },
 }
@@ -258,7 +268,7 @@ span {
     text-align: center;
   }
   &.pending {
-    background-color: #FDD835;
+    background-color: #fdd835;
   }
   &.confirmed {
     background-color: rgb(40, 43, 214);
