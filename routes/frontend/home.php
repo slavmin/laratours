@@ -217,6 +217,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::get('get-pdf', 'PdfController@getPdf');
             Route::get('get-word', 'WordController@getWord');
             Route::get('get-word-gibdd', 'GibddNotifyController@getWord');
+            Route::get('gibdd-map', 'GibddNotifyController@getMap');
         });
         // Demo data
         Route::group(['namespace' => 'Demo'], function () {

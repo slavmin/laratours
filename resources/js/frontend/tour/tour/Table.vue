@@ -129,6 +129,14 @@
           <td :class="props.item.published ? '' : 'unpublished'">
             <About :tour="props.item" />
             <BusNotify :tour="props.item" />
+            <v-btn
+              color="green"
+              dark
+              small
+              :href="`/modules/gibdd-map?tour_id=${props.item.id}`"
+            >
+              Схема
+            </v-btn>
           </td>
           <td :class="props.item.published ? '' : 'unpublished'">
             {{ getOrdersCount(props.item.orderprofiles) }}

@@ -38,6 +38,8 @@
         {{ style(mix('css/frontend.css')) }}
 
         @stack('after-styles')
+        @stack('scripts')
+        
     </head>
     <body>
         <div id="app">
