@@ -3,23 +3,25 @@
 @section('content')
     <!-- Vue component -->
     @if(count($items)==0)
-        <no-data
-            data-app
-            title="Заказы"
-        ></no-data
     @endif
-    @if(count($items)>0)
+    @if(count($items)>=0)
         <?php $sitems = json_encode($items); ?>
         <?php $sagencies = json_encode($agencies); ?>
         <?php $sstatuses = json_encode($statuses); ?>
+        <?php $scities = json_encode($cities_names); ?>
         <?php $stour_names = json_encode($tour_names); ?>
+        <?php $stour_infos = json_encode($tour_infos); ?>
+        <?php $sreq_params = json_encode($req_params); ?>
         <operator-orders-index
             data-app
             header="@lang('labels.frontend.tours.order.management')"
             :items="{{ $sitems }}"
             :agencies="{{ $sagencies }}"
             :statuses="{{ $sstatuses }}"
+            :cities="{{ $scities }}"
             :tour-names="{{ $stour_names }}"
+            :tour-infos="{{ $stour_infos }}"
+            :req-params="{{ $sreq_params }}"
             token="{{ csrf_token() }}"
         >
         </operator-orders-index>

@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+    
     <!-- Vue component -->
     @if(count($items)>0)
         <?php $sitems = json_encode($items); ?>

@@ -51,6 +51,19 @@ class Tour extends Model
         return $this->dates()->pluck('date');
     }
 
+    public function getOrderedQntAttribute()
+    {
+        $orders = TourOrder::where('tour_id', $this->id)->with('profiles')->get()->toArray();
+
+        $result = 0;
+
+        foreach ($orders as $order) {
+            $result += count($order['profiles'][0]['content']);
+        };
+
+        return $result;
+    }
+
 
     // Tour model relations
 

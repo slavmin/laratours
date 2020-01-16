@@ -10,7 +10,7 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Models\Tour\TourCity;
 
 class OrderController extends Controller
 {
@@ -31,22 +31,28 @@ class OrderController extends Controller
         $model_alias = TourOrder::getModelAliasAttribute();
 
         $statuses = TourOrder::getStatusesAttribute();
+
         $tour_names = TourOrder::getTourNames();
 
-        $items = TourOrder::with('profiles');
+        $tour_infos = TourOrder::getTourInfos();
+
+        $items = TourOrder::with(['profiles', 'tour:id,name']);
 
         $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
+        $cities_names = TourCity::withoutGlobalScope('team')->get()->pluck('name', 'id')->toArray();
+
         $deleted = TourOrder::where('team_id', auth()->user()->current_team_id)->onlyTrashed()->get();
 
-        if ($request->expectsJson()) {
-            return response()->json($items->toArray());
-        }
+        // if ($request->expectsJson()) {
+        //     return response()->json($items->toArray());
+        // }
 
-        return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names'))
+        $req_params = $request->all();
+
+        return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names', 'tour_infos', 'cities_names', 'req_params'))
             ->with('statuses', $statuses)
             ->with('model_alias', $model_alias);
-        // ->with('all_items', $all_items);
     }
 
 

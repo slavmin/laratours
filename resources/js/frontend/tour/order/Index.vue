@@ -18,11 +18,25 @@
           </v-icon>
           {{ header }}
         </h1>
-        <Filters />
+        <Filters :req-params="reqParams" />
+        <v-layout
+          row
+          wrap
+          justify-center
+        >
+          <v-flex
+            xs4
+            class="text-xs-center white--text subheading"
+          >
+            Найдено заявок: {{ items.data.length }}
+          </v-flex>
+        </v-layout>
         <v-divider />
         <Table
           :token="token"
           :tour-names="tourNames"
+          :tour-infos="tourInfos"
+          :cities="cities"
           :agencies="agencies"
           :statuses="statuses"
         />
@@ -61,7 +75,19 @@ export default {
         return {}
       },
     },
+    tourInfos: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     agencies: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    cities: {
       type: Object,
       default: () => {
         return {}
@@ -75,6 +101,12 @@ export default {
     },
     statusesList: {
       type: Array,
+      default: () => {
+        return []
+      },
+    },
+    reqParams: {
+      type: Object,
       default: () => {
         return []
       },

@@ -86,12 +86,38 @@ class TourOrder extends Model implements AuditableInterface
         return Tour::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
+    /**
+     * @return mixed
+     */
+    public static function getTourInfos()
+    {
+        $columns = ['id', 'name', 'cities_list', 'extra', 'deleted_at'];
+
+        $tours = Tour::select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
+
+        $trashed_tours = Tour::onlyTrashed()->select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
+
+        $result = [];
+
+        // Add 'ordered_qnt' field and it's value to all tourinfos
+        foreach ($tours as $tour) {
+            $tour['ordered_qnt'] = Tour::find($tour['id'])->ordered_qnt;
+            $result[$tour['id']] = $tour;
+        }
+        foreach ($trashed_tours as $tour) {
+            $tour['ordered_qnt'] = Tour::onlyTrashed()->find($tour['id'])->ordered_qnt;
+            $result[$tour['id']] = $tour;
+        }
+
+        return $result;
+    }
+
     protected static function boot()
     {
         parent::boot();
 
         static::updating(function (TourOrder $model) {
-            if($model->getOriginal('status') != $model->status){
+            if ($model->getOriginal('status') != $model->status) {
                 event(new OrderStatusChanged($model));
             }
         });
@@ -112,24 +138,21 @@ class TourOrder extends Model implements AuditableInterface
      */
     public function getSharedDocuments($order_id)
     {
-        
+
         $order = TourOrder::where('id', $order_id)->first();
 
         $documents = new Collection();
-        
+
         // Если статус "оплачено" и выше
-        if ($order->status >= 2) 
-        {
+        if ($order->status >= 2) {
             $documents =
                 Document::whereIn('team_id', [$order->team_id, $order->operator_id])
                 ->where('pdf_for_agent', 1)
                 ->orWhere('pdf_for_tourist', 1)
                 ->AllTeams()
                 ->get();
-                
         }
 
         return $documents;
     }
-
 }
