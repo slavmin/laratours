@@ -47,6 +47,7 @@ class ToursFilter
 
   public function city_id($value)
   {
+    if (!$value) return;
     $this->builder->where('cities_list', 'like', "%\"$value\"%");
   }
 
