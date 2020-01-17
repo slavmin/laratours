@@ -76,7 +76,7 @@ class ToursFilter
   public function date_start($value)
   {
     if (!$value) return;
-    $date = new Carbon($value);
+    $date = Carbon::parse($value)->timestamp;
     $all_tours = Tour::select('id')
       ->get()
       ->toArray();
@@ -85,7 +85,7 @@ class ToursFilter
 
     foreach ($all_tours as $tour) {
       if ($tour['tour_dates'] != []) {
-        $tour_date_start = new Carbon($tour['tour_dates'][0]);
+        $tour_date_start = Carbon::parse($tour['tour_dates'][0])->timestamp;
       }
       if ($date <= $tour_date_start) {
         array_push($filtered_tours, $tour['id']);
@@ -96,7 +96,7 @@ class ToursFilter
   public function date_end($value)
   {
     if (!$value) return;
-    $date = new Carbon($value);
+    $date = Carbon::parse($value)->timestamp;
     $all_tours = Tour::select('id')
       ->get()
       ->toArray();
@@ -105,7 +105,7 @@ class ToursFilter
 
     foreach ($all_tours as $tour) {
       if ($tour['tour_dates'] != []) {
-        $tour_date_start = new Carbon($tour['tour_dates'][0]);
+        $tour_date_start = Carbon::parse($tour['tour_dates'][0])->timestamp;
       }
       if ($date >= $tour_date_start) {
         array_push($filtered_tours, $tour['id']);
@@ -127,9 +127,8 @@ class ToursFilter
 
       foreach ($profiles as $profile) {
 
-        $full_name = mb_strtolower($profile['first_name'] . $profile['last_name']);
+        $full_name = mb_strtolower($profile['first_name'] . ' ' . $profile['last_name']);
         $search_subsr = mb_strtolower($value);
-
         if (mb_strpos($full_name, $search_subsr) !== false) {
           array_push($filtered_order_ids, $order->id);
         };
