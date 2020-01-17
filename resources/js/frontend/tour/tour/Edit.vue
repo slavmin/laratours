@@ -390,13 +390,14 @@ export default {
     },
     fillStore() {
       this.updateEditTour(this.tour)
-      this.updateActualTransport()
-      this.updateActualMuseum()
-      this.updateActualHotel()
-      this.updateActualMeal()
-      this.updateActualGuide()
-      this.updateActualAttendant()
-      console.log(this.getTour)
+      if (!this.getTour.constructorType == 'Тур от партнёра') {
+        this.updateActualTransport()
+        this.updateActualMuseum()
+        this.updateActualHotel()
+        this.updateActualMeal()
+        this.updateActualGuide()
+        this.updateActualAttendant()
+      }
     },
   },
 }

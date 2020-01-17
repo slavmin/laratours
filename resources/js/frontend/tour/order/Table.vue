@@ -13,7 +13,7 @@
             align-baseline
           >
             <v-flex xs6>
-              <span class="headline">
+              <div class="headline">
                 «{{ tourInfos[tour.tourId].name }}»
                 <span
                   v-if="tourInfos[tour.tourId].deleted_at"
@@ -23,7 +23,10 @@
                 >
                   Тур удалён
                 </span>
-              </span>
+              </div>
+              <div class="grey--text subheading">
+                {{ getCitiesNames(tourInfos[tour.tourId].cities_list) }}
+              </div>
             </v-flex>
             <v-flex xs4>
               <span class="grey--text">

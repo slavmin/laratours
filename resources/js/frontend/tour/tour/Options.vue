@@ -75,8 +75,8 @@
             v-on="on"
           />
         </template>
-        <v-date-picker 
-          v-model="startDate" 
+        <v-date-picker
+          v-model="startDate"
           :min="dateToday"
           color="#aa282a"
           locale="ru-ru"
@@ -172,8 +172,8 @@
       </v-layout> -->
       <!-- <v-divider /> -->
       <!-- Multiple times ^^^^ -->
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
         justify-content-between
       >
@@ -245,8 +245,8 @@
           />
         </v-flex>
       </v-layout> -->
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
         justify-content-end
       >
@@ -267,35 +267,32 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
-
   name: 'Options',
   props: {
     tourToEdit: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
   },
   data() {
     return {
       tourTypeFormValid: false,
-      nameRules: [
-        v => !!v || 'Введите название тура',
-      ],
+      nameRules: [v => !!v || 'Введите название тура'],
       tourGrades: [
-        { id: 1, name: 'Стандарт'},
-        { id: 2, name: 'VIP'}
+        { id: 1, name: 'Стандарт' },
+        { id: 2, name: 'VIP' },
       ],
       availableLanguages: [
-        { id: 1, name: 'Русский'},
-        { id: 2, name: 'Английский'},
-        { id: 3, name: 'Немецкий'},
-        { id: 4, name: 'Французский'},
-        { id: 5, name: 'Китайский'},
-        { id: 6, name: 'Испанский'},
-        { id: 7, name: 'Итальянский'},
-        { id: 8, name: 'Финский'}
+        { id: 1, name: 'Русский' },
+        { id: 2, name: 'Английский' },
+        { id: 3, name: 'Немецкий' },
+        { id: 4, name: 'Французский' },
+        { id: 5, name: 'Китайский' },
+        { id: 6, name: 'Испанский' },
+        { id: 7, name: 'Итальянский' },
+        { id: 8, name: 'Финский' },
       ],
       showDateStart: false,
       showDateEnd: false,
@@ -307,11 +304,8 @@ export default {
       startTimes: [],
       newStartTime: '09:00',
       selectedConstructorType: 'Подробный',
-      constructorTypes: [
-        'Подробный',
-        'Тур от партнёра',
-      ],
-    };
+      constructorTypes: ['Подробный', 'Тур от партнёра'],
+    }
   },
   computed: {
     ...mapGetters([
@@ -326,7 +320,7 @@ export default {
       for (let key in this.allTourOptions.tour_type_options) {
         types.push({
           id: key,
-          name: this.allTourOptions.tour_type_options[key]
+          name: this.allTourOptions.tour_type_options[key],
         })
       }
       return types
@@ -344,7 +338,7 @@ export default {
         result += `${moment(this.startDate).format('ll')}, `
       }
       return result.substring(0, result.length - 2)
-    }
+    },
   },
   watch: {
     startTimes: function() {
@@ -355,7 +349,7 @@ export default {
     },
     startDate: function() {
       this.setTourDateTimes()
-    }
+    },
   },
   created() {
     this.fetchAllTourOptions()
@@ -367,19 +361,21 @@ export default {
     if (this.getEditMode) {
       this.selectedConstructorType = this.getTour.options.constructorType
     }
-    if (this.getEditMode && this.getTour.options.dates.length != 0) {
-      this.getTour.options.dates.forEach((item) => {
-        const date = item.substring(0, 10)
-        const time = item.substring(11, 19)
-        // if (!this.startDates.includes(date)) {
-        //   this.startDates.push(date)
-        // }
-        // if (!this.startTimes.includes(time)) {
-        //   this.startTimes.push(time)
-        // }
-        this.startDate = date
-      })
-    }
+    setTimeout(() => {
+      if (this.getEditMode && this.getTour.options.dates.length != 0) {
+        this.getTour.options.dates.forEach(item => {
+          const date = item.substring(0, 10)
+          const time = item.substring(11, 19)
+          // if (!this.startDates.includes(date)) {
+          //   this.startDates.push(date)
+          // }
+          // if (!this.startTimes.includes(time)) {
+          //   this.startTimes.push(time)
+          // }
+          this.startDate = date
+        })
+      }
+    }, 1000)
   },
   methods: {
     ...mapActions([
@@ -393,7 +389,7 @@ export default {
       'updateActualMeal',
       'updateActualGuide',
       'updateActualAttendant',
-      'updateTourTotalPrice',  
+      'updateTourTotalPrice',
       'updateTourCorrectedPrice',
       'updateCorrectedPriceValues',
       'updateCommissionPriceValues',
@@ -413,8 +409,7 @@ export default {
         if (this.getTour.constructorType == 'Тур от партнёра') {
           console.log('tour partner')
           this.updateConstructorCurrentStage('Partner tour')
-        } 
-        else {
+        } else {
           this.snackbar = true
           this.updateActualTransport()
           this.updateActualMuseum()
@@ -448,13 +443,16 @@ export default {
     chipRemove(cityId) {
       console.log(cityId, this.getTour.options.cities)
       const index = this.getTour.options.cities.indexOf(cityId)
-      if (index >= 0)  this.getTour.options.cities.splice(index, 1)
+      if (index >= 0) this.getTour.options.cities.splice(index, 1)
     },
     removeStartTime(time) {
       this.startTimes = this.startTimes.filter(i => i != time)
     },
     addStartTime() {
-      if (this.newStartTime != '' && !this.startTimes.includes(this.newStartTime)) {
+      if (
+        this.newStartTime != '' &&
+        !this.startTimes.includes(this.newStartTime)
+      ) {
         this.startTimes.push(this.newStartTime)
         this.newStartTime = ''
       }
@@ -462,25 +460,24 @@ export default {
     setTourDateTimes() {
       if (this.startDates.length != 0) {
         this.getTour.options.dates = []
-        this.startDates.forEach((date) => {
+        this.startDates.forEach(date => {
           if (this.startTimes.length != 0) {
-            this.startTimes.forEach((time) => {
+            this.startTimes.forEach(time => {
               this.getTour.options.dates.push(`${date} ${time}`)
             })
-          }
-          else {
+          } else {
             this.getTour.options.dates.push(`${date} 00:00`)
           }
         })
       }
-      if (this.startDate != ''){
+      if (this.startDate != '') {
         this.getTour.options.dates = []
         this.getTour.options.dates.push(`${this.startDate} 00:00`)
         this.getTour.options.dateStart = `${this.startDate} 00:00`
       }
-    }
+    },
   },
-};
+}
 </script>
 
 <style lang="css" scoped>
