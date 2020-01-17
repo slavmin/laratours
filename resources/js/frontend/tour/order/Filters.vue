@@ -233,7 +233,6 @@ export default {
       if (this.status != null) {
         result = result + `&status=${this.status}`
       }
-      console.log(result)
       return result
     },
   },

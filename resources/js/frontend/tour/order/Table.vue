@@ -127,12 +127,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getTours']),
+    ...mapGetters(['allCities', 'getTours']),
   },
-  mounted() {
-    console.log(this.cities)
+  created() {
+    this.fetchCities()
   },
   methods: {
+    ...mapActions(['fetchAttendant', 'fetchCities', 'fetchTourTypes']),
     touristsCount(content) {
       let count = 0
       for (let key in content) {
@@ -141,13 +142,18 @@ export default {
       return count
     },
     getCitiesNames(cities) {
+      let result = ''
+      cities.forEach(id => {
+        result += this.getCityName(id) + '. '
+      })
+      return result
+    },
+    getCityName(id) {
       let cityName = ''
-      cities.forEach(cityId => {
-        _.toArray(this.cities).forEach((city, i) => {
-          if (i == cityId) {
-            cityName += this.cities[i] + '. '
-          }
-        })
+      this.allCities.forEach(city => {
+        if (city.id == id) {
+          cityName = city.name
+        }
       })
       return cityName
     },
