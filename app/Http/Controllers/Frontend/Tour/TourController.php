@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Filters\ToursFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourType;
@@ -31,27 +32,32 @@ class TourController extends Controller
 
         $model_alias = Tour::getModelAliasAttribute();
 
-        if (!is_null($city_id) && !is_null($type_id)) {
+        // if (!is_null($city_id) && !is_null($type_id)) {
 
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-        } elseif (!is_null($type_id)) {
+        //     $items = Tour::with(['orderprofiles' => function ($query) {
+        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        //     }])->where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
+        // } elseif (!is_null($type_id)) {
 
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-        } elseif (!is_null($city_id)) {
+        //     $items = Tour::with(['orderprofiles' => function ($query) {
+        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        //     }])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
+        // } elseif (!is_null($city_id)) {
 
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
-        } else {
+        //     $items = Tour::with(['orderprofiles' => function ($query) {
+        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        //     }])->where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        // } else {
 
-            $items = Tour::with(['orderprofiles' => function ($query) {
-                $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-            }])->orderBy($orderBy, $sort)->paginate();
-        }
+        //     $items = Tour::with(['orderprofiles' => function ($query) {
+        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        //     }])->orderBy($orderBy, $sort)->paginate();
+        // }
+        $items = Tour::with(['orderprofiles' => function ($query) {
+            $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
+        }]);
+
+        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         $deleted = Tour::onlyTrashed()->get();
 
@@ -61,7 +67,9 @@ class TourController extends Controller
 
         $tour_types = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted'))
+        $req_params = $request->all();
+
+        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted', 'req_params'))
             ->with('city_id', (int) $city_id)
             ->with('type_id', (int) $type_id)
             ->with('route', route('frontend.tour.' . $model_alias . '.store'))

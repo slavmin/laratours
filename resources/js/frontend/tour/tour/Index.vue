@@ -22,6 +22,20 @@
         </h1>
       </v-flex>
     </v-layout>
+    <Filters :req-params="reqParams" />
+    <v-layout
+      row
+      wrap
+      justify-center
+    >
+      <v-flex
+        xs4
+        class="text-xs-center white--text subheading"
+      >
+        Найдено туров: {{ items.data.length }}
+      </v-flex>
+    </v-layout>
+    <v-divider />
     <!-- <Add 
       :token="token"
       :tours="items.data"
@@ -52,10 +66,12 @@
 
 <script>
 import Table from './Table'
+import Filters from './Filters'
 export default {
   name: 'TourIndex',
   components: {
     Table,
+    Filters,
   },
   props: {
     token: {
@@ -66,6 +82,12 @@ export default {
       type: Object,
       default: () => {
         return {}
+      },
+    },
+    reqParams: {
+      type: Object,
+      default: () => {
+        return []
       },
     },
   },
