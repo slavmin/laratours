@@ -75,6 +75,15 @@
               :tour-names="tourNames"
             />
           </v-layout>
+          <v-layout
+            row
+            wrap
+            justify-center
+          >
+            <a :href="`/operator/order?tour_id=${tour.tourId}`">
+              Показать все заказы по туру
+            </a>
+          </v-layout>
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>

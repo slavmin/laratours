@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Events\Frontend\Order\OrderDeleted;
 use App\Exceptions\GeneralException;
-use App\Filters\ToursFilter;
+use App\Filters\OrdersFilter;
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
@@ -38,7 +38,7 @@ class OrderController extends Controller
 
         $items = TourOrder::with(['profiles', 'tour:id,name']);
 
-        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
+        $items = (new OrdersFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         $cities_names = TourCity::withoutGlobalScope('team')->get()->pluck('name', 'id')->toArray();
 

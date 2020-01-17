@@ -88,6 +88,9 @@
           justify-space-around
         >
           <v-flex>
+            <div class="white--text subheading">
+              Период туров от:
+            </div>
             <input
               type="hidden"
               name="date_start"
@@ -107,7 +110,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filterValues.date_start"
-                  label="Дата начала"
+                  label="Начало периода"
                   prepend-icon="event"
                   dark
                   readonly
@@ -124,6 +127,9 @@
             </v-menu>
           </v-flex>
           <v-flex>
+            <div class="white--text subheading">
+              до:
+            </div>
             <input
               type="hidden"
               name="date_end"
@@ -143,7 +149,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filterValues.date_end"
-                  label="Дата окончания"
+                  label="Конец"
                   prepend-icon="event"
                   dark
                   readonly

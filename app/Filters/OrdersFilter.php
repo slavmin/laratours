@@ -6,7 +6,7 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
 use Carbon\Carbon;
 
-class ToursFilter
+class OrdersFilter
 {
   protected $builder;
   protected $request;
@@ -71,6 +71,13 @@ class ToursFilter
     // dd($tours_by_city_id);
 
     $this->builder->whereIn('tour_id', $tours_by_city_id);
+  }
+
+  public function tour_id($value)
+  {
+    if (!$value) return;
+
+    $this->builder->where('tour_id', $value);
   }
 
   public function date_start($value)

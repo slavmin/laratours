@@ -8,7 +8,7 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourType;
 use Illuminate\Http\Request;
-use App\Filters\ToursFilter;
+use App\Filters\OrdersFilter;
 
 class TourController extends Controller
 {
@@ -35,12 +35,12 @@ class TourController extends Controller
         $sort = 'desc';
 
         $model_alias = Tour::getModelAliasAttribute();
-        
+
         $items = Tour::with(['orderprofiles' => function ($query) {
             $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
         }])->where('published', 1);
 
-        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
+        $items = (new OrdersFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
 
         $cities_names = TourCity::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->get()->pluck('name', 'id')->toArray();
         // Form filters
@@ -72,7 +72,7 @@ class TourController extends Controller
     {
         if (!empty($subscriptions)) {
             return $request->has('operator_id') && in_array($request->query('operator_id'), $subscriptions) ?
-            (int) $request->query('operator_id') : $subscriptions[0];
+                (int) $request->query('operator_id') : $subscriptions[0];
         } else {
             return null;
         }
@@ -82,14 +82,14 @@ class TourController extends Controller
     {
         $city_ids = TourCity::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->pluck('id')->all();
         return $request->has('city_id') && $request->query('city_id') != 0
-        && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
 
     public static function getTourTypeId(Request $request, $subscriptions)
     {
         $type_ids = TourType::withoutGlobalScope('team')->whereIn('team_id', $subscriptions)->pluck('id')->all();
         return $request->has('type_id') && $request->query('type_id') != 0
-        && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
+            && in_array($request->query('type_id'), $type_ids) ? $request->query('type_id') : null;
     }
 
     public static function getTourName(Request $request)
