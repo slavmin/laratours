@@ -64,7 +64,7 @@ class OrdersFilter
 
   public function city_id($value)
   {
-    $tours_by_city_id = Tour::where('cities_list', 'like', "\"$value\"")
+    $tours_by_city_id = Tour::where('cities_list', 'like', "%\"$value\"%")
       ->get()
       ->pluck('id')
       ->toArray();

@@ -47,7 +47,7 @@ class ToursFilter
 
   public function city_id($value)
   {
-    $this->builder->where('cities_list', 'like', "\"$value\"");
+    $this->builder->where('cities_list', 'like', "%\"$value\"%");
   }
 
   public function date_start($value)
