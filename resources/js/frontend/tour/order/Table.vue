@@ -129,6 +129,9 @@ export default {
   computed: {
     ...mapGetters(['getTours']),
   },
+  mounted() {
+    console.log(this.cities)
+  },
   methods: {
     touristsCount(content) {
       let count = 0

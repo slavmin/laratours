@@ -114,6 +114,7 @@ export default {
   },
   mounted() {
     this.updateTours(this.items.data)
+    console.log(this.cities)
   },
   methods: {
     ...mapActions(['updateTours']),
