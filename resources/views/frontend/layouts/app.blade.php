@@ -39,6 +39,10 @@
 
         @stack('after-styles')
         @stack('scripts')
+
+        <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="{{ asset('css/mdb.min.css')}}">
+        <script src="{{ asset('js/mdb.min.js') }}" defer></script>
         
     </head>
     <body>
@@ -59,6 +63,7 @@
         {!! script(mix('js/manifest.js')) !!}
         {!! script(mix('js/vendor.js')) !!}
         {!! script(mix('js/frontend.js')) !!}
+        
         @stack('after-scripts')
 
         {{-- <script type="text/javascript">
