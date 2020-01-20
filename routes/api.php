@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Tour\TourOptionsController;
 use App\Http\Controllers\Api\Document\LabelsController;
 use App\Http\Controllers\Api\Document\PdfController;
+use App\Http\Controllers\Api\User\OperatorInfoController;
 use Illuminate\Http\Request;
 
 /*
@@ -26,4 +27,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('api-logout');
     Route::get('/tour-options', [TourOptionsController::class, 'getOptions'])->name('api-tour-options');
     Route::get('/label-options', [LabelsController::class, 'getInfo'])->name('api-label-options');
+    Route::get('/operator-info', [OperatorInfoController::class, 'getOperatorInfo'])->name('api-operator-info');
 });

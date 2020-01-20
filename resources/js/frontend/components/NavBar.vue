@@ -15,63 +15,57 @@
       class="ml-5"
     >
       <span>
-        {{ branding.fullName }}
+        {{ branding.company_full_name }}
       </span>
       <br>
       <span>
-        {{ branding.address }}
+        {{ branding.company_address }}
       </span>
       <br>
       <span>
-        {{ branding.phones }} 
-        <a 
-          :href="`mailto:${branding.email}`"
-          style="color: white;"  
+        {{ branding.company_phone }}
+        <a
+          :href="`mailto:${branding.company_email}`"
+          style="color: white;"
         >
-          {{ branding.email }}
+          {{ branding.company_email }}
         </a>
       </span>
     </div>
     <v-spacer />
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn 
+      <v-btn
         v-if="auth"
         :href="dashboardUrl"
         flat
         class="no-border"
       >
-        <v-icon 
-          class="mr-2"
-        >
+        <v-icon class="mr-2">
           dashboard
         </v-icon>
         {{ dashboardText }}
       </v-btn>
-      <v-btn 
+      <v-btn
         v-if="status.guest"
         :href="loginUrl"
         flat
       >
         {{ loginText }}
       </v-btn>
-      <v-btn 
+      <v-btn
         v-if="status.guest"
         :href="regUrl"
         flat
       >
         {{ regText }}
       </v-btn>
-      <v-menu
-        v-if="!status.guest"
-      >
+      <v-menu v-if="!status.guest">
         <template v-slot:activator="{ on }">
           <v-btn
             flat
             v-on="on"
           >
-            <v-icon 
-              class="mr-2"
-            >
+            <v-icon class="mr-2">
               work_outline
             </v-icon>
             {{ managementText }}
@@ -95,17 +89,13 @@
           </a>
         </v-list>
       </v-menu>
-      <v-menu
-        v-if="!status.guest"
-      >
+      <v-menu v-if="!status.guest">
         <template v-slot:activator="{ on }">
           <v-btn
             flat
             v-on="on"
           >
-            <v-icon 
-              class="mr-2"
-            >
+            <v-icon class="mr-2">
               account_circle
             </v-icon>
             <v-icon>
@@ -118,27 +108,23 @@
             style="background-color: #aa282a; margin-top: -8px; margin-bottom: -14px;"
           >
             <v-list-tile-avatar>
-              <v-icon
-                color="white"
-              >
+              <v-icon color="white">
                 account_circle
               </v-icon>
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title
-                style="color: white;"
-              >
+              <v-list-tile-title style="color: white;">
                 {{ status.userName }}
               </v-list-tile-title>
             </v-list-tile-content>
-          </v-list-tile>  
+          </v-list-tile>
           <v-divider />
           <a
             v-for="item in profile"
             :key="item.name"
             :href="item.url"
-            class="menu-link" 
+            class="menu-link"
           >
             <v-list-tile class="black--text menu-text">
               <v-list-tile-title>
@@ -154,9 +140,7 @@
             flat
             v-on="on"
           >
-            <v-icon 
-              class="mr-2"
-            >
+            <v-icon class="mr-2">
               help_outline
             </v-icon>
             <v-icon>
@@ -167,7 +151,7 @@
         <v-list>
           <a
             :href="contactUrl"
-            class="menu-link" 
+            class="menu-link"
           >
             <v-list-tile class="black--text menu-text">
               <v-list-tile-title>
@@ -194,183 +178,183 @@ export default {
   props: {
     loginUrl: {
       type: String,
-      default: '/login'
+      default: '/login',
     },
     loginText: {
       type: String,
-      default: 'login!'
+      default: 'login!',
     },
     regUrl: {
       type: String,
-      default: '/registration'
+      default: '/registration',
     },
     regText: {
       type: String,
-      default: 'reg!'
+      default: 'reg!',
     },
     dashboardUrl: {
       type: String,
-      default: '/dashboard'
+      default: '/dashboard',
     },
     dashboardText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     managementText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     orderIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     orderIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourTypeIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourTypeIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourCustomerIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourCustomerIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourHotelCategoryIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourHotelCategoryIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourCountryIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourCountryIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourHotelIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourHotelIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourMuseumIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourMuseumIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourMealIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourMealIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourTransportIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourTransportIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourGuideIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourGuideIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     tourAttendantIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     tourAttendantIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     userTeamUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     userTeamText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     userAccountUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     userAccountText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     authLogoutUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     authLogoutText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     contactUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     contactText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     agencyTourListUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     agencyTourListText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     agencyOrderIndexUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     agencyOrderIndexText: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
     documentsIndexText: {
       type: String,
-      default: '#'
+      default: '#',
     },
     documentsIndexUrl: {
       type: String,
-      default: 'tourclick!'
+      default: 'tourclick!',
     },
   },
   data() {
@@ -379,9 +363,9 @@ export default {
         { title: 'Click Me' },
         { title: 'Click Me' },
         { title: 'Click Me' },
-        { title: 'Click Me 2' }
+        { title: 'Click Me 2' },
       ],
-      branding: [],
+      branding: {},
     }
   },
   computed: {
@@ -453,7 +437,6 @@ export default {
           url: this.tourAttendantIndexUrl,
           icon: 'nature_people',
         })
-
       }
       if (this.status.agency) {
         result = []
@@ -475,11 +458,11 @@ export default {
       let result = []
       result.push({
         text: this.userTeamText,
-        url: this.userTeamUrl
+        url: this.userTeamUrl,
       })
       result.push({
         text: this.userAccountText,
-        url: this.userAccountUrl
+        url: this.userAccountUrl,
       })
       result.push({
         text: this.documentsIndexText,
@@ -487,32 +470,28 @@ export default {
       })
       result.push({
         text: this.authLogoutText,
-        url: this.authLogoutUrl
+        url: this.authLogoutUrl,
       })
       return result
     },
     // branding: function() {
     //   let result = []
-      
+
     //   return result
     // }
   },
   mounted() {
-    axios.get('/branding.json')
-        .then((res) => {
-          res.data.forEach((item) => {
-            if (item.names.includes(this.status.userName)) {
-              this.branding = item
-            }
-          })
-        })
-        .catch(e => console.log('branding error: ', e))
+    axios
+      .get('/api/operator-info')
+      .then(res => {
+        this.branding = res.data[0].branding
+        // console.log(res)
+      })
+      .catch(e => console.log('branding error: ', e))
   },
   methods: {
-    ...mapActions([
-      'updateActualLinks',
-    ]),
-  }
+    ...mapActions(['updateActualLinks']),
+  },
 }
 </script>
 <style lang="scss" scoped>
