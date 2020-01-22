@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\Auth\PasswordExpiredController;
  * Frontend Access Controllers
  * All route names are prefixed with 'frontend.auth'.
  */
+
 Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
     // These routes require the user to be logged in
     Route::group(['middleware' => 'auth'], function () {
@@ -47,6 +48,7 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         // Registration Routes
         Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
         Route::post('register', [RegisterController::class, 'register'])->name('register.post');
+        Route::get('register/get-data-by-inn', [RegisterController::class, 'getDataByINN'])->name('register.get-data-by-inn');
 
         Route::get('invited/register/{token?}', [RegisterInvitedController::class, 'showRegistrationForm'])->name('invited.register');
         Route::post('invited/register', [RegisterInvitedController::class, 'register'])->name('invited.register.post');
