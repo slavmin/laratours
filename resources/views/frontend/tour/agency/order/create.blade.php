@@ -1,5 +1,4 @@
 @extends('frontend.layouts.app')
-<!-- @include('includes.partials.messages') -->
 
 @section('content')
     <?php $stour = json_encode($tour); ?>

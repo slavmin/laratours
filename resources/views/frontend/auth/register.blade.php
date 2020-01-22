@@ -6,7 +6,6 @@
     <script src="/js/inputmask.binding.js"></script>
 @endpush
 @section('content')
-    @include('includes.partials.messages')
     <div class="my-5 row justify-content-center align-items-center">
         <div class="col col-sm-10 align-self-center">
             <div class="card">
