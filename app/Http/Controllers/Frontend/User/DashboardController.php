@@ -20,9 +20,12 @@ class DashboardController extends Controller
 
         $show_fill_demo = false;
 
-        $hotel_categories = TourHotelCategory::where('team_id', $team->id)->get();
+        $isOperator = false;
 
-        $isOperator = ($team->roles->first()->name == 'operator') ? true : false;
+        if ($team) {
+            $isOperator = ($team->roles->first()->name == 'operator') ? true : false;
+            $hotel_categories = TourHotelCategory::where('team_id', $team->id)->get();
+        }
 
         if ($isOperator && count($hotel_categories) == 0) {
             $show_fill_demo = true;

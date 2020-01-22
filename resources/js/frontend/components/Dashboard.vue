@@ -32,14 +32,14 @@
               class="headline"
               style="color: #979694;"
             >
-              Вас приветствует туроператор "{{ team.name }}"!
+              Вас приветствует туроператор "{{ teamData.name }}"!
             </div>
           </v-card-title>
           <v-divider />
           <v-card-text>
             <span class="subheading">
               Здесь вы можете подобрать и оформить заказ на туры в
-              Санкт-Петербург от туроператора {{ team.name }}.
+              Санкт-Петербург от туроператора {{ teamData.name }}.
               <br>
               Так же мы предлагаем школьные экскурсии , сборные туры для детей и
               взрослых, туристические поездки по России, Золотое кольцо и
@@ -168,7 +168,7 @@ export default {
   name: 'Dashboard',
   props: {
     team: {
-      type: Object,
+      type: String,
       default: () => {
         return {}
       },
@@ -285,14 +285,16 @@ export default {
     ...mapGetters({
       management: 'getNavLinks',
     }),
+    teamData: function() {
+      if (this.team == '') return {}
+      return JSON.parse(this.team)
+    },
   },
-  mounted() {
-    console.log(this.team)
-  },
+  mounted() {},
   methods: {
     fillDemoData() {
       axios
-        .post(`/modules/fill-demo-data?team_id=${this.team.id}`)
+        .post(`/modules/fill-demo-data?team_id=${this.teamData.id}`)
         .then(response => {
           console.log(response)
           this.dataIsNotLoaded = false

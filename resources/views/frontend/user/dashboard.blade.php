@@ -2,10 +2,10 @@
 
 @section('title', app_name() . ' | ' . __('navs.frontend.dashboard') )
 
-@section('content')
+@section('content') 
 <dashboard
     data-app
-    :team="{{ $team }}"
+    team="{{ $team }}"
     header-text="@lang('navs.frontend.dashboard')"
     user-name="{{ $logged_in_user->name }}"
     user-email="{{ $logged_in_user->email }}"
