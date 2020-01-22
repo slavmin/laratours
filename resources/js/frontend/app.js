@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -53,7 +52,7 @@ Vue.component('hotel-index', require('./tour/object/hotel/Index.vue').default);
 Vue.component('meal-index', require('./tour/object/meal/Index.vue').default);
 Vue.component('guide-index', require('./tour/object/guide/Index.vue').default);
 Vue.component('attendant-index', require('./tour/object/attendant/Index.vue').default);
-Vue.component('register-index', require('./auth/Index.vue').default);
+// Vue.component('register-index', require('./auth/Index.vue').default);
 Vue.component('agency-tours-index', require('./tour/agency/Index.vue').default);
 Vue.component('agency-order-tour', require('./tour/agency/OrderTour.vue').default);
 Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);

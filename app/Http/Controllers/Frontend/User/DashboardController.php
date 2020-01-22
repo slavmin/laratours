@@ -21,8 +21,9 @@ class DashboardController extends Controller
         $show_fill_demo = false;
 
         $isOperator = false;
+        $hasRole = $team->roles()->first();
 
-        if ($team) {
+        if ($hasRole) {
             $isOperator = ($team->roles->first()->name == 'operator') ? true : false;
             $hotel_categories = TourHotelCategory::where('team_id', $team->id)->get();
         }

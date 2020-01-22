@@ -140,20 +140,22 @@ class RegisterController extends Controller
 
         $client = new Client();
 
+        $info = [];
+
         $response = $client->send($request);
-        $result = json_decode($response->getBody(), true)['suggestions'][0]['data'];
+        if (json_decode($response->getBody(), true)['suggestions'] != []) {
+            $result = json_decode($response->getBody(), true)['suggestions'][0]['data'];
 
-        $info['company_name'] = $result['name']['short_with_opf'];
-        $info['company_country'] = $result['address']['data']['country'];
-        $info['company_city'] = $result['address']['data']['region'];
-        $info['company_address'] = $result['address']['value'];
-        $info['company_ogrn'] = $result['ogrn'];
-        $info['company_inn'] = $result['inn'];
-        $info['company_kpp'] = $result['kpp'];
-        $info['company_okved'] = $result['okved'];
-        $info['company_ceo_name'] = $result['management']['name'];
-
-
+            $info['company_name'] = $result['name']['short_with_opf'];
+            $info['company_country'] = $result['address']['data']['country'];
+            $info['company_city'] = $result['address']['data']['region'];
+            $info['company_address'] = $result['address']['value'];
+            $info['company_ogrn'] = $result['ogrn'];
+            $info['company_inn'] = $result['inn'];
+            $info['company_kpp'] = $result['kpp'];
+            $info['company_okved'] = $result['okved'];
+            $info['company_ceo_name'] = $result['management']['name'];
+        }
 
         // dd($info, $result);
         return view('frontend.auth.register', compact('info'))

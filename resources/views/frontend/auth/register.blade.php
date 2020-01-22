@@ -1,12 +1,14 @@
 @extends('frontend.layouts.app')
 
 @section('title', app_name() . ' | ' . __('labels.frontend.auth.register_box_title'))
-
+@push('after-scripts')
+    <script src="/js/inputmask.js"></script>
+    <script src="/js/inputmask.binding.js"></script>
+@endpush
 @section('content')
-{{-- {{dd($params)}} --}}
     @include('includes.partials.messages')
     <div class="my-5 row justify-content-center align-items-center">
-        <div class="col col-sm-8 align-self-center">
+        <div class="col col-sm-10 align-self-center">
             <div class="card">
                 <div class="card-header white-text h2" style="background-color: rgb(102, 165, 174);">
                     @lang('labels.frontend.auth.register_box_title') юр. лица
@@ -14,18 +16,19 @@
 
                 <div class="card-body">
                     <div class="row justify-content-center grey-text">
-                        <h2>Регистрация по ИНН</h2>
+                        <h2>Введите ИНН и большинство полей заполнится автоматически</h2>
                     </div>
                     {{ html()->form('GET', route('frontend.auth.register.get-data-by-inn'))->open() }}
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
-                            {{ html()->label('Введите ИНН')->for('inn') }}
+                            {{ html()->label('ИНН вашей организации')->for('inn') }}
 
                                 {{ html()->text('inn')
                                     ->class('form-control')
                                     ->id('inn')
                                     ->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '9999999999'")
                                     ->value($params['inn'] ?? '')
                                     ->required() }}
                             </div><!--form-group-->
@@ -40,6 +43,9 @@
                     </div><!--row-->
                     <hr>
                     {{ html()->form('POST', route('frontend.auth.register.post'))->open() }}
+                    <div class="row justify-content-center grey-text">
+                        <h2>Название и реквизиты организации</h2>
+                    </div>
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
@@ -58,11 +64,22 @@
                                 {{ html()->label(__('validation.attributes.frontend.company.company_type'))
                                     ->class('grey-text')
                                     ->for('company_type') }}
-                                {{ html()
-                                    ->select('company_type')
-                                    ->id('company_type')
-                                    ->options(__('validation.attributes.frontend.company.company_types'))
-                                    ->class('form-control') }}
+                                <?php $types_array = (__('validation.attributes.frontend.company.company_types')); ?>
+                                <select
+                                    name="profile[formal][company_type]"
+                                    id="company_type"
+                                    class="form-control"
+                                    placeholder=""
+                                    required
+                                >
+                                    @foreach ($types_array as $type)
+                                        <option
+                                            value="{{$type}}"
+                                        >
+                                            {{$type}}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div><!--form-group-->
                         </div><!--col-->
                     </div>
@@ -133,6 +150,7 @@
                                     ->class('form-control')
                                     ->id('company_inn')->attribute('maxlength', 191)
                                     ->value($info['company_inn'] ?? '')
+                                    ->attribute('data-inputmask', "'mask': '9999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
@@ -145,6 +163,7 @@
                                     ->class('form-control')
                                     ->id('company_kpp')->attribute('maxlength', 191)
                                     ->value($info['company_kpp'] ?? '')
+                                    ->attribute('data-inputmask', "'mask': '999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -159,6 +178,7 @@
                                     ->class('form-control')
                                     ->id('company_ogrn')->attribute('maxlength', 191)
                                     ->value($info['company_ogrn'] ?? '')
+                                    ->attribute('data-inputmask', "'mask': '9999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
@@ -172,6 +192,7 @@
                                     ->id('company_okved')
                                     ->attribute('maxlength', 191)
                                     ->value($info['company_okved'] ?? '')
+                                    ->attribute('data-inputmask', "'mask': '9999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -185,6 +206,7 @@
                                 {{ html()->text('profile[formal][company_bik]')
                                     ->class('form-control')
                                     ->id('company_bik')->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '99999999999999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -220,6 +242,7 @@
                                 {{ html()->text('profile[formal][company_bankaccount]')
                                     ->class('form-control')
                                     ->id('company_bankaccount')->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '99999999999999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -233,6 +256,7 @@
                                 {{ html()->text('profile[formal][company_bankcorr]')
                                     ->class('form-control')
                                     ->id('company_bankcorr')->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '99999999999999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -244,10 +268,16 @@
                                 {{ html()->text('profile[formal][company_bankkpp]')
                                     ->class('form-control')
                                     ->id('company_bankkpp')->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '999999999'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
+
+                    <hr>
+                    <div class="row justify-content-center grey-text">
+                        <h2>Контактные данные ответственного лица</h2>
+                    </div>
 
                     <div class="row">
                         <div class="col-12 col-md-6">
@@ -280,13 +310,25 @@
                                     ->class('form-control')
                                     ->id('company_phone')
                                     ->attribute('maxlength', 191)
+                                    ->attribute('data-inputmask', "'mask': '[9-]999-999-99-99'")
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
                         <div class="col-12 col-md-6">
+                            
+                        </div><!--col-->
+                    </div><!--row-->
+                    <hr>
+                    <div class="row justify-content-center">
+                        <h2 class="grey-text">
+                            Данные для входа в систему
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
                             <div class="form-group md-form">
-                                {{ html()->label(__('validation.attributes.frontend.company.email').' будет использоваться как логин')->for('email') }}
+                                {{ html()->label(__('validation.attributes.frontend.company.email').' (логин)')->for('email') }}
 
                                 {{ html()->email('email')
                                     ->class('form-control')
@@ -295,10 +337,9 @@
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
-                    </div><!--row-->
-
+                    </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-12 col-md-6">
                             <div class="form-group md-form">
                                 {{ html()->label(__('validation.attributes.frontend.password'))->for('password') }}
 
@@ -306,10 +347,8 @@
                                     ->class('form-control')->required() }}
                             </div><!--form-group-->
                         </div><!--col-->
-                    </div><!--row-->
 
-                    <div class="row">
-                        <div class="col">
+                        <div class="col-12 col-md-6">
                             <div class="form-group md-form">
                                 {{ html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation') }}
 
@@ -319,6 +358,12 @@
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
+
+                    <div class="row justify-content-center">
+                        <div class="grey-text">
+                            Минимум 8 символов, заглавные, строчные буквы, и цифры.
+                        </div>
+                    </div>
 
                     @if(config('access.captcha.registration'))
                         <div class="row">
