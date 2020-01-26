@@ -1,0 +1,97 @@
+<template>
+  <v-container grid-list-xs>
+    <h1 class="text-xs-center">
+      Маршруты
+    </h1>
+    <v-layout
+      row
+      wrap
+      justify-center
+    >
+      <v-flex
+        xs12
+        md8
+      >
+        <ol class="subheading">
+          <li>
+            Схема формируется на основе адресов, указанных в справочниках
+            объектов.
+          </li>
+          <li>
+            Если вам не хватает объекта, вы можете его добавить в графе
+            "Добавить
+            адрес"
+            <a
+              href="/img/frontend/gibdd/hint1.png"
+              target="_blank"
+            >
+              ссылка
+            </a>
+          </li>
+          <li>
+            Для того, чтобы сохранить, или распечатать схему нажмите на
+            заголовок
+            "Открыть маршрут"
+            <a
+              href="/img/frontend/gibdd/hint2.png"
+              target="_blank"
+            >
+              ссылка
+            </a>
+          </li>
+          <li>
+            В открывшемся окне нажмите на значок печати и следуйте подказкам
+            системы
+            <a
+              href="/img/frontend/gibdd/hint3.png"
+              target="_blank"
+            >
+              ссылка
+            </a>
+          </li>
+        </ol>
+      </v-flex>
+    </v-layout>
+    <YandexMap
+      v-for="(dayData, i) in streetsByDays"
+      :key="i"
+      :day-data="dayData"
+    />
+  </v-container>
+</template>
+<script>
+import YandexMap from './YandexMap'
+export default {
+  name: 'TourRoutes',
+  components: {
+    YandexMap,
+  },
+  props: {
+    data: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      streetsByDays: [],
+    }
+  },
+  created() {
+    this.parseData()
+  },
+  methods: {
+    parseData() {
+      for (const [key, value] of Object.entries(this.data)) {
+        if (key != 0) {
+          const dayInfo = {
+            day: key,
+            points: value,
+          }
+          this.streetsByDays.push(dayInfo)
+        }
+      }
+    },
+  },
+}
+</script>

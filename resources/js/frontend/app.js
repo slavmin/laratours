@@ -72,6 +72,7 @@ Vue.component('document-edit', require('./components/documents/Edit.vue').defaul
 Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
 Vue.component('tour-add', require('./tour/tour/Add.vue').default);
 Vue.component('tour-edit', require('./tour/tour/Edit.vue').default);
+Vue.component('tour-routes', require('./components/documents/TourRoutes.vue').default);
 Vue.component('yandex-map', require('./components/documents/YandexMap.vue').default);
 /**
 /**

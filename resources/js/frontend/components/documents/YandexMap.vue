@@ -1,86 +1,107 @@
 <template>
-  <v-container grid-list-xs>
-    <v-btn
-      color="green"
-      class="no-print"
-      dark
-      @click="saveMap"
+  <v-card style="margin-bottom: 24px;">
+    <v-card-title
+      class="white--text"
+      style="background-color: #66a5ae;"
     >
-      Сохранить схему
-    </v-btn>
-    <v-layout
-      row
-      wrap
-    >
-      <div id="result" />
-      <div
-        id="map"
-        style="width: 900px; height: 600px"
-      />
-    </v-layout>
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex>
-        {{ routes }}
-        <ul
-          id="street-list--day-1"
-          class="street-list street-list--day-1"
-        >
-          <li
-            v-for="(address, i) in routes"
-            :key="i"
-          >
-            <span class="address-text">{{ address }}</span>
-            <button
-              class="btn-remove"
-              @click="removeAddress(address)"
+      <h2>День {{ dayData.day }}</h2>
+    </v-card-title>
+    <v-card-text>
+      <v-layout
+        row
+        wrap
+      >
+        <v-flex>
+          <h3>Объекты выбранные в туре:</h3>
+          <ul>
+            <li
+              v-for="object in objectsAtDay"
+              :key="object"
             >
-              x
-            </button>
-          </li>
-        </ul>
-      </v-flex>
-      <v-flex>
-        <v-layout
-          row
-          wrap
-        >
-          <v-text-field
-            v-model="newAddress"
-            class="no-print"
-            clearable
-            label="Добавить адрес"
-            @keyup.enter="addNewAddress"
-          />
-          <v-btn
-            color="green"
-            class="no-print"
-            dark
-            fab
-            small
-            @click="addNewAddress"
+              {{ object }}
+            </li>
+          </ul>
+        </v-flex>
+        <v-flex>
+          <h3>Распознанные адреса объектов:</h3>
+          <ul
+            :id="`address-list--${mapId}`"
+            :class="`address-list address-list--${mapId}`"
           >
-            <v-icon>add</v-icon>
-          </v-btn>
-        </v-layout>
-        <v-layout
-          row
-          wrap
-        >
-          <v-btn
-            color="green"
-            class="no-print"
-            dark
-            @click="buildMap"
+            <li
+              v-for="(address, i) in routes"
+              :key="i"
+            >
+              <span class="address-text">{{ address }}</span>
+              <button
+                class="btn-remove"
+                @click="removeAddress(address)"
+              >
+                x
+              </button>
+            </li>
+          </ul>
+        </v-flex>
+        <v-flex>
+          <v-layout
+            row
+            wrap
           >
-            Построить схему
-          </v-btn>
-        </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-container>
+            <v-text-field
+              v-model="newAddress"
+              class="no-print"
+              clearable
+              label="Добавить адрес"
+              @keyup.enter="addNewAddress"
+            />
+            <v-btn
+              color="green"
+              class="no-print"
+              dark
+              fab
+              small
+              @click="addNewAddress"
+            >
+              <v-icon>add</v-icon>
+            </v-btn>
+          </v-layout>
+          <v-layout
+            row
+            wrap
+          >
+            <v-btn
+              v-if="!showLoader"
+              color="green"
+              class="no-print"
+              dark
+              @click="buildMap"
+            >
+              Построить схему
+            </v-btn>
+            <div
+              v-if="showLoader"
+              class="loadingio-spinner-dual-ball-2lx0oq2r636"
+            >
+              <div class="ldio-z4c08nm4i3">
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+        wrap
+      >
+        <div
+          :id="mapId"
+          style="width: 100%; height: 600px"
+        />
+      </v-layout>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
 import { Sortable } from '@shopify/draggable'
@@ -89,19 +110,27 @@ import html2canvas from 'html2canvas'
 export default {
   name: 'YandexMap',
   props: {
-    streets: {
-      type: Array,
-      default: () => [],
+    dayData: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {
       routes: [],
       newAddress: '',
+      objectsAtDay: [],
+      routesForMap: [],
+      showLoader: false,
     }
   },
+  computed: {
+    mapId: function() {
+      return `map-${this.dayData.day}`
+    },
+  },
   mounted() {
-    this.routes = this.streets
+    this.makeRoutesArray()
     setTimeout(() => {
       this.buildMap()
     }, 2000)
@@ -109,17 +138,29 @@ export default {
     // this.buildMap()
   },
   methods: {
+    makeRoutesArray() {
+      this.dayData.points.forEach(point => {
+        if (point.address != 'Адрес не указан') {
+          this.routes.push(point.address)
+        }
+        this.objectsAtDay.push(
+          `${point.name}: ${point.event}. ${point.address}`
+        )
+      })
+      this.routesForMap = this.routes
+      console.log(this.objectsAtDay)
+    },
     resetMap() {
-      let div = document.getElementById('map')
+      let div = document.getElementById(this.mapId)
       div.innerHTML = ''
     },
     buildMap() {
       this.resetMap()
-      console.log(this.routes)
-      var myMap = new ymaps.Map('map', {
+      var myMap = new ymaps.Map(this.mapId, {
         center: [55.751574, 37.573856],
         zoom: 9,
-        controls: ['largeMapDefaultSet'],
+        controls: [],
+        // controls: ['largeMapDefaultSet'],
       })
 
       // Построение маршрута.
@@ -127,7 +168,7 @@ export default {
       var multiRoute = new ymaps.multiRouter.MultiRoute(
         {
           // Точки маршрута. Точки могут быть заданы как координатами, так и адресом.
-          referencePoints: this.routes,
+          referencePoints: this.routesForMap,
         },
         {
           // Автоматически устанавливать границы карты так,
@@ -166,15 +207,15 @@ export default {
     },
     addSortable() {
       const sortable = new Sortable(
-        document.getElementById('street-list--day-1'),
+        document.getElementById(`address-list--${this.mapId}`),
         {
           draggable: 'li',
         }
       )
 
-      //sortable.on('sortable:start', () => console.log('sortable:start'))
-      //sortable.on('sortable:sort', () => console.log('sortable:sort'))
-      //sortable.on('sortable:sorted', () => this.rebuildRoutesArray())
+      sortable.on('sortable:start', () => (this.showLoader = true))
+      // sortable.on('sortable:sort', () => console.log('sortable:sort'))
+      // sortable.on('sortable:sorted', () => console.log('sortable:sorted'))
       sortable.on('sortable:stop', () => this.rebuildRoutesArray())
     },
     addNewAddress() {
@@ -188,17 +229,21 @@ export default {
     },
     rebuildRoutesArray() {
       setTimeout(() => {
-        const list = document.getElementById('street-list--day-1')
+        const list = document.getElementById(`address-list--${this.mapId}`)
         const listItems = list.querySelectorAll('li')
-        console.log('TCL: rebuildRoutesArray -> listItems', listItems)
+        console.log(
+          'TCL: rebuildRoutesArray -> listItems',
+          listItems,
+          this.mapId
+        )
         let newRoutes = []
         listItems.forEach(item => {
           const address = item.querySelector('span')
           newRoutes.push(address.innerText)
         })
-        this.routes = newRoutes
-        console.log(this.routes)
-      }, 500)
+        this.routesForMap = newRoutes
+        this.showLoader = false
+      }, 1000)
     },
     saveMap() {
       const map = document.getElementById('map')
@@ -219,7 +264,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.street-list {
+.address-list {
   padding: 10px;
   list-style-type: none;
   li {
@@ -236,4 +281,75 @@ export default {
     background-color: yellow;
   }
 }
+@keyframes ldio-z4c08nm4i3-o {
+  0% {
+    opacity: 1;
+    transform: translate(0 0);
+  }
+  49.99% {
+    opacity: 1;
+    transform: translate(40px, 0);
+  }
+  50% {
+    opacity: 0;
+    transform: translate(40px, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+}
+@keyframes ldio-z4c08nm4i3 {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(40px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.ldio-z4c08nm4i3 div {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  top: 30px;
+  left: 10px;
+}
+.ldio-z4c08nm4i3 div:nth-child(1) {
+  background: #aa282a;
+  animation: ldio-z4c08nm4i3 1s linear infinite;
+  animation-delay: -0.5s;
+}
+.ldio-z4c08nm4i3 div:nth-child(2) {
+  background: #66a5ae;
+  animation: ldio-z4c08nm4i3 1s linear infinite;
+  animation-delay: 0s;
+}
+.ldio-z4c08nm4i3 div:nth-child(3) {
+  background: #aa282a;
+  animation: ldio-z4c08nm4i3-o 1s linear infinite;
+  animation-delay: -0.5s;
+}
+.loadingio-spinner-dual-ball-2lx0oq2r636 {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  overflow: hidden;
+  background: transparent;
+}
+.ldio-z4c08nm4i3 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(0.64);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-z4c08nm4i3 div {
+  box-sizing: content-box;
+}
+/* generated by https://loading.io/ */
 </style>
