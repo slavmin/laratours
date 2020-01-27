@@ -134,6 +134,7 @@
               dark
               small
               :href="`/modules/gibdd-map?tour_id=${props.item.id}`"
+              target="_blank"
             >
               Схема
             </v-btn>
