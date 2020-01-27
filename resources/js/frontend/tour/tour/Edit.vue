@@ -383,6 +383,7 @@ export default {
       return cityName
     },
     changeConstructorStage(stage) {
+      this.setActualInfo()
       this.updateConstructorCurrentStage(stage)
     },
     scrollToTop() {
@@ -390,7 +391,9 @@ export default {
     },
     fillStore() {
       this.updateEditTour(this.tour)
-      if (!this.getTour.constructorType == 'Тур от партнёра') {
+    },
+    setActualInfo() {
+      if (!(this.getTour.constructorType == 'Тур от партнёра')) {
         this.updateActualTransport()
         this.updateActualMuseum()
         this.updateActualHotel()

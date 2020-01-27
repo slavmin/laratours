@@ -1,31 +1,32 @@
 <template>
   <div>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
         <div class="title grey--text">
-          Тур: {{ getTour.options.name }}, количество туристов: {{ getTour.qnt }}
+          Тур: {{ getTour.options.name }}, количество туристов:
+          {{ getTour.qnt }}
         </div>
-      </v-flex>  
+      </v-flex>
     </v-layout>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-spacer />
-      <v-btn 
+      <v-btn
         v-if="getEditMode"
         dark
         color="#aa282a"
         @click="reCalcTour"
       >
         Пересчитать весь тур
-      </v-btn>  
+      </v-btn>
     </v-layout>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
@@ -54,14 +55,12 @@
                 mask="###"
                 outline
                 @input="inputCorrection"
-              /> 
+              />
             </th>
             <th>
               Нетто
             </th>
-            <th
-              v-show="!commissionManualMode"
-            >
+            <th v-show="!commissionManualMode">
               Комиссия, %
               <v-text-field
                 v-model="commissionToAll"
@@ -69,11 +68,9 @@
                 mask="###"
                 outline
                 @input="inputCommission"
-              /> 
+              />
             </th>
-            <th
-              v-show="!commissionManualMode"
-            >
+            <th v-show="!commissionManualMode">
               Итого
               <br>
             </th>
@@ -81,13 +78,13 @@
           <tbody>
             <tr v-if="getTour.transport.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Транспорт
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(transport, i) in getTour.transport"
               :key="`T-${i}`"
             >
@@ -96,16 +93,18 @@
                 {{ transport.obj.name }}.
                 <br>
                 <div class="body-1 grey--text">
-                  Цена: {{ transport.obj.price }}, за {{ transport.obj.duration.hours }} часов.
+                  Цена: {{ transport.obj.price }}, за
+                  {{ transport.obj.duration.hours }} часов.
                   <br>
-                  Мест: {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }}
+                  Мест:
+                  {{ JSON.parse(transport.obj.extra).scheme.totalPassengersCount }}
                 </div>
               </td>
               <td class="price">
                 {{ transport.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -126,32 +125,28 @@
                 />
               </td>
               <td>
-                {{ parseInt(transport.correctedPricePerSeat) }}  
+                {{ parseInt(transport.correctedPricePerSeat) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="transport.commission"
                   name="commission"
                   @input="commissPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(transport.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.museum.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Экскурсии
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(event, i) in getTour.museum"
               :key="`M-${i}`"
             >
@@ -178,30 +173,26 @@
               <td>
                 {{ parseInt(event.correctedPrice) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="event.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(event.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.museumCustomOrder.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Заказ-наряды
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(order, i) in getTour.museumCustomOrder"
               :key="`CO-${i}`"
             >
@@ -223,7 +214,7 @@
                 {{ order.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -232,7 +223,8 @@
                   </template>
                   <span>
                     Стоимость за одного человека:
-                    {{ JSON.parse(order.obj.extra).price * order.obj.count }} руб. / {{ getTour.qnt }} чел.
+                    {{ JSON.parse(order.obj.extra).price * order.obj.count }}
+                    руб. / {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
@@ -246,30 +238,26 @@
               <td>
                 {{ parseInt(order.correctedPricePerSeat) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="order.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(order.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.hotel.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Размещение
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(hotel, i) in getTour.hotel"
               :key="`H-${i}`"
             >
@@ -299,30 +287,26 @@
               <td>
                 {{ parseInt(hotel.correctedPrice) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="hotel.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(hotel.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.meal.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Питание
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(meal, i) in getTour.meal"
               :key="`Meal-${i}`"
             >
@@ -332,7 +316,8 @@
                 {{ meal.obj.name }}
                 <br>
                 <div class="body-1 grey--text">
-                  Описание: {{ meal.obj.description }}, {{ meal.obj.price }} руб.
+                  Описание: {{ meal.obj.description }}, {{ meal.obj.price }}
+                  руб.
                   <br>
                   Дни: {{ meal.obj.daysArray }}
                 </div>
@@ -341,7 +326,7 @@
                 {{ meal.obj.totalPrice }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -363,30 +348,26 @@
               <td>
                 {{ parseInt(meal.correctedPrice) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="meal.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(meal.commissionPrice) }}
               </td>
             </tr>
             <tr v-if="getTour.guide.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Гиды
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(guide, i) in getTour.guide"
               :key="`G-${i}`"
             >
@@ -400,7 +381,7 @@
                 {{ guide.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -423,30 +404,26 @@
               <td>
                 {{ parseInt(guide.correctedPricePerSeat) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="guide.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(guide.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.attendant.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Сопровождающие
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(attendant, i) in getTour.attendant"
               :key="`A-${i}`"
             >
@@ -457,7 +434,7 @@
                 {{ attendant.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -466,7 +443,8 @@
                   </template>
                   <span>
                     Стоимость за одного человека:
-                    {{ attendant.attendant.totalPrice }} руб. / {{ getTour.qnt }} чел.
+                    {{ attendant.attendant.totalPrice }} руб. /
+                    {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
               </td>
@@ -480,30 +458,26 @@
               <td>
                 {{ parseInt(attendant.correctedPricePerSeat) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="attendant.commission"
                   name="commision"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(attendant.commissionPricePerSeat) }}
               </td>
             </tr>
             <tr v-if="getTour.customPrice.length != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Доп.услуги
               </td>
             </tr>
-            <tr 
+            <tr
               v-for="(price, i) in getTour.customPrice"
               :key="`CP-${i}`"
             >
@@ -514,7 +488,7 @@
                 {{ price.pricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -537,29 +511,27 @@
               <td>
                 {{ parseInt(price.correctedPricePerSeat) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="price.commission"
                   name="commission"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ parseInt(price.commissionPricePerSeat) }}
               </td>
             </tr>
-            <tr v-if="getTour.options.drivers != 0 || getTour.guide.length != 0 || getTour.attendant.length != 0">
+            <tr
+              v-if="getTour.options.drivers != 0 || getTour.guide.length != 0 || getTour.attendant.length != 0"
+            >
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
                 style="background-color: #f8f8f8;"
               >
                 Персонал
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -622,11 +594,11 @@
             <tr v-show="showStaff">
               <td
                 v-if="getTour.options.drivers != []"
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Водители
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -644,10 +616,10 @@
               :key="`Driver-${i}`"
             >
               <td>
-                {{ driver.busName }}. 
+                {{ driver.busName }}.
                 <br>
                 Водитель {{ driver.driver }}
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -657,15 +629,11 @@
                     expand_{{ driver.showDetails ? 'less' : 'more' }}
                   </v-icon>
                 </v-btn>
-                <div
-                  v-if="driver.showDetails"
-                >
-                  <div 
-                    v-if="driver.hotelPrice"
-                  >
+                <div v-if="driver.showDetails">
+                  <div v-if="driver.hotelPrice">
                     <v-divider />
-                    Проживание: 
-                    <div 
+                    Проживание:
+                    <div
                       v-for="(room, r) in driver.hotelPrice"
                       :key="`Room-${r}`"
                     >
@@ -685,9 +653,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="driver.mealPrice"
-                  >
+                  <div v-if="driver.mealPrice">
                     <v-divider />
                     Питание:
                     <div
@@ -711,7 +677,7 @@
                 {{ driver.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -719,7 +685,7 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ driver.totalPrice }} / 
+                    {{ driver.totalPrice }} /
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
@@ -733,17 +699,13 @@
               <td>
                 {{ driver.correctedPricePerSeat }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="driver.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ driver.commissionPricePerSeat }}
               </td>
             </tr>
@@ -751,11 +713,11 @@
             <tr v-show="showStaff">
               <td
                 v-if="getTour.guide.length != 0"
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Гиды
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -774,7 +736,7 @@
             >
               <td>
                 {{ guide.guide.name }}
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -784,15 +746,11 @@
                     expand_{{ guide.showDetails ? 'less' : 'more' }}
                   </v-icon>
                 </v-btn>
-                <div
-                  v-show="guide.showDetails"
-                >
-                  <div
-                    v-if="guide.guide.options.hotel"
-                  >
+                <div v-show="guide.showDetails">
+                  <div v-if="guide.guide.options.hotel">
                     <v-divider />
-                    Проживание: 
-                    <div 
+                    Проживание:
+                    <div
                       v-for="(room, r) in guide.hotelPrice"
                       :key="`Room-${r}`"
                     >
@@ -812,9 +770,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="guide.mealPrice"
-                  >
+                  <div v-if="guide.mealPrice">
                     <v-divider />
                     Питание:
                     <div
@@ -832,9 +788,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="guide.guide.events.length > 0"
-                  >
+                  <div v-if="guide.guide.events.length > 0">
                     <v-divider />
                     Экскурсии:
                     <div
@@ -858,7 +812,7 @@
                 {{ guide.guide.options.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -866,7 +820,7 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ guide.guide.options.totalPrice }} / 
+                    {{ guide.guide.options.totalPrice }} /
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
@@ -880,17 +834,13 @@
               <td>
                 {{ guide.guide.options.correctedPricePerSeat }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="guide.guide.options.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ guide.guide.options.commissionPricePerSeat }}
               </td>
             </tr>
@@ -898,11 +848,11 @@
             <tr v-show="showStaff">
               <td
                 v-if="getTour.guide.length != 0"
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
               >
                 Сопровождающие
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -921,7 +871,7 @@
             >
               <td>
                 {{ attendant.attendant.name }}
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -931,15 +881,11 @@
                     expand_{{ attendant.showDetails ? 'less' : 'more' }}
                   </v-icon>
                 </v-btn>
-                <div
-                  v-show="attendant.showDetails"
-                >
-                  <div
-                    v-if="attendant.attendant.options.hotel"
-                  >
+                <div v-show="attendant.showDetails">
+                  <div v-if="attendant.attendant.options.hotel">
                     <v-divider />
-                    Проживание: 
-                    <div 
+                    Проживание:
+                    <div
                       v-for="(room, r) in attendant.hotelPrice"
                       :key="`Room-${r}`"
                     >
@@ -959,9 +905,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="attendant.mealPrice"
-                  >
+                  <div v-if="attendant.mealPrice">
                     <v-divider />
                     Питание:
                     <div
@@ -979,9 +923,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="attendant.attendant.events.length > 0"
-                  >
+                  <div v-if="attendant.attendant.events.length > 0">
                     <v-divider />
                     Экскурсии:
                     <div
@@ -1005,7 +947,7 @@
                 {{ attendant.attendant.options.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -1013,7 +955,7 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ attendant.attendant.options.totalPrice }} / 
+                    {{ attendant.attendant.options.totalPrice }} /
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
@@ -1027,29 +969,25 @@
               <td>
                 {{ attendant.attendant.options.correctedPricePerSeat }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="attendant.attendant.options.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ attendant.attendant.options.commissionPricePerSeat }}
               </td>
             </tr>
             <!-- Free adls -->
             <tr v-if="getTour.options.freeAdls != 0">
               <td
-                class="text-xs-center" 
+                class="text-xs-center"
                 colspan="6"
                 style="background-color: #f8f8f8;"
               >
                 "Бесплатные взрослые"
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -1115,7 +1053,7 @@
             >
               <td>
                 {{ freeAdl.name }}
-                <v-btn 
+                <v-btn
                   color="#aa282a"
                   fab
                   flat
@@ -1125,15 +1063,11 @@
                     expand_{{ freeAdl.showDetailsInSummary ? 'less' : 'more' }}
                   </v-icon>
                 </v-btn>
-                <div
-                  v-show="freeAdl.showDetailsInSummary"
-                >
-                  <div
-                    v-if="freeAdl.options.hotel"
-                  >
+                <div v-show="freeAdl.showDetailsInSummary">
+                  <div v-if="freeAdl.options.hotel">
                     <v-divider />
-                    Проживание: 
-                    <div 
+                    Проживание:
+                    <div
                       v-for="(room, r) in freeAdl.hotelPrice"
                       :key="`FreeAdlRoom-${r}`"
                     >
@@ -1153,9 +1087,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="freeAdl.mealPrice"
-                  >
+                  <div v-if="freeAdl.mealPrice">
                     <v-divider />
                     Питание:
                     <div
@@ -1173,9 +1105,7 @@
                       </span>
                     </div>
                   </div>
-                  <div
-                    v-if="freeAdl.museums.length > 0"
-                  >
+                  <div v-if="freeAdl.museums.length > 0">
                     <v-divider />
                     Экскурсии:
                     <div
@@ -1199,7 +1129,7 @@
                 {{ freeAdl.totalPricePerSeat }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-icon 
+                    <v-icon
                       color="grey"
                       v-on="on"
                     >
@@ -1207,7 +1137,7 @@
                     </v-icon>
                   </template>
                   <span>
-                    {{ freeAdl.totalPrice }} / 
+                    {{ freeAdl.totalPrice }} /
                     {{ getTour.qnt }} чел.
                   </span>
                 </v-tooltip>
@@ -1221,25 +1151,22 @@
               <td>
                 {{ freeAdl.correctedPricePerSeat }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 <v-text-field
                   v-model="freeAdl.commission"
                   @input="correctPrice"
                 />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ freeAdl.commissionPricePerSeat }}
               </td>
             </tr>
             <tr>
               <td>
-                Итого: 
+                Итого:
                 <div class="body-1 grey--text">
-                  Тип туриста: {{ (getCurrentTourCustomers.find(c => c.id == currentCustomerType)).name }}
+                  Тип туриста:
+                  {{ (getCurrentTourCustomers.find(c => c.id == currentCustomerType)).name }}
                 </div>
               </td>
               <td>
@@ -1253,14 +1180,12 @@
                   mask="###"
                   outline
                   @input="inputCorrection"
-                /> 
+                />
               </td>
               <td>
                 {{ (getTour.correctedPrice) }}
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 Комиссия, %
                 <v-text-field
                   v-model="commissionToAll"
@@ -1268,11 +1193,9 @@
                   mask="###"
                   outline
                   @input="inputCommission"
-                /> 
+                />
               </td>
-              <td
-                v-show="!commissionManualMode"
-              >
+              <td v-show="!commissionManualMode">
                 {{ getTour.commissionPrice }}
               </td>
             </tr>
@@ -1281,21 +1204,21 @@
       </v-flex>
     </v-layout>
     <v-divider />
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
       <v-flex xs12>
         <table class="summary">
           <tr v-if="getTour.extraEvents != 0">
             <td
-              class="text-xs-center" 
+              class="text-xs-center"
               colspan="6"
             >
               Допы
             </td>
           </tr>
-          <tr 
+          <tr
             v-for="(event, i) in getTour.extraEvents"
             :key="`EE-${i}`"
           >
@@ -1322,18 +1245,14 @@
             <td>
               {{ parseInt(event.correctedPrice) }}
             </td>
-            <td
-              v-show="!commissionManualMode"
-            >
+            <td v-show="!commissionManualMode">
               <v-text-field
                 v-model="event.commission"
                 name="commision"
                 @input="correctPrice"
               />
             </td>
-            <td
-              v-show="!commissionManualMode"
-            >
+            <td v-show="!commissionManualMode">
               {{ parseInt(event.commissionPrice) }}
             </td>
           </tr>
@@ -1365,19 +1284,19 @@
       </v-flex>
     </v-layout>
     <v-divider />
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
     >
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
       >
         <v-flex xs12>
           <h4 class="title grey--text">
             Итог по каждому типу туриста:
           </h4>
-        </v-flex>  
+        </v-flex>
       </v-layout>
       <v-flex xs12>
         <table class="total">
@@ -1398,7 +1317,7 @@
               Ребёнок
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                  <v-icon 
+                  <v-icon
                     color="grey"
                     v-on="on"
                   >
@@ -1423,16 +1342,12 @@
                   v-if="price.age"
                   class="grey--text body-1"
                 >
-                  <div
-                    v-if="JSON.parse(price.age).isPens"
-                  >
+                  <div v-if="JSON.parse(price.age).isPens">
                     Мужчины от {{ JSON.parse(price.age).agePensMale }}
                     <br>
                     Женщины от {{ JSON.parse(price.age).agePensFemale }}
                   </div>
-                  <div
-                    v-if="!JSON.parse(price.age).isPens"
-                  >
+                  <div v-if="!JSON.parse(price.age).isPens">
                     От {{ JSON.parse(price.age).ageFrom }}
                     до {{ JSON.parse(price.age).ageTo }}
                   </div>
@@ -1440,85 +1355,85 @@
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Общая стоимость:
                 </span>
                 {{ parseInt(price.commissionStandardPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Комиссия: 
+                  Комиссия:
                 </span>
                 {{ parseInt(price.commissionStandardPrice - price.standardPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
+                  Оплата оператору:
                 </span>
                 {{ parseInt(price.standardPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
                   Затраты:
-                </span> 
+                </span>
                 {{ parseInt(price.nettoStandardPrice).toFixed(2) }}
                 <v-divider />
                 <span class="body-1 grey--text">
-                  Прибыль оператора: 
+                  Прибыль оператора:
                 </span>
                 {{ parseInt(price.standardPrice - price.nettoStandardPrice).toFixed(2) }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Общая стоимость:
                 </span>
                 {{ parseInt(price.commissionSinglePrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Комиссия: 
+                  Комиссия:
                 </span>
                 {{ parseInt(price.commissionSinglePrice - price.singlePrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
+                  Оплата оператору:
                 </span>
                 {{ parseInt(price.singlePrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
                   Затраты:
-                </span> 
+                </span>
                 {{ parseInt(price.nettoSinglePrice).toFixed(2) }}
                 <v-divider />
                 <span class="body-1 grey--text">
-                  Прибыль оператора: 
+                  Прибыль оператора:
                 </span>
                 {{ parseInt(price.singlePrice - price.nettoSinglePrice).toFixed(2) }}
               </td>
               <td class="body-2">
                 <span class="body-1 grey--text">
-                  Общая стоимость: 
+                  Общая стоимость:
                 </span>
                 {{ parseInt(price.commissionExtraPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Комиссия: 
+                  Комиссия:
                 </span>
                 {{ parseInt(price.commissionExtraPrice - price.addPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
-                  Оплата оператору: 
+                  Оплата оператору:
                 </span>
                 {{ parseInt(price.addPrice).toFixed(2) }}
                 <br>
                 <span class="body-1 grey--text">
                   Затраты:
-                </span> 
+                </span>
                 {{ parseInt(price.nettoAddPrice).toFixed(2) }}
                 <v-divider />
                 <span class="body-1 grey--text">
-                  Прибыль оператора: 
+                  Прибыль оператора:
                 </span>
                 {{ parseInt(price.addPrice - price.nettoAddPrice).toFixed(2) }}
               </td>
               <td>
-                <v-checkbox 
-                  v-model="price.isChd" 
+                <v-checkbox
+                  v-model="price.isChd"
                   color="#aa282a"
                   name="is-chd"
                 />
@@ -1526,39 +1441,44 @@
             </tr>
           </tbody>
         </table>
-        <v-btn 
-          dark
-          color="#aa282a"
-          @click="calculatePriceForEveryCustomer"
+        <v-layout
+          row
+          wrap
+          justify-center
         >
-          Рассчитать цены для всех типов туристов
-        </v-btn>
-        <br>
-        <br>
-        <v-btn
-          dark
-          color="#aa282a"
-          @click="roundPrices"
+          <v-btn
+            dark
+            color="#aa282a"
+            @click="calculatePriceForEveryCustomer"
+          >
+            Рассчитать цены для всех типов туристов
+          </v-btn>
+        </v-layout>
+        <v-layout
+          row
+          wrap
+          justify-center
         >
-          Округлить цены
-        </v-btn>
-        <br>
+          <h3 class="title grey--text">
+            Округление всех цен
+          </h3>
+        </v-layout>
         <v-layout
           row
           wrap
         >
           <v-spacer />
-          <v-radio-group 
-            v-model="roundPricesParameter" 
+          <v-radio-group
+            v-model="roundPricesParameter"
             row
           >
-            <v-radio 
-              label="до 100" 
-              value="100" 
+            <v-radio
+              label="до 100"
+              value="100"
             />
-            <v-radio 
-              label="до 1000" 
-              value="1000" 
+            <v-radio
+              label="до 1000"
+              value="1000"
             />
           </v-radio-group>
         </v-layout>
@@ -1567,28 +1487,41 @@
           wrap
         >
           <v-spacer />
-          <v-radio-group 
-            v-model="roundPricesMinusValue" 
+          <v-radio-group
+            v-model="roundPricesMinusValue"
             row
           >
-            <v-radio 
-              label="не вычитать" 
-              value="0" 
+            <v-radio
+              label="не вычитать"
+              value="0"
             />
-            <v-radio 
-              label="минус 10" 
-              value="10" 
+            <v-radio
+              label="минус 10"
+              value="10"
             />
-            <v-radio 
-              label="минус 100" 
-              value="100" 
+            <v-radio
+              label="минус 100"
+              value="100"
             />
           </v-radio-group>
         </v-layout>
-      </v-flex>  
+        <v-layout
+          row
+          wrap
+          justify-center
+        >
+          <v-btn
+            dark
+            color="#aa282a"
+            @click="roundPrices"
+          >
+            Округлить цены
+          </v-btn>
+        </v-layout>
+      </v-flex>
     </v-layout>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       justify-end
     >
@@ -1597,10 +1530,8 @@
           Перед сохранением тура, рассчитайте цены для всех типов туристов.
         </p>
       </v-flex>
-      <v-flex xs2> 
-        <SaveTourForm
-          :token="token"
-        />
+      <v-flex xs2>
+        <SaveTourForm :token="token" />
       </v-flex>
     </v-layout>
   </div>
@@ -1618,8 +1549,8 @@ export default {
   props: {
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -1637,7 +1568,7 @@ export default {
       commissionManualValue: 0,
       roundPricesParameter: '100',
       roundPricesMinusValue: '0',
-    };
+    }
   },
   computed: {
     ...mapGetters([
@@ -1655,8 +1586,8 @@ export default {
     ]),
     tourExtra: function() {
       return {
-        ...this.getTour, 
-        correctedPrice: this.getCorrectedPrice
+        ...this.getTour,
+        correctedPrice: this.getCorrectedPrice,
       }
     },
   },
@@ -1678,7 +1609,7 @@ export default {
         if (this.commissionManualMode) {
           this.updateManualCommissionPriceValues(parseFloat(value).toFixed(2))
         }
-      }
+      },
     },
     commissionManualMode: {
       handler(value) {
@@ -1696,7 +1627,7 @@ export default {
           this.commissionManualValue = 0
           this.updateManualCommissionMode(false)
         }
-      }
+      },
     },
     currentCustomerType: {
       handler(value) {
@@ -1706,7 +1637,9 @@ export default {
           this.updateCommissionPriceValues()
           this.updateTourCommissionPrice()
         } else {
-          this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+          this.updateManualCommissionPriceValues(
+            parseFloat(this.commissionManualValue).toFixed(2)
+          )
         }
       },
     },
@@ -1736,7 +1669,7 @@ export default {
   methods: {
     ...mapActions([
       'updateTransportPrice',
-      'updateTourTotalPrice',  
+      'updateTourTotalPrice',
       'updateTourCorrectedPrice',
       'updateCorrectionToAll',
       'updateCorrectedPriceValues',
@@ -1770,7 +1703,9 @@ export default {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
       } else {
-        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+        this.updateManualCommissionPriceValues(
+          parseFloat(this.commissionManualValue).toFixed(2)
+        )
       }
     },
     inputCommission() {
@@ -1781,7 +1716,9 @@ export default {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
       } else {
-        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+        this.updateManualCommissionPriceValues(
+          parseFloat(this.commissionManualValue).toFixed(2)
+        )
       }
     },
     correctPrice() {
@@ -1791,7 +1728,9 @@ export default {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
       } else {
-        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+        this.updateManualCommissionPriceValues(
+          parseFloat(this.commissionManualValue).toFixed(2)
+        )
       }
     },
     commissPrice() {
@@ -1800,34 +1739,38 @@ export default {
         this.updateCommissionPriceValues()
         this.updateTourCommissionPrice()
       } else {
-        this.updateManualCommissionPriceValues(parseFloat(this.commissionManualValue).toFixed(2))
+        this.updateManualCommissionPriceValues(
+          parseFloat(this.commissionManualValue).toFixed(2)
+        )
       }
-  },
+    },
     customerName(event) {
       const data = JSON.parse(event.obj.extra)
-      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      const currentPrice = data.priceList.find(
+        price => price.customerId == this.currentCustomerType
+      )
       if (currentPrice) {
         return currentPrice.customerName
-      }
-      else {
+      } else {
         const defaultPrice = data.priceList.find(price => price.customerId == 1) // Взрослый
         return defaultPrice.customerName
       }
     },
     eventPrice(event) {
       const data = JSON.parse(event.obj.extra)
-      const currentPrice = data.priceList.find(price => price.customerId == this.currentCustomerType)
+      const currentPrice = data.priceList.find(
+        price => price.customerId == this.currentCustomerType
+      )
       if (currentPrice) {
         return currentPrice.price
-      }
-      else {
+      } else {
         return data.priceList.find(price => price.customerId == 1).price // Цена за взрослого
       }
     },
     calculatePriceForEveryCustomer() {
       let prevCustomer = this.currentCustomerType
-      this.getCurrentTourCustomers.forEach((customer) => {
-        setTimeout(() => { 
+      this.getCurrentTourCustomers.forEach(customer => {
+        setTimeout(() => {
           this.currentCustomerType = customer.id
           this.correctPrice()
         }, 300)
@@ -1844,13 +1787,12 @@ export default {
       this.updateCorrectedPriceValues()
     },
     getHotelPrice(hotel) {
-      let customer = this.getTour.calc.priceList.find((item) => {
+      let customer = this.getTour.calc.priceList.find(item => {
         return item.id == this.currentCustomerType
       })
       if (customer && customer.isChd) {
         return JSON.parse(hotel.obj.extra).priceList.chd.std * hotel.obj.day
-      }
-      else {
+      } else {
         return JSON.parse(hotel.obj.extra).priceList.adl.std * hotel.obj.day
       }
     },
@@ -1881,12 +1823,12 @@ export default {
     },
     roundPrices() {
       this.updateRoundPrices({
-        parameter: this.roundPricesParameter, 
-        minusValue: this.roundPricesMinusValue
+        parameter: this.roundPricesParameter,
+        minusValue: this.roundPricesMinusValue,
       })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -1901,7 +1843,7 @@ export default {
     font-weight: 250;
   }
   td {
-    text-align: left
+    text-align: left;
   }
 }
 </style>

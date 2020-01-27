@@ -1,44 +1,28 @@
 <template>
-  <v-layout 
-    column 
+  <v-layout
+    column
     wrap
     justify-content-center
   >
-    <!-- <v-btn 
-      dark 
-      color="#aa282a"
-      @click="addMoreGuide"
-    >
-      Добавить гида
-    </v-btn>
-    <v-btn 
-      dark 
-      color="#aa282a"
-      @click="addMoreAttendant"
-    >
-      Добавить сопровождающего
-    </v-btn> -->
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       justify-center
     >
-      <v-btn 
-        dark 
+      <v-btn
+        dark
         color="#aa282a"
         @click="addFreeAdl"
       >
         "Бесплатный взрослый"
-        <v-icon
-          class="ml-2"
-        >
+        <v-icon class="ml-2">
           person_add
         </v-icon>
       </v-btn>
     </v-layout>
-    <v-layout 
+    <v-layout
       v-if="freeAdls.length > 0"
-      row 
+      row
       wrap
       justify-center
     >
@@ -49,7 +33,7 @@
         lg2
         ma-2
       >
-        <v-card 
+        <v-card
           class="adl-card"
           :class="{'is-select' : adl.selected}"
           pa-3
@@ -87,18 +71,14 @@
                 color="#aa282a"
               />
             </div>
-            <div
-              v-show="!adl.selected"
-            >
-              <v-btn 
+            <div v-show="!adl.selected">
+              <v-btn
                 color="#aa282a"
                 dark
                 flat
                 @click="adl.showAdlDetails = !adl.showAdlDetails"
               >
-                <v-icon
-                  class="mr-2"
-                >
+                <v-icon class="mr-2">
                   hotel
                 </v-icon>
                 <v-icon>
@@ -108,34 +88,30 @@
                   expand_{{ adl.showAdlDetails ? 'less' : 'more' }}
                 </v-icon>
               </v-btn>
-              <div
-                v-show="adl.showAdlDetails"  
-              >
+              <div v-show="adl.showAdlDetails">
                 <div>
-                  <v-switch 
+                  <v-switch
                     v-model="adl.options.hotel"
                     label="Проживание"
-                    color="#aa282a" 
+                    color="#aa282a"
                   />
                   <v-checkbox
                     v-if="adl.options.hotel"
                     v-model="adl.options.isHotelSngl"
                     label="Сингл"
-                    color="#aa282a" 
+                    color="#aa282a"
                   />
                   <v-divider />
-                  <v-switch 
+                  <v-switch
                     v-model="adl.options.meal"
                     label="Питание"
-                    color="#aa282a" 
+                    color="#aa282a"
                   />
                 </div>
               </div>
             </div>
-            <div
-              v-show="!adl.selected"
-            >
-              <v-btn 
+            <div v-show="!adl.selected">
+              <v-btn
                 color="#aa282a"
                 dark
                 flat
@@ -146,39 +122,45 @@
                   expand_{{ adl.showEvents ? 'less' : 'more' }}
                 </v-icon>
               </v-btn>
-              <div
-                v-show="adl.showEvents"  
-              >
-                <v-switch 
+              <div v-show="adl.showEvents">
+                <v-switch
                   v-for="(museum, i) in adl.museums"
                   :key="`${adl.id}-${i}`"
                   v-model="museum.selected"
                   :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
-                  color="#aa282a" 
+                  color="#aa282a"
                 />
               </div>
             </div>
           </v-card-title>
           <v-divider />
           <v-card-actions>
-            <v-btn 
-              v-if="!adl.selected"
-              color="red"
-              flat
-              @click="remove(adl)"
+            <v-layout
+              row
+              wrap
+              justify-space-between
+              align-center
             >
-              Удалить
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-spacer />
-            <v-btn 
-              color="#aa282a"
-              flat
-              :disabled="adl.name == ''"
-              @click="choose(adl)"
-            >
-              {{ adl.selected ? 'Редактировать' : 'Сохранить' }}
-            </v-btn>
+              <v-btn
+                v-if="!adl.selected"
+                color="red"
+                fab
+                flat
+                small
+                @click="remove(adl)"
+              >
+                <v-icon>close</v-icon>
+              </v-btn>
+              <v-btn
+                color="#aa282a"
+                flat
+                small
+                :disabled="adl.name == ''"
+                @click="choose(adl)"
+              >
+                {{ adl.selected ? 'Редактировать' : 'Сохранить' }}
+              </v-btn>
+            </v-layout>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -197,20 +179,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'getTour',
-    ]),
+    ...mapGetters(['getTour']),
     days: function() {
       let result = []
       for (let i = 1; i <= this.getTour.options.days; i++) {
         result.push(i)
-      } 
+      }
       return result
     },
     museums() {
       let result = []
-      this.getTour.museum.forEach((museum) => {
-        let adlPrice = JSON.parse(museum.obj.extra).priceList.find((price) => {
+      this.getTour.museum.forEach(museum => {
+        let adlPrice = JSON.parse(museum.obj.extra).priceList.find(price => {
           return price.customerName.includes('Взр')
         })
         result.push({
@@ -228,14 +208,14 @@ export default {
   },
   mounted() {
     if (this.getTour.options.freeAdls != []) {
-      this.getTour.options.freeAdls.forEach(adl => this.freeAdls.push({...adl}))
+      this.getTour.options.freeAdls.forEach(adl =>
+        this.freeAdls.push({ ...adl })
+      )
     }
     this.usedIds = this.freeAdls.length
   },
   methods: {
-    ...mapActions([
-      'updateFreeAdlsOptions',
-    ]),
+    ...mapActions(['updateFreeAdlsOptions']),
     addFreeAdl() {
       let adl = {
         // Ex.: TourId = 38, freeAdls.length = 2 => id = 383
@@ -260,8 +240,8 @@ export default {
         correctedPricePerSeat: 0,
         commissionPricePerSeat: 0,
       }
-      this.museums.forEach((museum) => {
-        adl.museums.push({...museum})
+      this.museums.forEach(museum => {
+        adl.museums.push({ ...museum })
       })
       this.usedIds += 1
       this.freeAdls.push(adl)
@@ -276,16 +256,16 @@ export default {
       adl.selected = !adl.selected
       this.updateFreeAdlsOptions(adl.selected ? adl : { delete: adl.id })
     },
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .adl-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
 .is-select {
-  background-color: #FFAB16;
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }
