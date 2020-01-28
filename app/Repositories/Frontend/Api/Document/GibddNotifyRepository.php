@@ -4,6 +4,7 @@ namespace App\Repositories\Frontend\Api\Document;
 
 use App\Models\Auth\Team;
 use App\Models\Tour\Tour;
+use Carbon\Carbon;
 
 /**
  *  Class DocumentRepository
@@ -37,50 +38,50 @@ class GibddNotifyRepository
     $result = $result . $header;
 
     $result = $result .
-      "Наименование инициатора перевозки: "
+      "<h2>Наименование инициатора перевозки:</h2>"
       . $this->getCompanyInfo(auth()->user()->current_team_id)
       . "<br />";
 
     $result = $result .
-      "Наименование организатора перевозки:"
+      "<h2>Наименование организатора перевозки:</h2>"
       . $this->getCompanyInfo(auth()->user()->current_team_id)
       . "<br />";
 
     $result = $result .
-      "Наименование и адрес заказчика автобуса:"
+      "<h2>Наименование и адрес заказчика автобуса:</h2>"
       . $this->getCompanyInfo(auth()->user()->current_team_id)
       . "<br />";
 
     $result = $result .
-      "Наименование и адрес перевозчика:"
+      "<h2>Наименование и адрес перевозчика:</h2>"
       . $this->getTransportCompanyInfo()
       . "<br />";
     //dd($tour_options);
     $result = $result .
-      "Дата перевозки: "
-      . $this->tour_options->options->dateStart
+      "<h2>Дата перевозки:</h2>"
+      . ((new Carbon($this->tour_options->options->dateStart))->toDateString())
       . "<br />";
 
 
     $result = $result .
-      "Марка и регистрационный знак автобуса: "
+      "<h2>Марка и регистрационный знак автобуса:</h2>"
       . $this->getBusInfo($this->tour)
       . "<br />";
 
     $result = $result .
-      "Наименование владельца автобуса: "
+      "<h2>Наименование владельца автобуса:</h2>"
       . $this->getTransportCompanyInfo()
       . "<br />";
 
     $result = $result .
-      "ФИО водителя: "
+      "<h2>ФИО водителя:</h2>"
       . $this->getDriversInfo()
       . "<br />";
 
     $result = $result .
       "<br />"
-      . "Подпись лица, ответственного за организацию перевозки <br />"
-      . "_______________________";
+      . "<h3>Подпись лица, ответственного за организацию перевозки</h3><br />"
+      . "_______________________/_______________________";
 
     return $result;
   }
@@ -251,6 +252,7 @@ class GibddNotifyRepository
 
   public function getBusInfo()
   {
+    $empty_entry = 'Поле не заполнено';
     $result = '';
     $number = 1;
     $tour_transport = $this->tour_options->transport;
@@ -258,19 +260,28 @@ class GibddNotifyRepository
     foreach ($tour_transport as $transport) {
       $bus = $transport->obj;
       $bus_details = json_decode($bus->extra);
+      if (property_exists($bus_details, 'busDocs')) {
+        $has_glonass = $bus_details->busDocs->glonass;
+        $has_era_glonass = $bus_details->busDocs->eraGlonass;
+        $reg_number = $bus_details->busDocs->regNumber;
+        $diag_card = $bus_details->busDocs->diagCard;
+      } else {
+        $has_glonass = false;
+        $has_era_glonass = false;
+        $reg_number = $empty_entry;
+        $diag_card = $empty_entry;
+      }
 
-      $has_glonass = $bus_details->busDocs->glonass;
-      $has_era_glonass = $bus_details->busDocs->eraGlonass;
 
       $result = $result
         . "<br />"
         . "$number. Марка, модель: "
         . $bus->name . ", "
         . "гос. номер: "
-        . $bus_details->busDocs->regNumber . ". "
+        . $reg_number . ". "
         . $bus->description . ". "
         . "Номер диагностической карты и срок ее действия: "
-        . $bus_details->busDocs->diagCard . ". ";
+        . $diag_card . ". ";
 
       if ($has_glonass) $result = $result . "Глонасс. ";
       if ($has_era_glonass) $result = $result . "Эра-глонасс. ";
@@ -289,19 +300,23 @@ class GibddNotifyRepository
 
     foreach ($tour_transport as $transport) {
       $bus = $transport->obj;
-      $drivers = json_decode($bus->extra)->drivers;
 
-      foreach ($drivers as $driver) {
-        // dd($driver);
-        $result = $result
-          . "<br />"
-          . $number . ". "
-          . $driver->name . ", "
-          . "водительское удостоверение "
-          . $driver->license . ", "
-          . "стаж водителем автобуса в категории «Д»: "
-          . $driver->exp . " лет.";
-        $number++;
+      if (property_exists(json_decode($bus->extra), 'drivers')) {
+        $drivers = json_decode($bus->extra)->drivers;
+
+        foreach ($drivers as $driver) {
+          $result = $result
+            . "<br />"
+            . $number . ". "
+            . $driver->name . ", "
+            . "водительское удостоверение "
+            . $driver->license . ", "
+            . "стаж водителем автобуса в категории «Д»: "
+            . $driver->exp . " лет.";
+          $number++;
+        }
+      } else {
+        $result = "Автобус: " . $bus->name . ". Данные по водителям не заполнены!";
       }
     }
 
