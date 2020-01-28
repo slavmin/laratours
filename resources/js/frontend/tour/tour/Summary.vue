@@ -1797,6 +1797,9 @@ export default {
       }
     },
     reCalcTour() {
+      this.correctionToAll = 0
+      this.commissionToAll = 0
+      this.commissionManualValue = 0
       this.updateTourTransport()
       this.updateTourMuseum()
       this.updateTourHotel()
