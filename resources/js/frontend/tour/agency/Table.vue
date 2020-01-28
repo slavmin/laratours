@@ -1,6 +1,6 @@
 <template>
-  <v-layout 
-    row 
+  <v-layout
+    row
     wrap
     justify-center
   >
@@ -58,9 +58,7 @@
             }}
           </td>
           <td>
-            <AboutTour 
-              :content="JSON.parse(item.extra).editorsContent"
-            />
+            <AboutTour :content="JSON.parse(item.extra).editorsContent" />
           </td>
           <td>
             от
@@ -71,7 +69,7 @@
             }}
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-icon 
+                <v-icon
                   color="grey"
                   v-on="on"
                 >
@@ -114,25 +112,25 @@ export default {
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     items: {
       type: Array,
       default: () => {
         return []
-      }
+      },
     },
     cities: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
   },
   methods: {
     getCitiesNames(cities) {
       let cityName = ''
-      cities.forEach((cityId) => {
+      cities.forEach(cityId => {
         _.toArray(this.cities).forEach((city, i) => {
           if (i == cityId) {
             cityName += this.cities[i] + '. '
@@ -142,18 +140,22 @@ export default {
       return cityName
     },
     getPartnerMinPrice(tourExtra) {
-      let price = 'Уточняйте'
+      const noPrice = 'Цена взрослого не указана'
+      let price = 0
       if (tourExtra.partnerTour.prices) {
-        price = tourExtra.partnerTour.prices.find((item) => {
-          return item.name.toLowerCase().includes('взр') || item.name.toLowerCase().includes('двухместн')
+        price = tourExtra.partnerTour.prices.find(item => {
+          return (
+            item.name.toLowerCase().includes('взр') ||
+            item.name.toLowerCase().includes('двухместн')
+          )
         })
-        price = price.value
       }
-      return price
+      const result = price ? price.value : noPrice
+      return result
     },
     formatDate(date) {
       return moment(date).format('LL')
-    }
+    },
   },
 }
 </script>

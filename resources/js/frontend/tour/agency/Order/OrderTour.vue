@@ -225,6 +225,8 @@
         Оплачено ранее: {{ order.total_paid }}
         <br>
         Комиссия: {{ parseInt(getOrderCommission) }}
+        <br>
+        К оплате: {{ parseInt(getOrderPrice) - parseInt(getOrderCommission) }}
       </div>
       <v-layout 
         row 

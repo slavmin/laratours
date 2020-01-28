@@ -359,7 +359,8 @@ export default {
       }
     },
     getPartnerMinPrice(tourExtra) {
-      let price = 'Уточняйте'
+      const noPrice = 'Цена взрослого не указана'
+      let price = 0
       if (tourExtra.partnerTour.prices) {
         price = tourExtra.partnerTour.prices.find(item => {
           return (
@@ -367,9 +368,9 @@ export default {
             item.name.toLowerCase().includes('двухместн')
           )
         })
-        price = price.value
       }
-      return price
+      const result = price ? price.value : noPrice
+      return result
     },
   },
 }
