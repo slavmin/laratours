@@ -11,7 +11,8 @@
         <title>ТурКлик | tour-click.ru</title>
         <meta name="description" content="@yield('meta_description', 'Laravel 5')">
         <link href="https://fonts.googleapis.com/css?family=Merriweather&display=swap" rel="stylesheet">
-        <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700,900|Material+Icons' rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="57x57" href="/img/frontend/favicon/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="/img/frontend/favicon/apple-icon-60x60.png">
         <link rel="apple-touch-icon" sizes="72x72" href="/img/frontend/favicon/apple-icon-72x72.png">
@@ -41,6 +42,7 @@
         @stack('scripts')
 
         <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="{{ asset('css/bootstrap_mdb.css')}}">
         <link rel="stylesheet" href="{{ asset('css/mdb.min.css')}}">
         <script src="{{ asset('js/mdb.min.js') }}" defer></script>
         

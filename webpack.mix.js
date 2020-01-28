@@ -60,5 +60,7 @@ if (mix.inProduction()) {
         });
 } else {
     // Uses inline source-maps on development
-    mix.webpackConfig({ devtool: 'inline-source-map' });
+    mix.webpackConfig({
+        devtool: 'inline-source-map'
+    });
 }

@@ -7,16 +7,17 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';
 
 // Pages
 @import 'pages/dashboard';
 
 // Fix styles
 .dropdown-menu.show {
-  font-size: .875rem;
+    font-size: .875rem;
 }
+
 .dropdown-menu.show {
-  right: 0;
-  left: auto;
+    right: 0;
+    left: auto;
 }
