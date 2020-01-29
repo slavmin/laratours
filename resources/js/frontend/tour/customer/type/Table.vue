@@ -32,11 +32,11 @@
                 wrap
                 justify-end
               >
-                <customer-type-edit
+                <Edit
                   :item="props.item"
                   :token="token"
                 />
-                <customer-type-delete
+                <Delete
                   :item="props.item"
                   :token="token"
                 />
@@ -50,8 +50,14 @@
 </template>
 
 <script>
+import Edit from './Edit'
+import Delete from './Delete'
 export default {
   name: 'CustomerTable',
+  components: {
+    Edit,
+    Delete,
+  },
   props: {
     items: {
       type: Object,

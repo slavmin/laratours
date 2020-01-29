@@ -1,6 +1,9 @@
 @extends('frontend.layouts.app')
-
+@push('scripts')
+{!! script(mix('js/frontend_agency.js')) !!}
+@endpush
 @section('content')
+<div id="agency-wrap"></div>
     <?php $stour = json_encode($tour); ?>
     <?php $sprofiles = json_encode($tour->orderprofiles); ?>
     <agency-order-tour

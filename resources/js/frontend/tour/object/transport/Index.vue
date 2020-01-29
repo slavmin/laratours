@@ -26,11 +26,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-
-Vue.use(Vuetify)
 import Table from './Table'
 import AddCompany from './AddCompany'
 export default {

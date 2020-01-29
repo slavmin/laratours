@@ -1,7 +1,9 @@
 @extends('frontend.layouts.app')
-
+@push('scripts')
+{!! script(mix('js/frontend_agency.js')) !!}
+@endpush
 @section('content')
-    
+<div id="agency-wrap"></div>
     <!-- Vue component -->
     @if(count($items)>0)
         <?php $sitems = json_encode($items); ?>

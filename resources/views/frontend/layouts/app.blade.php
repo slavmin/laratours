@@ -45,6 +45,9 @@
         <link rel="stylesheet" href="{{ asset('css/bootstrap_mdb.css')}}">
         <link rel="stylesheet" href="{{ asset('css/mdb.css')}}">
         <script src="{{ asset('js/mdb.min.js') }}" defer></script>
+
+        <!-- Vuetify -->
+        <link rel="stylesheet" href="{{ asset('css/vuetify.min.css') }}">
         
     </head>
     <body>
