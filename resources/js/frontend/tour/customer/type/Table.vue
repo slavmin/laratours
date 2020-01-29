@@ -1,7 +1,13 @@
 <template>
-  <v-container fluid>
-    <h1 class="text-center mb-5">
-      <v-icon large>
+  <v-container
+    fluid
+    class="tc-blue-bg"
+  >
+    <h1 class="text-center mb-5 white--text">
+      <v-icon
+        dark
+        large
+      >
         view_list
       </v-icon>
       Типы туристов

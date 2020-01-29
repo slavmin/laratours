@@ -1,6 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+<div class="container-xl pt-4 tc-blue-bg">
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
@@ -48,6 +49,7 @@
 
         </div><!--card-body-->
     </div><!--card-->
+</div>
 
     @include('frontend.tour.includes.pagination-row')
 

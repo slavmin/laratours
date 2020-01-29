@@ -6,9 +6,21 @@
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+.root-wrap {
+    width: 100%;
+    padding-bottom: 46px;
+    margin-bottom: -70px;
+}
+
 body {
     font-family: 'Roboto' !important;
-
 }
 
 // Header Styles
@@ -19,5 +31,48 @@ body {
 
 // TourClick (tc) redefined styles
 .tc-blue-bg {
+    background-color: #216771;
+}
+
+.tc-navbar {
     background-color: #66A5AE;
+    color: white !important;
+    z-index: 50;
+}
+
+.tc-footer {
+    background-color: #A6D1D7;
+    position: fixed;
+    width: 100%;
+    bottom: 0px !important;
+    z-index: 50;
+}
+
+.fullscreen-bg {
+    background-color: #333;
+    width: 100%;
+    height: 100%;
+    background: url('/img/frontend/bg-bridge.jpg') center center no-repeat;
+    background-size: cover;
+    z-index: 2;
+
+    >.row {
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        position: relative;
+    }
+
+    &:before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 36px;
+        left: 0;
+        background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0.17));
+        opacity: 0.7;
+        z-index: 1;
+    }
 }

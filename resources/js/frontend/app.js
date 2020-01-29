@@ -28,6 +28,8 @@ window.Vue = Vue;
 
 Vue.component('index', require('./components/Index.vue').default);
 Vue.component('login', require('./components/Login.vue').default);
+Vue.component('branding', require('./components/Branding.vue').default);
+Vue.component('changelog', require('./components/Changelog.vue').default);
 Vue.component('reset-email', require('./components/ResetEmail.vue').default);
 Vue.component('reset-password', require('./components/ResetPassword.vue').default);
 Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
@@ -50,8 +52,8 @@ Vue.component('operator-order-edit', require('./tour/order/OrderTour.vue').defau
 // Vue.component('agency-orders-index', require('./tour/agency/Order/Index.vue').default);
 // Vue.component('agency-order-edit', require('./tour/agency/Order/OrderTour.vue').default);
 Vue.component('trash', require('./tour/includes/Trash.vue').default);
-Vue.component('nav-bar', require('./components/NavBar.vue').default);
-Vue.component('nav-bar-status', require('./components/NavBarStatus.vue').default);
+// Vue.component('nav-bar', require('./components/NavBar.vue').default);
+// Vue.component('nav-bar-status', require('./components/NavBarStatus.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('messages', require('./components/Messages.vue').default);
 Vue.component('footer-component', require('./components/Footer.vue').default);

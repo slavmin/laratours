@@ -3,7 +3,7 @@
     fluid
     grid-list-md
     text-xs-center
-    style="background-color: #66a5ae;"
+    class="tc-blue-bg"
   >
     <h1 class="text-center white--text mb-5">
       <v-icon
@@ -13,13 +13,9 @@
         thumb_up
       </v-icon>
       Сопровождающие
-      <Add 
-        :token="token" 
-      />
+      <Add :token="token" />
     </h1>
-    <Table 
-      :token="token" 
-    />
+    <Table :token="token" />
   </v-container>
 </template>
 
@@ -27,24 +23,21 @@
 import Add from './Add'
 import Table from './Table'
 export default {
-
   name: 'ObjectGuideIndex',
   components: {
     Add,
-    Table
+    Table,
   },
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
   },
   data() {
-    return {
-
-    };
-  }
-};
+    return {}
+  },
+}
 </script>
 
 <style lang="css" scoped>

@@ -1,18 +1,18 @@
 <template>
-  <v-container>
-    <v-layout 
-      row 
+  <v-container class="tc-blue-bg">
+    <v-layout
+      row
       justify-end
     >
-      <v-dialog 
-        v-model="dialog" 
+      <v-dialog
+        v-model="dialog"
         max-width="600px"
       >
         <template v-slot:activator="{ on }">
-          <v-btn 
+          <v-btn
             fab
-            color="#aa282a" 
-            dark 
+            color="#aa282a"
+            dark
             v-on="on"
           >
             <i class="material-icons">
@@ -21,115 +21,113 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-title
-            style="background-color: #66a5ae;"
-          >
+          <v-card-title style="background-color: #66a5ae;">
             <span class="headline white--text">
               {{ header }}
             </span>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
-              <form 
+              <form
                 id="form"
                 action="/operator/customer-type"
                 method="POST"
               >
-                <input 
+                <input
                   type="hidden"
                   name="_token"
                   :value="token"
                 >
-                <input 
+                <input
                   type="hidden"
                   name="description"
                   :value="description"
                 >
-                <v-text-field 
+                <v-text-field
                   v-model="name"
                   name="name"
-                  label="Название" 
-                  color="#aa282a" 
+                  label="Название"
+                  color="#aa282a"
                   outline
                   required
                 />
                 <h4>Возраст</h4>
-                <v-layout 
+                <v-layout
                   v-if="!isPens"
-                  row 
+                  row
                   wrap
                 >
                   <v-flex xs6>
-                    <v-text-field 
+                    <v-text-field
                       v-model="ageFrom"
-                      label="От" 
+                      label="От"
                       mask="##"
                       outline
-                      color="#aa282a" 
+                      color="#aa282a"
                     />
                   </v-flex>
                   <v-flex xs6>
-                    <v-text-field 
+                    <v-text-field
                       v-model="ageTo"
-                      label="До" 
-                      mask="##" 
+                      label="До"
+                      mask="##"
                       outline
-                      color="#aa282a" 
+                      color="#aa282a"
                     />
                   </v-flex>
                 </v-layout>
-                <v-layout 
+                <v-layout
                   v-if="isPens"
-                  row 
+                  row
                   wrap
                 >
                   <v-flex xs6>
                     <h5>Мужчины</h5>
-                    <v-text-field 
+                    <v-text-field
                       v-model="agePensMale"
-                      label="От" 
+                      label="От"
                       mask="##"
                       outline
-                      color="#aa282a" 
+                      color="#aa282a"
                     />
                   </v-flex>
                   <v-flex xs6>
                     <h5>Женщины</h5>
-                    <v-text-field 
+                    <v-text-field
                       v-model="agePensFemale"
-                      label="От" 
-                      mask="##" 
+                      label="От"
+                      mask="##"
                       outline
-                      color="#aa282a" 
+                      color="#aa282a"
                     />
                   </v-flex>
                 </v-layout>
-                <v-layout 
-                  row 
+                <v-layout
+                  row
                   wrap
                 >
                   <v-flex xs12>
                     <v-checkbox
                       v-model="isPens"
-                      color="#aa282a" 
+                      color="#aa282a"
                       label="Пенсионер"
                     />
-                  </v-flex>  
+                  </v-flex>
                 </v-layout>
               </form>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn 
-              color="#aa282a"  
+            <v-btn
+              color="#aa282a"
               dark
               @click="close"
             >
               Закрыть
             </v-btn>
-            <v-btn 
-              color="#aa282a"  
+            <v-btn
+              color="#aa282a"
               dark
               type="submit"
               form="form"
@@ -145,21 +143,20 @@
 
 <script>
 export default {
-
   name: 'AddCustomerType',
   props: {
     header: {
       type: String,
       default: () => {
         return 'Создать'
-      }
+      },
     },
     token: {
       type: String,
       default: () => {
         return ''
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -170,7 +167,7 @@ export default {
       isPens: false,
       agePensMale: 0,
       agePensFemale: 0,
-    };
+    }
   },
   computed: {
     customerAgeRange: function() {
@@ -201,15 +198,15 @@ export default {
   methods: {
     close() {
       this.name = ''
-      this.ageFrom = 0 
+      this.ageFrom = 0
       this.ageTo = 0
-      this.isPens =  false
-      this.agePensMale =  0
+      this.isPens = false
+      this.agePensMale = 0
       this.agePensFemale = 0
       this.dialog = false
     },
-  }
-};
+  },
+}
 </script>
 
 <style lang="css" scoped>

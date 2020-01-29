@@ -1,8 +1,10 @@
 @extends('frontend.layouts.app')
-
+@section('css')
+<link rel="stylesheet" href="css/index.css">
+@endsection
 @section('title', app_name() . ' | ' . __('navs.general.home'))
 
-@section('content')
+@section('fullscreen-bg')
 <div class="container-fluid fullscreen-bg">
 	<div class="row justify-content-center align-items-center">
 		<div class="container">

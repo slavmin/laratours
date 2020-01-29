@@ -28,7 +28,7 @@
         </div><!--col-->
         <div class="col-auto col-xs-6">
             <div class="form-group mb-0">
-                <a href="{{route('frontend.tour.'.$model_alias.'.index')}}" class="btn btn-outline-primary">
+                <a href="{{route('frontend.tour.'.$model_alias.'.index')}}" class="btn btn-yellow">
                     {{__('buttons.general.reset')}}
                 </a>
             </div><!--form-group-->

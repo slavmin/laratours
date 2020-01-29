@@ -2,19 +2,14 @@
 
 <div class="row mt-4">
     <div class="col">
-        <div class="form-group row">
+        <div class="form-group md-form">
             {{ html()->label(__('validation.attributes.frontend.general.name'))
-                ->class('col-md-2 form-control-label')
                 ->for('name') }}
-
-            <div class="col-md-10">
-                {{ html()->text('name', $item->name??'')
+            {{ html()->text('name', $item->name??'')
                     ->class('form-control')
-                    ->placeholder(__('validation.attributes.frontend.general.name'))
                     ->attribute('maxlength', 191)
                     ->required()
                     ->autofocus() }}
-            </div><!--col-->
         </div><!--form-group-->
 
     </div><!--col-->
@@ -22,17 +17,13 @@
 
 <div class="row mt-4">
     <div class="col">
-        <div class="form-group row">
+        <div class="form-group md-form">
             {{ html()->label(__('validation.attributes.frontend.general.description'))
-                ->class('col-md-2 form-control-label')
                 ->for('description') }}
 
-            <div class="col-md-10">
-                {{ html()->text('description', $item->description??'')
-                    ->class('form-control')
-                    ->placeholder(__('validation.attributes.frontend.general.description'))
-                    ->attribute('maxlength', 191) }}
-            </div><!--col-->
+            {{ html()->text('description', $item->description??'')
+                ->class('form-control')
+                ->attribute('maxlength', 191) }}
         </div><!--form-group-->
 
     </div><!--col-->
@@ -44,11 +35,11 @@
     <div class="col">
         <div class="form-group row">
             <div class="col">
-                {{ html()->a($cancel_route, __('buttons.general.cancel'))->class('btn btn-outline-info btn-sm') }}
+                {{ html()->a($cancel_route, __('buttons.general.cancel'))->class('btn btn-outline-primary') }}
             </div><!--col-->
 
             <div class="col text-right">
-                {{ html()->submit(__('buttons.general.crud.update'))->class('btn btn-success btn-sm') }}
+                {{ html()->submit(__('buttons.general.crud.update'))->class('btn btn-primary') }}
             </div><!--col-->
         </div><!--form-group-->
 

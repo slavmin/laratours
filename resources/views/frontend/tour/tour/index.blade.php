@@ -14,7 +14,7 @@
     ></tour-index>
 
     {{-- @include('frontend.tour.includes.pagination-row') --}}
-    @include('frontend.tour.includes.city-type-select-form')
+    {{-- @include('frontend.tour.includes.city-type-select-form') --}}
 
     @include('frontend.tour.includes.trash-bin')
 

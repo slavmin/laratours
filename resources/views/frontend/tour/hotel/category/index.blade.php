@@ -46,6 +46,7 @@
 
         </div><!--card-body-->
     </div><!--card-->
+</div>
 
     @include('frontend.tour.includes.pagination-row')
 

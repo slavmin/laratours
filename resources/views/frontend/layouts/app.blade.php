@@ -34,6 +34,8 @@
         {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
         @stack('before-styles')
 
+        @yield('css')
+
         <!-- Check if the language is set to RTL, so apply the RTL layouts -->
         <!-- Otherwise apply the normal LTR layouts -->
         {{ style(mix('css/frontend.css')) }}
@@ -55,12 +57,12 @@
             @include('includes.partials.logged-in-as')
             @include('frontend.includes.nav')
             @include('includes.partials.messages')
-
-            <div class="root-wrap tc-blue-bg pt-4">
+            @yield('fullscreen-bg')
+            <div class="root-wrap tc-blue-bg">
                 @yield('content')
-                @include('includes.partials.footer')
             </div><!-- root-wrap -->
         </div><!-- #app -->
+        @include('includes.partials.footer')
         @yield('contacts')
 
         <!-- Scripts -->

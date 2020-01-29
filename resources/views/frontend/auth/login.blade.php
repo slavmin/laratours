@@ -2,7 +2,7 @@
 
 @section('title', app_name() . ' | ' . __('labels.frontend.auth.login_box_title'))
 
-@section('content')
+@section('fullscreen-bg')
     <login
         data-app
         header-text="@lang('labels.frontend.auth.login_box_title')"

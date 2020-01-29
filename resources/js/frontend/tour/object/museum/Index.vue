@@ -3,7 +3,7 @@
     fluid
     grid-list-md
     text-xs-center
-    style="background-color: #66a5ae;"
+    class="tc-blue-bg"
   >
     <h1 class="text-center white--text mb-5">
       <Add

@@ -3,7 +3,7 @@
     fluid
     grid-list-xs
     fill-height
-    style="background-color: white;"
+    class="tc-blue-bg"
   >
     <v-layout
       row
@@ -94,36 +94,36 @@ export default {
     },
     loginUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     emailText: {
       type: String,
-      default: 'email'
+      default: 'email',
     },
     passwordText: {
       type: String,
-      default: 'password'
+      default: 'password',
     },
     rememberText: {
       type: String,
-      default: 'remember'
+      default: 'remember',
     },
     submitText: {
       type: String,
-      default: 'submit'
+      default: 'submit',
     },
     passwordResetUrl: {
       type: String,
-      default: '#'
+      default: '#',
     },
     passwordResetText: {
       type: String,
-      default: 'forgotten'
+      default: 'forgotten',
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {

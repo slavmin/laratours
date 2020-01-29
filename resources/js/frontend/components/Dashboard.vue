@@ -2,7 +2,7 @@
   <v-container
     fluid
     grid-list-xs
-    style="background-color: #66a5ae;"
+    class="tc-blue-bg"
   >
     <v-layout
       row
