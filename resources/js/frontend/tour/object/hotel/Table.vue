@@ -375,7 +375,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allHotel', 'allCities']),
+    ...mapGetters(['allCities']),
     customerTypes: function() {
       let result = []
       Object.keys(this.customers).map(key => {

@@ -1,18 +1,18 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    fullscreen 
+  <v-dialog
+    v-model="dialog"
+    fullscreen
     lazy
-    hide-overlay 
+    hide-overlay
     transition="dialog-bottom-transition"
     @input="setDefaults"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         fab
         title="Добавить"
-        color="#aa282a" 
-        dark 
+        color="#aa282a"
+        dark
         v-on="on"
       >
         <i class="material-icons">
@@ -25,8 +25,8 @@
         dark
         color="#66a5ae"
       >
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           @click="dialog = false"
         >
           <v-icon>close</v-icon>
@@ -37,14 +37,14 @@
         <v-spacer />
       </v-toolbar>
       <v-container>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-center
         >
           <v-flex xs12>
-            <v-layout 
-              row 
+            <v-layout
+              row
               wrap
             >
               <v-form
@@ -54,21 +54,21 @@
                 method="POST"
                 class="form"
               >
-                <v-layout 
-                  row 
+                <v-layout
+                  row
                   wrap
                 >
                   <v-flex xs6>
-                    <input 
-                      type="hidden" 
-                      name="_token" 
+                    <input
+                      type="hidden"
+                      name="_token"
                       :value="token"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="price" 
+                    >
+                    <input
+                      type="hidden"
+                      name="price"
                       value="1"
-                    > 
+                    >
                     <div class="display-1 mb-3">
                       Общая информация:
                     </div>
@@ -101,11 +101,11 @@
                       outline
                       required
                     />
-                    <input 
-                      type="hidden" 
-                      name="city_id" 
+                    <input
+                      type="hidden"
+                      name="city_id"
                       :value="city"
-                    > 
+                    >
                     <v-select
                       v-model="type"
                       :items="hotelTypes"
@@ -125,11 +125,11 @@
                       outline
                       required
                     />
-                    <input 
+                    <input
                       v-model="details"
-                      type="hidden" 
-                      name="extra" 
-                    > 
+                      type="hidden"
+                      name="extra"
+                    >
                     <div class="display-1 mb-3">
                       Контакты:
                     </div>
@@ -186,12 +186,12 @@
                       required
                     />
                   </v-flex>
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
                     justify-end
                   >
-                    <v-btn 
+                    <v-btn
                       color="#aa282a"
                       class="white--text"
                       type="submit"
@@ -210,14 +210,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'  
+import { mapActions, mapGetters } from 'vuex'
 export default {
-
   name: 'ObjectHotelAdd',
   props: {
     token: {
       type: String,
-      default: ''
+      default: '',
     },
   },
   data() {
@@ -229,11 +228,11 @@ export default {
       hotelTypes: [
         'Ведомственная',
         'Хостел',
-        '2*', 
-        '3*', 
-        '4*', 
+        '2*',
+        '3*',
+        '4*',
         '5*',
-        'Аппартаменты'
+        'Аппартаменты',
       ],
       roomTypes: [
         { count: 1, name: 'Одноместный номер' },
@@ -248,14 +247,11 @@ export default {
       staffName: '',
       staffPhone: '+7-',
       address: '',
-    };
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'allHotel'
-    ]),
-    details: function () {
+    ...mapGetters(['allCities']),
+    details: function() {
       return JSON.stringify({
         hotelType: this.type,
         address: this.address,
@@ -269,24 +265,21 @@ export default {
           name: this.staffName,
           phone: this.staffPhone,
         },
-      }) 
-    }
+      })
+    },
   },
   created() {
     this.fetchCities()
     this.fetchHotel()
   },
   methods: {
-    ...mapActions([
-      'fetchCities',
-      'fetchHotel'
-    ]),
+    ...mapActions(['fetchCities', 'fetchHotel']),
     log() {
       console.log(this.details)
     },
-    setDefaults(){},
-  }
-};
+    setDefaults() {},
+  },
+}
 </script>
 
 <style lang="css" scoped>

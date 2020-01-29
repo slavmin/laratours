@@ -310,7 +310,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allMuseum', 'allCities']),
+    ...mapGetters(['allCities']),
     customerTypes: function() {
       let result = []
       Object.keys(this.customers).map(key => {
