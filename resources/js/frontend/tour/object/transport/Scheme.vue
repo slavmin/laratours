@@ -11,7 +11,6 @@
         justify-space-between
       >
         <v-flex xs2>
-          <v-spacer />
           <!-- Bus scheme -->
           <div class="bus">
             <div
@@ -67,7 +66,7 @@
             >
               <!-- Add button -->
               <button
-                class="btn btn-primary rounded mr-2"
+                class="btn btn-outline-primary btn-sm rounded mr-2"
                 :disabled="bus.rows == 50"
                 @click="addRow"
               >
@@ -79,7 +78,7 @@
               </p> <!-- Show rows count -->
               <!-- Remove button -->
               <button
-                class="btn btn-primary rounded ml-2"
+                class="btn btn-outline-primary btn-sm rounded ml-2"
                 :disabled="bus.rows == 1"
                 @click="removeRow"
               >
@@ -95,7 +94,7 @@
             >
               <!-- Add button -->
               <button
-                class="btn btn-primary rounded mr-2"
+                class="btn btn-outline-primary btn-sm rounded mr-2"
                 :disabled="bus.cols == 40"
                 @click="addCol"
               >
@@ -107,7 +106,7 @@
               </p> <!-- Show rows count -->
               <!-- Remove button -->
               <button
-                class="btn btn-primary rounded ml-2"
+                class="btn btn-outline-primary btn-sm rounded ml-2"
                 :disabled="bus.cols == 1"
                 @click="removeCol"
               >
@@ -215,6 +214,7 @@
               </button>
             </div>
             <!-- /Set unavailable seats button -->
+            <v-divider />
             <!-- Make all seats common button -->
             <div
               class="container-fluid d-flex justify-content-between align-items-center"
@@ -224,7 +224,7 @@
                 class="btn btn-primary reset-btn control"
                 @click="reset"
               >
-                Сбросить
+                Сбросить всё
               </button>
             </div>
             <!-- /Make all seats common button -->
@@ -639,44 +639,44 @@ export default {
 .common-seat,
 .common-seat-btn,
 .reset-btn {
-  background-color: green;
-  border-color: green;
+  background-color: green !important;
+  border-color: green !important;
 }
 .driver-seat {
   background-color: gray;
   border-color: gray;
 }
 .pass {
-  background-color: #f3f3f3;
-  border-color: #f3f3f3;
+  background-color: #f3f3f3 !important;
+  border-color: #f3f3f3 !important;
   color: #f3f3f3;
 }
 .pass.control {
   color: gray;
 }
 .door {
-  background-color: white;
-  border-color: white;
+  background-color: white !important;
+  border-color: white !important;
 }
 .door.control {
-  border-color: black;
-  color: gray;
+  border-color: black !important;
+  color: gray !important;
 }
 .choosen-seat {
   background-color: #ffc107;
   border-color: #ffc107;
 }
 .guide-seat {
-  background-color: #a1a1a1;
-  border-color: #a1a1a1;
+  background-color: #a1a1a1 !important;
+  border-color: #a1a1a1 !important;
 }
 .unavailable-seat {
-  background-color: #212121;
-  border-color: #212121;
-  color: #212121;
+  background-color: #212121 !important;
+  border-color: #212121 !important;
+  color: #212121 !important;
 }
 .unavailable-seat.control {
-  color: white;
+  color: white !important;
 }
 .controls {
   max-width: 300px;
