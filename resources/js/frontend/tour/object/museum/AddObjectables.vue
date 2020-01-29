@@ -1,21 +1,21 @@
 <template>
   <v-container>
-    <v-layout 
-      row 
+    <v-layout
+      row
       justify-end
     >
-      <v-dialog 
-        v-model="dialog" 
-        persistent 
+      <v-dialog
+        v-model="dialog"
+        persistent
         max-width="600px"
       >
         <template v-slot:activator="{ on }">
-          <v-btn 
+          <v-btn
             fab
             small
-            color="#aa282a" 
+            color="#aa282a"
             :title="`Добавить экскурсию. Музей: ` + museum.name"
-            dark 
+            dark
             v-on="on"
           >
             <i class="material-icons">
@@ -24,10 +24,8 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-title
-            style="background-color: #66a5ae;"
-          >
-            <v-layout 
+          <v-card-title style="background-color: #66a5ae;">
+            <v-layout
               column
               wrap
               class="white--text"
@@ -37,66 +35,65 @@
                   account_balance
                 </i>
                 {{ museum.name }}
-              </h3>  
+              </h3>
               <h4>Добавить экскурсию:</h4>
             </v-layout>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
-              <v-form 
+              <v-form
                 :id="'form' + museum.id"
                 ref="form"
                 lazy-validation
                 action="/operator/attribute"
                 method="POST"
               >
-                <input 
-                  id="_method" 
-                  type="hidden" 
-                  name="_method" 
+                <input
+                  type="hidden"
+                  name="_method"
                   value="POST"
                 >
-                <input 
-                  type="hidden" 
-                  name="_token" 
+                <input
+                  type="hidden"
+                  name="_token"
                   :value="token"
-                > 
-                <input 
-                  type="hidden" 
-                  name="parent_model_id" 
+                >
+                <input
+                  type="hidden"
+                  name="parent_model_id"
                   :value="museum.id"
                 >
-                <input 
-                  type="hidden" 
-                  name="parent_model_alias" 
-                  value="museum"
-                >  
-                <input 
-                  type="hidden" 
-                  name="id" 
-                  value="0"
-                > 
                 <input
-                  type="hidden" 
-                  name="qnt'" 
+                  type="hidden"
+                  name="parent_model_alias"
+                  value="museum"
+                >
+                <input
+                  type="hidden"
+                  name="id"
+                  value="0"
+                >
+                <input
+                  type="hidden"
+                  name="qnt'"
                   value="1"
-                > 
-                <input 
+                >
+                <input
                   value="1"
-                  type="hidden" 
-                  name="customer_type_id" 
-                > 
-                <input 
+                  type="hidden"
+                  name="customer_type_id"
+                >
+                <input
                   v-model="name"
-                  type="hidden" 
-                  name="name" 
-                > 
-                <input 
+                  type="hidden"
+                  name="name"
+                >
+                <input
                   v-model="extra"
-                  type="hidden" 
-                  name="extra" 
-                > 
-                <input 
+                  type="hidden"
+                  name="extra"
+                >
+                <input
                   value="0"
                   type="hidden"
                   name="price"
@@ -105,46 +102,44 @@
                   column
                   wrap
                 >
-                  <v-flex 
-                    xs12 
-                    sm6 
+                  <v-flex
+                    xs12
+                    sm6
                   >
-                    <v-checkbox 
-                      v-model="isCustomOrder" 
-                      label="Заказ-наряд" 
+                    <v-checkbox
+                      v-model="isCustomOrder"
+                      label="Заказ-наряд"
                       color="#aa282a"
                     />
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
-                      <v-flex 
-                        :class="isCustomOrder ? 'xs12' : 'xs8'"
-                      >
-                        <v-text-field 
+                      <v-flex :class="isCustomOrder ? 'xs12' : 'xs8'">
+                        <v-text-field
                           v-model="name"
-                          label="Название" 
+                          label="Название"
                           outline
                           color="#aa282a"
                           class="mb-3"
                         />
                       </v-flex>
-                      <v-flex 
+                      <v-flex
                         v-if="!isCustomOrder"
                         xs2
                       >
-                        <v-layout 
-                          row 
+                        <v-layout
+                          row
                           wrap
                         >
-                          <v-checkbox 
-                            v-model="isExtra" 
+                          <v-checkbox
+                            v-model="isExtra"
                             color="#aa282a"
-                            label="Доп" 
+                            label="Доп"
                           />
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                              <v-icon 
+                              <v-icon
                                 color="grey"
                                 v-on="on"
                               >
@@ -152,16 +147,16 @@
                               </v-icon>
                             </template>
                             <span>
-                              Можно будет выбрать в расчёте тура как дополнительную экскурсию, не входящую в основную стоимость.  
+                              Можно будет выбрать в расчёте тура как
+                              дополнительную экскурсию, не входящую в основную
+                              стоимость.
                             </span>
                           </v-tooltip>
                         </v-layout>
                       </v-flex>
                     </v-layout>
-                    <div
-                      v-show="!isCustomOrder"
-                    >
-                      <v-text-field 
+                    <div v-show="!isCustomOrder">
+                      <v-text-field
                         v-model="duration"
                         label="Продолжительность экскурсии"
                         outline
@@ -171,10 +166,11 @@
                         Цены:
                       </h5>
                       <div class="grey--text">
-                        Заполните только нужные поля. Остальные оставьте пустыми.
+                        Заполните только нужные поля. Остальные оставьте
+                        пустыми.
                       </div>
-                      <v-layout 
-                        row 
+                      <v-layout
+                        row
                         wrap
                         justify-space-between
                       >
@@ -191,11 +187,9 @@
                         </v-flex>
                       </v-layout>
                     </div>
-                    <div
-                      v-show="isCustomOrder"
-                    >
-                      <v-layout 
-                        row 
+                    <div v-show="isCustomOrder">
+                      <v-layout
+                        row
                         wrap
                         justify-space-between
                       >
@@ -216,7 +210,7 @@
                           />
                         </v-flex>
                         <v-flex>
-                          <v-text-field 
+                          <v-text-field
                             v-model="customOrder.about"
                             label="Описание"
                             outline
@@ -232,16 +226,16 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn 
-              color="#aa282a" 
-              dark 
+            <v-btn
+              color="#aa282a"
+              dark
               @click="close"
             >
               Закрыть
             </v-btn>
-            <v-btn 
-              color="#aa282a" 
-              dark 
+            <v-btn
+              color="#aa282a"
+              dark
               type="submit"
               :form="'form' + museum.id"
             >
@@ -256,7 +250,6 @@
 
 <script>
 export default {
-
   name: 'AddObjectables',
   props: {
     museum: {
@@ -273,8 +266,8 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -290,7 +283,7 @@ export default {
         price: NaN,
       },
       isExtra: false,
-    };
+    }
   },
   computed: {
     attribute: function() {
@@ -312,7 +305,7 @@ export default {
     },
     customerTypes: function() {
       let result = []
-      Object.keys(this.customers).map((key) => {
+      Object.keys(this.customers).map(key => {
         if (key != '') {
           result.push({
             id: key,
@@ -327,13 +320,13 @@ export default {
   methods: {
     getPriceList() {
       let result = []
-      this.customerTypes.forEach((customer) => {
+      this.customerTypes.forEach(customer => {
         if (this.priceArray[customer.id]) {
           result.push({
             customerId: customer.id,
             customerName: customer.name,
             customerAge: customer.description,
-            price: parseInt(this.priceArray[customer.id])
+            price: parseInt(this.priceArray[customer.id]),
           })
         }
       })
@@ -345,10 +338,9 @@ export default {
       this.name = ''
       this.priceArray = []
       this.dialog = false
-    }
+    },
   },
-  
-};
+}
 </script>
 
 <style lang="css" scoped>

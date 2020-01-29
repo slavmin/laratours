@@ -1,16 +1,16 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    persistent 
+  <v-dialog
+    v-model="dialog"
+    persistent
     max-width="600px"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         fab
         small
         outline
-        color="green" 
-        dark 
+        color="green"
+        dark
         v-on="on"
       >
         <i class="material-icons">
@@ -19,10 +19,8 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title
-        style="background-color: #66a5ae;"
-      >
-        <v-layout 
+      <v-card-title style="background-color: #66a5ae;">
+        <v-layout
           column
           wrap
           class="white--text"
@@ -32,72 +30,71 @@
               fastfood
             </i>
             {{ meal.name }}
-          </h3>  
+          </h3>
           <h4>Добавить номер:</h4>
         </v-layout>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
-          <v-form 
+          <v-form
             :id="'form' + meal.id + event.id"
             ref="form"
             lazy-validation
             :action="'/operator/attribute/' + event.id"
             method="POST"
           >
-            <input 
-              id="_method" 
-              type="hidden" 
-              name="_method" 
+            <input
+              type="hidden"
+              name="_method"
               value="PATCH"
             >
-            <input 
-              type="hidden" 
-              name="_token" 
+            <input
+              type="hidden"
+              name="_token"
               :value="token"
-            > 
-            <input 
-              type="hidden" 
-              name="parent_model_id" 
+            >
+            <input
+              type="hidden"
+              name="parent_model_id"
               :value="meal.id"
             >
-            <input 
-              type="hidden" 
-              name="parent_model_alias" 
+            <input
+              type="hidden"
+              name="parent_model_alias"
               value="meal"
-            >  
-            <input  
+            >
+            <input
               v-model="event.id"
-              type="hidden" 
-              name="id" 
-            > 
-            <input 
-              type="hidden" 
-              name="qnt" 
+              type="hidden"
+              name="id"
+            >
+            <input
+              type="hidden"
+              name="qnt"
               value="1"
-            > 
-            <input 
-              type="hidden" 
-              name="customer_type_id" 
+            >
+            <input
+              type="hidden"
+              name="customer_type_id"
               value="1"
-            > 
-            <input  
+            >
+            <input
               v-model="mealType"
-              type="hidden" 
-              name="name" 
-            > 
-            <input 
+              type="hidden"
+              name="name"
+            >
+            <input
               v-model="extra"
-              type="hidden" 
-              name="extra" 
-            > 
+              type="hidden"
+              name="extra"
+            >
             <v-layout
               column
               wrap
             >
-              <v-flex 
-                xs12 
-                sm6 
+              <v-flex
+                xs12
+                sm6
               >
                 <v-select
                   v-model="mealType"
@@ -107,18 +104,18 @@
                   label="Тип питания:"
                   outline
                 />
-                <v-text-field 
+                <v-text-field
                   v-model="description"
-                  name="description" 
-                  label="Описание" 
+                  name="description"
+                  label="Описание"
                   outline
                   color="#aa282a"
                   class="mb-3"
                 />
-                <v-text-field 
+                <v-text-field
                   v-model="price"
                   name="price"
-                  label="Цена" 
+                  label="Цена"
                   mask="#####"
                   outline
                   color="#aa282a"
@@ -130,16 +127,16 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn 
-          color="#aa282a" 
-          dark 
+        <v-btn
+          color="#aa282a"
+          dark
           @click="dialog = false"
         >
           Закрыть
         </v-btn>
-        <v-btn 
-          color="#aa282a" 
-          dark 
+        <v-btn
+          color="#aa282a"
+          dark
           type="submit"
           :form="'form' + meal.id + event.id"
         >
@@ -152,7 +149,6 @@
 
 <script>
 export default {
-
   name: 'EditObjectables',
   props: {
     meal: {
@@ -169,15 +165,15 @@ export default {
       type: String,
       required: true,
       default: null,
-    }
+    },
   },
   data() {
     return {
       dialog: false,
       customerTypes: [
-        { id: 15, name: 'Взрослый'},
-        { id: 2, name: 'Ребёнок'},
-        { id: 3, name: 'Иностранец'}
+        { id: 15, name: 'Взрослый' },
+        { id: 2, name: 'Ребёнок' },
+        { id: 3, name: 'Иностранец' },
       ],
       mealTypes: [
         { count: 1, name: 'Завтрак' },
@@ -188,20 +184,21 @@ export default {
       mealType: 0,
       description: '',
       price: 0,
-    };
+    }
   },
   computed: {
     attribute: function() {
       return 'attribute[' + this.meal.id + ']'
     },
     customerName: function() {
-      return this.customerTypes.find(customer => customer.id == this.customerId).name
+      return this.customerTypes.find(customer => customer.id == this.customerId)
+        .name
     },
     extra: function() {
       return JSON.stringify({
-        mealType: this.mealType
+        mealType: this.mealType,
       })
-    }
+    },
   },
   mounted() {
     this.mealType = this.event.name
@@ -211,9 +208,9 @@ export default {
   methods: {
     log() {
       console.log(this.customerName)
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>

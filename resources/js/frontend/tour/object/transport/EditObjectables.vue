@@ -1,32 +1,32 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    fullscreen 
+  <v-dialog
+    v-model="dialog"
+    fullscreen
     lazy
-    hide-overlay 
+    hide-overlay
     transition="dialog-bottom-transition"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         fab
         small
         outline
         color="green"
-        dark 
+        dark
         v-on="on"
       >
         <i class="material-icons">
           edit
         </i>
-      </v-btn>  
+      </v-btn>
     </template>
     <v-card>
       <v-toolbar
         dark
         color="#66a5ae"
       >
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           @click="close"
         >
           <v-icon>close</v-icon>
@@ -37,19 +37,19 @@
         <v-spacer />
       </v-toolbar>
       <v-container>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
         >
           <!-- Edit transport form -->
-          <v-flex 
+          <v-flex
             mt-5
             xs12
             column
             class="add-transport-form"
           >
             <v-container>
-              <v-layout 
+              <v-layout
                 row
                 wrap
               >
@@ -57,60 +57,59 @@
                   <h2 class="grey--text text--darken-1 mb-2">
                     Транспорт:
                   </h2>
-                  <form 
+                  <form
                     :id="'form' + companyId + item.id"
                     method="POST"
-                    :action="'/operator/attribute/' + item.id" 
+                    :action="'/operator/attribute/' + item.id"
                   >
-                    <input 
-                      id="_method" 
-                      type="hidden" 
-                      name="_method" 
+                    <input
+                      type="hidden"
+                      name="_method"
                       value="PATCH"
                     >
-                    <input 
-                      type="hidden" 
-                      name="_token" 
+                    <input
+                      type="hidden"
+                      name="_token"
                       :value="token"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="parent_model_id" 
+                    >
+                    <input
+                      type="hidden"
+                      name="parent_model_id"
                       :value="companyId"
                     >
-                    <input 
-                      type="hidden" 
-                      name="parent_model_alias" 
+                    <input
+                      type="hidden"
+                      name="parent_model_alias"
                       value="transport"
-                    >  
-                    <input 
+                    >
+                    <input
                       type="hidden"
                       :value="JSON.stringify(extra)"
                       name="extra"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="id" 
+                    >
+                    <input
+                      type="hidden"
+                      name="id"
                       value="0"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="customer_type_id" 
-                      value="1"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="qnt" 
+                    >
+                    <input
+                      type="hidden"
+                      name="customer_type_id"
                       value="1"
                     >
                     <input
-                      type="hidden" 
+                      type="hidden"
+                      name="qnt"
+                      value="1"
+                    >
+                    <input
+                      type="hidden"
                       value="0"
                       name="price"
                     >
                     <v-text-field
                       v-model="name"
-                      name="name" 
+                      name="name"
                       label="Название"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="#aa282a"
@@ -118,7 +117,7 @@
                     />
                     <v-text-field
                       v-model="description"
-                      name="description" 
+                      name="description"
                       label="Описание"
                       color="#aa282a"
                     />
@@ -133,8 +132,8 @@
                       hint="Можно выбрать несколько"
                       persistent-hint
                     />
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
                       <!-- <v-flex xs6>
@@ -150,7 +149,7 @@
                     </v-layout>
                   </form>
                 </v-flex>
-                <v-flex 
+                <v-flex
                   xs3
                   offset-xs3
                 >
@@ -169,18 +168,18 @@
                   />
                 </v-flex>
               </v-layout>
-              <v-layout 
-                row 
+              <v-layout
+                row
                 wrap
                 mt-5
               >
                 <v-flex>
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
-                    justify-start  
+                    justify-start
                   >
-                    <v-btn 
+                    <v-btn
                       small
                       flat
                       color="#aa282a"
@@ -201,20 +200,20 @@
                       @update="updateScheme"
                     />
                   </div>
-                </v-flex>   
+                </v-flex>
               </v-layout>
-              <v-layout 
-                row 
+              <v-layout
+                row
                 wrap
                 mt-5
               >
                 <v-flex>
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
-                    justify-start  
+                    justify-start
                   >
-                    <v-btn 
+                    <v-btn
                       small
                       flat
                       color="#aa282a"
@@ -228,7 +227,7 @@
                     </v-btn>
                   </v-layout>
                   <div v-if="showDocs">
-                    <TransportDocs 
+                    <TransportDocs
                       edit-mode
                       :bus-data="JSON.parse(item.extra)"
                       @update="updateTransportData"
@@ -236,12 +235,12 @@
                   </div>
                 </v-flex>
               </v-layout>
-              <v-layout 
-                row 
+              <v-layout
+                row
                 wrap
                 justify-end
               >
-                <v-btn 
+                <v-btn
                   type="submit"
                   dark
                   color="#aa282a"
@@ -264,7 +263,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Scheme from './Scheme'
 import TransportDocs from './TransportDocs'
 export default {
-
   name: 'EditObjectables',
   components: {
     Scheme,
@@ -275,22 +273,22 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     item: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     companyId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -310,22 +308,24 @@ export default {
       grade: [],
       grades: ['Стандарт', 'C-Class', 'VIP'],
       priceList: [
-          { dateRange: '1 января - 10 января',
-            prices: [
-              { id: 0, name: '1 час', price: '2000' },
-              { id: 1, name: '3 часа', price: '3500' },
-              { id: 2, name: '8 часов', price: '6000' },
-              { id: 3, name: 'Сутки', price: '15000' }
-            ]
-          },
-          { dateRange: '11 января - 30 апреля',
-            prices: [
-              { id: 0, name: '1 час', price: '1800' },
-              { id: 1, name: '3 часа', price: '3000' },
-              { id: 2, name: '8 часов', price: '5500' },
-              { id: 3, name: 'Сутки', price: '13000' }
-            ]
-          }
+        {
+          dateRange: '1 января - 10 января',
+          prices: [
+            { id: 0, name: '1 час', price: '2000' },
+            { id: 1, name: '3 часа', price: '3500' },
+            { id: 2, name: '8 часов', price: '6000' },
+            { id: 3, name: 'Сутки', price: '15000' },
+          ],
+        },
+        {
+          dateRange: '11 января - 30 апреля',
+          prices: [
+            { id: 0, name: '1 час', price: '1800' },
+            { id: 1, name: '3 часа', price: '3000' },
+            { id: 2, name: '8 часов', price: '5500' },
+            { id: 3, name: 'Сутки', price: '13000' },
+          ],
+        },
       ],
       currentDateRange: '1 января - 10 января',
       currentPrices: [],
@@ -339,7 +339,7 @@ export default {
         transportCompanyId: '',
         cityId: '',
         description: '',
-        prices: []
+        prices: [],
       },
       attribute: 'attribute',
       price: 10000,
@@ -351,7 +351,7 @@ export default {
         guide: ['2-4'],
         pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
         unavailable: [],
-        totalPassengersCount: 0
+        totalPassengersCount: 0,
       },
       currentScheme: {},
       initialScheme: {},
@@ -374,7 +374,7 @@ export default {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
       return result
-    }
+    },
   },
   mounted() {
     this.name = this.item.name
@@ -417,9 +417,9 @@ export default {
       this.companyIsNotSelected = false
     },
     getPricesArray() {
-      return [ 
-        { name: '1 час', value: parseInt(this.price0) }, 
-        { name: '1 км', value:parseInt(this.price1) }, 
+      return [
+        { name: '1 час', value: parseInt(this.price0) },
+        { name: '1 км', value: parseInt(this.price1) },
       ]
     },
     updateScheme(scheme) {
@@ -431,9 +431,9 @@ export default {
     updateTransportData(data) {
       this.drivers = data.drivers
       this.busDocs = data.bus
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -442,8 +442,7 @@ export default {
 }
 .choose-company-form,
 .add-company-form,
-.edit-company-form
- {
+.edit-company-form {
   form {
     max-width: 500px;
     margin: 0 auto;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Filters\ObjectsFilter;
 use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,20 +24,22 @@ class MealController extends Controller
 
         $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
+        $name_param = !is_null($request->name) ? $request->name : '';
+
         $orderBy = 'name';
         $sort = 'asc';
 
         $model_alias = TourMeal::getModelAliasAttribute();
 
-        if (!is_null($city_id)) {
+        // if (!is_null($city_id)) {
 
-            $items = TourMeal::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        //     $items = TourMeal::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        // } else {
 
-        } else {
+        //     $items = TourMeal::orderBy($orderBy, $sort)->paginate();
+        // }
+        $items = (new ObjectsFilter(TourMeal::with('objectables'), $request))->apply()->paginate();
 
-            $items = TourMeal::orderBy($orderBy, $sort)->paginate();
-
-        }
 
         $deleted = TourMeal::onlyTrashed()->get();
 
@@ -44,11 +47,16 @@ class MealController extends Controller
 
         $cities_select = TourMeal::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted'))
-            ->with('city_id', (int)$city_id)
+        $cities_ids = TourMeal::select('city_id')->pluck('city_id')->toArray();
+
+        $cities_for_filter = TourMeal::getCitiesForFilterAttribute($cities_ids);
+
+        return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
+            ->with('city_id', (int) $city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
-            ->with('model_alias', $model_alias);
+            ->with('model_alias', $model_alias)
+            ->with('name', $name_param);
     }
 
     public function show($id)
@@ -66,10 +74,10 @@ class MealController extends Controller
         return view('frontend.tour.object.create', compact('cities_options'))
             ->with('method', 'POST')
             ->with('action', 'create')
-            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('item', [])
-            ->with('city_id', (int)$city_id)
+            ->with('city_id', (int) $city_id)
             ->with('model_alias', $model_alias);
     }
 
@@ -105,18 +113,18 @@ class MealController extends Controller
         return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
-            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
 
 
     public function update(Request $request, $id)
     {
-        if($request->get('attribute')){
+        if ($request->get('attribute')) {
             $request->validate([
                 'attribute.*.name' => 'required|min:3',
-                'attribute.*.price'=> 'required',
+                'attribute.*.price' => 'required',
                 'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
             ]);
         } else {
@@ -178,6 +186,6 @@ class MealController extends Controller
     {
         $city_ids = TourMeal::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
-        && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
 }

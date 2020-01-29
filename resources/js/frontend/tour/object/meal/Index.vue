@@ -6,19 +6,11 @@
     style="background-color: #66a5ae;"
   >
     <h1 class="text-center white--text mb-5">
-      <v-icon
-        dark
-        large
-      >
-        fastfood
-      </v-icon>
-      Питание
-      <Add 
-        :token="token" 
-      />
+      <Add :token="token" />
     </h1>
-    <Table 
-      :token="token" 
+    <Table
+      :items="items"
+      :token="token"
     />
   </v-container>
 </template>
@@ -27,24 +19,27 @@
 import Add from './Add'
 import Table from './Table'
 export default {
-
   name: 'ObjectMealIndex',
   components: {
     Add,
-    Table
+    Table,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
   },
   data() {
-    return {
-
-    };
-  }
-};
+    return {}
+  },
+}
 </script>
 
 <style lang="css" scoped>

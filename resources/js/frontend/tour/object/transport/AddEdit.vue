@@ -1,20 +1,20 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    fullscreen 
+  <v-dialog
+    v-model="dialog"
+    fullscreen
     lazy
-    hide-overlay 
+    hide-overlay
     transition="dialog-bottom-transition"
     @input="mode"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         :small="edit"
         fab
         outline
         :title="edit ? 'Редактировать' : 'Создать'"
         color="green"
-        dark 
+        dark
         v-on="on"
       >
         <i class="material-icons">
@@ -27,8 +27,8 @@
         dark
         color="green"
       >
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           @click="close"
         >
           <v-icon>close</v-icon>
@@ -47,21 +47,21 @@
         </v-toolbar-items> -->
       </v-toolbar>
       <v-container>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
         >
           <!-- Choose company -->
-          <v-flex 
+          <v-flex
             v-if="show.company"
-            mt-5 
+            mt-5
             xs12
             column
             class="choose-company-form"
           >
             <h2 class="grey--text text--darken-1">
               Выберите транспортную компанию
-            </h2>  
+            </h2>
             <v-form
               ref="form"
               lazy-validation
@@ -82,7 +82,7 @@
               >
                 Добавить новую
               </v-btn> -->
-              <v-btn 
+              <v-btn
                 dark
                 color="green"
                 @click="selectCompany"
@@ -93,9 +93,9 @@
           </v-flex>
           <!-- /Choose company -->
           <!-- Add company -->
-          <v-flex 
+          <v-flex
             v-if="show.addCompany"
-            mt-5 
+            mt-5
             xs12
             column
             class="add-company-form"
@@ -106,20 +106,20 @@
               action="/operator/transport"
               method="POST"
             >
-              <input 
-                type="hidden" 
-                name="_token" 
+              <input
+                type="hidden"
+                name="_token"
                 :value="token"
-              > 
-              <input 
+              >
+              <input
                 type="hidden"
                 :value="JSON.stringify(extra)"
                 :name="attribute + '[extra]'"
-              > 
+              >
               <input
                 v-model="description"
                 type="hidden"
-                :name="description" 
+                :name="description"
               >
               <v-text-field
                 v-model="newCompany"
@@ -140,11 +140,11 @@
                 color="green lighten-3"
                 required
               />
-              <input 
-                type="hidden" 
-                name="city_id" 
+              <input
+                type="hidden"
+                name="city_id"
                 :value="newCompanyCityId"
-              > 
+              >
               <!-- <v-btn 
                 dark
                 color="green"
@@ -152,7 +152,7 @@
               >
                 Вернуться
               </v-btn> -->
-              <v-btn 
+              <v-btn
                 color="green"
                 :disabled="!newCompany || !newCompanyDescription"
                 class="white--text"
@@ -184,7 +184,7 @@
           </v-alert>
           <!-- /Alert. Company successfully added -->
           <!-- Add transport form -->
-          <v-flex 
+          <v-flex
             v-if="show.addTransport"
             mt-5
             xs12
@@ -192,7 +192,7 @@
             class="add-transport-form"
           >
             <v-container>
-              <v-layout 
+              <v-layout
                 row
                 wrap
               >
@@ -200,46 +200,45 @@
                   <h2 class="grey--text text--darken-1 mb-2">
                     Транспорт:
                   </h2>
-                  <form 
+                  <form
                     method="POST"
-                    :action="'/operator/transport/' + (edit ? companyId : id)" 
+                    :action="'/operator/transport/' + (edit ? companyId : id)"
                   >
-                    <input 
-                      id="_method" 
-                      type="hidden" 
-                      name="_method" 
+                    <input
+                      type="hidden"
+                      name="_method"
                       value="PATCH"
                     >
-                    <input 
-                      type="hidden" 
-                      name="_token" 
+                    <input
+                      type="hidden"
+                      name="_token"
                       :value="token"
-                    > 
-                    <input 
+                    >
+                    <input
                       type="hidden"
                       :value="JSON.stringify(extra)"
                       :name="attribute + '[extra]'"
-                    > 
-                    <input 
-                      :id="attribute + '[id]'" 
-                      type="hidden" 
-                      :name="attribute + '[id]'" 
-                      :value="edit ? editItem.id : 0"
-                    > 
-                    <input 
-                      :id="attribute + '[customer_type_id]'" 
-                      type="hidden" 
-                      :name="attribute + '[customer_type_id]'" 
-                      value="1"
-                    > 
+                    >
                     <input
-                      type="hidden" 
+                      :id="attribute + '[id]'"
+                      type="hidden"
+                      :name="attribute + '[id]'"
+                      :value="edit ? editItem.id : 0"
+                    >
+                    <input
+                      :id="attribute + '[customer_type_id]'"
+                      type="hidden"
+                      :name="attribute + '[customer_type_id]'"
+                      value="1"
+                    >
+                    <input
+                      type="hidden"
                       value="1"
                       :name="attribute + '[price]'"
                     >
                     <v-text-field
                       v-model="name"
-                      :name="attribute + '[name]'" 
+                      :name="attribute + '[name]'"
                       label="Название"
                       :rules="[v => !!v || 'Это обязательное поле']"
                       color="green"
@@ -247,24 +246,24 @@
                     />
                     <v-text-field
                       v-model="description"
-                      :name="attribute + '[description]'" 
+                      :name="attribute + '[description]'"
                       label="Описание"
                       color="green"
                     />
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
                       <v-flex xs6>
                         <v-text-field
                           v-model="qnt"
-                          :name="attribute + '[qnt]'" 
+                          :name="attribute + '[qnt]'"
                           :rules="[v => !!v || 'Это обязательное поле']"
                           label="Вместимость"
                           color="green"
                           required
                         />
-                      </v-flex> 
+                      </v-flex>
                       <!-- <v-flex xs6>
                         Схема салона:
                         <Scheme
@@ -285,7 +284,7 @@
                       hint="Можно выбрать несколько"
                       persistent-hint
                     />
-                    <v-btn 
+                    <v-btn
                       type="submit"
                       dark
                       color="green"
@@ -294,7 +293,7 @@
                     </v-btn>
                   </form>
                 </v-flex>
-                <v-flex 
+                <v-flex
                   xs3
                   offset-xs3
                 >
@@ -332,7 +331,7 @@
               type="success"
               transition="scale-transition"
             >
-              Транспорт  добавлен!
+              Транспорт добавлен!
             </v-alert>
             <!-- /Alert. Company successfully added -->
           </v-flex>
@@ -346,7 +345,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 // import Scheme from './Scheme'
 export default {
-
   name: 'AddEdit',
   components: {
     // Scheme,
@@ -356,34 +354,34 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     edit: {
       type: Boolean,
-      default: false
+      default: false,
     },
     editItem: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     companyId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
       dialog: false,
       show: {
-        company: true,  //true
+        company: true, //true
         addCompany: false,
-        addTransport: false //false
+        addTransport: false, //false
       },
       cities: [],
       companies: ['Ромашка', 'Рейс'],
@@ -401,22 +399,24 @@ export default {
       grade: [],
       grades: ['Стандарт', 'C-Class', 'VIP'],
       priceList: [
-          { dateRange: '1 января - 10 января',
-            prices: [
-              { id: 0, name: '1 час', price: '2000' },
-              { id: 1, name: '3 часа', price: '3500' },
-              { id: 2, name: '8 часов', price: '6000' },
-              { id: 3, name: 'Сутки', price: '15000' }
-            ]
-          },
-          { dateRange: '11 января - 30 апреля',
-            prices: [
-              { id: 0, name: '1 час', price: '1800' },
-              { id: 1, name: '3 часа', price: '3000' },
-              { id: 2, name: '8 часов', price: '5500' },
-              { id: 3, name: 'Сутки', price: '13000' }
-            ]
-          }
+        {
+          dateRange: '1 января - 10 января',
+          prices: [
+            { id: 0, name: '1 час', price: '2000' },
+            { id: 1, name: '3 часа', price: '3500' },
+            { id: 2, name: '8 часов', price: '6000' },
+            { id: 3, name: 'Сутки', price: '15000' },
+          ],
+        },
+        {
+          dateRange: '11 января - 30 апреля',
+          prices: [
+            { id: 0, name: '1 час', price: '1800' },
+            { id: 1, name: '3 часа', price: '3000' },
+            { id: 2, name: '8 часов', price: '5500' },
+            { id: 3, name: 'Сутки', price: '13000' },
+          ],
+        },
       ],
       currentDateRange: '1 января - 10 января',
       currentPrices: [],
@@ -430,7 +430,7 @@ export default {
         transportCompanyId: '',
         cityId: '',
         description: '',
-        prices: []
+        prices: [],
       },
       attribute: 'attribute',
       price: 10000,
@@ -442,7 +442,7 @@ export default {
         guide: ['2-4'],
         pass: ['1-3', '2-3', '3-3', '4-3', '5-3', '6-3', '7-3', '8-3', '9-3'],
         unavailable: [],
-        totalPassengersCount: 0
+        totalPassengersCount: 0,
       },
     }
   },
@@ -457,13 +457,15 @@ export default {
       //   result.scheme = JSON.parse(this.editItem.extra).scheme
       // }
       return result
-    }
+    },
   },
   created() {
     for (let city in this.citiesSelect.Россия) {
-      this.cities.push({'id': city, 'name': this.citiesSelect.Россия[city]})
+      this.cities.push({ id: city, name: this.citiesSelect.Россия[city] })
     }
-    let element = this.priceList.find(item => item.dateRange == this.currentDateRange)
+    let element = this.priceList.find(
+      item => item.dateRange == this.currentDateRange
+    )
     this.currentPrices = element.prices
     this.attribute = this.attribute + '[' + this.editItem.id + ']'
   },
@@ -504,7 +506,7 @@ export default {
     addCompany() {
       this.addTransportCompany({
         name: this.newCompany,
-        id: this.allTransportCompanies.length + 1
+        id: this.allTransportCompanies.length + 1,
       })
       this.addCompanyAlert = true
       setTimeout(() => {
@@ -515,7 +517,7 @@ export default {
     selectCompany() {
       if (this.selectedCompany === '') {
         this.companyIsNotSelected = true
-      } 
+      }
       if (this.selectedCompany) {
         this.companyIsNotSelected = false
         this.show.company = false
@@ -544,9 +546,9 @@ export default {
       }, 2000)
     },
     getPricesArray() {
-      return [ 
-        { name: '1 час', value: parseInt(this.price0) }, 
-        { name: '1 км', value:parseInt(this.price1) }, 
+      return [
+        { name: '1 час', value: parseInt(this.price0) },
+        { name: '1 км', value: parseInt(this.price1) },
       ]
     },
     editModeOn() {
@@ -561,8 +563,8 @@ export default {
       this.price1 = extra.prices[1].value
       this.grade = extra.grade
     },
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -570,8 +572,7 @@ export default {
   font-family: 'Roboto' sans-serif;
 }
 .choose-company-form,
-.add-company-form
- {
+.add-company-form {
   form {
     max-width: 500px;
     margin: 0 auto;

@@ -1,12 +1,12 @@
 <template>
   <v-layout column>
-    <v-layout 
+    <v-layout
       row
       wrap
       class="white--text"
     >
       <v-flex
-        v-for="transport in allTransports"
+        v-for="transport in items.data"
         :key="transport.id"
         mb-5
         xs12
@@ -14,122 +14,127 @@
         lg12
         xl6
       >
-        <v-layout 
-          row 
-          wrap
-          justify-center
-        >
-          <h3 class="display-1">
-            {{ transport.name }}
-          </h3>
-          <Edit 
-            :transport="transport" 
-            :token="token"
-          />
-          <form 
-            :action="'/operator/transport/' + transport.id"
-            method="POST"
+        <v-card>
+          <v-card-title
+            class="white--text"
+            style="background-color: #66a5ae;"
           >
-            <input 
-              type="hidden"
-              name="_token"
-              :value="token"
+            <h3 class="display-1">
+              {{ transport.name }}
+            </h3>
+            <Edit
+              :transport="transport"
+              :token="token"
+            />
+            <form
+              :action="'/operator/transport/' + transport.id"
+              method="POST"
             >
-            <input 
-              type="hidden"
-              name="_method"
-              value="DELETE"
-            >
-            <v-btn 
-              color="red"
-              fab
-              small
-              dark
-              type="submit"
-            >
-              <i class="material-icons">
-                delete
+              <input
+                type="hidden"
+                name="_token"
+                :value="token"
+              >
+              <input
+                type="hidden"
+                name="_method"
+                value="DELETE"
+              >
+              <v-btn
+                color="red"
+                fab
+                small
+                dark
+                type="submit"
+              >
+                <i class="material-icons">
+                  delete
+                </i>
+              </v-btn>
+            </form>
+          </v-card-title>
+          <v-card-text style="color: #979694;">
+            <div class="subheading mb-3">
+              <i class="material-icons mr-2">
+                location_city
               </i>
-            </v-btn>
-          </form>  
-        </v-layout>
-        <div class="subheading mb-3">
-          <i class="material-icons mr-2">
-            location_city
-          </i>
-          {{ getCityName(transport.city_id) }}
-        </div>
-        <v-layout 
-          row 
-          wrap
-          mb-2
-          justify-center
-        >
-          <div class="mr-3">
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
+              {{ getCityName(transport.city_id) }}
+            </div>
+            <v-layout
+              row
+              wrap
+              mb-2
+              justify-center
             >
-              web
-            </i>
-            <a 
-              :href="JSON.parse(transport.description).contacts.site"
-              target="_blank"
-              style="color: white;"
-            >
-              {{ JSON.parse(transport.description).contacts.site }}
-            </a>
-          </div>
-          <div class="mr-3">
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
-            >
-              email
-            </i>
-            <a 
-              :href="'mailto:' + JSON.parse(transport.description).contacts.email"
-            >
-              {{ JSON.parse(transport.description).contacts.email }}
-            </a>
-          </div>
-          <div class="mr-5">
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
-            >
-              phone
-            </i>
-            {{ JSON.parse(transport.description).contacts.phone }}
-          </div>
-          <div class="mr-3">
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
-            >
-              person
-            </i>
-            {{ JSON.parse(transport.description).staff.name }}
-          </div>
-          <div>
-            <i 
-              class="material-icons"
-              style="font-size: 12px;"
-            >
-              phone
-            </i>
-            {{ JSON.parse(transport.description).staff.phone }}
-          </div>
-        </v-layout>
-        <AttributesTable 
-          :transport-attributes="transport.objectables" 
-          :company-id="transport.id"
-          :token="token"
-        />
-        <AddObjectables 
-          :token="token"
-          :company-id="transport.id"
-        />
+              <div class="mr-3">
+                <i
+                  class="material-icons"
+                  style="font-size: 12px;"
+                >
+                  web
+                </i>
+                <a
+                  :href="JSON.parse(transport.description).contacts.site"
+                  target="_blank"
+                >
+                  {{ JSON.parse(transport.description).contacts.site }}
+                </a>
+              </div>
+              <div class="mr-3">
+                <i
+                  class="material-icons"
+                  style="font-size: 12px;"
+                >
+                  email
+                </i>
+                <a
+                  class=""
+                  :href="`mailto: ${JSON.parse(transport.description).contacts.email}`"
+                >
+                  {{ JSON.parse(transport.description).contacts.email }}
+                </a>
+              </div>
+              <div class="mr-5">
+                <i
+                  class="material-icons"
+                  style="font-size: 12px;"
+                >
+                  phone
+                </i>
+                {{ JSON.parse(transport.description).contacts.phone }}
+              </div>
+              <div class="mr-3">
+                <i
+                  class="material-icons"
+                  style="font-size: 12px;"
+                >
+                  person
+                </i>
+                {{ JSON.parse(transport.description).staff.name }}
+              </div>
+              <div>
+                <i
+                  class="material-icons"
+                  style="font-size: 12px;"
+                >
+                  phone
+                </i>
+                {{ JSON.parse(transport.description).staff.phone }}
+              </div>
+            </v-layout>
+            <AttributesTable
+              :transport-attributes="transport.objectables"
+              :company-id="transport.id"
+              :token="token"
+            />
+          </v-card-text>
+          <v-card-actions>
+            <AddObjectables
+              :token="token"
+              :company-id="transport.id"
+            />
+          </v-card-actions>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-layout>
@@ -141,7 +146,6 @@ import AttributesTable from './AttributesTable'
 import AddObjectables from './AddObjectables'
 import Edit from './Edit'
 export default {
-
   name: 'ObjectTransportTable',
   components: {
     Edit,
@@ -149,27 +153,23 @@ export default {
     AddObjectables,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
-    return {
-      
-    };
+    return {}
   },
-  computed: mapGetters([
-    'allTransports', 
-    'allTransportCompanies',
-    'allCities'
-  ]),
-  mounted() {
-    this.fetchTransport()
-    this.fetchCities()
-  },
-  updated() {
-  },
+  computed: mapGetters(['allCities']),
+
+  updated() {},
   methods: {
     ...mapMutations(['deleteTransport']),
     ...mapActions(['fetchTransport', 'fetchCities']),
@@ -188,9 +188,9 @@ export default {
     },
     del(id) {
       // this.deleteTransport(id)
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>

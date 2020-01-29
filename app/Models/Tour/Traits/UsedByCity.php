@@ -30,7 +30,7 @@ trait UsedByCity
 
     public static function getCitiesAttribute($text = '')
     {
-        $cities = TourCity::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+        $cities = TourCity::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
         $cities_options = [0 => $text];
         $cities_options = array_replace($cities_options, $cities);
 
@@ -39,7 +39,7 @@ trait UsedByCity
 
     public static function getAllCities()
     {
-        return TourCity::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
+        return TourCity::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
     // TO DO to be removed
@@ -59,6 +59,17 @@ trait UsedByCity
         }
 
         return $out_arr;
+    }
+
+    public static function getCitiesForFilterAttribute($cities_ids)
+    {
+        $result = [];
+        $result[0] = 'Все города';
+        foreach ($cities_ids as $city_id) {
+            $result[$city_id] = TourCity::find($city_id)->name;
+        }
+
+        return $result;
     }
 
     public static function getCountriesWithCities()

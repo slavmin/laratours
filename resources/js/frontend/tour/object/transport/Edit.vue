@@ -1,19 +1,19 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
-    fullscreen 
+  <v-dialog
+    v-model="dialog"
+    fullscreen
     lazy
-    hide-overlay 
+    hide-overlay
     transition="dialog-bottom-transition"
     @input="setDefaults"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         small
         fab
         title="Редактировать"
         color="#aa282a"
-        dark 
+        dark
         v-on="on"
       >
         <i class="material-icons">
@@ -26,8 +26,8 @@
         dark
         color="#66a5ae"
       >
-        <v-btn 
-          icon 
+        <v-btn
+          icon
           @click="dialog = false"
         >
           <v-icon>close</v-icon>
@@ -38,14 +38,14 @@
         <v-spacer />
       </v-toolbar>
       <v-container>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-center
         >
           <v-flex xs12>
-            <v-layout 
-              row 
+            <v-layout
+              row
               wrap
             >
               <v-form
@@ -55,27 +55,26 @@
                 method="POST"
                 class="form"
               >
-                <v-layout 
-                  row 
+                <v-layout
+                  row
                   wrap
                 >
                   <v-flex xs6>
-                    <input 
-                      id="_method" 
-                      type="hidden" 
-                      name="_method" 
+                    <input
+                      type="hidden"
+                      name="_method"
                       value="PATCH"
                     >
-                    <input 
-                      type="hidden" 
-                      name="_token" 
+                    <input
+                      type="hidden"
+                      name="_token"
                       :value="token"
-                    > 
-                    <input 
-                      type="hidden" 
-                      name="price" 
+                    >
+                    <input
+                      type="hidden"
+                      name="price"
                       value="1"
-                    > 
+                    >
                     <div class="display-1 mb-3">
                       Общая информация:
                     </div>
@@ -108,11 +107,11 @@
                       outline
                       required
                     />
-                    <input 
-                      type="hidden" 
-                      name="city_id" 
+                    <input
+                      type="hidden"
+                      name="city_id"
                       :value="city"
-                    > 
+                    >
                     <v-text-field
                       v-model="about"
                       label="Описание"
@@ -122,11 +121,11 @@
                       outline
                       required
                     />
-                    <input 
+                    <input
                       v-model="details"
-                      type="hidden" 
-                      name="description" 
-                    > 
+                      type="hidden"
+                      name="description"
+                    >
                     <div class="display-1 mb-3">
                       Контакты:
                     </div>
@@ -181,12 +180,12 @@
                       required
                     />
                   </v-flex>
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
                     justify-end
                   >
-                    <v-btn 
+                    <v-btn
                       color="#aa282a"
                       class="white--text"
                       type="submit"
@@ -216,7 +215,7 @@ export default {
     },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
   },
   data() {
@@ -236,7 +235,7 @@ export default {
   },
   computed: {
     ...mapGetters(['allCities']),
-    details: function () {
+    details: function() {
       return JSON.stringify({
         about: this.about,
         address: this.address,
@@ -249,8 +248,8 @@ export default {
           name: this.staffName,
           phone: this.staffPhone,
         },
-      }) 
-    }
+      })
+    },
   },
   created() {
     this.fetchCities()
@@ -266,13 +265,11 @@ export default {
   },
   methods: {
     ...mapActions(['fetchCities']),
-    setDefaults() {
-
-    },
+    setDefaults() {},
     log() {
       console.log(this.details)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="css" scoped>

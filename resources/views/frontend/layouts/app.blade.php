@@ -43,7 +43,7 @@
 
         <!-- Material Design Bootstrap -->
         <link rel="stylesheet" href="{{ asset('css/bootstrap_mdb.css')}}">
-        <link rel="stylesheet" href="{{ asset('css/mdb.min.css')}}">
+        <link rel="stylesheet" href="{{ asset('css/mdb.css')}}">
         <script src="{{ asset('js/mdb.min.js') }}" defer></script>
         
     </head>
@@ -53,7 +53,7 @@
             @include('frontend.includes.nav')
             @include('includes.partials.messages')
 
-            <div class="root-wrap">
+            <div class="root-wrap tc-blue-bg pt-4">
                 @yield('content')
                 @include('includes.partials.footer')
             </div><!-- root-wrap -->

@@ -6,15 +6,15 @@
     style="background-color: #66a5ae;"
   >
     <h1 class="text-center white--text mb-5">
-      Музеи
-      <Add 
-        :token="token" 
+      <Add
+        :token="token"
         :cities-select="cities"
       />
     </h1>
-    <Table 
+    <Table
+      :items="items"
       :customers="customers"
-      :token="token" 
+      :token="token"
       :cities="cities"
     />
   </v-container>
@@ -24,36 +24,36 @@
 import Table from './Table'
 import Add from './Add'
 export default {
-
   name: 'ObjectMuseumIndex',
   components: {
     Table,
     Add,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     cities: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     customers: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
-  data() {
-    return {
-
-    };
-  },
-};
+}
 </script>
 
 <style lang="css" scoped>

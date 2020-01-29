@@ -40,7 +40,7 @@
           my-1
         >
           <span class="grey--text text--darken-1">
-            {{ price.name }}: 
+            {{ price.name }}:
           </span>
           <div>
             {{ price.value }}
@@ -51,8 +51,8 @@
         {{ props.item.description }}
       </td>
       <td class="text-xs-center">
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-center
         >
@@ -63,7 +63,7 @@
             :token="token"
           /> -->
           <EditObjectables
-            :item="props.item" 
+            :item="props.item"
             :company-id="companyId"
             :token="token"
           />
@@ -73,32 +73,31 @@
             :company-id="companyId"
             :token="token"
           /> -->
-          <form 
+          <form
             :action="'/operator/attribute/' + props.item.id"
             method="POST"
           >
-            <input 
-              id="_method" 
-              type="hidden" 
-              name="_method" 
+            <input
+              type="hidden"
+              name="_method"
               value="DELETE"
             >
-            <input 
-              type="hidden" 
-              name="_token" 
+            <input
+              type="hidden"
+              name="_token"
               :value="token"
-            > 
-            <input 
-              type="hidden" 
-              name="parent_model_id" 
+            >
+            <input
+              type="hidden"
+              name="parent_model_id"
               :value="companyId"
             >
-            <input 
-              type="hidden" 
-              name="parent_model_alias" 
+            <input
+              type="hidden"
+              name="parent_model_alias"
               value="transport"
-            >  
-            <v-btn 
+            >
+            <v-btn
               fab
               small
               outline
@@ -132,28 +131,27 @@
 // import Edit from './AddEdit'
 import EditObjectables from './EditObjectables'
 export default {
-
   name: 'AttributesTable',
   components: {
     // Scheme,
     // Edit
-    EditObjectables
+    EditObjectables,
   },
   props: {
     transportAttributes: {
       type: Array,
       default: () => {
         return {}
-      }
+      },
     },
     companyId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -161,35 +159,35 @@ export default {
         {
           text: 'Название',
           align: 'left',
-          value: 'name'
+          value: 'name',
         },
         {
           text: 'Вместимость',
           align: 'center',
-          value: 'qnt'
+          value: 'qnt',
         },
         {
           text: 'Класс',
           align: 'center',
-          value: 'grade'
+          value: 'grade',
         },
         {
           text: 'Цены',
           align: 'center',
-          value: 'price'
+          value: 'price',
         },
         {
           text: 'Описание',
           align: 'center',
-          value: 'description'
+          value: 'description',
         },
         {
           text: 'Действия',
           align: 'center',
-          value: 'description'
+          value: 'description',
         },
       ],
-    };
+    }
   },
   methods: {
     getExtraProperty(extra, property) {
@@ -197,9 +195,9 @@ export default {
       if (data != null) {
         return data[property]
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>

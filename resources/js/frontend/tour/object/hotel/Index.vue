@@ -12,13 +12,12 @@
       >
         view_list
       </v-icon>
-      Отели
-      <Add 
-        :token="token" 
-      />
+      <!-- Отели -->
+      <Add :token="token" />
     </h1>
-    <Table 
-      :token="token" 
+    <Table
+      :items="items"
+      :token="token"
       :customers="customers"
     />
   </v-container>
@@ -28,30 +27,30 @@
 import Add from './Add'
 import Table from './Table'
 export default {
-
   name: 'ObjectHotelIndex',
   components: {
     Add,
-    Table
+    Table,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     token: {
       type: String,
-      default: ''
+      default: '',
     },
     customers: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
-  data() {
-    return {
-
-    };
-  },
-};
+}
 </script>
 
 <style lang="css" scoped>

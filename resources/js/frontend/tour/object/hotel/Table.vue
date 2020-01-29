@@ -6,7 +6,7 @@
       class="white--text"
     >
       <v-flex
-        v-for="hotel in allHotel"
+        v-for="hotel in items.data"
         :key="hotel.id"
         mb-5
         xs12
@@ -269,7 +269,6 @@
                     method="POST"
                   >
                     <input
-                      id="_method"
                       type="hidden"
                       name="_method"
                       value="DELETE"
@@ -331,6 +330,12 @@ export default {
     EditObjectables,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     token: {
       type: String,
       default: '',
@@ -385,8 +390,8 @@ export default {
     },
   },
   mounted() {
-    this.fetchMuseum()
-    this.fetchCities()
+    // this.fetchMuseum()
+    // this.fetchCities()
   },
   methods: {
     ...mapActions(['fetchMuseum', 'fetchCities']),

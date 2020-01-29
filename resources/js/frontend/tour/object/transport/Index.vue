@@ -11,19 +11,15 @@
     >
       <v-flex xs12>
         <h1 class="text-center white--text mb-5">
-          <v-icon
-            dark
-            large
-          >
-            commute
-          </v-icon>
-          Транспорт
           <AddCompany
             :token="token"
             :transport="transport"
           />
         </h1>
-        <Table :token="token" />
+        <Table
+          :items="items"
+          :token="token"
+        />
       </v-flex>
     </v-layout>
   </v-container>
@@ -44,6 +40,12 @@ export default {
     AddCompany,
   },
   props: {
+    items: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     cities: {
       type: Object,
       default: () => {
