@@ -57,7 +57,7 @@ class TourController extends Controller
             $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
         }]);
 
-        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
+        $items = (new ToursFilter($items, $request))->apply()->orderBy($orderBy, $sort)->paginate();
 
         $deleted = Tour::onlyTrashed()->get();
 

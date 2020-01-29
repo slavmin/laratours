@@ -38,7 +38,7 @@ class OrderController extends Controller
 
         $items = TourOrder::with(['profiles', 'tour:id,name']);
 
-        $items = (new OrdersFilter($items, $request))->apply()->orderBy($orderBy, $sort)->AllTeams()->paginate();
+        $items = (new OrdersFilter($items, $request))->apply()->orderBy($orderBy, $sort)->paginate();
 
         $cities_names = TourCity::withoutGlobalScope('team')->get()->pluck('name', 'id')->toArray();
 
