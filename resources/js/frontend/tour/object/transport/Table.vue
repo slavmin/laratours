@@ -59,6 +59,7 @@
                 location_city
               </i>
               {{ getCityName(transport.city_id) }}
+              {{ JSON.parse(transport.description).address }}
             </div>
             <v-layout
               row

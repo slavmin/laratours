@@ -25,6 +25,7 @@
               </h3>
               <div class="text-xs-left subheading mb-3">
                 {{ getCityName(hotel.city_id) }}
+                {{ JSON.parse(hotel.extra).address }}
               </div>
             </div>
             <Edit

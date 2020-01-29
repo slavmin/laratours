@@ -25,6 +25,7 @@
               </h3>
               <div class="text-xs-left subheading mb-3">
                 {{ getCityName(meal.city_id) }}
+                {{ JSON.parse(meal.extra).address }}
               </div>
             </div>
             <Edit
