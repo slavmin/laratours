@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-layout 
-      row 
+    <v-layout
+      row
       wrap
       class="wrap"
     >
@@ -9,15 +9,15 @@
         <FreeAdl />
       </v-flex>
       <v-flex xs12>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-center
           mt-5
         >
           <h3 class="grey--text">
             Доп. услуги: ({{ getCustomPrice.length }})
-            <v-btn 
+            <v-btn
               color="#aa282a"
               fab
               small
@@ -30,13 +30,13 @@
             </v-btn>
           </h3>
         </v-layout>
-        <v-layout 
+        <v-layout
           v-show="showCustomPrice"
-          row 
+          row
           wrap
           justify-center
         >
-          <v-flex 
+          <v-flex
             v-if="showTable"
             xs12
           >
@@ -47,7 +47,7 @@
                 </th>
                 <th>
                   Стоимость
-                </th>  
+                </th>
                 <th>
                   Действия
                 </th>
@@ -64,7 +64,7 @@
                     {{ price.value }}
                   </td>
                   <td>
-                    <v-btn 
+                    <v-btn
                       color="red"
                       fab
                       small
@@ -81,14 +81,14 @@
             </table>
           </v-flex>
         </v-layout>
-        <v-layout 
+        <v-layout
           v-show="showCustomPrice"
-          row 
+          row
           wrap
           mt-5
           justify-center
         >
-          <v-flex 
+          <v-flex
             xs3
             mr-5
           >
@@ -99,7 +99,7 @@
               outline
             />
           </v-flex>
-          <v-flex 
+          <v-flex
             xs2
             mr-5
           >
@@ -110,12 +110,12 @@
               outline
             />
           </v-flex>
-          <v-btn 
+          <v-btn
             fab
             small
             title="Добавить"
             color="#aa282a"
-            dark 
+            dark
             @click="addCustomService"
           >
             <i class="material-icons">
@@ -126,13 +126,11 @@
         <v-divider />
         <ExtraEvents />
         <v-divider />
-        <h3 
-          class="grey--text mt-5"
-        >
+        <h3 class="grey--text mt-5">
           Редакторы:
         </h3>
-        <v-layout 
-          row 
+        <v-layout
+          row
           justify-center
         >
           <v-btn
@@ -143,18 +141,14 @@
           >
             Заполнить
           </v-btn>
-          <v-card
-            v-if="dialogFillEditors"
-          >
-            <v-card-title 
+          <v-card v-if="dialogFillEditors">
+            <v-card-title
               class="headline white--text"
               style="background-color: #66a5ae;"
             >
               Автоматическое заполнение редакторов
             </v-card-title>
-            <v-card-text
-              class="body-1"
-            >
+            <v-card-text class="body-1">
               <p>
                 Редакторы будут очищены и заново заполнены информацией по туру.
               </p>
@@ -184,8 +178,8 @@
             </v-card-actions>
           </v-card>
         </v-layout>
-        <v-layout 
-          row 
+        <v-layout
+          row
           wrap
           justify-center
         >
@@ -194,9 +188,9 @@
               v-for="(item,i) in editorsControl.length"
               :key="parseInt(i)"
               class="mb-5"
-            > 
+            >
               <h3>День {{ i + 1 }}</h3>
-              <Editor 
+              <Editor
                 :id="'editor-day-' + i"
                 v-model="getTour.editorsContent[i]"
                 :api-key="tiny.apiKey"
@@ -207,7 +201,7 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-btn 
+      <v-btn
         dark
         fab
         class="done-btn"
@@ -228,7 +222,6 @@ import Editor from '@tinymce/tinymce-vue'
 import FreeAdl from './FreeAdl'
 import ExtraEvents from './ExtraEvents'
 export default {
-
   name: 'Services',
   components: {
     Editor,
@@ -239,31 +232,28 @@ export default {
     return {
       customPrice: {
         name: '',
-        value: NaN, 
+        value: NaN,
       },
       tiny: {
         apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
         init: {
           min_width: '600',
-          branding: false, 
+          branding: false,
           language: 'ru',
           language_url: '/fonts/vendor/tinymce/ru.js',
           height: 500,
-          plugins: "table link",
-          default_link_target: "_blank"
+          plugins: 'table link print',
+          default_link_target: '_blank',
         },
       },
       dialog: false,
       dialogFillEditors: false,
       editorsContent: [],
       showCustomPrice: false,
-    };
+    }
   },
   computed: {
-    ...mapGetters([
-      'getTour',
-      'getCustomPrice',
-    ]),
+    ...mapGetters(['getTour', 'getCustomPrice']),
     showTable: function() {
       return this.getCustomPrice.length == 0 ? false : true
     },
@@ -281,11 +271,10 @@ export default {
     editorsContent: {
       handler(value) {
         this.updateEditorsContent(value)
-      }
-    }
+      },
+    },
   },
-  created() {
-  },
+  created() {},
   updated() {
     this.getCustomPrice
   },
@@ -331,9 +320,9 @@ export default {
         string = `<h2>День ${i + 1}:<h2>`
         if (this.getTour.transport.length > 0) {
           string += '<h3>Транспорт:</h3><p>'
-          this.getTour.transport.forEach((transport) => {
-            transport.obj.daysArray.forEach((day) => {
-              if (day == (i + 1)) {
+          this.getTour.transport.forEach(transport => {
+            transport.obj.daysArray.forEach(day => {
+              if (day == i + 1) {
                 string += transport.obj.name
               }
             })
@@ -342,8 +331,8 @@ export default {
         }
         if (this.getTour.museum.length > 0) {
           string += '<h3>Экскурсии:</h3><p>'
-          this.getTour.museum.forEach((museum) => {
-            if (museum.obj.day == (i + 1)) {
+          this.getTour.museum.forEach(museum => {
+            if (museum.obj.day == i + 1) {
               string += `${museum.museum.name}: ${museum.obj.name}<br>`
             }
           })
@@ -351,9 +340,9 @@ export default {
         }
         if (this.getTour.hotel.length > 0) {
           string += '<h3>Проживание:</h3><p>'
-          this.getTour.hotel.forEach((hotel) => {
-            hotel.obj.daysArray.forEach((day) => {
-              if (day == (i + 1)) {
+          this.getTour.hotel.forEach(hotel => {
+            hotel.obj.daysArray.forEach(day => {
+              if (day == i + 1) {
                 string += `${hotel.hotel.name}: ${hotel.obj.name}<br>`
               }
             })
@@ -362,9 +351,9 @@ export default {
         }
         if (this.getTour.meal.length > 0) {
           string += '<h3>Питание:</h3><p>'
-          this.getTour.meal.forEach((meal) => {
-            meal.obj.daysArray.forEach((day) => {
-              if (day == (i + 1)) {
+          this.getTour.meal.forEach(meal => {
+            meal.obj.daysArray.forEach(day => {
+              if (day == i + 1) {
                 string += `${meal.meal.name}: ${meal.obj.name}<br>`
               }
             })
@@ -373,7 +362,7 @@ export default {
         }
         if (this.getTour.guide.length > 0) {
           string += '<h3>Гид:</h3><p>'
-          this.getTour.guide.forEach((guide) => {
+          this.getTour.guide.forEach(guide => {
             string += `${guide.guide.name} `
           })
           string += '</p>'
@@ -381,14 +370,14 @@ export default {
         string += '<hr>'
         if (this.getTour.attendant.length > 0) {
           string += '<h3>Сопроводжающий:</h3><p>'
-          this.getTour.attendant.forEach((attendant) => {
+          this.getTour.attendant.forEach(attendant => {
             string += `${attendant.attendant.name} `
           })
           string += '</p>'
         }
         if (this.getTour.customPrice.length > 0) {
           string += '<h3>Допы:</h3><p>'
-          this.getTour.customPrice.forEach((customPrice) => {
+          this.getTour.customPrice.forEach(customPrice => {
             string += `${customPrice.name} `
           })
           string += '</p>'
@@ -399,7 +388,7 @@ export default {
       this.updateEditorsContent(result)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -412,7 +401,7 @@ export default {
     font-size: 24px;
   }
   td {
-    background-color: #FFAB16;
+    background-color: #ffab16;
     color: white;
   }
 }

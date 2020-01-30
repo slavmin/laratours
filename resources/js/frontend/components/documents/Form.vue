@@ -18,7 +18,7 @@
         type="hidden"
         name="template"
       >
-      <Editor 
+      <Editor
         v-model="content"
         :api-key="tiny.apiKey"
         :init="tiny.init"
@@ -43,8 +43,8 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -55,13 +55,13 @@ export default {
         apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
         init: {
           min_width: '600',
-          branding: false, 
+          branding: false,
           language: 'ru',
           language_url: '/fonts/vendor/tinymce/ru.js',
           height: 500,
-          plugins: "table link",
-          default_link_target: "_blank"
-        }
+          plugins: 'table link print',
+          default_link_target: '_blank',
+        },
       },
     }
   },
@@ -74,6 +74,6 @@ export default {
       this.description = this.document.description
       this.content = this.document.template
     },
-  }
+  },
 }
 </script>

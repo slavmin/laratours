@@ -151,7 +151,9 @@
                     >
                         @lang('navs.frontend.contact')
                     </a>
-                    <Changelog />
+                    @auth
+                        <Changelog />
+                    @endauth
                 </div>
             </li>    
         </ul>

@@ -29,7 +29,7 @@ export default {
           language: 'ru',
           language_url: '/fonts/vendor/tinymce/ru.js',
           height: 500,
-          plugins: "table link",
+          plugins: "table link print",
           default_link_target: "_blank"
         }
       },
