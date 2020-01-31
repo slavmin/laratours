@@ -8,6 +8,7 @@ use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
+use App\Models\Tour\TourObjectAttributes;
 
 class MuseumController extends Controller
 {

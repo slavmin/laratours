@@ -31,6 +31,10 @@
       :value="city"
     >
     <input
+      name="museum_id[]"
+      value="10"
+    >
+    <input
       type="hidden"
       name="duration"
       :value="getTour.options.days"

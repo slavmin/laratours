@@ -1,17 +1,17 @@
 <template>
-  <v-dialog 
-    v-model="dialog" 
+  <v-dialog
+    v-model="dialog"
     lazy
     max-width="600px"
   >
     <template v-slot:activator="{ on }">
-      <v-btn 
+      <v-btn
         fab
         small
         outline
         color="green"
         :title="`Редактировать экскурсию: ` + event.name"
-        dark 
+        dark
         v-on="on"
       >
         <i class="material-icons">
@@ -20,10 +20,8 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title
-        style="background-color: #66a5ae;"
-      >
-        <v-layout 
+      <v-card-title style="background-color: #66a5ae;">
+        <v-layout
           column
           wrap
           class="white--text"
@@ -33,7 +31,7 @@
               account_balance
             </i>
             {{ museum.name }}
-          </h3>  
+          </h3>
           <h4>
             Редактирование экскурсии:
             <br>
@@ -43,59 +41,59 @@
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
-          <v-form 
+          <v-form
             :id="'form' + museum.id + event.id"
             ref="form"
             lazy-validation
             :action="'/operator/attribute/' + event.id"
             method="POST"
           >
-            <input 
-              type="hidden" 
-              name="_method" 
+            <input
+              type="hidden"
+              name="_method"
               value="PATCH"
             >
-            <input 
-              type="hidden" 
-              name="_token" 
+            <input
+              type="hidden"
+              name="_token"
               :value="token"
-            >  
-            <input 
-              type="hidden" 
-              name="parent_model_id" 
+            >
+            <input
+              type="hidden"
+              name="parent_model_id"
               :value="museum.id"
             >
-            <input 
-              type="hidden" 
-              name="parent_model_alias" 
+            <input
+              type="hidden"
+              name="parent_model_alias"
               value="museum"
             >
-            <input 
+            <input
               v-model="event.id"
-              type="hidden" 
+              type="hidden"
               name="id"
-            > 
-            <input 
-              type="hidden" 
-              name="qnt" 
+            >
+            <input
+              type="hidden"
+              name="qnt"
               value="1"
-            > 
-            <input 
+            >
+            <input
               value="1"
-              type="hidden" 
-              name="customer_type_id" 
-            > 
-            <input 
+              type="hidden"
+              name="customer_type_id"
+            >
+            <input
               v-model="name"
-              type="hidden" 
-              name="name" 
-            > 
-            <input 
+              type="hidden"
+              name="name"
+            >
+            <input
               v-model="extra"
-              type="hidden" 
-              name="extra" 
-            > 
-            <input 
+              type="hidden"
+              name="extra"
+            >
+            <input
               value="0"
               type="hidden"
               name="price"
@@ -104,46 +102,44 @@
               column
               wrap
             >
-              <v-flex 
-                xs12 
-                sm6 
+              <v-flex
+                xs12
+                sm6
               >
-                <v-checkbox 
-                  v-model="isCustomOrder" 
-                  label="Заказ-наряд" 
+                <v-checkbox
+                  v-model="isCustomOrder"
+                  label="Заказ-наряд"
                   color="#aa282a"
                 />
-                <v-layout 
-                  row 
+                <v-layout
+                  row
                   wrap
                 >
-                  <v-flex 
-                    :class="isCustomOrder ? 'xs12' : 'xs8'"
-                  >
-                    <v-text-field 
+                  <v-flex :class="isCustomOrder ? 'xs12' : 'xs8'">
+                    <v-text-field
                       v-model="name"
-                      label="Название" 
+                      label="Название"
                       outline
                       color="#aa282a"
                       class="mb-3"
                     />
                   </v-flex>
-                  <v-flex 
+                  <v-flex
                     v-if="!isCustomOrder"
                     xs2
                   >
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
-                      <v-checkbox 
-                        v-model="isExtra" 
+                      <v-checkbox
+                        v-model="isExtra"
                         color="#aa282a"
-                        label="Доп" 
+                        label="Доп"
                       />
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
-                          <v-icon 
+                          <v-icon
                             color="grey"
                             v-on="on"
                           >
@@ -151,18 +147,17 @@
                           </v-icon>
                         </template>
                         <span>
-                          Можно будет выбрать в расчёте тура как дополнительную экскурсию, не входящую в основную стоимость.  
+                          Можно будет выбрать в расчёте тура как дополнительную
+                          экскурсию, не входящую в основную стоимость.
                         </span>
                       </v-tooltip>
                     </v-layout>
                   </v-flex>
                 </v-layout>
-                <div
-                  v-show="!isCustomOrder"
-                >
-                  <v-text-field 
+                <div v-show="!isCustomOrder">
+                  <v-text-field
                     v-model="duration"
-                    label="Продолжительность экскурсии" 
+                    label="Продолжительность экскурсии"
                     mask="##"
                     outline
                     color="#aa282a"
@@ -173,8 +168,8 @@
                   <div class="grey--text">
                     Заполните только нужные поля. Остальные оставьте пустыми.
                   </div>
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
                     justify-space-between
                   >
@@ -191,11 +186,9 @@
                     </v-flex>
                   </v-layout>
                 </div>
-                <div
-                  v-show="isCustomOrder"
-                >
-                  <v-layout 
-                    row 
+                <div v-show="isCustomOrder">
+                  <v-layout
+                    row
                     wrap
                     justify-space-between
                   >
@@ -216,7 +209,7 @@
                       />
                     </v-flex>
                     <v-flex>
-                      <v-text-field 
+                      <v-text-field
                         v-model="customOrder.about"
                         label="Описание"
                         outline
@@ -229,19 +222,23 @@
             </v-layout>
           </v-form>
         </v-container>
+        <Price
+          :event-id="event.id"
+          :token="token"
+        />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn 
-          color="#aa282a" 
-          dark 
+        <v-btn
+          color="#aa282a"
+          dark
           @click="close"
         >
           Закрыть
         </v-btn>
-        <v-btn 
-          color="#aa282a" 
-          dark 
+        <v-btn
+          color="#aa282a"
+          dark
           type="submit"
           :form="'form' + museum.id + event.id"
         >
@@ -253,9 +250,10 @@
 </template>
 
 <script>
+import Price from './Price'
 export default {
-
   name: 'EditObjectables',
+  components: { Price },
   props: {
     museum: {
       type: Object,
@@ -271,14 +269,14 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     event: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -296,7 +294,7 @@ export default {
         price: NaN,
       },
       isExtra: false,
-    };
+    }
   },
   computed: {
     attribute: function() {
@@ -313,12 +311,12 @@ export default {
       return JSON.stringify({
         isExtra: this.isExtra,
         duration: this.duration,
-        priceList: this.getPriceList()
+        priceList: this.getPriceList(),
       })
     },
     customerTypes: function() {
       let result = []
-      Object.keys(this.customers).map((key) => {
+      Object.keys(this.customers).map(key => {
         if (key != '') {
           result.push({
             id: key,
@@ -343,9 +341,9 @@ export default {
         this.customerId = JSON.parse(this.event.extra).customer
         if (JSON.parse(this.event.extra).priceList) {
           this.customerTypes.forEach((customerType, i) => {
-            const value = (JSON.parse(this.event.extra).priceList.find((price) => {
+            const value = JSON.parse(this.event.extra).priceList.find(price => {
               return customerType.id == price.customerId
-            }))
+            })
             this.priceArray[i] = value ? value.price : 0
           })
         }
@@ -361,20 +359,20 @@ export default {
     },
     getPriceList() {
       let result = []
-      this.customerTypes.forEach((customer) => {
+      this.customerTypes.forEach(customer => {
         if (this.priceArray[customer.id]) {
           result.push({
             customerId: customer.id,
             customerName: customer.name,
             customerAge: customer.description,
-            price: parseInt(this.priceArray[customer.id])
+            price: parseInt(this.priceArray[customer.id]),
           })
         }
       })
       return result
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>
