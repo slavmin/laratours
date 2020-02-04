@@ -3,6 +3,12 @@
     <h1 class="text-xs-center">
       Маршруты
     </h1>
+    <Form1 />
+    <Form2 />
+    <Form3 />
+    <Form4 />
+    <Form5 />
+    <Form6 />
     <v-layout
       row
       wrap
@@ -72,10 +78,22 @@
 </template>
 <script>
 import YandexMap from './YandexMap'
+import Form1 from './gibdd/Form1'
+import Form2 from './gibdd/Form2'
+import Form3 from './gibdd/Form3'
+import Form4 from './gibdd/Form4'
+import Form5 from './gibdd/Form5'
+import Form6 from './gibdd/Form6'
 export default {
   name: 'TourRoutes',
   components: {
     YandexMap,
+    Form1,
+    Form2,
+    Form3,
+    Form4,
+    Form5,
+    Form6,
   },
   props: {
     data: {
