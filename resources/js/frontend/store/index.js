@@ -21,6 +21,7 @@ import deleteTours from './modules/deleteTours'
 import navBar from './modules/navBar'
 
 import transportDocs from './modules/transportDocs'
+import gibddNotify from './modules/gibddNotify'
 
 Vue.use(Vuex)
 
@@ -39,5 +40,6 @@ export default new Vuex.Store({
         deleteTours,
         navBar,
         transportDocs,
+        gibddNotify,
     }
 })

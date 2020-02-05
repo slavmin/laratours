@@ -1,144 +1,256 @@
 <template>
   <div class="card">
-    <h5 class="card-header info-color white-text text-center py-4">
+    <h5 class="card-header white-text text-center py-4 tc-blue-header">
       <strong>Информация о заявителе</strong>
     </h5>
-    <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
       <!-- Form -->
-      <form
-        id="form1"
-        class="text-center"
-        target="_blank"
-        style="color: #757575;"
-        action="https://гибдд.рф/transportation/applicant/"
-        method="POST"
-      >
+      <form class="text-center">
         <!-- Name -->
         <div class="md-form">
           <input
-            id="name"
-            name="name"
+            id="form1-name"
+            v-model="info.name"
             type="text"
             class="form-control"
-            value="Тестов Тест Тестович"
           >
-          <label for="name">ФИО</label>
+          <label for="form1-name">ФИО</label>
         </div>
         <!-- Position -->
         <div class="md-form">
           <input
-            id="position"
-            name="position"
+            id="form1-position"
+            v-model="info.position"
             type="text"
             class="form-control"
-            value="Тестировщик форм"
           >
-          <label for="position">Должность</label>
+          <label for="form1-position">Должность</label>
         </div>
         <!-- Phone number -->
         <div class="md-form">
           <input
-            id="phone"
-            name="phone"
+            id="form1-phone"
+            v-model="info.phone"
             type="text"
             class="form-control"
-            value="+7-000-111-22-33"
           >
-          <label for="phone">Телефон</label>
+          <label for="form1-phone">Телефон</label>
         </div>
         <!-- email -->
         <div class="md-form">
           <input
-            id="email"
-            name="email"
+            id="form1-email"
+            v-model="info.email"
             type="email"
             class="form-control"
-            value="test@test.test"
           >
-          <label for="email">Email</label>
+          <label for="form1-email">Email</label>
         </div>
         <!-- Region -->
-        <div class="md-form">
-          <input
-            id="region"
-            name="region_code[]"
-            type="text"
-            class="form-control"
-            value="78"
-          >
-          <label for="region">Регион</label>
+        <div class="row">
+          <div class="col-12 text-center grey-text">
+            Регионы, по маршруту, включая регион начала движения
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <v-select
+              v-model="info.selectedRegionCodes"
+              color="#aa282a"
+              :items="regionsWithCodesArray"
+              attach
+              chips
+              multiple
+            />
+          </div>
         </div>
         <!-- Count -->
         <div class="md-form">
           <input
-            id="count"
-            name="count"
+            id="form1-count"
+            v-model="info.count"
             type="text"
             class="form-control"
-            value="15"
           >
-          <label for="count">Количество детей</label>
+          <label for="form1-count">Количество детей</label>
         </div>
         <!-- Goal -->
         <div class="md-form">
           <input
-            id="goal"
-            name="goal"
+            id="form1-goal"
+            v-model="info.goal"
             type="text"
             class="form-control"
-            value="Экскурсия теста"
           >
-          <label for="goal">Цель</label>
+          <label for="form1-goal">Цель</label>
         </div>
         <!-- Date start -->
-        <div class="md-form">
-          <input
-            id="date_start"
-            name="date_start"
-            type="text"
-            class="form-control"
-            value="2020-10-01 00:00"
-          >
-          <label for="date_start">
+        <div class="row">
+          <div class="col-12 text-center grey-text">
             Предполагаемое время начала перевозки
-          </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <v-menu
+              v-model="showDateStart"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="info.dateStart"
+                  label="Дата"
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="info.dateStart"
+                color="#aa282a"
+                :min="dateToday"
+                locale="ru-ru"
+                first-day-of-week="1"
+              />
+            </v-menu>
+          </div>
+          <div class="col-6">
+            <v-menu
+              v-model="showTimeStart"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="info.timeStart"
+                  label="Время"
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-time-picker
+                v-model="info.timeStart"
+                color="#aa282a"
+                locale="ru-ru"
+                :allowed-minutes="allowedStep"
+                class="mt-3"
+                format="24hr"
+              />
+            </v-menu>
+          </div>
         </div>
         <!-- Date end -->
-        <div class="md-form">
-          <input
-            id="date_end"
-            name="date_end"
-            type="text"
-            class="form-control"
-            value="2020-11-01 00:00"
-          >
-          <label for="date_start">
+        <div class="row">
+          <div class="col-12 text-center grey-text">
             Предполагаемое время окончания перевозки
-          </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <v-menu
+              v-model="showDateEnd"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="info.dateEnd"
+                  label="Дата"
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="info.dateEnd"
+                :min="minDateEnd"
+                color="#aa282a"
+                locale="ru-ru"
+                first-day-of-week="1"
+              />
+            </v-menu>
+          </div>
+          <div class="col-6">
+            <v-menu
+              v-model="showTimeEnd"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="info.timeEnd"
+                  label="Время"
+                  readonly
+                  v-on="on"
+                />
+              </template>
+              <v-time-picker
+                v-model="info.timeEnd"
+                color="#aa282a"
+                locale="ru-ru"
+                :allowed-minutes="allowedStep"
+                class="mt-3"
+                format="24hr"
+              />
+            </v-menu>
+          </div>
         </div>
       </form>
-      <!-- Sign in button -->
-      <button
-        class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-        @click="send"
-      >
-        Отправить
-      </button>
-      <!-- Form -->
     </div>
   </div>
-  <!-- Material form login -->
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   name: 'Form1',
-  methods: {
-    send() {
-      let form = document.getElementById('form1')
-      form.submit()
-      console.log('submit', form)
+  data() {
+    return {
+      showDateStart: false,
+      showTimeStart: false,
+      showDateEnd: false,
+      showTimeEnd: false,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      info: 'getForm1',
+      regionsWithCodesArray: 'getRegionsWithCodesArray',
+    }),
+    dateToday: function() {
+      return moment().format('YYYY-MM-DD')
     },
+    minDateEnd: function() {
+      let result = ''
+      if (this.info.dateStart) {
+        result = this.info.dateStart
+      } else {
+        result = this.dateToday
+      }
+      return result
+    },
+  },
+  methods: {
+    allowedStep: m => m % 15 === 0,
   },
 }
 </script>

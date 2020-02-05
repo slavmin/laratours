@@ -1,86 +1,101 @@
 <template>
   <div class="card">
-    <h5 class="card-header info-color white-text text-center py-4">
+    <h5 class="card-header white-text text-center py-4 tc-blue-header">
       <strong>Информация о водителе (водителях)</strong>
     </h5>
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
-      <!-- Form -->
-      <form
-        class="text-center"
-        target="_blank"
-        style="color: #757575;"
-        action="https://гибдд.рф/transportation/drivers/"
-        method="POST"
+      <!-- Vue for-loop -->
+      <div
+        v-for="(driver, i) in info.drivers"
+        :key="i"
       >
+        <div class="h5 grey-text pt-2">
+          Водитель {{ i+1 }}
+          <button
+            class="btn btn-red btn-small"
+            @click="removeDriver(driver)"
+          >
+            <i class="fas fa-times white-text" />
+          </button>
+        </div>
         <!-- Driver name -->
         <div class="md-form">
           <input
-            id="drivers[0][name]"
-            name="drivers[0][name]"
+            :id="`drivers[${i}][name]`"
+            v-model="driver.name"
             type="text"
             class="form-control"
-            value="Водителев Вод Водович"
           >
-          <label for="drivers[0][name]">
+          <label :for="`drivers[${i}][name]`">
             Фамилия имя и отчество (полностью)
           </label>
         </div>
         <!-- Driver license number -->
         <div class="md-form">
           <input
-            id="drivers[0][licence]"
-            name="drivers[0][licence]"
+            :id="`drivers[${i}][licence]`"
+            v-model="driver.licence"
             type="text"
             class="form-control"
-            value="78РН000000"
           >
-          <label for="drivers[0][licence]">
+          <label :for="`drivers[${i}][licence]`">
             Номер водительского удостоверения
           </label>
         </div>
         <!-- Driver license date -->
         <div class="md-form">
           <input
-            id="drivers[0][licence_date]"
-            name="drivers[0][licence_date]"
+            :id="`drivers[${i}][licence_date]`"
+            v-model="driver.licence_date"
             type="text"
             class="form-control"
-            value="01.01.2001"
           >
-          <label for="drivers[0][licence_date]">
+          <label :for="`drivers[${i}][licence_date]`">
             Дата выдачи водительского удостоверения
           </label>
         </div>
         <!-- Driver license date -->
+        <div class="row text-center justify-content-center">
+          <p class="grey-text mt-3 mb-0">
+            Сведения о стаже работы в качестве водителя транспортного средства
+            категории «D» не менее одного года из последних 3 календарных лет:
+          </p>
+        </div>
         <div class="md-form">
           <input
-            id="drivers[0][experience]"
-            name="drivers[0][experience]"
+            :id="`drivers[${i}][experience]`"
+            v-model="driver.experience"
             type="text"
             class="form-control"
-            value="10 лет"
           >
-          <label for="drivers[0][experience]">
-            Сведения о стаже работы в качестве водителя транспортного средства
-            категории «D» не менее одного года из последних 3 календарных лет
-          </label>
         </div>
-        <!-- Sign in button -->
+        <hr>
+      </div>
+      <!-- /Vue for-loop -->
+      <div class="row text-center justify-content-center">
         <button
-          class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-          type="submit"
+          class="btn btn-green btn-small"
+          @click="addDriver"
         >
-          Отправить
+          <i class="fas fa-plus white-text" />
         </button>
-      </form>
-      <!-- Form -->
+      </div>
     </div>
   </div>
   <!-- Material form login -->
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'Form4',
+  name: 'Form5',
+  computed: {
+    ...mapGetters({
+      info: 'getForm5',
+    }),
+  },
+  methods: {
+    ...mapActions(['removeDriver', 'addDriver']),
+  },
 }
 </script>

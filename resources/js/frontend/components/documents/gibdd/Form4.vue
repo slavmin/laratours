@@ -1,89 +1,102 @@
 <template>
   <div class="card">
-    <h5 class="card-header info-color white-text text-center py-4">
-      <strong>Информация о заказчике</strong>
+    <h5 class="card-header white-text text-center py-4 tc-blue-header">
+      <strong>Информация об используемых автобусах</strong>
     </h5>
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
-      <!-- Form -->
-      <form
-        class="text-center"
-        target="_blank"
-        style="color: #757575;"
-        action="https://гибдд.рф/transportation/vehicles/"
-        method="POST"
+      <!-- Vue for-loop -->
+      <div
+        v-for="(vehicle, i) in info.vehicles"
+        :key="i"
       >
+        <div class="h5 grey-text pt-2">
+          Автобус {{ i+1 }}
+          <button
+            class="btn btn-red btn-small"
+            @click="removeVehicle(vehicle)"
+          >
+            <i class="fas fa-times white-text" />
+          </button>
+        </div>
         <!-- Bus model -->
         <div class="md-form">
           <input
-            id="vehicles[0][brand_and_model]"
-            name="vehicles[0][brand_and_model]"
+            :id="`vehicles[${i}][brand_and_model]`"
+            v-model="vehicle.brand_and_model"
             type="text"
             class="form-control"
-            value="Тестовый автобус"
           >
-          <label for="vehicles[0][brand_and_model]">
+          <label :for="`vehicles[${i}][brand_and_model]`">
             Марка, модель
           </label>
         </div>
         <!-- Bus regnumber -->
         <div class="md-form">
           <input
-            id="vehicles[0][number]"
-            name="vehicles[0][number]"
+            :id="`vehicles[${i}][number]`"
+            v-model="vehicle.number"
             type="text"
             class="form-control"
-            value="o000oo00"
           >
-          <label for="vehicles[0][number]">
+          <label :for="`vehicles[${i}][number]`">
             Государственный регистрационный знак
           </label>
         </div>
         <!-- Bus regnumber -->
         <div class="md-form">
           <input
-            id="vehicles[0][diagnostic_card_info]"
-            name="vehicles[0][diagnostic_card_info]"
+            :id="`vehicles[${i}][diagnostic_card_info]`"
+            v-model="vehicle.diagnostic_card_info"
             type="text"
             class="form-control"
-            value="111"
           >
-          <label for="vehicles[0][diagnostic_card_info]">
+          <label :for="`vehicles[${i}][diagnostic_card_info]`">
             Номер диагностической карты и срок её действия
           </label>
         </div>
         <div class="custom-control custom-checkbox">
           <input
-            id="glonass"
+            :id="`navigator_info[${i}]`"
+            v-model="vehicle.navigator_info"
             type="checkbox"
-            name="vehicles[0][navigator_info]"
             class="custom-control-input"
-            value="1"
             checked
           >
           <label
-            class="custom-control-label"
-            for="glonass"
+            class="custom-control-label grey-text"
+            :for="`navigator_info[${i}]`"
           >
-            Сведения об оснащении тахографом и аппаратурой спутниковой навигации
+            Сведения об оснащении тахографом и аппаратурой спутниковой
+            навигации
             ГЛОНАСС или ГЛОНАСС/GPS
           </label>
         </div>
-        <!-- Sign in button -->
+        <hr>
+      </div>
+      <!-- /Vue for-loop -->
+      <div class="row text-center justify-content-center">
         <button
-          class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-          type="submit"
+          class="btn btn-green btn-small"
+          @click="addVehicle"
         >
-          Отправить
+          <i class="fas fa-plus white-text" />
         </button>
-      </form>
-      <!-- Form -->
+      </div>
     </div>
   </div>
-  <!-- Material form login -->
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Form4',
+  computed: {
+    ...mapGetters({
+      info: 'getForm4',
+    }),
+  },
+  methods: {
+    ...mapActions(['removeVehicle', 'addVehicle']),
+  },
 }
 </script>

@@ -1,108 +1,138 @@
 <template>
   <div class="card">
-    <h5 class="card-header info-color white-text text-center py-4">
+    <h5 class="card-header white-text text-center py-4 tc-blue-header">
       <strong>Информация о заказчике</strong>
     </h5>
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
       <!-- Form -->
-      <form
-        class="text-center"
-        target="_blank"
-        style="color: #757575;"
-        action="https://гибдд.рф/transportation/customers/"
-        method="POST"
-      >
+      <form class="text-center">
         <!-- Type -->
-        <div class="md-form">
-          <input
-            id="type"
-            name="type"
-            type="text"
-            class="form-control"
-            value="2"
-          >
-          <label for="type">Тип заказчика (1 - физ, 2 - юр, 3 - ИП)</label>
+        <div class="row">
+          <div class="col-12 text-center grey-text">
+            Тип заказчика
+          </div>
         </div>
-        <!-- Entity name -->
-        <div class="md-form">
+        <div class="row">
+          <div class="col-12">
+            <v-select
+              v-model="info.type"
+              color="#aa282a"
+              :items="typesArray"
+              attach
+            />
+          </div>
+        </div>
+        <!-- Entity name. For type 2 -->
+        <div
+          v-if="info.type == 2"
+          class="md-form"
+        >
           <input
-            id="entity_name"
-            name="entity_name"
+            id="form2-entity_name"
+            v-model="info.entity_name"
             type="text"
             class="form-control"
-            value="не ООО 'Тест'"
           >
-          <label for="entity_name">
-            Полное наименование с указанием организационно-правовой формы
+          <label for="form2-entity_name">
+            Полное наименование организации
           </label>
         </div>
-        <!-- Entity address -->
-        <div class="md-form">
+        <!-- Name. For type 3 -->
+        <div
+          v-if="info.type == 3"
+          class="md-form"
+        >
           <input
-            id="entity_address"
-            name="entity_address"
+            id="form2-name"
+            v-model="info.name"
             type="text"
             class="form-control"
-            value="СПб"
           >
-          <label for="entity_address">
+          <label for="form2-name">
+            ФИО
+          </label>
+        </div>
+        <!-- Entity address. For type 2 -->
+        <div
+          v-if="info.type == 2"
+          class="md-form"
+        >
+          <input
+            id="form2-entity_address"
+            v-model="info.entity_address"
+            type="text"
+            class="form-control"
+          >
+          <label for="form2-entity_address">
             Юридический адрес
           </label>
         </div>
-        <!-- Entity location -->
-        <div class="md-form">
+        <!-- Entity address. For type 3 -->
+        <div
+          v-if="info.type == 3"
+          class="md-form"
+        >
           <input
-            id="entity_location"
-            name="entity_location"
+            id="form2-address"
+            v-model="info.address"
             type="text"
             class="form-control"
-            value="Горелово"
           >
-          <label for="entity_location">
+          <label for="form2-address">
+            Адрес места жительства
+          </label>
+        </div>
+        <!-- Entity location. Only for type 2 -->
+        <div
+          v-if="info.type == 2"
+          class="md-form"
+        >
+          <input
+            id="form2-entity_location"
+            v-model="info.entity_location"
+            type="text"
+            class="form-control"
+          >
+          <label for="form2-entity_location">
             Адрес места нахождения
           </label>
         </div>
         <!-- Phone number -->
         <div class="md-form">
           <input
-            id="phone"
-            name="phone"
+            id="form2-phone"
+            v-model="info.phone"
             type="text"
             class="form-control"
-            value="+7-111-22-55"
           >
-          <label for="phone">Контактный номер телефона и (или) факса</label>
+          <label for="form2-phone">
+            Контактный номер телефона и (или)
+            факса
+          </label>
         </div>
         <!-- email -->
         <div class="md-form">
           <input
-            id="email"
-            name="email"
+            id="form2-email"
+            v-model="info.email"
             type="email"
             class="form-control"
-            value="test@test.test"
           >
-          <label for="email">Адрес электронной почты (при наличии)</label>
+          <label for="form2-email">
+            Адрес электронной почты (при наличии)
+          </label>
         </div>
         <!-- INN -->
         <div class="md-form">
           <input
-            id="inn"
-            name="inn"
+            id="form2-inn"
+            v-model="info.inn"
             type="text"
             class="form-control"
-            value="7729773587"
           >
-          <label for="inn">ИНН</label>
+          <label for="form2-inn">ИНН</label>
         </div>
-        <!-- Sign in button -->
-        <button
-          class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-          type="submit"
-        >
-          Отправить
-        </button>
       </form>
       <!-- Form -->
     </div>
@@ -110,7 +140,21 @@
   <!-- Material form login -->
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Form2',
+  data() {
+    return {
+      typesArray: [
+        { value: '2', text: 'Юр. лицо' },
+        { value: '3', text: 'ИП' },
+      ],
+    }
+  },
+  computed: {
+    ...mapGetters({
+      info: 'getForm2',
+    }),
+  },
 }
 </script>

@@ -31,7 +31,11 @@ body {
 
 // TourClick (tc) redefined styles
 .tc-blue-bg {
-    background-color: #216771;
+    background-color: #216771 !important;
+}
+
+.tc-blue-header {
+    background-color: #66A5AE !important;
 }
 
 .tc-navbar {

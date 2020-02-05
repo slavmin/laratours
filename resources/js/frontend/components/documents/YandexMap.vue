@@ -4,26 +4,40 @@
       class="white--text"
       style="background-color: #66a5ae;"
     >
-      <h2>День {{ dayData.day }}</h2>
+      <h2>Маршрут</h2>
     </v-card-title>
     <v-card-text>
       <v-layout
         row
         wrap
+        justify-center
       >
-        <v-flex>
-          <h3>Объекты выбранные в туре:</h3>
-          <ul>
-            <li
-              v-for="object in objectsAtDay"
+        <v-flex
+          xs12
+          md4
+          xl4
+        >
+          <h3 class="grey--text">
+            Адрес места начала перевозки:
+          </h3>
+          <v-radio-group v-model="info.address_start">
+            <v-radio
+              v-for="object in routes"
               :key="object"
-            >
-              {{ object }}
-            </li>
-          </ul>
+              :label="object"
+              :value="object"
+            />
+          </v-radio-group>
         </v-flex>
-        <v-flex>
-          <h3>Распознанные адреса объектов:</h3>
+        <v-flex
+          xs12
+          md7
+          xl4
+        >
+          <h3 class="grey--text">
+            Адреса промежуточных остановочных пунктов и места окончания
+            перевозки:
+          </h3>
           <ul
             :id="`address-list--${mapId}`"
             :class="`address-list address-list--${mapId}`"
@@ -32,17 +46,39 @@
               v-for="(address, i) in routes"
               :key="i"
             >
-              <span class="address-text">{{ address }}</span>
-              <button
-                class="btn-remove"
-                @click="removeAddress(address)"
+              <v-layout
+                row
+                wrap
               >
-                x
-              </button>
+                <v-flex xs6>
+                  <p class="grey-text">
+                    {{ getObjectName(address) }}
+                  </p>
+                  <span class="address-text">
+                    {{ address }}
+                  </span>
+                  <button
+                    class="btn-remove"
+                    @click="removeAddress(address)"
+                  >
+                    x
+                  </button>
+                </v-flex>
+                <v-flex xs6>
+                  <v-text-field
+                    :id="`goal_${address}`"
+                    label="Цель стоянки"
+                    @input="goalChanged(address)"
+                  />
+                  <v-text-field
+                    :id="`time_${address}`"
+                    label="Планируемое время стоянки (ЧЧ:ММ)"
+                    @input="timeChanged(address)"
+                  />
+                </v-flex>
+              </v-layout>
             </li>
           </ul>
-        </v-flex>
-        <v-flex>
           <v-layout
             row
             wrap
@@ -65,31 +101,33 @@
               <v-icon>add</v-icon>
             </v-btn>
           </v-layout>
-          <v-layout
-            row
-            wrap
-          >
-            <v-btn
-              v-if="!showLoader"
-              color="green"
-              class="no-print"
-              dark
-              @click="buildMap"
-            >
-              Построить схему
-            </v-btn>
-            <div
-              v-if="showLoader"
-              class="loadingio-spinner-dual-ball-2lx0oq2r636"
-            >
-              <div class="ldio-z4c08nm4i3">
-                <div />
-                <div />
-                <div />
-              </div>
-            </div>
-          </v-layout>
         </v-flex>
+      </v-layout>
+      <v-divider />
+      <v-layout
+        row
+        wrap
+        justify-center
+      >
+        <v-btn
+          v-if="!showLoader"
+          color="green"
+          class="no-print"
+          dark
+          @click="buildMap"
+        >
+          Построить схему
+        </v-btn>
+        <div
+          v-if="showLoader"
+          class="loadingio-spinner-dual-ball-2lx0oq2r636"
+        >
+          <div class="ldio-z4c08nm4i3">
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
       </v-layout>
       <v-layout
         row
@@ -104,9 +142,10 @@
   </v-card>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import { Sortable } from '@shopify/draggable'
 import html2canvas from 'html2canvas'
-
+import axios from 'axios'
 export default {
   name: 'YandexMap',
   props: {
@@ -122,14 +161,40 @@ export default {
       objectsAtDay: [],
       routesForMap: [],
       showLoader: false,
+      goals: [],
     }
   },
   computed: {
+    ...mapGetters({
+      info: 'getForm6',
+    }),
     mapId: function() {
-      return `map-${this.dayData.day}`
+      return `map`
+    },
+  },
+  watch: {
+    objectsAtDay: {
+      handler: function(val) {
+        this.updateStopPoints(val)
+      },
+      deep: true,
+    },
+    routesForMap: {
+      handler: function(val) {
+        let result = []
+        val.forEach(address => {
+          let object = this.objectsAtDay.find(object => {
+            return object.address == address
+          })
+          result.push(object)
+        })
+        this.objectsAtDay = result
+      },
+      deep: true,
     },
   },
   mounted() {
+    console.log(this.dayData)
     this.makeRoutesArray()
     setTimeout(() => {
       this.buildMap()
@@ -138,17 +203,21 @@ export default {
     // this.buildMap()
   },
   methods: {
+    ...mapActions(['updateStopPoints']),
     makeRoutesArray() {
       this.dayData.points.forEach(point => {
         if (point.address != 'Адрес не указан') {
           this.routes.push(point.address)
         }
-        this.objectsAtDay.push(
-          `${point.name}: ${point.event}. ${point.address}`
-        )
+        this.objectsAtDay.push({
+          name: point.name,
+          event: point.event,
+          address: point.address,
+          goal: '',
+          time: '',
+        })
       })
       this.routesForMap = this.routes
-      console.log(this.objectsAtDay)
     },
     resetMap() {
       let div = document.getElementById(this.mapId)
@@ -220,30 +289,54 @@ export default {
     },
     addNewAddress() {
       this.routes.push(this.newAddress)
+      this.objectsAtDay.push({
+        name: 'Адрес добавлен вручную',
+        event: '',
+        address: this.newAddress,
+        goal: '',
+        time: '',
+      })
       this.newAddress = ''
       this.rebuildRoutesArray()
     },
     removeAddress(address) {
       this.routes = this.routes.filter(item => item != address)
+      this.objectsAtDay = this.objectsAtDay.filter(
+        object => object.address != address
+      )
       this.rebuildRoutesArray()
     },
     rebuildRoutesArray() {
       setTimeout(() => {
         const list = document.getElementById(`address-list--${this.mapId}`)
         const listItems = list.querySelectorAll('li')
-        console.log(
-          'TCL: rebuildRoutesArray -> listItems',
-          listItems,
-          this.mapId
-        )
         let newRoutes = []
         listItems.forEach(item => {
           const address = item.querySelector('span')
-          newRoutes.push(address.innerText)
+          newRoutes.push(address.innerText.trim())
         })
         this.routesForMap = newRoutes
         this.showLoader = false
       }, 1000)
+    },
+    getObjectName(address) {
+      const object = this.objectsAtDay.find(object => object.address == address)
+      const result = `${object.name}`
+      return result
+    },
+    goalChanged(address) {
+      const goal = document.getElementById(`goal_${address}`).value
+      let object = this.objectsAtDay.find(object => {
+        return object.address == address
+      })
+      object.goal = goal
+    },
+    timeChanged(address) {
+      const time = document.getElementById(`time_${address}`).value
+      let object = this.objectsAtDay.find(object => {
+        return object.address == address
+      })
+      object.time = time
     },
     saveMap() {
       const map = document.getElementById('map')

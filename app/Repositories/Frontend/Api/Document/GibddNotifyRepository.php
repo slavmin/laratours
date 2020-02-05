@@ -100,6 +100,8 @@ class GibddNotifyRepository
     $this->tour = Tour::where('id', $tour_id)->first();
     $this->tour_options = json_decode($this->tour->extra);
 
+    $transport_days = $this->getTourTransportDays($tour_id);
+
     // Calculate tour length in days
     $tour_days_count = $this->tour_options->options->days;
     $tour_nights_count = $this->tour_options->options->nights;
@@ -118,19 +120,19 @@ class GibddNotifyRepository
 
       if (property_exists($museum->obj, 'day')) {
         $museum_day = $museum->obj->day;
-      } else {
-        $museum_day = 0;
       }
-      $museum_data = [
-        'name'    => $museum->museum->name,
-        'event'   => $museum->obj->name,
-      ];
-      if (property_exists(json_decode($museum->museum->extra), 'address')) {
-        $museum_data['address'] = json_decode($museum->museum->extra)->address;
-      } else {
-        $museum_data['address'] = 'Адрес не указан';
+      if (in_array($museum_day, $transport_days)) {
+        $museum_data = [
+          'name'    => $museum->museum->name,
+          'event'   => $museum->obj->name,
+        ];
+        if (property_exists(json_decode($museum->museum->extra), 'address')) {
+          $museum_data['address'] = json_decode($museum->museum->extra)->address;
+        } else {
+          $museum_data['address'] = 'Адрес не указан';
+        }
+        array_push($result[$museum_day], $museum_data);
       }
-      array_push($result[$museum_day], $museum_data);
     }
 
     // Add hotels
@@ -147,11 +149,10 @@ class GibddNotifyRepository
 
       if (property_exists($hotel->obj, 'daysArray')) {
         foreach ($hotel->obj->daysArray as $hotel_day) {
-          array_push($result[$hotel_day], $hotel_data);
+          if (in_array($hotel_day, $transport_days)) {
+            array_push($result[$hotel_day], $hotel_data);
+          }
         }
-      } else {
-        $hotel_day = 0;
-        array_push($result[$hotel_day], $hotel_data);
       }
     }
 
@@ -169,11 +170,10 @@ class GibddNotifyRepository
 
       if (property_exists($meal->obj, 'daysArray')) {
         foreach ($meal->obj->daysArray as $meal_day) {
-          array_push($result[$meal_day], $meal_data);
+          if (in_array($meal_day, $transport_days)) {
+            array_push($result[$meal_day], $meal_data);
+          }
         }
-      } else {
-        $meal_day = 0;
-        array_push($result[$meal_day], $meal_data);
       }
     }
 
@@ -184,6 +184,30 @@ class GibddNotifyRepository
     }
 
     return collect($result);
+  }
+
+  /**
+   * Возвращает массив дней в которых учавствует транспорт
+   * 
+   * @param @tour_id
+   */
+  public function getTourTransportDays($tour_id)
+  {
+    $this->tour = Tour::where('id', $tour_id)->first();
+    $this->tour_options = json_decode($this->tour->extra);
+
+    $result = [];
+
+    foreach ($this->tour_options->transport as $transport) {
+      $transport_days = $transport->obj->daysArray;
+      foreach ($transport_days as $transport_day) {
+        if (!in_array($transport_day, $result)) {
+          array_push($result, $transport_day);
+        }
+      }
+    }
+
+    return $result;
   }
 
   public function getHeader()
