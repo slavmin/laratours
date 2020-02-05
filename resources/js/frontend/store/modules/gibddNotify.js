@@ -33,7 +33,12 @@ export default {
     },
     mutations: {
         setTourInfo(state, data) {
-            state.tourInfo = data
+            state.tourInfo.tourName = data.tour_name
+            state.tourInfo.form1 = data.form1
+            state.tourInfo.form2 = data.form2
+            state.tourInfo.form3 = data.form3
+            state.tourInfo.form4 = data.form4
+            state.tourInfo.form5 = data.form5
         },
         filterVehicles(state, vehicle) {
             state.tourInfo.form4.vehicles = state.tourInfo.form4.vehicles.filter(item => item != vehicle)
@@ -64,411 +69,407 @@ export default {
     state: {
         tourInfo: {
             regionsWithCodesArray: [{
-                    value: '01',
+                    value: 1,
                     text: 'Республика Адыгея'
                 },
                 {
-                    value: '02',
+                    value: 0,
                     text: 'Республика Башкортостан'
                 },
                 {
-                    value: '03',
+                    value: 3,
                     text: 'Республика Бурятия'
                 },
                 {
-                    value: '04',
+                    value: 4,
                     text: 'Республика Алтай'
                 },
                 {
-                    value: '05',
+                    value: 5,
                     text: 'Республика Дагестан'
                 },
                 {
-                    value: '06',
+                    value: 6,
                     text: 'Республика Ингушетия'
                 },
                 {
-                    value: '07',
+                    value: 7,
                     text: 'Кабардино-Балкарская Республика'
                 },
                 {
-                    value: '08',
+                    value: 8,
                     text: 'Республика Калмыкия'
                 },
                 {
-                    value: '09',
+                    value: 9,
                     text: 'Республика Карачаево-Черкессия'
                 },
                 {
-                    value: '10',
+                    value: 10,
                     text: 'Республика Карелия'
                 },
                 {
-                    value: '11',
+                    value: 11,
                     text: 'Республика Коми'
                 },
                 {
-                    value: '12',
+                    value: 12,
                     text: 'Республика Марий Эл'
                 },
                 {
-                    value: '13',
+                    value: 13,
                     text: 'Республика Мордовия'
                 },
                 {
-                    value: '14',
+                    value: 14,
                     text: 'Республика Саха (Якутия)'
                 },
                 {
-                    value: '15',
+                    value: 15,
                     text: 'Республика Северная Осетия-Алания'
                 },
                 {
-                    value: '16',
+                    value: 16,
                     text: 'Республика Татарстан'
                 },
                 {
-                    value: '17',
+                    value: 17,
                     text: 'Республика Тыва'
                 },
                 {
-                    value: '18',
+                    value: 18,
                     text: 'Удмуртская Республика'
                 },
                 {
-                    value: '19',
+                    value: 19,
                     text: 'Республика Хакасия'
                 },
                 {
-                    value: '21',
+                    value: 21,
                     text: 'Чувашская Республика'
                 },
                 {
-                    value: '22',
+                    value: 22,
                     text: 'Алтайский край'
                 },
                 {
-                    value: '23',
+                    value: 23,
                     text: 'Краснодарский край'
                 },
                 {
-                    value: '24',
+                    value: 24,
                     text: 'Красноярский край'
                 },
                 {
-                    value: '25',
+                    value: 25,
                     text: 'Приморский край'
                 },
                 {
-                    value: '26',
+                    value: 26,
                     text: 'Ставропольский край'
                 },
                 {
-                    value: '27',
+                    value: 27,
                     text: 'Хабаровский край'
                 },
                 {
-                    value: '28',
+                    value: 28,
                     text: 'Амурская область'
                 },
                 {
-                    value: '29',
+                    value: 29,
                     text: 'Архангельская область'
                 },
                 {
-                    value: '30',
+                    value: 30,
                     text: 'Астраханская область'
                 },
                 {
-                    value: '31',
+                    value: 31,
                     text: 'Белгородская область'
                 },
                 {
-                    value: '32',
+                    value: 32,
                     text: 'Брянская область'
                 },
                 {
-                    value: '33',
+                    value: 33,
                     text: 'Владимирская область'
                 },
                 {
-                    value: '34',
+                    value: 34,
                     text: 'Волгоградская область'
                 },
                 {
-                    value: '35',
+                    value: 35,
                     text: 'Вологодская область'
                 },
                 {
-                    value: '36',
+                    value: 36,
                     text: 'Воронежская область'
                 },
                 {
-                    value: '37',
+                    value: 37,
                     text: 'Ивановская область'
                 },
                 {
-                    value: '38',
+                    value: 38,
                     text: 'Иркутская область'
                 },
                 {
-                    value: '39',
+                    value: 39,
                     text: 'Калининградская область'
                 },
                 {
-                    value: '40',
+                    value: 40,
                     text: 'Калужская область'
                 },
                 {
-                    value: '41',
+                    value: 41,
                     text: 'Камчатский край'
                 },
                 {
-                    value: '42',
+                    value: 42,
                     text: 'Кемеровская область - Кузбасс'
                 },
                 {
-                    value: '43',
+                    value: 43,
                     text: 'Кировская область'
                 },
                 {
-                    value: '44',
+                    value: 44,
                     text: 'Костромская область'
                 },
                 {
-                    value: '45',
+                    value: 45,
                     text: 'Курганская область'
                 },
                 {
-                    value: '46',
+                    value: 46,
                     text: 'Курская область'
                 },
                 {
-                    value: '47',
+                    value: 47,
                     text: 'Ленинградская область'
                 },
                 {
-                    value: '48',
+                    value: 48,
                     text: 'Липецкая область'
                 },
                 {
-                    value: '49',
+                    value: 49,
                     text: 'Магаданская область'
                 },
                 {
-                    value: '50',
+                    value: 50,
                     text: 'Московская область'
                 },
                 {
-                    value: '51',
+                    value: 51,
                     text: 'Мурманская область'
                 },
                 {
-                    value: '52',
+                    value: 52,
                     text: 'Нижегородская область'
                 },
                 {
-                    value: '53',
+                    value: 53,
                     text: 'Новгородская область'
                 },
                 {
-                    value: '54',
+                    value: 54,
                     text: 'Новосибирская область'
                 },
                 {
-                    value: '55',
+                    value: 55,
                     text: 'Омская область'
                 },
                 {
-                    value: '56',
+                    value: 56,
                     text: 'Оренбургская область'
                 },
                 {
-                    value: '57',
+                    value: 57,
                     text: 'Орловская область'
                 },
                 {
-                    value: '58',
+                    value: 58,
                     text: 'Пензенская область'
                 },
                 {
-                    value: '59',
+                    value: 59,
                     text: 'Пермский край'
                 },
                 {
-                    value: '60',
+                    value: 60,
                     text: 'Псковская область'
                 },
                 {
-                    value: '61',
+                    value: 61,
                     text: 'Ростовская область'
                 },
                 {
-                    value: '62',
+                    value: 62,
                     text: 'Рязанская область'
                 },
                 {
-                    value: '63',
+                    value: 63,
                     text: 'Самарская область'
                 },
                 {
-                    value: '64',
+                    value: 64,
                     text: 'Саратовская область'
                 },
                 {
-                    value: '65',
+                    value: 65,
                     text: 'Сахалинская область'
                 },
                 {
-                    value: '66',
+                    value: 66,
                     text: 'Свердловская область'
                 },
                 {
-                    value: '67',
+                    value: 67,
                     text: 'Смоленская область'
                 },
                 {
-                    value: '68',
+                    value: 68,
                     text: 'Тамбовская область'
                 },
                 {
-                    value: '69',
+                    value: 69,
                     text: 'Тверская область'
                 },
                 {
-                    value: '70',
+                    value: 70,
                     text: 'Томская область'
                 },
                 {
-                    value: '71',
+                    value: 71,
                     text: 'Тульская область'
                 },
                 {
-                    value: '72',
+                    value: 72,
                     text: 'Тюменская область'
                 },
                 {
-                    value: '73',
+                    value: 73,
                     text: 'Ульяновская область'
                 },
                 {
-                    value: '74',
+                    value: 74,
                     text: 'Челябинская область'
                 },
                 {
-                    value: '75',
+                    value: 75,
                     text: 'Забайкальский край'
                 },
                 {
-                    value: '76',
+                    value: 76,
                     text: 'Ярославская область'
                 },
                 {
-                    value: '77',
+                    value: 77,
                     text: 'г. Москва'
                 },
                 {
-                    value: '78',
+                    value: 78,
                     text: 'г. Санкт-Петербург'
                 },
                 {
-                    value: '79',
+                    value: 79,
                     text: 'Еврейская автономная область'
                 },
                 {
-                    value: '82',
+                    value: 82,
                     text: 'Республика Крым'
                 },
                 {
-                    value: '83',
+                    value: 83,
                     text: 'Ненецкий автономный округ'
                 },
                 {
-                    value: '86',
+                    value: 86,
                     text: 'Ханты-Мансийский автономный округ - Югра'
                 },
                 {
-                    value: '87',
+                    value: 87,
                     text: 'Чукотский автономный округ'
                 },
                 {
-                    value: '89',
+                    value: 89,
                     text: 'Ямало-Ненецкий автономный округ'
                 },
                 {
-                    value: '92',
+                    value: 92,
                     text: 'г. Севастополь'
                 },
                 {
-                    value: '95',
+                    value: 95,
                     text: 'Чеченская Республика'
                 },
             ],
+            tourName: '',
             form1: {
-                name: 'Иванов',
-                position: 'Менеджер',
-                phone: '322',
-                email: 'dfdf@fff.fg',
-                selectedRegionCodes: ['78'],
-                count: 15,
-                goal: 'экскурсия',
-                dateStart: '2020-03-01',
-                timeStart: '00:00',
-                dateEnd: '2020-03-02',
-                timeEnd: '00:00',
+                name: '',
+                position: '',
+                phone: '',
+                email: '',
+                selectedRegionCodes: [],
+                count: 0,
+                goal: '',
+                dateStart: '',
+                timeStart: '',
+                dateEnd: '',
+                timeEnd: '',
             },
             form2: {
-                type: '2',
-                entity_name: 'Юрлицо',
-                name: 'Фио ИП1',
-                entity_address: 'Московский',
-                address: '254',
-                entity_location: 'Подвал',
-                phone: '222',
-                email: 'ur@ur.ur',
-                inn: '7729773587',
+                type: '',
+                entity_name: '',
+                name: '',
+                entity_address: '',
+                address: '',
+                entity_location: '',
+                phone: '',
+                email: '',
+                inn: '',
             },
             form3: {
-                type: '3',
-                entity_name: 'ип',
-                name: 'ИПЭШНИК',
-                entity_address: '3',
-                address: 'Квартира Петрова спросить Вольнова',
-                entity_location: '3111',
-                phone: '555',
-                email: 'ip@ip.ip',
-                inn: '7729773587',
+                type: '',
+                entity_name: '',
+                name: '',
+                entity_address: '',
+                address: '',
+                entity_location: '',
+                phone: '',
+                email: '',
+                inn: '',
             },
             form4: {
                 vehicles: [{
-                        brand_and_model: 'IVECO',
-                        number: 'а222аа78',
-                        diagnostic_card_info: '231111m',
+                        brand_and_model: '',
+                        number: '',
+                        diagnostic_card_info: '',
                         navigator_info: 1,
                     },
                     {
-                        brand_and_model: 'MAN',
-                        number: 'в245аа78',
-                        diagnostic_card_info: '777m',
+                        brand_and_model: '',
+                        number: '',
+                        diagnostic_card_info: '',
                         navigator_info: 1,
                     }
                 ]
             },
             form5: {
                 drivers: [{
-                    name: 'Первый Водитель',
-                    licence: '78РНРХПХ1232',
-                    licence_date: '01.01.2000',
-                    experience: 'Опыт работы работы'
-                }, {
-                    name: 'Второй водитель',
-                    licence: '99РНРХПХ',
-                    licence_date: '01.01.1999',
-                    experience: 'Опыт работы2'
+                    name: '',
+                    licence: '',
+                    licence_date: '',
+                    experience: ''
                 }]
             },
             form6: {
-                address_start: 'Начало маршрута',
+                address_start: '',
                 region_code: '',
                 district: '',
                 distance: '',
@@ -479,6 +480,9 @@ export default {
         }
     },
     getters: {
+        getTourNameForGibddNotify(state) {
+            return state.tourInfo.tourName
+        },
         getRegionsWithCodesArray(state) {
             return state.tourInfo.regionsWithCodesArray
         },

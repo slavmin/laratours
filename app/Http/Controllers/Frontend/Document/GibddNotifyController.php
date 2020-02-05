@@ -42,6 +42,17 @@ class GibddNotifyController extends BaseController
 
         $streets_by_days = (new GibddNotifyRepository)->getTourAddresses($tour_id);
 
-        return view('frontend.tour.tour.gibdd.map', compact('streets_by_days', 'tour_transport_days', 'req_tour_day', 'tour_id'));
+        $notify_data = (new GibddNotifyRepository)->getDataForGibddNotify($tour_id, $req_tour_day);
+
+        return view(
+            'frontend.tour.tour.gibdd.map',
+            compact(
+                'streets_by_days',
+                'tour_transport_days',
+                'req_tour_day',
+                'tour_id',
+                'notify_data'
+            )
+        );
     }
 }

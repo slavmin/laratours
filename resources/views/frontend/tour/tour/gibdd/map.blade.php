@@ -7,11 +7,13 @@
 <div id="tour-constructor"></div>
   <?php $sstreets_by_days = json_encode($streets_by_days); ?>
   <?php $stour_transport_days = json_encode($tour_transport_days); ?>
+  <?php $snotify_data = json_encode($notify_data); ?>
   <tour-routes
     data-app
     :data="{{ $sstreets_by_days }}"
     :tour-transport-days="{{ $stour_transport_days }}"
     req-tour-day="{{ $req_tour_day }}"
     tour-id="{{ $tour_id }}"
+    :notify-data="{{ $snotify_data }}"
   ></tour-routes>
 @endsection

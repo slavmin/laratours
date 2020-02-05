@@ -3,6 +3,9 @@
     <h1 class="text-xs-center white-text my-5">
       Уведомление в ГИБДД
     </h1>
+    <h2 class="text-xs-center white-text my-5">
+      Тур "{{ tourName }}"
+    </h2>
     <div class="row">
       <p class="white-text display-1 mb-5">
         Ниже представленная информация была загружена из созданного вами тура,
@@ -26,7 +29,7 @@
       </div>
     </div>
     <div v-if="selectedTourDay">
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-md-6 col-xs-12">
           <Form1 />
         </div>
@@ -34,7 +37,7 @@
           <Form2 />
         </div>
       </div>
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-md-6 col-xs-12">
           <Form3 />
         </div>
@@ -42,7 +45,7 @@
           <Form4 />
         </div>
       </div>
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-md-6 col-xs-12">
           <Form5 />
         </div>
@@ -128,6 +131,7 @@
   </v-container>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import YandexMap from './YandexMap'
 import Form1 from './gibdd/Form1'
 import Form2 from './gibdd/Form2'
@@ -136,6 +140,7 @@ import Form4 from './gibdd/Form4'
 import Form5 from './gibdd/Form5'
 import Form6 from './gibdd/Form6'
 import SendInfoToGibdd from './gibdd/SendInfoToGibdd'
+import { mapActions } from 'vuex'
 export default {
   name: 'TourRoutes',
   components: {
@@ -165,6 +170,10 @@ export default {
       type: String,
       default: '',
     },
+    notifyData: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -173,12 +182,19 @@ export default {
       dayDataForYandexMap: {},
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      tourName: 'getTourNameForGibddNotify',
+    }),
+  },
   created() {
     this.parseData()
+    this.fillTourInfo(this.notifyData)
     if (this.reqTourDay) this.selectedTourDay = parseInt(this.reqTourDay)
+    console.log(this.notifyData)
   },
   methods: {
+    ...mapActions(['fillTourInfo']),
     parseData() {
       for (const [key, value] of Object.entries(this.data)) {
         if (key != 0) {
