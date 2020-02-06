@@ -6,7 +6,10 @@
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
       <!-- Form -->
-      <form class="text-center">
+      <v-form
+        ref="form3"
+        class="text-center"
+      >
         <!-- Type -->
         <div class="row">
           <div class="col-12 text-center grey-text">
@@ -30,112 +33,83 @@
           v-if="info.type == 2"
           class="md-form"
         >
-          <input
-            id="form2-entity_name"
+          <v-text-field
             v-model="info.entity_name"
             type="text"
-            class="form-control"
-          >
-          <label for="form2-entity_name">
-            Полное наименование организации
-          </label>
+            label="Полное наименование организации"
+          />
         </div>
         <!-- Name. For type 3 -->
         <div
           v-if="info.type == 3"
           class="md-form"
         >
-          <input
-            id="form2-name"
+          <v-text-field
             v-model="info.name"
             type="text"
-            class="form-control"
-          >
-          <label for="form2-name">
-            ФИО
-          </label>
+            label="ФИО"
+          />
         </div>
         <!-- Entity address. For type 2 -->
         <div
           v-if="info.type == 2"
           class="md-form"
         >
-          <input
-            id="form3-entity_address"
+          <v-text-field
             v-model="info.entity_address"
             type="text"
-            class="form-control"
-          >
-          <label for="form3-entity_address">
-            Юридический адрес
-          </label>
+            label="Юридический адрес"
+          />
         </div>
         <!-- Entity address. For type 3 -->
         <div
           v-if="info.type == 3"
           class="md-form"
         >
-          <input
-            id="form3-address"
+          <v-text-field
             v-model="info.address"
             type="text"
-            class="form-control"
-          >
-          <label for="form3-address">
-            Адрес места жительства
-          </label>
+            label="Адрес места жительства"
+          />
         </div>
         <!-- Entity location. Only for type 2 -->
         <div
           v-if="info.type == 2"
           class="md-form"
         >
-          <input
-            id="form3-entity_location"
+          <v-text-field
             v-model="info.entity_location"
             type="text"
-            class="form-control"
-          >
-          <label for="form3-entity_location">
-            Адрес места нахождения
-          </label>
+            label="Адрес места нахождения"
+          />
         </div>
         <!-- Phone number -->
         <div class="md-form">
-          <input
-            id="form3-phone"
+          <v-text-field
             v-model="info.phone"
             type="text"
-            class="form-control"
-          >
-          <label for="form3-phone">
-            Контактный номер телефона и (или)
-            факса
-          </label>
+            label="Контактный номер телефона и (или) факса"
+          />
         </div>
         <!-- email -->
         <div class="md-form">
-          <input
-            id="form3-email"
+          <v-text-field
             v-model="info.email"
             type="email"
-            class="form-control"
-          >
-          <label for="form3-email">
-            Адрес электронной почты (при наличии)
-          </label>
+            label="Адрес электронной почты"
+            :rules="rules.email"
+          />
         </div>
         <!-- INN -->
         <div class="md-form">
-          <input
-            id="form3-inn"
+          <v-text-field
             v-model="info.inn"
             type="text"
-            class="form-control"
-          >
-          <label for="form3-inn">ИНН</label>
+            label="ИНН"
+            :rules="rules.inn"
+          />
         </div>
-      </form>
+      </v-form>
       <!-- Form -->
     </div>
   </div>
@@ -156,7 +130,18 @@ export default {
   computed: {
     ...mapGetters({
       info: 'getForm3',
+      rules: 'getValidationRules',
     }),
+  },
+  mounted() {
+    this.validate()
+  },
+  methods: {
+    validate() {
+      if (this.$refs.form3.validate()) {
+        this.snackbar = true
+      }
+    },
   },
 }
 </script>

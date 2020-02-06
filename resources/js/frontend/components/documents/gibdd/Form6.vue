@@ -6,7 +6,10 @@
     <!--Card content-->
     <div class="card-body px-lg-5 pt-0">
       <!-- Form -->
-      <form class="text-center">
+      <v-form
+        ref="form6"
+        class="text-center"
+      >
         <div class="h5 grey-text pt-2">
           Начало маршрута
         </div>
@@ -50,6 +53,7 @@
             v-model="info.region_code"
             :items="availableRegions"
             label="Регион начала маршрута"
+            :rules="rules.notEmpty"
           />
         </div>
         <!-- Start district -->
@@ -59,6 +63,7 @@
             :items="spbDistricts"
             label="Район или городской округ начала
             маршрута"
+            :rules="rules.notEmpty"
           />
         </div>
         <!-- <div class="h5 grey-text pt-2">
@@ -121,49 +126,34 @@
         </div>
         <!-- Distance -->
         <div class="md-form">
-          <input
-            id="form6-distance"
+          <v-text-field
             v-model="info.distance"
             type="text"
-            class="form-control"
-          >
-          <label for="form6-distance">
-            Расстояние перевозки в километрах
-          </label>
+            label="Расстояние перевозки в километрах"
+            :rules="rules.notEmpty"
+          />
         </div>
         <!-- Schedule -->
         <div class="md-form">
-          <input
-            id="form6-schedule"
+          <v-text-field
             v-model="info.schedule"
             type="text"
-            class="form-control"
-          >
-          <label for="form6-schedule">
-            График движения
-          </label>
+            label="График движения"
+            :rules="rules.notEmpty"
+          />
         </div>
         <!-- Duration -->
         <div class="md-form">
-          <input
-            id="form6-duration"
+          <v-text-field
             v-model="info.duration"
             type="text"
-            class="form-control"
-          >
-          <label for="form6-duration">
-            Расчётное время в пути (ЧЧ:ММ)
-          </label>
+            label="Расчётное время в пути (ЧЧ:ММ)"
+            :rules="rules.notEmpty"
+          />
         </div>
-      </form>
+      </v-form>
       <!-- Form -->
     </div>
-    <!-- <v-btn
-      color="green"
-      @click="send"
-    >
-      ОПОПУДАЧА2
-    </v-btn> -->
   </div>
   <!-- Material form login -->
 </template>
@@ -202,7 +192,11 @@ export default {
       info: 'getForm6',
       form1: 'getForm1',
       availableRegions: 'getAvailableRegions',
+      rules: 'getValidationRules',
     }),
+  },
+  mounted() {
+    this.validate()
   },
   methods: {
     send() {
@@ -231,6 +225,11 @@ export default {
     },
     delay(ms) {
       return new Promise(resolve => setTimeout(resolve, ms))
+    },
+    validate() {
+      if (this.$refs.form6.validate()) {
+        this.snackbar = true
+      }
     },
   },
 }

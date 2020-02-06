@@ -324,6 +324,7 @@ export default {
     this.fetchCities()
     this.fetchTransport()
     this.fetchAllTourOptions()
+    this.setActualInfo()
   },
   mounted() {
     this.fillStore()
@@ -383,7 +384,6 @@ export default {
       return cityName
     },
     changeConstructorStage(stage) {
-      this.setActualInfo()
       this.updateConstructorCurrentStage(stage)
     },
     scrollToTop() {

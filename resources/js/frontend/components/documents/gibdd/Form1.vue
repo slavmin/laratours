@@ -5,46 +5,42 @@
     </h5>
     <div class="card-body px-lg-5 pt-0">
       <!-- Form -->
-      <form class="text-center">
+      <v-form
+        ref="form1"
+        class="text-center"
+      >
         <!-- Name -->
         <div class="md-form">
-          <input
-            id="form1-name"
+          <v-text-field
             v-model="info.name"
             type="text"
-            class="form-control"
-          >
-          <label for="form1-name">ФИО</label>
+            label="ФИО"
+          />
         </div>
         <!-- Position -->
         <div class="md-form">
-          <input
-            id="form1-position"
+          <v-text-field
             v-model="info.position"
             type="text"
-            class="form-control"
-          >
-          <label for="form1-position">Должность</label>
+            label="Должность"
+          />
         </div>
         <!-- Phone number -->
         <div class="md-form">
-          <input
-            id="form1-phone"
+          <v-text-field
             v-model="info.phone"
             type="text"
-            class="form-control"
-          >
-          <label for="form1-phone">Телефон</label>
+            label="Телефон"
+          />
         </div>
         <!-- email -->
         <div class="md-form">
-          <input
-            id="form1-email"
+          <v-text-field
             v-model="info.email"
             type="email"
-            class="form-control"
-          >
-          <label for="form1-email">Email</label>
+            label="Email"
+            :rules="rules.email"
+          />
         </div>
         <!-- Region -->
         <div class="row">
@@ -66,23 +62,19 @@
         </div>
         <!-- Count -->
         <div class="md-form">
-          <input
-            id="form1-count"
+          <v-text-field
             v-model="info.count"
             type="text"
-            class="form-control"
-          >
-          <label for="form1-count">Количество детей</label>
+            label="Количество детей"
+          />
         </div>
         <!-- Goal -->
         <div class="md-form">
-          <input
-            id="form1-goal"
+          <v-text-field
             v-model="info.goal"
             type="text"
-            class="form-control"
-          >
-          <label for="form1-goal">Цель</label>
+            label="Цель"
+          />
         </div>
         <!-- Date start -->
         <div class="row">
@@ -214,7 +206,7 @@
             </v-menu>
           </div>
         </div>
-      </form>
+      </v-form>
     </div>
   </div>
 </template>
@@ -235,6 +227,7 @@ export default {
     ...mapGetters({
       info: 'getForm1',
       regionsWithCodesArray: 'getRegionsWithCodesArray',
+      rules: 'getValidationRules',
     }),
     dateToday: function() {
       return moment().format('YYYY-MM-DD')
@@ -249,8 +242,16 @@ export default {
       return result
     },
   },
+  mounted() {
+    this.validate()
+  },
   methods: {
     allowedStep: m => m % 15 === 0,
+    validate() {
+      if (this.$refs.form1.validate()) {
+        this.snackbar = true
+      }
+    },
   },
 }
 </script>

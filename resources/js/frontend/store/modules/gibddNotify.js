@@ -67,6 +67,22 @@ export default {
         }
     },
     state: {
+        validationRules: {
+            email: [
+                v => !!v || 'email обязателен',
+                v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Это не похоже на email'
+            ],
+            inn: [
+                v => !!v || 'ИНН обязателен',
+                v => (v && v.length == 10) || 'ИНН должен содержать 10 цифр',
+            ],
+            notEmpty: [
+                v => !!v || 'Поле должно быть заполнено',
+            ],
+            glonass: [
+                v => !!v || 'Оснащение автобусов тахографом и аппаратурой спутниковой навигации ГЛОНАСС или ГЛОНАСС/GPS для перевозки группы детей является обязательным требованием',
+            ]
+        },
         tourInfo: {
             regionsWithCodesArray: [{
                     value: 1,
@@ -515,6 +531,9 @@ export default {
                 }
             })
             return result
+        },
+        getValidationRules(state) {
+            return state.validationRules
         }
     }
 }

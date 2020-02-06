@@ -305,7 +305,7 @@ class GibddNotifyRepository
       array_push($form5['drivers'], [
         'name' => $driver->name ?? '',
         'licence' => $driver->license ?? '',
-        'licence_date' => '',
+        'licence_date' => '01.01.2000',
         'experience' => $driver->exp ?? '',
       ]);
     }
