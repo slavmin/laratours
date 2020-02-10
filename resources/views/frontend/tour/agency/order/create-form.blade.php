@@ -1,7 +1,7 @@
 {{ html()->form($method, $route)->class('form-horizontal')->open() }}
 
-    {{ html()->hidden('tour_id')->value($tour->id??0) }}
-    {{ html()->hidden('operator_id')->value($tour->team_id??0) }}
+    {{ html()->hidden('tour_id')->value($item->id??0) }}
+    {{ html()->hidden('operator_id')->value($item->team_id??0) }}
 
     @if(count($profiles) > 0)
         @foreach($profiles as $i => $profile)

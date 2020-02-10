@@ -175,9 +175,8 @@ return [
         'passwords' => [
             'expired_password_box_title' => 'Срок действия изменения пароля истек.',
             'forgot_password' => 'Забыли Пароль?',
-            'reset_password_box_title' => 'Сброс пароля',
+            'reset_password_box_title' => 'Сброс Пароля',
             'reset_password_button' => 'Смена пароля',
-            'reset_password_hint' => 'Пароль должен содержать большие и маленькие буквы, и как минимум одну цифру. Например: Tourclick1',
             'update_password_button' => 'Обновить пароль',
             'send_password_reset_link_button' => 'Отправить',
         ],
@@ -401,7 +400,7 @@ return [
                 'status' => 'Статус',
                 'management' => 'Заказы',
                 'statuses' => [
-                    '0' => 'Не подтвержден',
+                    '0' => 'Не подвержден',
                     '1' => 'Подтвержден',
                     '2' => 'Оплачен',
                     '3' => 'Отменен',

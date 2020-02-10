@@ -15,7 +15,7 @@
                     </div><!--row-->
 
                     <hr>
-                    
+
                     @include('frontend.tour.includes.type-form')
 
                 </div><!--card-body-->

@@ -36,8 +36,10 @@
 
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
+
             {{--@if($item_attributes)--}}
                 @foreach($attributes as $attribute)
+
                    @include('frontend.tour.object.includes.extra-form')
 
                 @endforeach

@@ -126,62 +126,6 @@
         </div><!--row-->
 
         <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    Банк
-
-                    {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_bankname]', $profile['company_bankname']??'')
-                        ->class('form-control')
-                        ->id('company_bankname')
-                        ->placeholder(__('validation.attributes.frontend.company.bankname'))
-                        ->attribute('maxlength', 191)
-                        ->required()}}
-                </div><!--form-group-->
-            </div><!--row-->
-
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    Счёт
-
-                    {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_bankaccount]', $profile['company_bankaccount']??'')
-                        ->class('form-control')
-                        ->id('company_bankaccount')
-                        ->placeholder(__('validation.attributes.frontend.company.bankaccount'))
-                        ->attribute('maxlength', 191)
-                        ->required()}}
-                </div><!--form-group-->
-            </div><!--col-->
-        </div><!--row-->
-
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    Коррсчёт банка
-
-                    {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_bankcorr]', $profile['company_bankcorr']??'')
-                        ->class('form-control')
-                        ->id('company_bankcorr')
-                        ->placeholder(__('validation.attributes.frontend.company.bankcorr'))
-                        ->attribute('maxlength', 191)
-                        ->required()}}
-                </div><!--form-group-->
-            </div><!--row-->
-
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    КПП банка
-
-                    {{ html()->text(config('teamwork.extra_field_name').'['.$type.'][company_bankkpp]', $profile['company_bankkpp']??'')
-                        ->class('form-control')
-                        ->id('company_bankkpp')
-                        ->placeholder(__('validation.attributes.frontend.company.bankkpp'))
-                        ->attribute('maxlength', 191)
-                        ->required()}}
-                </div><!--form-group-->
-            </div><!--col-->
-        </div><!--row-->
-
-        <div class="row">
             <div class="col">
                 {{ form_cancel(route('frontend.user.team'), __('buttons.general.cancel')) }}
             </div><!--col-->

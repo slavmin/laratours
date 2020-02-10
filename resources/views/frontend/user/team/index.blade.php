@@ -4,6 +4,7 @@
     <div class="row">
 
       <div class="col-lg-8">
+
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between py-3 border-bottom border-info">
@@ -96,15 +97,7 @@
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.inn') :</span> {{ $profile['company_inn']??'' }}</div>
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>
-                        <div class="list-group-item">
-                            <span class="text-secondary">Банк :</span> {{ $profile['company_bankname']??'' }}</div>
-                        <div class="list-group-item">
-                            <span class="text-secondary">Счет :</span> {{ $profile['company_bankaccount']??'' }}</div>
-                        <div class="list-group-item">
-                            <span class="text-secondary">Коррсчет банка :</span> {{ $profile['company_bankcorr']??'' }}</div>
-                        <div class="list-group-item">
-                            <span class="text-secondary">КПП :</span> {{ $profile['company_bankkpp']??'' }}</div>
-            
+
             </div><!--/list-group-->
 
           @endforeach
