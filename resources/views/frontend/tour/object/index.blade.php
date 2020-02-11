@@ -2,23 +2,105 @@
 
 @section('content')
 
-    @include('frontend.tour.includes.city-select-form')
+    {{-- @include('frontend.tour.includes.city-select-form') --}}
+    <v-container
+      fluid
+      grid-list-md
+      text-xs-center
+    >
+      <h1 class="text-white text-center">
+        @lang('labels.frontend.tours.'.$model_alias.'.management')
+      </h1>
+      <v-layout
+        row
+        wrap
+        justify-center
+        mb-5
+      >
+        <v-btn 
+          fab
+          dark 
+          class="tc-red-bg tc-link-no-underline-on-hover"
+          title="@lang('buttons.general.crud.create')"
+          href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}"
+        >
+          <i class="material-icons">
+            add
+          </i>
+        </v-btn>
+      </v-layout>
+      <v-layout
+        row
+        wrap
+      >
+        @if(count($items)>0)
+          @foreach($items as $item)
+          <v-flex
+            mb-5
+            xs12
+            md12
+            lg6
+            xl4
+          >
+            <v-card
+              class="mx-auto"
+              max-width="100%"
+              outlined
+            >
+            <v-img
+              class="white--text align-end"
+              height="200px"
+              src="/img/frontend/ermitage.jpg"
+            >
+              <v-card-title></v-card-title>
+            </v-img>
+            <v-list-item three-line>
+              <v-list-item-content>
+                <div class="overline mb-4">тип музея</div>
+                <v-list-item-title class="headline mb-1">
+                  <v-layout row wrap justify-space-between>
+                  <v-flex>{{$item->name}}</v-flex>
+                  {!! $item->action_buttons !!}
+                  </v-layout>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  @if (array_key_exists($item->city_id, $cities_names))
+                    <div class="text-secondary">
+                      Город: {{$cities_names[$item->city_id]}}
+                    </div>
+                    <div class="text-secondary">
+                      Адрес: {{ $item->address }}
+                    </div>
+                  @endif
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
 
-    <div class="card mb-4">
+            <v-card-actions>
+              <v-btn text>Button</v-btn>
+              <v-btn text>Button</v-btn>
+            </v-card-actions>
+          </v-card>
+          </v-flex>
+          @endforeach
+        @endif
+      </v-layout>
+    </v-container>
+    {{-- {{dd($items)}} --}}
+    
+    {{--<div class="card mb-4">
         <div class="card-body">
-            <div class="row">
+             <div class="row">
                 <div class="col">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                            <a href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
-                                <i class="fas fa-plus"></i></a>
-                        </div><!--btn-toolbar-->
+                             
+                        </div><!-- btn-toolbar -->
                     </div>
                 </div><!--col-->
-            </div><!--row-->
-
-            @if(count($items)>0)
+            </div><!--row -->
+            
             <div class="row mt-4">
                 <div class="col">
                     <div class="table-responsive">
@@ -32,31 +114,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($items as $item)
-                                    <tr>
-                                        <td>{{$item->name}}</td>
-                                        <td>
-                                            @if (array_key_exists($item->city_id, $cities_names))
-                                                <span class="text-secondary">{{$cities_names[$item->city_id]}}</span>
-                                            @endif
-                                        </td>
-                                        <td>{{$item->qnt}}</td>
-                                        <td>
-                                            <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                                {!! $item->action_buttons !!}
-                                            </div><!--float-right-->
-                                        </td>
-                                    </tr>
-                            @endforeach
+                                    
                             </tbody>
                         </table>
                     </div>
-                </div><!--col-->
-            </div><!--row-->
+                </div><!-- col -->
+            </div><!-- row -->
             @endif
 
         </div><!--card-body-->
-    </div><!--card-->
+    </div><!--card--> --}}
 
     @include('frontend.tour.includes.pagination-row')
 

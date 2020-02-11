@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Exceptions\GeneralException;
+use App\Filters\ObjectsFilter;
 use App\Models\Tour\TourHotelCategory;
 use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
@@ -24,20 +25,21 @@ class HotelController extends Controller
 
         $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
+        $name_param = !is_null($request->name) ? $request->name : '';
+
         $orderBy = 'name';
         $sort = 'asc';
 
         $model_alias = TourHotel::getModelAliasAttribute();
 
-        if (!is_null($city_id)) {
+        // if (!is_null($city_id)) {
 
-            $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        //     $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        // } else {
 
-        } else {
-
-            $items = TourHotel::orderBy($orderBy, $sort)->paginate();
-
-        }
+        //     $items = TourHotel::orderBy($orderBy, $sort)->paginate();
+        // }
+        $items = (new ObjectsFilter(TourHotel::with('objectables'), $request))->apply()->paginate();
 
         $deleted = TourHotel::onlyTrashed()->get();
 
@@ -46,13 +48,18 @@ class HotelController extends Controller
         $cities_select = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
-        
-        return view('frontend.tour.object.index', compact('items','cities_names', 'cities_select','deleted','customer_type_options'))
-            ->with('city_id', (int)$city_id)
+
+        $cities_ids = TourHotel::select('city_id')->pluck('city_id')->toArray();
+
+        $cities_for_filter = TourHotel::getCitiesForFilterAttribute($cities_ids);
+
+        return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'customer_type_options', 'cities_for_filter'))
+            ->with('city_id', (int) $city_id)
             ->with('city_name', $city_name)
             ->with('city_param', $city_param)
             ->with('model_alias', $model_alias)
-            ->with('customer_type_options', $customer_type_options);
+            ->with('customer_type_options', $customer_type_options)
+            ->with('name', $name_param);
     }
 
     public function show($id)
@@ -72,10 +79,10 @@ class HotelController extends Controller
         return view('frontend.tour.object.create', compact('cities_options', 'hotel_categories'))
             ->with('method', 'POST')
             ->with('action', 'create')
-            ->with('route', route('frontend.tour.'.$model_alias.'.store'))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('item', [])
-            ->with('city_id', (int)$city_id)
+            ->with('city_id', (int) $city_id)
             ->with('model_alias', $model_alias);
     }
 
@@ -114,18 +121,18 @@ class HotelController extends Controller
         return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
-            ->with('route', route('frontend.tour.'.$model_alias.'.update', [$item->id]))
-            ->with('cancel_route', route('frontend.tour.'.$model_alias.'.index'))
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
 
 
     public function update(Request $request, $id)
     {
-        if($request->get('attribute')){
+        if ($request->get('attribute')) {
             $request->validate([
                 'attribute.*.name' => 'required|min:3',
-                'attribute.*.price'=> 'required',
+                'attribute.*.price' => 'required',
                 'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
             ]);
         } else {
@@ -188,6 +195,6 @@ class HotelController extends Controller
     {
         $city_ids = TourHotel::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
-        && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
 }

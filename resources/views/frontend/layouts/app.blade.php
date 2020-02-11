@@ -49,23 +49,23 @@
     <body>
         <div id="app" v-cloak>
           @include('includes.partials.logged-in-as')
-          @include('frontend.includes.nav')
           @include('includes.partials.messages')
             <v-app dark>
-              <v-content>
+              <v-content class="tc-content-bg">
+                @include('frontend.includes.nav')
                 @yield('content')
-                <v-footer color="blue darken-2">
-                  <v-layout row wrap align-center>
-                    <v-flex xs12>
-                      <div class="white--text ml-4">
-                        Made with
-                        <v-icon class="red--text">mdi-heart</v-icon>
-                        by <a class="white--text" href="https://vuetifyjs.com" target="_blank">Vuetify</a>
-                        and <a class="white--text" href="https://github.com/vwxyzjn">Costa Huang</a>
-                      </div>
-                    </v-flex>
-                  </v-layout>
               </v-content>
+              <v-footer color="#A6D1D7">
+                <v-layout row wrap align-center>
+                  <v-flex xs12>
+                    <div class="white--text ml-4">
+                      © 2019-2020 Copyright: 
+                      <a class="white--text" href="https://promo.tourclick.ru" target="_blank">
+                        Tourclick
+                      </a>
+                    </div>
+                  </v-flex>
+                </v-layout>
               </v-footer>
             </v-app>
         </div><!-- #app -->

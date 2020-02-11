@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\Team;
+use App\Models\Tour\TourHotelCategory;
 
 /**
  * Class DashboardController.
@@ -14,6 +16,22 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('frontend.user.dashboard');
+        $team = Team::whereId(auth()->user()->current_team_id)->with('roles')->first();
+
+        $show_fill_demo = false;
+
+        $isOperator = false;
+        $hasRole = $team->roles()->first();
+
+        if ($hasRole) {
+            $isOperator = ($team->roles->first()->name == 'operator') ? true : false;
+            $hotel_categories = TourHotelCategory::where('team_id', $team->id)->get();
+        }
+
+        if ($isOperator && count($hotel_categories) == 0) {
+            $show_fill_demo = true;
+        }
+
+        return view('frontend.user.dashboard', compact('team', 'show_fill_demo'));
     }
 }

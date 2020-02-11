@@ -1,0 +1,136 @@
+<template>
+  <v-container
+    fluid
+    grid-list-xs
+    fill-height
+    class="tc-blue-bg"
+  >
+    <v-layout
+      row
+      wrap
+      justify-center
+    >
+      <v-flex
+        xs10
+        md6
+        lg4
+      >
+        <v-card>
+          <v-card-title
+            primary-title
+            style="background-color: #66a5ae;"
+          >
+            <h3 class="subheading white--text">
+              {{ headerText }}
+            </h3>
+          </v-card-title>
+          <form
+            id="loginForm"
+            :action="loginUrl"
+            method="POST"
+          >
+            <v-card-text>
+              <input
+                type="hidden"
+                name="_token"
+                :value="token"
+              >
+              <v-text-field
+                v-model="login"
+                :label="emailText"
+                :placeholder="emailText"
+                name="email"
+                color="#aa282a"
+                autofocus
+                required
+              />
+              <v-text-field
+                v-model="password"
+                :label="passwordText"
+                :placeholder="passwordText"
+                type="password"
+                color="#aa282a"
+                name="password"
+                required
+              />
+              <v-checkbox
+                v-model="remember"
+                :label="rememberText"
+                color="#aa282a"
+              />
+            </v-card-text>
+            <v-divider />
+            <v-card-actions>
+              <v-btn
+                color="#aa282a"
+                :href="passwordResetUrl"
+                flat
+              >
+                {{ passwordResetText }}
+              </v-btn>
+              <v-spacer />
+              <v-btn
+                color="#aa282a"
+                dark
+                type="submit"
+                form="loginForm"
+              >
+                {{ submitText }}
+              </v-btn>
+            </v-card-actions>
+          </form>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+<script>
+export default {
+  name: 'Login',
+  props: {
+    headerText: {
+      type: String,
+      default: 'Заголовок',
+    },
+    loginUrl: {
+      type: String,
+      default: '#',
+    },
+    emailText: {
+      type: String,
+      default: 'email',
+    },
+    passwordText: {
+      type: String,
+      default: 'password',
+    },
+    rememberText: {
+      type: String,
+      default: 'remember',
+    },
+    submitText: {
+      type: String,
+      default: 'submit',
+    },
+    passwordResetUrl: {
+      type: String,
+      default: '#',
+    },
+    passwordResetText: {
+      type: String,
+      default: 'forgotten',
+    },
+    token: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      login: '',
+      password: '',
+      remember: false,
+    }
+  },
+}
+</script>

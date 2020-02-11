@@ -8,7 +8,15 @@
                     <div class="float-right">
                         {{ html()->form('GET', $route)->class('form-horizontal')->open() }}
                         <div class="form-row align-items-center float-right">
-
+                            <div class="col-auto">
+                                <div class="form-group mb-0">
+                                {{ html()->text('name')
+                                ->placeholder(__('labels.frontend.tours.filter.tour_name'))
+                                ->value($name)
+                                ->attribute('maxlength', 191)
+                                ->class('form-control form-control-sm') }}
+                                </div>
+                            </div>
                             @if(count($operators)>0)
                             <div class="col-auto">
                                 <div class="form-group mb-0">

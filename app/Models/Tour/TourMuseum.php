@@ -13,23 +13,36 @@ use App\Models\Traits\HasPagination;
 
 class TourMuseum extends Model
 {
-    use SoftDeletes, UsedByTeams, UsedByCity, HasPagination, HasProfile, HasObjectAttributes, ActionButtonsAttribute;
+  use SoftDeletes, UsedByTeams, UsedByCity, HasPagination, HasProfile, HasObjectAttributes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'city_id', 'description', 'qnt', 'extra'];
+  protected $fillable = [
+    'name',
+    'city_id',
+    'description',
+    'qnt',
+    'extra',
+    'types_list',
+    'address',
+    'museum_site',
+    'museum_email',
+    'museum_phone',
+    'staff_name',
+    'staff_phone'
+  ];
 
-    protected $appends = ['model_alias'];
+  protected $appends = ['model_alias'];
 
-    protected $casts = [
-        'extra' => 'array',
-    ];
+  protected $casts = [
+    'extra' => 'array',
+  ];
 
-    public static function getModelAliasAttribute()
-    {
-        return 'museum';
-    }
+  public static function getModelAliasAttribute()
+  {
+    return 'museum';
+  }
 
-    public function tours()
-    {
-        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
-    }
+  public function tours()
+  {
+    return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+  }
 }

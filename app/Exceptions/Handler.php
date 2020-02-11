@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof OAuthServerException && $exception->getCode() == 9) {
             return;
         }
-        
+
         parent::report($exception);
     }
 
@@ -62,6 +62,10 @@ class Handler extends ExceptionHandler
             return redirect()
                 ->route(home_route())
                 ->withFlashDanger(__('auth.general_error'));
+        }
+
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            return redirect('/')->withErrors(['token_error' => 'Время сессии истекло.']);
         }
 
         return parent::render($request, $exception);

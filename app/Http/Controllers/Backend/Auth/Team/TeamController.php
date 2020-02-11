@@ -83,7 +83,7 @@ class TeamController extends Controller
 
         $operators = new Collection();
 
-        if($team->hasRole(config('access.teams.agent_role'))) {
+        if ($team->hasRole(config('access.teams.agent_role'))) {
             $operators = Team::whereHas("roles", function ($q) {
                 $q->where('name', config('access.teams.operator_role'));
             })->get();
@@ -117,13 +117,15 @@ class TeamController extends Controller
         }
 
         // Update company profile
-        $team->profiles()->updateOrCreate([
+        $team->profiles()->updateOrCreate(
+            [
                 'type' => $profile_type,
             ],
             [
                 'type' => $profile_type,
                 'content' => $profile[$profile_type],
-            ]);
+            ]
+        );
 
         // Update team name
         if ($profile_type == 'formal') {
@@ -184,6 +186,4 @@ class TeamController extends Controller
 
         return redirect()->route('admin.auth.team.deleted')->withFlashSuccess(__('alerts.backend.teams.deleted'));
     }
-
-
 }

@@ -71,5 +71,4 @@ class TeamRepository extends BaseRepository
             ->orderBy($orderBy, $sort)
             ->paginate($paged);
     }
-
 }

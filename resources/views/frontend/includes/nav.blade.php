@@ -15,7 +15,7 @@
   }
 </script>
 @endpush
-<v-toolbar id="tc-main-header" class="tc-main-header">
+<v-toolbar id="tc-main-header" class="tc-main-header" tile>
   <v-toolbar-title>
     <a href="/dashboard">
       <img src="/img/frontend/logo_small.png">

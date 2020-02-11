@@ -32,7 +32,7 @@ class OrderController extends Controller
 
         $statuses = TourOrder::getStatusesAttribute();
         $tour_names = Tour::withoutGlobalScopes()->whereIn('team_id', $subscriptions)->pluck('name', 'id')->all();
-
+    
         $items = TourOrder::with('profiles')->orderBy($orderBy, $sort)->paginate();
         $deleted = TourOrder::onlyTrashed()->get();
 
@@ -114,6 +114,7 @@ class OrderController extends Controller
 
         $item = TourOrder::findOrFail($id);
 
+
         $operators = Team::getTeamSubscriptions();
         $subscriptions = array_keys($operators);
 
@@ -133,7 +134,9 @@ class OrderController extends Controller
 
         $audits = $item->audits->sortByDesc('created_at');
 
-        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits'))
+        $documents = $item->getSharedDocuments($item->id);
+        
+        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.agency.' . $model_alias . '.update', [$item->id]))
