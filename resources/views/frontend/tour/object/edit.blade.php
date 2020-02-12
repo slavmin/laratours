@@ -30,20 +30,26 @@
         <v-card-text>
           @include('frontend.tour.object.includes.'.$model_alias.'.form')
         </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn text
+            color="#aa282a"
+            href="{{ $cancel_route }}"
+          >
+            {{ __('buttons.general.cancel') }}
+          </v-btn>
+           <v-spacer></v-spacer>
+           <v-btn
+            form="museum-form"
+            type="submit"
+            dark
+            color="#aa282a"
+           >
+            {{ __('buttons.general.crud.update') }}
+           </v-btn>
+        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>
 </v-container>
-
-    <div class="row justify-content-center align-items-center">
-        <div class="col col-sm-8 align-self-center">
-            {{--@if($item_attributes)--}}
-                @foreach($attributes as $attribute)
-                   @include('frontend.tour.object.includes.extra-form')
-
-                @endforeach
-            {{--@endif--}}
-
-        </div><!-- col-md-8 -->
-    </div><!-- row -->
 @endsection

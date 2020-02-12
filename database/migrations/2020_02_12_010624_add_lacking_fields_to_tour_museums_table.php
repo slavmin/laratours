@@ -21,6 +21,7 @@ class AddLackingFieldsToTourMuseumsTable extends Migration
       $table->text('museum_phone')->nullable();
       $table->text('staff_name')->nullable();
       $table->text('staff_phone')->nullable();
+      $table->string('photo_location')->nullable();
     });
   }
 
@@ -40,7 +41,8 @@ class AddLackingFieldsToTourMuseumsTable extends Migration
           'museum_email',
           'museum_phone',
           'staff_name',
-          'staff_phone'
+          'staff_phone',
+          'photo_location'
         );
     });
   }

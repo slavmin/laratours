@@ -47,11 +47,11 @@
               max-width="100%"
               outlined
             >
-            <v-img
-              class="white--text align-end"
-              height="200px"
-              src="/img/frontend/ermitage.jpg"
-            >
+              <v-img
+                class="white--text align-end"
+                height="200px"
+                src="{{ $item->getMedia('photos')->first() ? $item->getMedia('photos')->first()->getUrl() : '/img/frontend/museum_tmpl.jpg' }}"
+              ></v-img>
               <v-card-title></v-card-title>
             </v-img>
             <v-list-item three-line>
