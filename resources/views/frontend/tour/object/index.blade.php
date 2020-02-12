@@ -1,7 +1,6 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
     {{-- @include('frontend.tour.includes.city-select-form') --}}
     <v-container
       fluid
@@ -73,12 +72,80 @@
                     </div>
                   @endif
                 </v-list-item-subtitle>
+                @if(count($item->objectables) > 0)
+                <v-divider></v-divider>
+                <div class="text-center mt-3">Экскурсии и расценки:</div>
+                <v-simple-table dense>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Название</th>
+                        <th class="text-left">Цены</th>
+                        <th class="text-right">Действия</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($item->objectables as $event)
+                      <tr>
+                        <td>{{ $event->name }}</td>
+                        <td>
+                          <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                              <v-btn 
+                                icon
+                                v-on="on"
+                              >
+                              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z" />
+                              </svg>
+                              </v-btn>
+                            </template>
+                            <span>
+                              Здесь будут цены из таблицы prices
+                            </span>
+                          </v-tooltip>
+                      </td>
+                        <td>
+                          <v-row>
+                            <v-spacer></v-spacer>
+                            <museum-objectable
+                              edit-mode
+                              :museum="{{ $item }}"
+                              :event="{{ $event }}"
+                              token="{{ csrf_token() }}"
+                              :customers="{{ json_encode($customer_type_options_arrays) }}"
+                            ></museum-objectable>
+                            {{ html()
+                              ->form('DELETE', route('frontend.tour.attribute.destroy', $event->id))
+                              ->open() }}
+                              <v-btn 
+                                icon 
+                                small 
+                                color="red" 
+                                type="submit"
+                                title="{{ 'Удалить "'. $event->name .'"' }}"
+                              >
+                                <v-icon>close</v-icon>
+                              </v-btn>
+                            {{ html()->form()->close() }}
+                          </v-row>
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </template>
+                </v-simple-table>
+                @endif
               </v-list-item-content>
             </v-list-item>
 
             <v-card-actions>
-              <v-btn text>Button</v-btn>
-              <v-btn text>Button</v-btn>
+              <v-spacer></v-spacer>
+              <museum-objectable
+                :museum="{{ $item }}"
+                :customers="{{ json_encode($customer_type_options_arrays) }}"
+                token="{{ csrf_token() }}"
+              ></museum-objectable>
             </v-card-actions>
           </v-card>
           </v-flex>

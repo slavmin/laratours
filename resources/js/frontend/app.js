@@ -41,6 +41,7 @@ Vue.component('document-edit', require('./components/documents/Edit.vue').defaul
 Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
 
 Vue.component('cities-autocomplete', require('./components/CitiesAutocomplete.vue').default);
+Vue.component('museum-objectable', require('./components/MuseumObjectable.vue').default);
 
 window.Vuetify = require('vuetify');
 Vue.use(Vuetify)
