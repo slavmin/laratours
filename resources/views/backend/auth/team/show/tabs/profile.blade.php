@@ -23,6 +23,8 @@
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.inn') :</span> {{ $profile['company_inn']??'' }}</div>
                         <div class="list-group-item">
                             <span class="text-secondary">@lang('validation.attributes.frontend.company.kpp') :</span> {{ $profile['company_kpp']??'' }}</div>
+                        <div class="list-group-item">
+                            <span class="text-secondary">@lang('validation.attributes.frontend.company.company_type') :</span> {{ $profile['company_type']??'' }}</div>
                     </div><!--/list-group-->
                 </div>
 

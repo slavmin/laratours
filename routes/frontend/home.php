@@ -26,7 +26,11 @@ use App\Http\Controllers\Frontend\Tour\ObjectAttributeController;
 // Agency controllers
 use App\Http\Controllers\Frontend\Tour\Agency\TourController as AgencyTourController;
 use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderController;
-
+// Document template engine controllers
+use App\Http\Controllers\Frontend\Document\DocumentController;
+use App\Http\Controllers\Api\Document\PdfController;
+// Demo data
+use App\Http\Controllers\Frontend\Demo\DemoDataController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.

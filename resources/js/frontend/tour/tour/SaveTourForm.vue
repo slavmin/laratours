@@ -31,6 +31,13 @@
       :value="city"
     >
     <input
+<<<<<<< HEAD
+      name="museum_id[]"
+      value="10"
+    >
+    <input
+=======
+>>>>>>> dropjs
       type="hidden"
       name="duration"
       :value="getTour.options.days"

@@ -3,8 +3,11 @@ import Vuetify from 'vuetify'
 Vue.use(Vuetify)
 window.Vue = Vue
 
+<<<<<<< HEAD
+=======
 
 // const tourIndex = () => import('./Index.vue');
+>>>>>>> dropjs
 Vue.component('tour-index', require('./Index.vue').default);
 Vue.component('tour-add', require('./Add.vue').default);
 Vue.component('tour-edit', require('./Edit.vue').default);
@@ -26,8 +29,11 @@ import store from './store.js'
 
 const app = new Vue({
     el: '#tour-constructor',
+<<<<<<< HEAD
+=======
     components: {
         tourIndex,
     },
+>>>>>>> dropjs
     store
 });

@@ -25,6 +25,17 @@ class TourObjectAttributes extends Model
     return 'object-attributes';
   }
 
+<<<<<<< HEAD
+    public function objectable()
+    {
+        return $this->morphTo();
+    }
+
+    public function priceable()
+    {
+        return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
+    }
+=======
   public function objectable()
   {
     return $this->morphTo();
@@ -34,4 +45,5 @@ class TourObjectAttributes extends Model
   {
     return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
   }
+>>>>>>> dropjs
 }

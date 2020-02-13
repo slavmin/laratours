@@ -1,4 +1,14 @@
 {
+<<<<<<< HEAD
+    "/js/backend.js": "/js/backend.js",
+    "/js/frontend.js": "/js/frontend.js",
+    "/css/frontend.css": "/css/frontend.css",
+    "/css/backend.css": "/css/backend.css",
+    "/js/frontend_agency.js": "/js/frontend_agency.js",
+    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js",
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js"
+=======
     "/js/manifest.js": "/js/manifest.js?id=6a4eb117ddc7ca47286f",
     "/js/manifest.js.map": "/js/manifest.js.map?id=2b7092fd6e2c065e72d7",
     "/js/vendor.js": "/js/vendor.js?id=17685b106a1cfe4614cc",
@@ -13,4 +23,5 @@
     "/js/frontend_agency.js.map": "/js/frontend_agency.js.map?id=fee16a76c949eb5bb309",
     "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js?id=701237e739e4d14a0a64",
     "/js/frontend_tour_constructor.js.map": "/js/frontend_tour_constructor.js.map?id=9e92c7ed7c6943a60999"
+>>>>>>> dropjs
 }

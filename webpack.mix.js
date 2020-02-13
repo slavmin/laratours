@@ -36,6 +36,14 @@ mix.setPublicPath('public')
         fix: false,
         cache: false,
     })
+    .js('resources/js/frontend/tour/tour/app.js', 'js/frontend_tour_constructor.js').eslint({
+        fix: false,
+        cache: false,
+    })
+    .js('resources/js/frontend/tour/agency/app.js', 'js/frontend_agency.js').eslint({
+        fix: false,
+        cache: false,
+    })
     .js([
         'resources/js/backend/before.js',
         'resources/js/backend/app.js',

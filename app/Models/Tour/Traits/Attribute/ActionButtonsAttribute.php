@@ -18,6 +18,41 @@ trait ActionButtonsAttribute
         class="btn btn-success ml-1"><i class="fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.reserve') . '"></i></a>';
   }
 
+<<<<<<< HEAD
+    public function getCreateButtonAttribute()
+    {
+        if ($this->model_alias == 'city') {
+            return '<a href="' . route('frontend.tour.' . $this->model_alias . '.create', [$this->country_id, $this]) . '"
+        class="btn btn-success ml-1"><i class="fas fa-plus" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.create') . '"></i></a>';
+        }
+
+        return '<a href="' . route('frontend.tour.' . $this->model_alias . '.create', $this) . '"
+        class="btn btn-success ml-1"><i class="fas fa-plus" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.create') . '"></i></a>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditButtonAttribute()
+    {
+        if ($this->model_alias == 'city') {
+            return '<a href="' . route('frontend.tour.' . $this->model_alias . '.edit', [$this->country_id, $this]) . '"
+        class="btn btn-yellow btn-small"><i class="fas fa-pen" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.update') . '"></i></a>';
+        }
+
+        return '<a href="' . route('frontend.tour.' . $this->model_alias . '.edit', $this) . '"
+        class="btn btn-yellow btn-small"><i class="fas fa-pen" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.update') . '"></i></a>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeleteButtonAttribute()
+    {
+        if ($this->model_alias == 'city') {
+
+            return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.destroy', [$this->country_id, $this]) . '" method="post">
+=======
   public function getCreateButtonAttribute()
   {
     if ($this->model_alias == 'city') {
@@ -54,10 +89,29 @@ trait ActionButtonsAttribute
     if ($this->model_alias == 'city') {
 
       return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.destroy', [$this->country_id, $this]) . '" method="post">
+>>>>>>> dropjs
                 ' . csrf_field() . '
                 <input type="hidden" name="_method" value="DELETE"/>
                 <button class="btn btn-danger" title="' . __('labels.general.buttons.delete') . '"><i class="far fa-trash-alt"></i></button>
                 </form>';
+<<<<<<< HEAD
+        }
+
+        return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.destroy', $this) . '" method="post">
+                ' . csrf_field() . '
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button class="btn btn-danger" title="' . __('labels.general.buttons.delete') . '"><i class="far fa-trash-alt"></i></button>
+                </form>';
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getDeletePermanentlyButtonAttribute()
+    {
+        if ($this->model_alias == 'city') {
+=======
     }
 
     return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.destroy', $this) . '" method="post">
@@ -76,19 +130,40 @@ trait ActionButtonsAttribute
   public function getDeletePermanentlyButtonAttribute()
   {
     if ($this->model_alias == 'city') {
+>>>>>>> dropjs
 
       return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.delete-permanently', [$this->country_id, $this]) . '" method="post">
                 ' . csrf_field() . '
                 <input type="hidden" name="_method" value="DELETE"/>
                 <button class="btn btn-outline-danger" title="' . __('labels.general.buttons.delete-permanently') . '"><i class="far fa-trash-alt"></i></button>
                 </form>';
+<<<<<<< HEAD
+        }
+
+        return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.delete-permanently', $this) . '" method="post">
+=======
     }
 
     return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.delete-permanently', $this) . '" method="post">
+>>>>>>> dropjs
                 ' . csrf_field() . '
                 <input type="hidden" name="_method" value="DELETE"/>
                 <button class="btn btn-outline-danger" title="' . __('labels.general.buttons.delete-permanently') . '"><i class="far fa-trash-alt"></i></button>
                 </form>';
+<<<<<<< HEAD
+    }
+
+    /**
+     * @return string
+     */
+    public function getRestoreButtonAttribute()
+    {
+        if ($this->model_alias == 'city') {
+            return '<a href="' . route('frontend.tour.' . $this->model_alias . '.restore', [$this->country_id, $this]) . '"
+        class="btn btn-outline-success ml-1"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.restore') . '"></i></a>';
+        }
+        return '<a href="' . route('frontend.tour.' . $this->model_alias . '.restore', $this) . '"
+=======
   }
 
   /**
@@ -98,6 +173,7 @@ trait ActionButtonsAttribute
   {
     if ($this->model_alias == 'city') {
       return '<a href="' . route('frontend.tour.' . $this->model_alias . '.restore', [$this->country_id, $this]) . '"
+>>>>>>> dropjs
         class="btn btn-outline-success ml-1"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.restore') . '"></i></a>';
     }
     return '<a href="' . route('frontend.tour.' . $this->model_alias . '.restore', $this) . '"
@@ -105,6 +181,16 @@ trait ActionButtonsAttribute
   }
 
 
+<<<<<<< HEAD
+    /**
+     * @return string
+     */
+    public function getActionButtonsAttribute()
+    {
+        if (auth()->user()->can(config('access.teams.operator_permission'))) {
+            if ($this->trashed()) {
+                return '
+=======
   /**
    * @return string
    */
@@ -113,6 +199,7 @@ trait ActionButtonsAttribute
     if (auth()->user()->can(config('access.teams.operator_permission'))) {
       if ($this->trashed()) {
         return '
+>>>>>>> dropjs
 				<div class="ml-1">
 				  ' . $this->restore_button . '
 				  ' . $this->delete_permanently_button . '
@@ -133,11 +220,19 @@ trait ActionButtonsAttribute
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '
 			</div>';
+<<<<<<< HEAD
+        } elseif (auth()->user()->can(config('access.teams.agent_permission'))) {
+            return '
+=======
     } elseif (auth()->user()->can(config('access.teams.agent_permission'))) {
       return '
+>>>>>>> dropjs
             <div class="ml-1">
               ' . $this->create_order_button . '
 			</div>';
     }
+<<<<<<< HEAD
+=======
   }
+>>>>>>> dropjs
 }

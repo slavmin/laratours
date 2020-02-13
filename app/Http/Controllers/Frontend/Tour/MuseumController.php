@@ -8,6 +8,7 @@ use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
+use App\Models\Tour\TourObjectAttributes;
 
 class MuseumController extends Controller
 {
@@ -24,11 +25,28 @@ class MuseumController extends Controller
 
     $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
+<<<<<<< HEAD
+        $name_param = !is_null($request->name) ? $request->name : '';
+
+        $orderBy = 'name';
+        $sort = 'asc';
+=======
     $name_param = !is_null($request->name) ? $request->name : '';
+>>>>>>> dropjs
 
     $orderBy = 'name';
     $sort = 'asc';
 
+<<<<<<< HEAD
+        // if (!is_null($city_id)) {
+
+        //     $items = TourMuseum::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+        // } else {
+
+        //     $items = TourMuseum::orderBy($orderBy, $sort)->paginate();
+        // }
+        $items = (new ObjectsFilter(TourMuseum::with('objectables'), $request))->apply()->paginate();
+=======
     $model_alias = TourMuseum::getModelAliasAttribute();
 
     // if (!is_null($city_id)) {
@@ -41,6 +59,7 @@ class MuseumController extends Controller
     $items = (new ObjectsFilter(TourMuseum::with('objectables'), $request))->apply()->paginate();
 
     $deleted = TourMuseum::onlyTrashed()->get();
+>>>>>>> dropjs
 
     $cities_names = TourMuseum::getCitiesAttribute();
 
@@ -50,9 +69,27 @@ class MuseumController extends Controller
 
     $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
 
+<<<<<<< HEAD
+        $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
+
+        $cities_ids = TourMuseum::select('city_id')->pluck('city_id')->toArray();
+
+        $cities_for_filter = TourMuseum::getCitiesForFilterAttribute($cities_ids);
+
+        return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
+            ->with('city_id', (int) $city_id)
+            ->with('city_name', $city_name)
+            ->with('city_param', $city_param)
+            ->with('model_alias', $model_alias)
+            // ->with('customer_type_options', $customer_type_options)
+            ->with('customer_type_options_arrays', $customer_type_options_arrays)
+            ->with('name', $name_param);
+    }
+=======
     $cities_ids = TourMuseum::select('city_id')->pluck('city_id')->toArray();
 
     $cities_for_filter = TourMuseum::getCitiesForFilterAttribute($cities_ids);
+>>>>>>> dropjs
 
     return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
       ->with('city_id', (int) $city_id)
@@ -77,7 +114,19 @@ class MuseumController extends Controller
 
     $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
+<<<<<<< HEAD
+        return view('frontend.tour.object.create', compact('cities_options', 'attributes'))
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+            ->with('item', [])
+            ->with('city_id', (int) $city_id)
+            ->with('model_alias', $model_alias);
+    }
+=======
     $attributes = [];
+>>>>>>> dropjs
 
     return view('frontend.tour.object.create', compact('cities_options', 'attributes'))
       ->with('method', 'POST')
@@ -120,10 +169,36 @@ class MuseumController extends Controller
 
     $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
 
+<<<<<<< HEAD
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+            ->with('model_alias', $model_alias);
+    }
+=======
     $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+>>>>>>> dropjs
 
     $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
+<<<<<<< HEAD
+    public function update(Request $request, $id)
+    {
+        if ($request->get('attribute')) {
+            $request->validate([
+                'attribute.*.name' => 'required|min:3',
+                'attribute.*.price' => 'required',
+                'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
+            ]);
+        } else {
+            $request->validate([
+                'name' => 'required',
+                'city_id' => 'exists:tour_cities,id',
+            ]);
+        }
+=======
     return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
       ->with('method', 'PATCH')
       ->with('action', 'edit')
@@ -131,6 +206,7 @@ class MuseumController extends Controller
       ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
       ->with('model_alias', $model_alias);
   }
+>>>>>>> dropjs
 
 
   public function update(Request $request, $id)
@@ -202,6 +278,14 @@ class MuseumController extends Controller
 
     $museum->forceDelete();
 
+<<<<<<< HEAD
+    public static function getCityId(Request $request)
+    {
+        $city_ids = TourMuseum::getCityIds();
+        return $request->has('city_id') && $request->query('city_id') != 0
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+    }
+=======
     return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
   }
 
@@ -212,4 +296,5 @@ class MuseumController extends Controller
     return $request->has('city_id') && $request->query('city_id') != 0
       && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
   }
+>>>>>>> dropjs
 }
