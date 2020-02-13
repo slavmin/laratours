@@ -7,10 +7,7 @@ use App\Models\Tour\TourHotel;
 use App\Models\Tour\TourMeal;
 use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourObjectAttributes;
-<<<<<<< HEAD
-=======
 use App\Models\Tour\TourPrice;
->>>>>>> dropjs
 use App\Models\Tour\TourTransport;
 use Illuminate\Http\Request;
 
@@ -52,34 +49,14 @@ class PriceController extends Controller
     $attribute->priceable()->updateOrCreate(
       ['id' => $item_id],
       [
-<<<<<<< HEAD
-        'period_start' => '2020-01-01',
-        'period_end' => '2020-01-31',
-        'price' => 1500,
-=======
         'period_start' => $request->period_start,
         'period_end' => $request->period_end,
         'price' => $request->price,
         'tour_customer_type_id' => $request->tour_customer_type_id ?? ''
->>>>>>> dropjs
       ]
     );
 
     return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
-<<<<<<< HEAD
-    // dd(__METHOD__, $request->all(), $attribute_id, $attribute);
-
-    // if ($request->get('attribute')) {
-    //   $request->validate([
-    //     'parent_model_id' => 'required|exists:tour_' . $parent_model_alias . 's,id',
-    //     'parent_model_alias' => 'required',
-    //     'name' => 'required|min:3',
-    //     'price' => 'required',
-    //     'customer_type_id' => 'nullable|exists:tour_customer_types,id',
-    //   ]);
-    // }
-=======
->>>>>>> dropjs
   }
 
   /**
@@ -124,18 +101,10 @@ class PriceController extends Controller
    */
   public function destroy($id)
   {
-<<<<<<< HEAD
-    dd(__METHOD__);
-    // $item = TourObjectAttributes::findOrFail($id);
-    // $item->delete();
-
-    // return redirect()->back()->withFlashWarning(__('alerts.general.deleted'));
-=======
     // dd(__METHOD__);
     $item = TourPrice::findOrFail($id);
     $item->delete();
 
     return redirect()->back()->withFlashWarning(__('alerts.general.deleted'));
->>>>>>> dropjs
   }
 }

@@ -1,11 +1,14 @@
 const mix = require('laravel-mix');
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 /* ESLint
  *
  * shoom1337
  */
 require('laravel-mix-eslint');
+
+/* fs module
+ */
+// mix.webpackConfig({ node: { fs: 'empty' }});
 
 
 /*
@@ -23,16 +26,7 @@ mix.setPublicPath('public')
     .setResourceRoot('../') // turns assets paths in css relative to css file
     .sass('resources/sass/frontend/app.scss', 'css/frontend.css')
     .sass('resources/sass/backend/app.scss', 'css/backend.css')
-    .js('resources/js/frontend/app.js', 'js/frontend.js')
-    .js('resources/js/frontend/tour/tour/app.js', 'js/frontend_tour_constructor.js').eslint({
-        fix: false,
-        cache: false,
-    })
-    .js('resources/js/frontend/tour/agency/app.js', 'js/frontend_agency.js').eslint({
-        fix: false,
-        cache: false,
-    })
-    .eslint({
+    .js('resources/js/frontend/app.js', 'js/frontend.js').eslint({
         fix: false,
         cache: false,
     })
@@ -58,8 +52,7 @@ mix.setPublicPath('public')
         'axios',
         'sweetalert2',
         'lodash',
-        'moment',
-        'vuetify'
+        'moment'
     ])
     .sourceMaps();
 

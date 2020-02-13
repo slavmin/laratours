@@ -106,7 +106,6 @@
                 xs12
                 sm6
               >
-<<<<<<< HEAD
                 <v-checkbox
                   v-model="isCustomOrder"
                   label="Заказ-наряд"
@@ -115,59 +114,6 @@
                 <v-layout
                   row
                   wrap
-=======
-                <v-checkbox 
-                  v-model="isCustomOrder" 
-                  label="Заказ-наряд" 
-                  color="#aa282a"
-                />
-                <v-layout 
-                  row 
-                  wrap
-                >
-                  <v-flex 
-                    :class="isCustomOrder ? 'xs12' : 'xs8'"
-                  >
-                    <v-text-field 
-                      v-model="name"
-                      label="Название" 
-                      outline
-                      color="#aa282a"
-                      class="mb-3"
-                    />
-                  </v-flex>
-                  <v-flex 
-                    v-if="!isCustomOrder"
-                    xs2
-                  >
-                    <v-layout 
-                      row 
-                      wrap
-                    >
-                      <v-checkbox 
-                        v-model="isExtra" 
-                        color="#aa282a"
-                        label="Доп" 
-                      />
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                          <v-icon 
-                            color="grey"
-                            v-on="on"
-                          >
-                            info
-                          </v-icon>
-                        </template>
-                        <span>
-                          Можно будет выбрать в расчёте тура как дополнительную экскурсию, не входящую в основную стоимость.  
-                        </span>
-                      </v-tooltip>
-                    </v-layout>
-                  </v-flex>
-                </v-layout>
-                <div
-                  v-show="!isCustomOrder"
->>>>>>> dropjs
                 >
                   <v-flex :class="isCustomOrder ? 'xs12' : 'xs8'">
                     <v-text-field
@@ -209,70 +155,110 @@
                   </v-flex>
                 </v-layout>
                 <div v-show="!isCustomOrder">
+                  <v-flex :class="isCustomOrder ? 'xs12' : 'xs8'">
+                    <v-text-field
+                      v-model="name"
+                      label="Название"
+                      outline
+                      color="#aa282a"
+                      class="mb-3"
+                    />
+                  </v-flex>
+                  <v-flex
+                    v-if="!isCustomOrder"
+                    xs2
+                  >
+                    <v-layout
+                      row
+                      wrap
+                    >
+                      <v-checkbox
+                        v-model="isExtra"
+                        color="#aa282a"
+                        label="Доп"
+                      />
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-icon
+                            color="grey"
+                            v-on="on"
+                          >
+                            info
+                          </v-icon>
+                        </template>
+                        <span>
+                          Можно будет выбрать в расчёте тура как дополнительную
+                          экскурсию, не входящую в основную стоимость.
+                        </span>
+                      </v-tooltip>
+                    </v-layout>
+                  </v-flex>
+            </v-layout>
+            <div v-show="!isCustomOrder">
+              <v-text-field
+                v-model="duration"
+                label="Продолжительность экскурсии"
+                mask="##"
+                outline
+                color="#aa282a"
+              />
+              <h5 class="subheading grey--text">
+                Цены:
+              </h5>
+              <div class="grey--text">
+                Заполните только нужные поля. Остальные оставьте пустыми.
+              </div>
+              <v-layout
+                row
+                wrap
+                justify-space-between
+              >
+                <v-flex
+                  v-for="(customer, i) in customerTypes"
+                  :key="customer.id"
+                >
                   <v-text-field
-                    v-model="duration"
-                    label="Продолжительность экскурсии"
-                    mask="##"
+                    v-model="priceArray[i]"
+                    :label="customer.name"
+                    outline
+                    mask="#####"
+                  />
+                </v-flex>
+              </v-layout>
+            </div>
+            <div v-show="isCustomOrder">
+              <v-layout
+                row
+                wrap
+                justify-space-between
+              >
+                <v-flex>
+                  <v-text-field
+                    v-model="customOrder.count"
+                    label="Кол-во человек"
+                    outline
+                    mask="#####"
+                  />
+                </v-flex>
+                <v-flex>
+                  <v-text-field
+                    v-model="customOrder.price"
+                    label="Цена"
+                    outline
+                    mask="#####"
+                  />
+                </v-flex>
+                <v-flex>
+                  <v-text-field
+                    v-model="customOrder.about"
+                    label="Описание"
                     outline
                     color="#aa282a"
                   />
-                  <h5 class="subheading grey--text">
-                    Цены:
-                  </h5>
-                  <div class="grey--text">
-                    Заполните только нужные поля. Остальные оставьте пустыми.
-                  </div>
-                  <v-layout
-                    row
-                    wrap
-                    justify-space-between
-                  >
-                    <v-flex
-                      v-for="(customer, i) in customerTypes"
-                      :key="customer.id"
-                    >
-                      <v-text-field
-                        v-model="priceArray[i]"
-                        :label="customer.name"
-                        outline
-                        mask="#####"
-                      />
-                    </v-flex>
-                  </v-layout>
-                </div>
-                <div v-show="isCustomOrder">
-                  <v-layout
-                    row
-                    wrap
-                    justify-space-between
-                  >
-                    <v-flex>
-                      <v-text-field
-                        v-model="customOrder.count"
-                        label="Кол-во человек"
-                        outline
-                        mask="#####"
-                      />
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        v-model="customOrder.price"
-                        label="Цена"
-                        outline
-                        mask="#####"
-                      />
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field
-                        v-model="customOrder.about"
-                        label="Описание"
-                        outline
-                        color="#aa282a"
-                      />
-                    </v-flex>
-                  </v-layout>
-                </div>
-              </v-flex>
+                </v-flex>
+              </v-layout>
+            </div>
+            </v-flex>
             </v-layout>
           </v-form>
         </v-container>
@@ -348,11 +334,7 @@ export default {
         price: NaN,
       },
       isExtra: false,
-<<<<<<< HEAD
     }
-=======
-    };
->>>>>>> dropjs
   },
   computed: {
     attribute: function() {
@@ -399,15 +381,9 @@ export default {
         this.customerId = JSON.parse(this.event.extra).customer
         if (JSON.parse(this.event.extra).priceList) {
           this.customerTypes.forEach((customerType, i) => {
-<<<<<<< HEAD
             const value = JSON.parse(this.event.extra).priceList.find(price => {
               return customerType.id == price.customerId
             })
-=======
-            const value = (JSON.parse(this.event.extra).priceList.find((price) => {
-              return customerType.id == price.customerId
-            }))
->>>>>>> dropjs
             this.priceArray[i] = value ? value.price : 0
           })
         }

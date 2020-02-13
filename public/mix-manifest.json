@@ -1,27 +1,16 @@
 {
-<<<<<<< HEAD
-    "/js/backend.js": "/js/backend.js",
-    "/js/frontend.js": "/js/frontend.js",
-    "/css/frontend.css": "/css/frontend.css",
-    "/css/backend.css": "/css/backend.css",
-    "/js/frontend_agency.js": "/js/frontend_agency.js",
-    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js",
-    "/js/manifest.js": "/js/manifest.js",
-    "/js/vendor.js": "/js/vendor.js"
-=======
     "/js/manifest.js": "/js/manifest.js?id=6a4eb117ddc7ca47286f",
     "/js/manifest.js.map": "/js/manifest.js.map?id=2b7092fd6e2c065e72d7",
-    "/js/vendor.js": "/js/vendor.js?id=17685b106a1cfe4614cc",
-    "/js/vendor.js.map": "/js/vendor.js.map?id=e7e5457b23312e8428f5",
+    "/js/vendor.js": "/js/vendor.js?id=6a28493cb3fc2116c3eb",
+    "/js/vendor.js.map": "/js/vendor.js.map?id=66bc2891435958a0e2e6",
     "/js/backend.js": "/js/backend.js?id=8789481b711eaa0421cf",
     "/js/backend.js.map": "/js/backend.js.map?id=5ca13119a953fdf24afa",
-    "/js/frontend.js": "/js/frontend.js?id=f420f5873566619d2d78",
-    "/css/frontend.css": "/css/frontend.css?id=9f135627727f03e6cb5e",
-    "/css/backend.css": "/css/backend.css?id=48844876832c17c6797a",
-    "/js/frontend.js.map": "/js/frontend.js.map?id=1e1e3d75417b478348af",
-    "/js/frontend_agency.js": "/js/frontend_agency.js?id=dec46e9b08d87f2e7e90",
-    "/js/frontend_agency.js.map": "/js/frontend_agency.js.map?id=fee16a76c949eb5bb309",
-    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js?id=701237e739e4d14a0a64",
-    "/js/frontend_tour_constructor.js.map": "/js/frontend_tour_constructor.js.map?id=9e92c7ed7c6943a60999"
->>>>>>> dropjs
+    "/js/frontend.js": "/js/frontend.js?id=35d7a37615f543768420",
+    "/css/frontend.css": "/css/frontend.css?id=3dd1fab93752ab94f830",
+    "/css/backend.css": "/css/backend.css?id=567cf52b48d349352b63",
+    "/js/frontend.js.map": "/js/frontend.js.map?id=7882707f97322351aef8",
+    "/js/frontend_agency.js": "/js/frontend_agency.js?id=be996c47394c1dc44e5d",
+    "/js/frontend_agency.js.map": "/js/frontend_agency.js.map?id=652dd60a3d18f41d0bea",
+    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js?id=a9581a1d9b7decb3ac28",
+    "/js/frontend_tour_constructor.js.map": "/js/frontend_tour_constructor.js.map?id=668e512a2a435e2ec6b6"
 }

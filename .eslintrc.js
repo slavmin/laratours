@@ -1,18 +1,6 @@
 // https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
-<<<<<<< HEAD
-    extends: [
-        // add more generic rulesets here, such as:
-        // 'eslint:recommended',
-        'plugin:vue/recommended',
-    ],
-    rules: {
-        // override/add rules settings here, such as:
-        // 'vue/no-unused-vars': 'error'
-        'vue/no-v-html': 'off',
-    },
-=======
     root: true,
     parserOptions: {
         "parser": "babel-eslint",
@@ -36,5 +24,4 @@ module.exports = {
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'vue/no-v-html': 'off',
     }
->>>>>>> dropjs
 }
