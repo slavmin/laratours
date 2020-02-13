@@ -22,11 +22,21 @@
 
 @section('content')
 <v-container class="d-flex justify-center align-center" style="height: 100%; margin-top: -64px;">
-    <h1 class="white--text display-3" style="z-index: 3;">
+    <div style="z-index: 3;">
       <v-row justify="center">
         <img src="/img/frontend/round-logo.png" width="120"></img>
       </v-row>
-      TourClick
-    </h1>
+      <h1 class="white--text display-3">TourClick</h1>
+      <v-row justify="center" class="mt-5">
+        <v-btn 
+          href="{{route('frontend.auth.login')}}"
+          class="ma-2" 
+          tile color="#aa282a" 
+          dark
+        >
+          Войти
+        </v-btn>
+      </v-row>
+    </div>
 </v-container>
 @endsection
