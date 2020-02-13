@@ -1,40 +1,32 @@
 @extends('frontend.layouts.app')
-
+@push('after-styles')
+<style>
+.v-content__wrap {
+  background: url('/img/frontend/bg-mountain.jpg') 0 0 no-repeat;
+  background-size: cover;
+}
+.v-content__wrap:before {
+  display: block;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0px;
+  left: 0;
+  background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0.1));
+  opacity: 0.4;
+}
+</style>
+@endpush
 @section('title', app_name() . ' | ' . __('navs.general.home'))
 
 @section('content')
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-home"></i> @lang('navs.general.home')
-                </div>
-                <div class="card-body">
-                    @lang('strings.frontend.welcome_to', ['place' => app_name()])
-                </div>
-            </div><!--card-->
-        </div><!--col-->
-    </div><!--row-->
-
-    <div class="row mb-4">
-        <div class="col">
-            df
-        </div><!--col-->
-    </div><!--row-->
-
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fab fa-font-awesome-flag"></i> Font Awesome @lang('strings.frontend.test')
-                </div>
-                <div class="card-body">
-                    <i class="fas fa-home"></i>
-                    <i class="fab fa-facebook"></i>
-                    <i class="fab fa-twitter"></i>
-                    <i class="fab fa-pinterest"></i>
-                </div><!--card-body-->
-            </div><!--card-->
-        </div><!--col-->
-    </div><!--row-->
+<v-container class="d-flex justify-center align-center" style="height: 100%; margin-top: -64px;">
+    <h1 class="white--text display-3" style="z-index: 3;">
+      <v-row justify="center">
+        <img src="/img/frontend/round-logo.png" width="120"></img>
+      </v-row>
+      TourClick
+    </h1>
+</v-container>
 @endsection
