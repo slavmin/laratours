@@ -42,6 +42,7 @@ Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
 
 Vue.component('cities-autocomplete', require('./components/CitiesAutocomplete.vue').default);
 Vue.component('museum-objectable', require('./components/MuseumObjectable.vue').default);
+Vue.component('object-attribute-price', require('./components/ObjectAttributePrice.vue').default);
 
 window.Vuetify = require('vuetify');
 Vue.use(Vuetify)

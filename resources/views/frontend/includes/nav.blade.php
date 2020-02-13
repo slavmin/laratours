@@ -10,6 +10,7 @@
       menu.classList.toggle('d-none')
       menu.classList.toggle('tc-show-menu-on-burger')
       menu.classList.toggle('tc-main-header')
+      menu.classList.toggle('justify-end')
       showMenu = !showMenu
     }
   }

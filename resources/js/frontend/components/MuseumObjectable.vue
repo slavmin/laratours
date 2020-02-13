@@ -33,7 +33,7 @@
               </i>
               {{ museum.name }}
             </h3>
-            <h4>Добавить экскурсию:</h4>
+            <h4>{{ editMode ? 'Редактировать' :'Добавить' }} экскурсию:</h4>
           </v-layout>
         </v-card-title>
         <v-card-text>
@@ -72,16 +72,6 @@
                 value="0"
               >
               <input
-                type="hidden"
-                name="qnt'"
-                value="1"
-              >
-              <input
-                value="1"
-                type="hidden"
-                name="customer_type_id"
-              >
-              <input
                 v-model="name"
                 type="hidden"
                 name="name"
@@ -91,11 +81,15 @@
                 type="hidden"
                 name="extra"
               >
-              <input
-                value="0"
-                type="hidden"
-                name="price"
-              >
+              <div v-if="prices.length > 0">
+                <input
+                  v-for="(price, k) in prices"
+                  :key="`price-${k}`"
+                  type="hidden"
+                  name="prices[]"
+                  :value="price"
+                >
+              </div>
               <v-layout
                 column
                 wrap
@@ -160,9 +154,67 @@
                       outline
                       color="#aa282a"
                     />
-                    <h5 class="subheading grey--text">
+                    <v-divider />
+                    <!-- <h5 class="subheading grey--text text-center">
                       Цены:
                     </h5>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-menu
+                          v-model="showDateStart"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              v-model="dateStart"
+                              label="Начало периода"
+                              prepend-icon="event"
+                              clearable
+                              readonly
+                              v-on="on"
+                            />
+                          </template>
+                          <v-date-picker
+                            v-model="dateStart"
+                            :first-day-of-week="1"
+                            locale="ru-ru"
+                            @input="showDateStart = false"
+                          />
+                        </v-menu>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-menu
+                          v-model="showDateEnd"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              v-model="dateEnd"
+                              label="Конец периода"
+                              prepend-icon="event"
+                              clearable
+                              readonly
+                              v-on="on"
+                            />
+                          </template>
+                          <v-date-picker
+                            v-model="dateEnd"
+                            :min="dateStart"
+                            :first-day-of-week="1"
+                            locale="ru-ru"
+                            @input="showDateEnd = false"
+                          />
+                        </v-menu>
+                      </v-col>
+                    </v-row>
                     <div class="grey--text">
                       Заполните только нужные поля. Остальные оставьте
                       пустыми.
@@ -183,7 +235,7 @@
                           mask="#####"
                         />
                       </v-flex>
-                    </v-layout>
+                    </v-layout> -->
                   </div>
                   <div v-show="isCustomOrder">
                     <v-layout
@@ -223,14 +275,15 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer />
           <v-btn
             color="#aa282a"
+            text
             dark
             @click="close"
           >
             Закрыть
           </v-btn>
+          <v-spacer />
           <v-btn
             color="#aa282a"
             dark
@@ -256,7 +309,10 @@ export default {
     },
     event: {
       type: Object,
-      required: true,
+      default: null,
+    },
+    eventPrices: {
+      type: Array,
       default: null,
     },
     token: {
@@ -289,6 +345,10 @@ export default {
         price: NaN,
       },
       isExtra: false,
+      showDateStart: false,
+      dateStart: '',
+      showDateEnd: false,
+      dateEnd: '',
     }
   },
   computed: {
@@ -306,7 +366,7 @@ export default {
       return JSON.stringify({
         isExtra: this.isExtra,
         duration: this.duration,
-        priceList: this.getPriceList(),
+        // priceList: this.getPriceList(),
       })
     },
     customerTypes: function() {
@@ -322,9 +382,26 @@ export default {
       })
       return result
     },
+    prices: function() {
+      let result = []
+      this.priceArray.forEach((price, i) => {
+        if (price != 0) {
+          result.push(
+            JSON.stringify({
+              period_start: this.dateStart,
+              period_end: this.dateEnd,
+              price: price,
+              tour_customer_type_id: this.customers[i].id,
+            })
+          )
+        }
+      })
+      return result
+    },
   },
   mounted() {
     if (this.editMode) this.parseInfo()
+    console.log(this.eventPrices)
   },
   methods: {
     parseInfo() {
@@ -374,6 +451,14 @@ export default {
         }
       })
       return result
+    },
+    test() {
+      console.log(
+        this.priceArray,
+        this.customers,
+        this.customerTypes,
+        this.prices
+      )
     },
   },
 }

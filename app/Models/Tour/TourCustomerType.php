@@ -30,8 +30,6 @@ class TourCustomerType extends Model
     return $types_options;
   }
 
-  // shoom
-  // vvvvvvvvv
   public static function getCustomerTypesAttributeArrays($text = '')
   {
     $types = self::orderBy('name', 'asc')->get()->toArray();
@@ -40,6 +38,4 @@ class TourCustomerType extends Model
 
     return $types_options;
   }
-  // ^^^^^^^^^
-  // /shoom
 }
