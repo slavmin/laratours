@@ -1,16 +1,10 @@
 {
-    "/js/manifest.js": "/js/manifest.js?id=6a4eb117ddc7ca47286f",
-    "/js/manifest.js.map": "/js/manifest.js.map?id=2b7092fd6e2c065e72d7",
-    "/js/vendor.js": "/js/vendor.js?id=6a28493cb3fc2116c3eb",
-    "/js/vendor.js.map": "/js/vendor.js.map?id=8febfbf272da774d2ecc",
-    "/js/backend.js": "/js/backend.js?id=ffc19959673f4e7fec7b",
-    "/js/backend.js.map": "/js/backend.js.map?id=8ed078ac48a3b01af9ff",
-    "/js/frontend.js": "/js/frontend.js?id=48033f9a7e67c00ff82c",
-    "/css/frontend.css": "/css/frontend.css?id=f0b68586c4c612ee6de7",
-    "/css/backend.css": "/css/backend.css?id=30cd7092703899a7876d",
-    "/js/frontend.js.map": "/js/frontend.js.map?id=972363fc1f3400767b29",
-    "/js/frontend_agency.js": "/js/frontend_agency.js?id=0f74d94f59f86a4a511f",
-    "/js/frontend_agency.js.map": "/js/frontend_agency.js.map?id=2f7ad6d8e567d27c82a4",
-    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js?id=2354585c1d65ce9d72f6",
-    "/js/frontend_tour_constructor.js.map": "/js/frontend_tour_constructor.js.map?id=3ec0d3f99f63da03d071"
+    "/js/backend.js": "/js/backend.js",
+    "/js/frontend.js": "/js/frontend.js",
+    "/css/frontend.css": "/css/frontend.css",
+    "/css/backend.css": "/css/backend.css",
+    "/js/frontend_agency.js": "/js/frontend_agency.js",
+    "/js/frontend_tour_constructor.js": "/js/frontend_tour_constructor.js",
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js"
 }

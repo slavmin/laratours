@@ -187,6 +187,8 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
             // Tour Objects attributes Management
             Route::resource('attribute', \ObjectAttributeController::class, ['except' => ['index', 'create', 'show', 'edit']]);
+            // Tour Objects attributes Prices Management
+            Route::resource('attribute-price', \PriceController::class, ['except' => ['index', 'create', 'show', 'edit']]);
         });
         // Demo data
         Route::group(['namespace' => 'Demo'], function () {
