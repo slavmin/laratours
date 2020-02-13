@@ -7,5 +7,6 @@
             }
         }]
     ],
-    "sourceMaps": true
+    "sourceMaps": true,
+    "plugins": ["babel-plugin-syntax-dynamic-import"]
 }

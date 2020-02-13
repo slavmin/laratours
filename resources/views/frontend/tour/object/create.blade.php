@@ -1,36 +1,54 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="row justify-content-center align-items-center">
-        <div class="col col-sm-8 align-self-center">
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title mb-0">
-                                @lang('labels.frontend.tours.'.$model_alias.'.create')
-                            </h5>
-                        </div><!--col-->
-                    </div><!--row-->
-
-                    <hr>
-
-                    @include('frontend.tour.object.includes.'.$model_alias.'.form')
-
-                </div><!--card-body-->
-
-                {{--<div class="card-footer">
-                    <div class="row">
-                        <div class="col">
-
-                        </div><!--col-->
-                    </div><!--row-->
-                </div><!--card-footer-->--}}
-
-            </div><!--card-->
-
-
-        </div><!-- col-md-8 -->
-    </div><!-- row -->
+<v-container
+  fluid
+  grid-list-md
+  text-xs-center
+>
+  <v-layout row wrap justify-center>
+    <v-flex xs12>
+      <v-card>
+        <v-toolbar
+          dark
+          color="#66a5ae"
+        >
+          <v-btn 
+            href="{{$cancel_route}}"
+            class="tc-link-no-underline-on-hover"
+            title="{{__('buttons.general.cancel')}}"
+            icon 
+            text
+          >
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-card-title class="display-1">
+            @lang('labels.frontend.tours.'.$model_alias.'.create')
+          </v-card-title>
+        </v-toolbar>
+        <v-card-text>
+          @include('frontend.tour.object.includes.'.$model_alias.'.form')
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text
+            color="#aa282a"
+            href="{{ $cancel_route }}"
+          >
+            {{ __('buttons.general.cancel') }}
+          </v-btn>
+           <v-spacer></v-spacer>
+           <v-btn
+            form="museum-form"
+            type="submit"
+            dark
+            color="#aa282a"
+           >
+            {{ __('buttons.general.crud.update') }}
+           </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
 @endsection
