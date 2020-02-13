@@ -6,6 +6,7 @@
     <script src="/js/inputmask.binding.js"></script>
 @endpush
 @section('content')
+<<<<<<< HEAD
     <div class="my-5 row justify-content-center align-items-center">
         <div class="col col-sm-10 align-self-center">
             <div class="card">
@@ -86,25 +87,100 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
-                                {{ html()->label(__('validation.attributes.frontend.company.country'))->for('company_country') }}
+=======
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-sm-8 align-self-center">
+            <div class="card">
+                <div class="card-header">
+                    <strong>
+                        @lang('labels.frontend.auth.register_box_title')
+                    </strong>
+                </div><!--card-header-->
 
-                                {{ html()->text('profile[formal][company_country]')
+                <div class="card-body">
+                    {{ html()->form('POST', route('frontend.auth.register.post'))->open() }}
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.company.name'))->for('company_name') }}
+
+                                {{ html()->text('profile[formal][company_name]')
                                     ->class('form-control')
-                                    ->id('company_country')
+                                    ->id('company_name')
+                                    ->placeholder(__('validation.attributes.frontend.company.name'))
                                     ->attribute('maxlength', 191)
-                                    ->value($info['company_country'] ?? '')
+                                    ->required() }}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.company.phone'))->for('company_phone') }}
+
+                                {{ html()->text('profile[formal][company_phone]')
+                                    ->class('form-control')
+                                    ->id('company_phone')
+                                    ->placeholder(__('validation.custom.phone_format'))
+                                    ->attribute('maxlength', 191)
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
                         <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.company.email'))->for('company_email') }}
+
+                                {{ html()->email('profile[formal][company_email]')
+                                    ->class('form-control')
+                                    ->id('company_email')
+                                    ->placeholder(__('validation.attributes.frontend.company.email'))
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+>>>>>>> dropjs
+                                {{ html()->label(__('validation.attributes.frontend.company.country'))->for('company_country') }}
+
+                                {{ html()->text('profile[formal][company_country]')
+                                    ->class('form-control')
+                                    ->id('company_country')
+<<<<<<< HEAD
+                                    ->attribute('maxlength', 191)
+                                    ->value($info['company_country'] ?? '')
+=======
+                                    ->placeholder(__('validation.attributes.frontend.company.country'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
+                                    ->required()}}
+                            </div><!--form-group-->
+                        </div><!--row-->
+
+                        <div class="col-12 col-md-6">
+<<<<<<< HEAD
                             <div class="form-group md-form">
+=======
+                            <div class="form-group">
+>>>>>>> dropjs
                                 {{ html()->label(__('validation.attributes.frontend.company.city'))->for('company_city') }}
 
                                 {{ html()->text('profile[formal][company_city]')
                                     ->class('form-control')
+<<<<<<< HEAD
                                     ->id('company_city')->attribute('maxlength', 191)
                                     ->value($info['company_city'] ?? '')
+=======
+                                    ->id('company_city')
+                                    ->placeholder(__('validation.attributes.frontend.company.city'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -112,12 +188,17 @@
 
                     <div class="row">
                         <div class="col">
+<<<<<<< HEAD
                             <div class="form-group md-form">
+=======
+                            <div class="form-group">
+>>>>>>> dropjs
                                 {{ html()->label(__('validation.attributes.frontend.company.address'))->for('company_address') }}
 
                                 {{ html()->text('profile[formal][company_address]')
                                     ->class('form-control')
                                     ->id('company_address')
+<<<<<<< HEAD
                                     ->attribute('maxlength', 191)
                                     ->value($info['company_address'] ?? '')
                                     ->required()}}
@@ -143,23 +224,46 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
+=======
+                                    ->placeholder(__('validation.attributes.frontend.company.address'))
+                                    ->attribute('maxlength', 191)
+                                    ->required()}}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+>>>>>>> dropjs
                                 {{ html()->label(__('validation.attributes.frontend.company.inn'))->for('company_inn') }}
 
                                 {{ html()->text('profile[formal][company_inn]')
                                     ->class('form-control')
+<<<<<<< HEAD
                                     ->id('company_inn')->attribute('maxlength', 191)
                                     ->value($info['company_inn'] ?? '')
                                     ->attribute('data-inputmask', "'mask': '9999999999'")
+=======
+                                    ->id('company_inn')
+                                    ->placeholder(__('validation.attributes.frontend.company.inn'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--row-->
 
                         <div class="col-12 col-md-6">
+<<<<<<< HEAD
                             <div class="form-group md-form">
+=======
+                            <div class="form-group">
+>>>>>>> dropjs
                                 {{ html()->label(__('validation.attributes.frontend.company.kpp'))->for('company_kpp') }}
 
                                 {{ html()->text('profile[formal][company_kpp]')
                                     ->class('form-control')
+<<<<<<< HEAD
                                     ->id('company_kpp')->attribute('maxlength', 191)
                                     ->value($info['company_kpp'] ?? '')
                                     ->attribute('data-inputmask', "'mask': '999999999'")
@@ -242,6 +346,11 @@
                                     ->class('form-control')
                                     ->id('company_bankaccount')->attribute('maxlength', 191)
                                     ->attribute('data-inputmask', "'mask': '99999999999999999999'")
+=======
+                                    ->id('company_kpp')
+                                    ->placeholder(__('validation.attributes.frontend.company.kpp'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
                                     ->required()}}
                             </div><!--form-group-->
                         </div><!--col-->
@@ -249,6 +358,7 @@
 
                     <div class="row">
                         <div class="col-12 col-md-6">
+<<<<<<< HEAD
                             <div class="form-group md-form">
                                 {{ html()->label('Корреспондентский счет банка')->for('company_bankcorr') }}
 
@@ -285,22 +395,42 @@
 
                                 {{ html()->text('first_name')
                                     ->class('form-control')->attribute('maxlength', 191)
+=======
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.first_name'))->for('first_name') }}
+
+                                {{ html()->text('first_name')
+                                    ->class('form-control')
+                                    ->placeholder(__('validation.attributes.frontend.first_name'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
                                     ->required()}}
                             </div><!--col-->
                         </div><!--row-->
 
                         <div class="col-12 col-md-6">
+<<<<<<< HEAD
                             <div class="form-group md-form">
                                 {{ html()->label(__('validation.attributes.frontend.last_name'))->for('last_name') }}
 
                                 {{ html()->text('last_name')
                                     ->class('form-control')->attribute('maxlength', 191)
+=======
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.last_name'))->for('last_name') }}
+
+                                {{ html()->text('last_name')
+                                    ->class('form-control')
+                                    ->placeholder(__('validation.attributes.frontend.last_name'))
+                                    ->attribute('maxlength', 191)
+>>>>>>> dropjs
                                     ->required() }}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
 
                     <div class="row">
+<<<<<<< HEAD
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
                                 {{ html()->label(__('validation.attributes.frontend.company.phone'))->for('company_phone') }}
@@ -349,21 +479,59 @@
 
                         <div class="col-12 col-md-6">
                             <div class="form-group md-form">
-                                {{ html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation') }}
+=======
+                        <div class="col">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.email'))->for('email') }}
 
-                                {{ html()->password('password_confirmation')
+                                {{ html()->email('email')
                                     ->class('form-control')
+                                    ->placeholder(__('validation.attributes.frontend.email'))
+                                    ->attribute('maxlength', 191)
                                     ->required() }}
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{ html()->label(__('validation.attributes.frontend.password'))->for('password') }}
+
+                                {{ html()->password('password')
+                                    ->class('form-control')
+                                    ->placeholder(__('validation.attributes.frontend.password'))
+                                    ->required() }}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+>>>>>>> dropjs
+                                {{ html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation') }}
+
+                                {{ html()->password('password_confirmation')
+                                    ->class('form-control')
+<<<<<<< HEAD
+=======
+                                    ->placeholder(__('validation.attributes.frontend.password_confirmation'))
+>>>>>>> dropjs
+                                    ->required() }}
+                            </div><!--form-group-->
+                        </div><!--col-->
+                    </div><!--row-->
+
+<<<<<<< HEAD
                     <div class="row justify-content-center">
                         <div class="grey-text">
                             Минимум 6 символов. Используйте латинские буквы и цифры.
                         </div>
                     </div>
 
+=======
+>>>>>>> dropjs
                     @if(config('access.captcha.registration'))
                         <div class="row">
                             <div class="col">
@@ -376,8 +544,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group mb-0 clearfix">
+<<<<<<< HEAD
                                 {{ form_submit(__('labels.frontend.auth.register_button'))
                                     ->style("background-color: #aa282a !important;") }}
+=======
+                                {{ form_submit(__('labels.frontend.auth.register_button')) }}
+>>>>>>> dropjs
                             </div><!--form-group-->
                         </div><!--col-->
                     </div><!--row-->
@@ -395,10 +567,13 @@
             </div><!-- card -->
         </div><!-- col-md-8 -->
     </div><!-- row -->
+<<<<<<< HEAD
     {{-- <register-index
         data-app
         token="{{ csrf_token() }}"
     ></register-index> --}}
+=======
+>>>>>>> dropjs
 @endsection
 
 @push('after-scripts')

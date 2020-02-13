@@ -12,26 +12,32 @@ use App\Models\Tour\TourHotel;
 
 class HotelController extends Controller
 {
-    protected $tour_hotel;
+  protected $tour_hotel;
 
-    protected $city_id;
+  protected $city_id;
 
 
-    public function index(Request $request)
-    {
-        $city_id = $this->getCityId($request);
+  public function index(Request $request)
+  {
+    $city_id = $this->getCityId($request);
 
-        $city_name = TourHotel::getCityName($city_id, __('labels.frontend.tours.all_cities'));
+    $city_name = TourHotel::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
+    $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
+<<<<<<< HEAD
         $name_param = !is_null($request->name) ? $request->name : '';
 
         $orderBy = 'name';
         $sort = 'asc';
+=======
+    $name_param = !is_null($request->name) ? $request->name : '';
+>>>>>>> dropjs
 
-        $model_alias = TourHotel::getModelAliasAttribute();
+    $orderBy = 'name';
+    $sort = 'asc';
 
+<<<<<<< HEAD
         // if (!is_null($city_id)) {
 
         //     $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -40,13 +46,28 @@ class HotelController extends Controller
         //     $items = TourHotel::orderBy($orderBy, $sort)->paginate();
         // }
         $items = (new ObjectsFilter(TourHotel::with('objectables'), $request))->apply()->paginate();
+=======
+    $model_alias = TourHotel::getModelAliasAttribute();
 
-        $deleted = TourHotel::onlyTrashed()->get();
+    // if (!is_null($city_id)) {
 
-        $cities_names = TourHotel::getCitiesAttribute();
+    //     $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+    // } else {
 
-        $cities_select = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+    //     $items = TourHotel::orderBy($orderBy, $sort)->paginate();
+    // }
+    $items = (new ObjectsFilter(TourHotel::with('objectables'), $request))->apply()->paginate();
 
+    $deleted = TourHotel::onlyTrashed()->get();
+>>>>>>> dropjs
+
+    $cities_names = TourHotel::getCitiesAttribute();
+
+    $cities_select = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+
+<<<<<<< HEAD
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
         $cities_ids = TourHotel::select('city_id')->pluck('city_id')->toArray();
@@ -61,21 +82,30 @@ class HotelController extends Controller
             ->with('customer_type_options', $customer_type_options)
             ->with('name', $name_param);
     }
+=======
+    $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
+>>>>>>> dropjs
 
-    public function show($id)
-    {
-        //
-    }
+    $cities_ids = TourHotel::select('city_id')->pluck('city_id')->toArray();
 
-    public function create(Request $request)
-    {
-        $model_alias = TourHotel::getModelAliasAttribute();
+    $cities_for_filter = TourHotel::getCitiesForFilterAttribute($cities_ids);
 
-        $city_id = $this->getCityId($request);
-        $cities_options = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+    return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'customer_type_options', 'cities_for_filter'))
+      ->with('city_id', (int) $city_id)
+      ->with('city_name', $city_name)
+      ->with('city_param', $city_param)
+      ->with('model_alias', $model_alias)
+      ->with('customer_type_options', $customer_type_options)
+      ->with('customer_type_options_arrays', $customer_type_options_arrays)
+      ->with('name', $name_param);
+  }
 
-        $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
+  public function show($id)
+  {
+    //
+  }
 
+<<<<<<< HEAD
         return view('frontend.tour.object.create', compact('cities_options', 'hotel_categories'))
             ->with('method', 'POST')
             ->with('action', 'create')
@@ -85,37 +115,52 @@ class HotelController extends Controller
             ->with('city_id', (int) $city_id)
             ->with('model_alias', $model_alias);
     }
+=======
+  public function create(Request $request)
+  {
+    $model_alias = TourHotel::getModelAliasAttribute();
+>>>>>>> dropjs
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'city_id' => 'exists:tour_cities,id',
-            'category_id' => 'exists:tour_hotel_categories,id',
-        ]);
+    $city_id = $this->getCityId($request);
+    $cities_options = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-        $tour_hotel = new TourHotel($request->all());
+    $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        $tour_hotel->save();
+    return view('frontend.tour.object.create', compact('cities_options', 'hotel_categories'))
+      ->with('method', 'POST')
+      ->with('action', 'create')
+      ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+      ->with('item', [])
+      ->with('city_id', (int) $city_id)
+      ->with('model_alias', $model_alias);
+  }
 
-        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
-    }
+  public function store(Request $request)
+  {
+    $request->validate([
+      'name' => 'required',
+      'city_id' => 'exists:tour_cities,id',
+      'category_id' => 'exists:tour_hotel_categories,id',
+    ]);
+
+    $tour_hotel = new TourHotel($request->all());
+
+    $tour_hotel->save();
+
+    return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
+  }
 
 
-    public function edit($id)
-    {
-        $model_alias = TourHotel::getModelAliasAttribute();
+  public function edit($id)
+  {
+    $model_alias = TourHotel::getModelAliasAttribute();
 
-        $item = TourHotel::findOrFail($id);
+    $item = TourHotel::findOrFail($id);
 
-        $attributes = $item->objectables->toArray();
+    $attributes = $item->objectables->toArray();
 
-        $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
-
-        $cities_options = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
-
-        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
-
+<<<<<<< HEAD
         $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
         return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))
@@ -125,8 +170,13 @@ class HotelController extends Controller
             ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
+=======
+    $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
+>>>>>>> dropjs
 
+    $cities_options = TourHotel::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
+<<<<<<< HEAD
     public function update(Request $request, $id)
     {
         if ($request->get('attribute')) {
@@ -142,59 +192,98 @@ class HotelController extends Controller
                 'category_id' => 'exists:tour_hotel_categories,id',
             ]);
         }
+=======
+    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+>>>>>>> dropjs
 
-        $tour_hotel = TourHotel::findOrFail($id);
+    $hotel_categories = TourHotelCategory::getHotelCategoriesAttribute(__('validation.attributes.frontend.general.select'));
 
-        $tour_hotel->update($request->all());
+    return view('frontend.tour.object.edit', compact('item', 'cities_options', 'hotel_categories', 'customer_type_options', 'attributes'))
+      ->with('method', 'PATCH')
+      ->with('action', 'edit')
+      ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+      ->with('model_alias', $model_alias);
+  }
 
-        $tour_hotel->saveObjectAttributes($request->get('attribute'));
 
-        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
+  public function update(Request $request, $id)
+  {
+    if ($request->get('attribute')) {
+      $request->validate([
+        'attribute.*.name' => 'required|min:3',
+        'attribute.*.price' => 'required',
+        'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
+      ]);
+    } else {
+      $request->validate([
+        'name' => 'required',
+        'city_id' => 'exists:tour_cities,id',
+        'category_id' => 'exists:tour_hotel_categories,id',
+      ]);
     }
 
+    $tour_hotel = TourHotel::findOrFail($id);
 
-    public function destroy($id)
-    {
-        $tour_hotel = TourHotel::findOrFail($id);
-        $tour_hotel->delete();
+    $tour_hotel->update($request->all());
 
-        return redirect()->route('frontend.tour.hotel.index')->withFlashWarning(__('alerts.general.deleted'));
+    $tour_hotel->saveObjectAttributes($request->get('attribute'));
+
+    return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
+  }
+
+
+  public function destroy($id)
+  {
+    $tour_hotel = TourHotel::findOrFail($id);
+    $tour_hotel->delete();
+
+    return redirect()->route('frontend.tour.hotel.index')->withFlashWarning(__('alerts.general.deleted'));
+  }
+
+
+  public function restore($id)
+  {
+    $tour_hotel = TourHotel::withTrashed()->find($id);
+
+    if ($tour_hotel->deleted_at === null) {
+      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
     }
 
-
-    public function restore($id)
-    {
-        $tour_hotel = TourHotel::withTrashed()->find($id);
-
-        if ($tour_hotel->deleted_at === null) {
-            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
-        }
-
-        if ($tour_hotel->restore()) {
-            return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.restored'));
-        }
-
-        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    if ($tour_hotel->restore()) {
+      return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.restored'));
     }
 
-    public function delete($id)
-    {
-        $tour_hotel = TourHotel::withTrashed()->find($id);
+    throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+  }
 
-        if ($tour_hotel->deleted_at === null) {
-            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
-        }
+  public function delete($id)
+  {
+    $tour_hotel = TourHotel::withTrashed()->find($id);
 
-        $tour_hotel->forceDelete();
-
-        return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+    if ($tour_hotel->deleted_at === null) {
+      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
     }
 
+    $tour_hotel->forceDelete();
 
+<<<<<<< HEAD
     public static function getCityId(Request $request)
     {
         $city_ids = TourHotel::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
             && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
+=======
+    return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+  }
+
+
+  public static function getCityId(Request $request)
+  {
+    $city_ids = TourHotel::getCityIds();
+    return $request->has('city_id') && $request->query('city_id') != 0
+      && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+  }
+>>>>>>> dropjs
 }

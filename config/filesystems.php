@@ -1,7 +1,7 @@
 <?php
 
 return [
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
     |--------------------------------------------------------------------------
@@ -12,9 +12,9 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+  'default' => env('FILESYSTEM_DRIVER', 'local'),
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Default Cloud Filesystem Disk
     |--------------------------------------------------------------------------
@@ -25,9 +25,9 @@ return [
     |
     */
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+  'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
@@ -40,40 +40,47 @@ return [
     |
     */
 
-    'disks' => [
-        'local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-        ],
-
-        'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
-
-        'media' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/media'),
-            'url' => env('APP_URL') . '/storage/media',
-            'visibility' => 'public',
-        ],
-
-        'avatars' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/avatars'),
-            'url' => env('APP_URL') . '/storage/avatars',
-            'visibility' => 'public',
-        ],
-
-        's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-        ],
+  'disks' => [
+    'local' => [
+      'driver' => 'local',
+      'root' => storage_path('app'),
     ],
+
+    'public' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public'),
+      'url' => env('APP_URL') . '/storage',
+      'visibility' => 'public',
+    ],
+
+    'media' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public/media'),
+      'url' => env('APP_URL') . '/storage/media',
+      'visibility' => 'public',
+    ],
+
+    'avatars' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public/avatars'),
+      'url' => env('APP_URL') . '/storage/avatars',
+      'visibility' => 'public',
+    ],
+
+    'objects_photos' => [
+      'driver' => 'local',
+      'root' => storage_path('app/public/objects_photos'),
+      'url' => env('APP_URL') . '/storage/objects_photos',
+      'visibility' => 'public',
+    ],
+
+    's3' => [
+      'driver' => 's3',
+      'key' => env('AWS_ACCESS_KEY_ID'),
+      'secret' => env('AWS_SECRET_ACCESS_KEY'),
+      'region' => env('AWS_DEFAULT_REGION'),
+      'bucket' => env('AWS_BUCKET'),
+      'url' => env('AWS_URL'),
+    ],
+  ],
 ];

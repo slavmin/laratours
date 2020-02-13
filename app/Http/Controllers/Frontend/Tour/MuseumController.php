@@ -12,26 +12,32 @@ use App\Models\Tour\TourObjectAttributes;
 
 class MuseumController extends Controller
 {
-    protected $museum;
+  protected $museum;
 
-    protected $city_id;
+  protected $city_id;
 
 
-    public function index(Request $request)
-    {
-        $city_id = $this->getCityId($request);
+  public function index(Request $request)
+  {
+    $city_id = $this->getCityId($request);
 
-        $city_name = TourMuseum::getCityName($city_id, __('labels.frontend.tours.all_cities'));
+    $city_name = TourMuseum::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
+    $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
 
+<<<<<<< HEAD
         $name_param = !is_null($request->name) ? $request->name : '';
 
         $orderBy = 'name';
         $sort = 'asc';
+=======
+    $name_param = !is_null($request->name) ? $request->name : '';
+>>>>>>> dropjs
 
-        $model_alias = TourMuseum::getModelAliasAttribute();
+    $orderBy = 'name';
+    $sort = 'asc';
 
+<<<<<<< HEAD
         // if (!is_null($city_id)) {
 
         //     $items = TourMuseum::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
@@ -40,15 +46,30 @@ class MuseumController extends Controller
         //     $items = TourMuseum::orderBy($orderBy, $sort)->paginate();
         // }
         $items = (new ObjectsFilter(TourMuseum::with('objectables'), $request))->apply()->paginate();
+=======
+    $model_alias = TourMuseum::getModelAliasAttribute();
 
-        $deleted = TourMuseum::onlyTrashed()->get();
+    // if (!is_null($city_id)) {
 
-        $cities_names = TourMuseum::getCitiesAttribute();
+    //     $items = TourMuseum::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
+    // } else {
 
-        $cities_select = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+    //     $items = TourMuseum::orderBy($orderBy, $sort)->paginate();
+    // }
+    $items = (new ObjectsFilter(TourMuseum::with('objectables'), $request))->apply()->paginate();
 
-        // $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+    $deleted = TourMuseum::onlyTrashed()->get();
+>>>>>>> dropjs
 
+    $cities_names = TourMuseum::getCitiesAttribute();
+
+    $cities_select = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+
+    $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
+
+<<<<<<< HEAD
         $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
 
         $cities_ids = TourMuseum::select('city_id')->pluck('city_id')->toArray();
@@ -64,22 +85,36 @@ class MuseumController extends Controller
             ->with('customer_type_options_arrays', $customer_type_options_arrays)
             ->with('name', $name_param);
     }
+=======
+    $cities_ids = TourMuseum::select('city_id')->pluck('city_id')->toArray();
 
-    public function show($id)
-    {
-        //
-    }
+    $cities_for_filter = TourMuseum::getCitiesForFilterAttribute($cities_ids);
+>>>>>>> dropjs
 
-    public function create(Request $request)
-    {
-        $model_alias = TourMuseum::getModelAliasAttribute();
+    return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
+      ->with('city_id', (int) $city_id)
+      ->with('city_name', $city_name)
+      ->with('city_param', $city_param)
+      ->with('model_alias', $model_alias)
+      ->with('customer_type_options', $customer_type_options)
+      ->with('customer_type_options_arrays', $customer_type_options_arrays)
+      ->with('name', $name_param);
+  }
 
-        $city_id = $this->getCityId($request);
+  public function show($id)
+  {
+    //
+  }
 
-        $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+  public function create(Request $request)
+  {
+    $model_alias = TourMuseum::getModelAliasAttribute();
 
-        $attributes = [];
+    $city_id = $this->getCityId($request);
 
+    $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+<<<<<<< HEAD
         return view('frontend.tour.object.create', compact('cities_options', 'attributes'))
             ->with('method', 'POST')
             ->with('action', 'create')
@@ -89,36 +124,52 @@ class MuseumController extends Controller
             ->with('city_id', (int) $city_id)
             ->with('model_alias', $model_alias);
     }
+=======
+    $attributes = [];
+>>>>>>> dropjs
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'city_id' => 'exists:tour_cities,id',
-        ]);
+    return view('frontend.tour.object.create', compact('cities_options', 'attributes'))
+      ->with('method', 'POST')
+      ->with('action', 'create')
+      ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+      ->with('item', [])
+      ->with('city_id', (int) $city_id)
+      ->with('model_alias', $model_alias);
+  }
 
-        $museum = new TourMuseum($request->all());
+  public function store(Request $request)
+  {
+    $request->validate([
+      'name' => 'required',
+      'city_id' => 'exists:tour_cities,id',
+    ]);
 
-        $museum->save();
+    $museum = new TourMuseum($request->all());
 
-        return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.created'));
+    $image = $request->photo_location;
+    if ($image) {
+      $museum->photo_location = $image->store('/objects', 'public');
+      $museum->addMedia('storage/' . $museum->photo_location)->toMediaCollection('photos', 'objects_photos');
     }
 
+    $museum->save();
 
-    public function edit($id)
-    {
-        $model_alias = TourMuseum::getModelAliasAttribute();
+    return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.created'));
+  }
 
-        $item = TourMuseum::findOrFail($id);
 
-        $attributes = $item->objectables->toArray();
+  public function edit($id)
+  {
+    $model_alias = TourMuseum::getModelAliasAttribute();
 
-        $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
+    $item = TourMuseum::findOrFail($id);
 
-        $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+    $attributes = $item->objectables->toArray();
 
-        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+    $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
 
+<<<<<<< HEAD
         return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
@@ -126,8 +177,13 @@ class MuseumController extends Controller
             ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
     }
+=======
+    $cities_options = TourMuseum::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+>>>>>>> dropjs
 
+    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
+<<<<<<< HEAD
     public function update(Request $request, $id)
     {
         if ($request->get('attribute')) {
@@ -142,60 +198,103 @@ class MuseumController extends Controller
                 'city_id' => 'exists:tour_cities,id',
             ]);
         }
+=======
+    return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+      ->with('method', 'PATCH')
+      ->with('action', 'edit')
+      ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+      ->with('model_alias', $model_alias);
+  }
+>>>>>>> dropjs
 
-        $museum = TourMuseum::findOrFail($id);
 
-        $museum->update($request->all());
-
-        $museum->saveObjectAttributes($request->get('attribute'));
-
-        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
+  public function update(Request $request, $id)
+  {
+    if ($request->get('attribute')) {
+      $request->validate([
+        'attribute.*.name' => 'required|min:3',
+        'attribute.*.price' => 'required',
+        'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
+      ]);
+    } else {
+      $request->validate([
+        'name' => 'required',
+        'city_id' => 'exists:tour_cities,id',
+      ]);
     }
 
+    $museum = TourMuseum::findOrFail($id);
 
-    public function destroy($id)
-    {
-        $museum = TourMuseum::findOrFail($id);
-        $museum->delete();
-
-        return redirect()->route('frontend.tour.museum.index')->withFlashWarning(__('alerts.general.deleted'));
+    $image = $request->photo_location;
+    if ($image) {
+      if (count($museum->media) > 0) {
+        $museum->getMedia('photos')->first()->delete();
+      }
+      $museum->photo_location = $image->store('/objects', 'public');
+      $museum->addMedia('storage/' . $museum->photo_location)->toMediaCollection('photos', 'objects_photos');
     }
 
+    $museum->update($request->all());
+
+    $museum->saveObjectAttributes($request->get('attribute'));
+
+    return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
+  }
 
 
-    public function restore($id)
-    {
-        $museum = TourMuseum::withTrashed()->find($id);
+  public function destroy($id)
+  {
+    $museum = TourMuseum::findOrFail($id);
+    $museum->delete();
 
-        if ($museum->deleted_at === null) {
-            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
-        }
+    return redirect()->route('frontend.tour.museum.index')->withFlashWarning(__('alerts.general.deleted'));
+  }
 
-        if ($museum->restore()) {
-            return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.restored'));
-        }
 
-        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+
+  public function restore($id)
+  {
+    $museum = TourMuseum::withTrashed()->find($id);
+
+    if ($museum->deleted_at === null) {
+      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
     }
 
-    public function delete($id)
-    {
-        $museum = TourMuseum::withTrashed()->find($id);
-
-        if ($museum->deleted_at === null) {
-            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
-        }
-
-        $museum->forceDelete();
-
-        return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+    if ($museum->restore()) {
+      return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.restored'));
     }
 
+    throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+  }
 
+  public function delete($id)
+  {
+    $museum = TourMuseum::withTrashed()->find($id);
+
+    if ($museum->deleted_at === null) {
+      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+    }
+
+    $museum->forceDelete();
+
+<<<<<<< HEAD
     public static function getCityId(Request $request)
     {
         $city_ids = TourMuseum::getCityIds();
         return $request->has('city_id') && $request->query('city_id') != 0
             && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
     }
+=======
+    return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+  }
+
+
+  public static function getCityId(Request $request)
+  {
+    $city_ids = TourMuseum::getCityIds();
+    return $request->has('city_id') && $request->query('city_id') != 0
+      && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+  }
+>>>>>>> dropjs
 }

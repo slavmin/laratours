@@ -1,7 +1,7 @@
 {
     "name": "slavmin/laratours",
     "type": "project",
-    "description": "The Laravel Laratours Project.",
+    "description": "The Laravel TourClick Project.",
     "keywords": [
         "framework",
         "laravel"

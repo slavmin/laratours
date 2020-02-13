@@ -1,0 +1,45 @@
+.tc-main-menu {
+    list-style: none;
+    margin-bottom: 0 !important;
+    position: relative;
+}
+
+.tc-main-menu-link {
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.tc-main-menu-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529 !important;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+
+    &:hover {
+        background-color: rgb(231, 231, 231);
+    }
+
+    &.active {
+        color: #fff !important;
+        text-decoration: none;
+        background-color: #aa282a;
+    }
+}
+
+.tc-show-menu-on-burger {
+    display: flex;
+    flex-direction: column;
+    top: 75px;
+    border: 1px solid #5A7E83;
+}
+
+.tc-expand-header {
+    margin-bottom: 150px;
+}

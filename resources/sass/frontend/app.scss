@@ -11,6 +11,10 @@
 
 // Pages
 @import 'pages/dashboard';
+@import 'pages/navbar';
+
+// TourClick brand styles
+@import 'brand.scss';
 
 // Fix styles
 .dropdown-menu.show {
@@ -21,3 +25,29 @@
     right: 0;
     left: auto;
 }
+<<<<<<< HEAD
+=======
+
+// V-cloak for FUOC
+[v-cloak]>* {
+    display: none;
+}
+
+[v-cloak]::before {
+    content: "TourClick";
+    font-size: 54px;
+    width: 300px;
+    height: 150px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -75px;
+}
+
+// Hacks
+.tc-link-no-underline-on-hover:hover {
+    text-decoration: none;
+}
+>>>>>>> dropjs
