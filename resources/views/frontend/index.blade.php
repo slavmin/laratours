@@ -1,7 +1,5 @@
 @extends('frontend.layouts.app')
-@section('css')
-<link rel="stylesheet" href="css/index.css">
-@endsection
+
 @section('title', app_name() . ' | ' . __('navs.general.home'))
 
 @section('content')

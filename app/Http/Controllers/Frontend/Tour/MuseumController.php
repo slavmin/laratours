@@ -8,7 +8,6 @@ use App\Models\Tour\TourCustomerType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourMuseum;
-use App\Models\Tour\TourObjectAttributes;
 
 class MuseumController extends Controller
 {
@@ -101,7 +100,7 @@ class MuseumController extends Controller
 
     $image = $request->photo_location;
     if ($image) {
-      $museum->photo_location = $image->store('/objects', 'public');
+      $museum->photo_location = $image->store('/objects_photos', 'public');
       $museum->addMedia('storage/' . $museum->photo_location)->toMediaCollection('photos', 'objects_photos');
     }
 
@@ -156,7 +155,7 @@ class MuseumController extends Controller
       if (count($museum->media) > 0) {
         $museum->getMedia('photos')->first()->delete();
       }
-      $museum->photo_location = $image->store('/objects', 'public');
+      $museum->photo_location = $image->store('/objects_photos', 'public');
       $museum->addMedia('storage/' . $museum->photo_location)->toMediaCollection('photos', 'objects_photos');
     }
 

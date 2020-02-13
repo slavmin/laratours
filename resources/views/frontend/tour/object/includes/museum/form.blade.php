@@ -112,7 +112,9 @@
       class="white--text align-end"
       height="80px"
       width="80px"
-      src="{{ $item->getMedia('photos')->first() ? $item->getMedia('photos')->first()->getUrl('thumb') : '' }}"
+      @if ($item)
+        src="{{ $item->getMedia('photos')->first() ? $item->getMedia('photos')->first()->getUrl('thumb') : '' }}"
+      @endif
     ></v-img>
     <v-file-input
       name="photo_location"

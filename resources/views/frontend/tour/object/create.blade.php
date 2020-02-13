@@ -30,6 +30,23 @@
         <v-card-text>
           @include('frontend.tour.object.includes.'.$model_alias.'.form')
         </v-card-text>
+        <v-card-actions>
+          <v-btn text
+            color="#aa282a"
+            href="{{ $cancel_route }}"
+          >
+            {{ __('buttons.general.cancel') }}
+          </v-btn>
+           <v-spacer></v-spacer>
+           <v-btn
+            form="museum-form"
+            type="submit"
+            dark
+            color="#aa282a"
+           >
+            {{ __('buttons.general.crud.update') }}
+           </v-btn>
+        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>

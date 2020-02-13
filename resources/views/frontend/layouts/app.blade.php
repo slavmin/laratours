@@ -36,8 +36,6 @@
         {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
         @stack('before-styles')
 
-        @yield('css')
-
         <!-- Check if the language is set to RTL, so apply the RTL layouts -->
         <!-- Otherwise apply the normal LTR layouts -->
         {{ style(mix('css/frontend.css')) }}
@@ -47,16 +45,6 @@
         </style>
 
         @stack('after-styles')
-        @stack('scripts')
-
-        <!-- Material Design Bootstrap -->
-        <link rel="stylesheet" href="{{ asset('css/bootstrap_mdb.css')}}">
-        <link rel="stylesheet" href="{{ asset('css/mdb.css')}}">
-        <script src="{{ asset('js/mdb.min.js') }}" defer></script>
-
-        <!-- Vuetify -->
-        <link rel="stylesheet" href="{{ asset('css/vuetify.min.css') }}">
-        
     </head>
     <body>
         <div id="app" v-cloak>
@@ -81,8 +69,6 @@
               </v-footer>
             </v-app>
         </div><!-- #app -->
-        @include('includes.partials.footer')
-        @yield('contacts')
 
         <!-- Scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
@@ -90,7 +76,6 @@
         {!! script(mix('js/manifest.js')) !!}
         {!! script(mix('js/vendor.js')) !!}
         {!! script(mix('js/frontend.js')) !!}
-        
         @stack('after-scripts')
 
 

@@ -47,7 +47,7 @@
     },
     "browserslist": {
         "development": "last 1 version",
-        "production": ">1%, Firefox ESR"
+        "production": ">2%, Firefox ESR"
     },
     "jest": {
         "testURL": "http://localhost",
@@ -84,7 +84,6 @@
         "html2pdf-fix-jspdf": "^0.0.4",
         "laravel-mix-eslint": "^0.1.3",
         "material-design-icons-iconfont": "^5.0.1",
-        "mhtml-to-word": "^1.0.4",
         "moment": "^2.24.0",
         "node-sass": "^4.13.1",
         "pdfmake": "^0.1.59",
