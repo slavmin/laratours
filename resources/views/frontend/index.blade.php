@@ -31,7 +31,8 @@
         <v-btn 
           href="{{route('frontend.auth.login')}}"
           class="ma-2" 
-          tile color="#aa282a" 
+          tile 
+          color="#aa282a" 
           dark
         >
           Войти
