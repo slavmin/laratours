@@ -31,7 +31,7 @@
               <i class="material-icons mr-2">
                 account_balance
               </i>
-              {{ museum.name }}
+              {{ tourObject.name }}
             </h3>
             <h4>{{ editMode ? 'Редактировать' :'Добавить' }} экскурсию:</h4>
           </v-layout>
@@ -39,10 +39,10 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-form
-              :id="'form' + museum.id"
+              :id="'form' + tourObject.id"
               ref="form"
               lazy-validation
-              :action="editMode ? `/operator/attribute/${event.id}` : '/operator/attribute'"
+              :action="editMode ? `/operator/attribute/${objectAttribute.id}` : '/operator/attribute'"
               method="POST"
             >
               <input
@@ -59,7 +59,7 @@
               <input
                 type="hidden"
                 name="parent_model_id"
-                :value="museum.id"
+                :value="tourObject.id"
               >
               <input
                 type="hidden"
@@ -172,7 +172,7 @@
                             <v-text-field
                               v-model="dateStart"
                               label="Начало периода"
-                              prepend-icon="event"
+                              prepend-icon="objectAttribute"
                               clearable
                               readonly
                               v-on="on"
@@ -199,7 +199,7 @@
                             <v-text-field
                               v-model="dateEnd"
                               label="Конец периода"
-                              prepend-icon="event"
+                              prepend-icon="objectAttribute"
                               clearable
                               readonly
                               v-on="on"
@@ -288,7 +288,7 @@
             color="#aa282a"
             dark
             type="submit"
-            :form="'form' + museum.id"
+            :form="'form' + tourObject.id"
           >
             Сохранить
           </v-btn>
@@ -302,16 +302,16 @@
 export default {
   name: 'MuseumObjectable',
   props: {
-    museum: {
+    tourObject: {
       type: Object,
       required: true,
       default: null,
     },
-    event: {
+    objectAttribute: {
       type: Object,
       default: null,
     },
-    eventPrices: {
+    objectAttributePrices: {
       type: Array,
       default: null,
     },
@@ -401,28 +401,30 @@ export default {
   },
   mounted() {
     if (this.editMode) this.parseInfo()
-    console.log(this.eventPrices)
+    console.log(this.objectAttributePrices)
   },
   methods: {
     parseInfo() {
-      if (!JSON.parse(this.event.extra).isCustomOrder) {
-        this.name = this.event.name
-        this.price = this.event.price
-        this.isExtra = JSON.parse(this.event.extra).isExtra
-        this.duration = JSON.parse(this.event.extra).duration
-        this.customerId = JSON.parse(this.event.extra).customer
-        if (JSON.parse(this.event.extra).priceList) {
+      if (!JSON.parse(this.objectAttribute.extra).isCustomOrder) {
+        this.name = this.objectAttribute.name
+        this.price = this.objectAttribute.price
+        this.isExtra = JSON.parse(this.objectAttribute.extra).isExtra
+        this.duration = JSON.parse(this.objectAttribute.extra).duration
+        this.customerId = JSON.parse(this.objectAttribute.extra).customer
+        if (JSON.parse(this.objectAttribute.extra).priceList) {
           this.customerTypes.forEach((customerType, i) => {
-            const value = JSON.parse(this.event.extra).priceList.find(price => {
-              return customerType.id == price.customerId
-            })
+            const value = JSON.parse(this.objectAttribute.extra).priceList.find(
+              price => {
+                return customerType.id == price.customerId
+              }
+            )
             this.priceArray[i] = value ? value.price : 0
           })
         }
       } else {
         this.isCustomOrder = true
-        this.name = this.event.name
-        this.customOrder = JSON.parse(this.event.extra)
+        this.name = this.objectAttribute.name
+        this.customOrder = JSON.parse(this.objectAttribute.extra)
       }
     },
     close() {

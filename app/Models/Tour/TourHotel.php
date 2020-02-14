@@ -27,7 +27,20 @@ class TourHotel extends Model implements HasMedia
     ActionButtonsAttribute,
     HasMediaTrait;
 
-  protected $fillable = ['name', 'city_id', 'category_id', 'description', 'qnt', 'extra'];
+  protected $fillable = [
+    'name',
+    'city_id',
+    'category_id',
+    'description',
+    'qnt',
+    'extra',
+    'address',
+    'site',
+    'email',
+    'phone',
+    'staff_name',
+    'staff_phone'
+  ];
 
   protected $appends = ['model_alias'];
 

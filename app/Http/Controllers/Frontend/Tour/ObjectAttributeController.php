@@ -10,6 +10,7 @@ use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourObjectAttributes;
 use App\Models\Tour\TourPrice;
 use App\Models\Tour\TourTransport;
+use App\Repositories\Frontend\Tour\ObjectAttributeRepository;
 use Illuminate\Http\Request;
 
 class ObjectAttributeController extends Controller
@@ -127,13 +128,9 @@ class ObjectAttributeController extends Controller
    */
   public function edit($id)
   {
-    $item = TourObjectAttributes::find($id);
+    $tour_object_data = (new ObjectAttributeRepository)->getTourObjectData($id);
 
-    $prices = $item->priceable;
-
-    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
-
-    return view('frontend.tour.object.includes.prices', compact('item', 'prices', 'customer_type_options'));
+    return view('frontend.tour.object.includes.object-attribute', $tour_object_data);
   }
 
   /**

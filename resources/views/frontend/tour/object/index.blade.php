@@ -47,15 +47,22 @@
               outlined
             >
               <v-img
-                class="white--text align-end"
                 height="200px"
-                src="{{ $item->getMedia('photos')->first() ? $item->getMedia('photos')->first()->getUrl() : '/img/frontend/museum_tmpl.jpg' }}"
-              ></v-img>
+                src="{{ $item->getMedia('photos')->first() ? $item->getMedia('photos')->first()->getUrl() : '/img/frontend/'.$model_alias.'_tmpl.jpg' }}"
+              >
+                @if(!$item->getMedia('photos')->first())
+                  <div class="fill-height repeating-gradient d-flex justify-center align-center">
+                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                      <path fill="white" d="M1.2,4.47L2.5,3.2L20,20.72L18.73,22L16.73,20H4A2,2 0 0,1 2,18V6C2,5.78 2.04,5.57 2.1,5.37L1.2,4.47M7,4L9,2H15L17,4H20A2,2 0 0,1 22,6V18C22,18.6 21.74,19.13 21.32,19.5L16.33,14.5C16.76,13.77 17,12.91 17,12A5,5 0 0,0 12,7C11.09,7 10.23,7.24 9.5,7.67L5.82,4H7M7,12A5,5 0 0,0 12,17C12.5,17 13.03,16.92 13.5,16.77L11.72,15C10.29,14.85 9.15,13.71 9,12.28L7.23,10.5C7.08,10.97 7,11.5 7,12M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9Z" />
+                    </svg>
+                  </div>
+                @endif
+              </v-img>
               <v-card-title></v-card-title>
             </v-img>
             <v-list-item three-line>
               <v-list-item-content>
-                <div class="overline mb-4">тип музея</div>
+                <div class="overline mb-4">тип/категория</div>
                 <v-list-item-title class="headline mb-1">
                   <v-layout row wrap justify-space-between>
                   <v-flex>{{$item->name}}</v-flex>
@@ -75,30 +82,30 @@
                 @if(count($item->objectables) > 0)
                 <v-divider></v-divider>
                 <div class="text-center mt-3">Экскурсии:</div>
-                <v-simple-table dense>
+                <v-simple-table class="objectables-table" dense>
                   <template v-slot:default>
                     <thead>
                       <tr>
                         <th class="text-left">Название</th>
-                        <th class="text-center">Заказ-наряд</th>
-                        <th class="text-center">Доп</th>
+                        <th class="text-center d-none d-md-table-cell">З/Н</th>
+                        <th class="text-center d-none d-md-table-cell">Доп</th>
                         <th class="text-left">Цены</th>
                         <th class="text-right">Действия</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($item->objectables as $event)
+                      @foreach($item->objectables as $object_attribute)
                       <tr>
-                        <td>{{ $event->name }}</td>
-                        <td class="text-center">
-                          @if(isset(json_decode($event->extra)->isCustomOrder))
+                        <td>{{ $object_attribute->name }}</td>
+                        <td class="text-center d-none d-md-table-cell">
+                          @if(isset(json_decode($object_attribute->extra)->isCustomOrder))
                           <v-icon>
                             check
                           </v-icon>
                           @endif
                         </td>
-                        <td class="text-center">
-                          @if(isset(json_decode($event->extra)->isExtra) && json_decode($event->extra)->isExtra)
+                        <td class="text-center d-none d-md-table-cell">
+                          @if(isset(json_decode($object_attribute->extra)->isExtra) && json_decode($object_attribute->extra)->isExtra)
                           <v-icon>
                             check
                           </v-icon>
@@ -107,7 +114,7 @@
                         <td>
                           <v-btn
                             icon
-                            href="{{ route('frontend.tour.attribute.edit', $event->id) }}"
+                            href="{{ route('frontend.tour.attribute.edit', $object_attribute->id) }}"
                           >
                             <svg
                               style="width:24px;height:24px"
@@ -123,23 +130,23 @@
                         <td>
                           <v-row>
                             <v-spacer></v-spacer>
-                            <museum-objectable
+                            <{{ $model_alias}}-objectable
                               edit-mode
-                              :museum="{{ $item }}"
-                              :event="{{ $event }}"
-                              :event-prices="{{ $event->priceable }}"
+                              :tour-object="{{ $item }}"
+                              :object-attribute="{{ $object_attribute }}"
+                              :object-attribute-prices="{{ $object_attribute->priceable }}"
                               token="{{ csrf_token() }}"
                               :customers="{{ json_encode($customer_type_options_arrays) }}"
-                            ></museum-objectable>
+                            ></{{ $model_alias}}-objectable>
                             {{ html()
-                              ->form('DELETE', route('frontend.tour.attribute.destroy', $event->id))
+                              ->form('DELETE', route('frontend.tour.attribute.destroy', $object_attribute->id))
                               ->open() }}
                               <v-btn 
                                 icon 
                                 small 
                                 color="red" 
                                 type="submit"
-                                title="{{ 'Удалить "'. $event->name .'"' }}"
+                                title="{{ 'Удалить "'. $object_attribute->name .'"' }}"
                               >
                                 <v-icon>close</v-icon>
                               </v-btn>
@@ -157,11 +164,11 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <museum-objectable
-                :museum="{{ $item }}"
+              <{{ $model_alias}}-objectable
+                :tour-object="{{ $item }}"
                 :customers="{{ json_encode($customer_type_options_arrays) }}"
                 token="{{ csrf_token() }}"
-              ></museum-objectable>
+              ></{{ $model_alias}}-objectable>
             </v-card-actions>
           </v-card>
           </v-flex>
@@ -169,44 +176,6 @@
         @endif
       </v-layout>
     </v-container>
-    {{-- {{dd($items)}} --}}
-    
-    {{--<div class="card mb-4">
-        <div class="card-body">
-             <div class="row">
-                <div class="col">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
-                        <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                             
-                        </div><!-- btn-toolbar -->
-                    </div>
-                </div><!--col-->
-            </div><!--row -->
-            
-            <div class="row mt-4">
-                <div class="col">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>@lang('labels.frontend.tours.'.$model_alias.'.table.name')</th>
-                                <th>@lang('labels.frontend.tours.tour.city')</th>
-                                <th>@lang('labels.frontend.tours.'.$model_alias.'.table.qnt')</th>
-                                <th><div class="float-right">@lang('labels.general.actions')</div></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                    
-                            </tbody>
-                        </table>
-                    </div>
-                </div><!-- col -->
-            </div><!-- row -->
-            @endif
-
-        </div><!--card-body-->
-    </div><!--card--> --}}
 
     @include('frontend.tour.includes.pagination-row')
 

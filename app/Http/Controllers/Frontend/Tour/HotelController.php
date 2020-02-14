@@ -99,6 +99,12 @@ class HotelController extends Controller
 
     $tour_hotel = new TourHotel($request->all());
 
+    $image = $request->photo_location;
+    if ($image) {
+      $tour_hotel->photo_location = $image->store('/objects_photos', 'public');
+      $tour_hotel->addMedia('storage/' . $tour_hotel->photo_location)->toMediaCollection('photos', 'objects_photos');
+    }
+
     $tour_hotel->save();
 
     return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
@@ -147,6 +153,15 @@ class HotelController extends Controller
     }
 
     $tour_hotel = TourHotel::findOrFail($id);
+
+    $image = $request->photo_location;
+    if ($image) {
+      if (count($tour_hotel->media) > 0) {
+        $tour_hotel->getMedia('photos')->first()->delete();
+      }
+      $tour_hotel->photo_location = $image->store('/objects_photos', 'public');
+      $tour_hotel->addMedia('storage/' . $tour_hotel->photo_location)->toMediaCollection('photos', 'objects_photos');
+    }
 
     $tour_hotel->update($request->all());
 
