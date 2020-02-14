@@ -149,6 +149,17 @@
                   </a>
                 </v-list-item-title>
               </v-list-item>
+
+              <v-list-item class="pa-0">
+                <v-list-item-title>
+                  <a 
+                    href="{{ route('frontend.tour.room-category.index') }}" 
+                    class="tc-main-menu-dropdown-item {{ active_class(Active::checkRoute('frontend.tour.room-category.index')) }}"
+                  >
+                    @lang('labels.frontend.tours.hotel.room.management')
+                  </a>
+                </v-list-item-title>
+              </v-list-item>
               
               <v-list-item class="pa-0">
                 <v-list-item-title>

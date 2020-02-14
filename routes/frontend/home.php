@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\Tour\TourController;
 use App\Http\Controllers\Frontend\Tour\TypeController;
 use App\Http\Controllers\Frontend\Tour\CustomerTypeController;
 use App\Http\Controllers\Frontend\Tour\HotelCategoryController;
+use App\Http\Controllers\Frontend\Tour\RoomCategoryController;
 use App\Http\Controllers\Frontend\Tour\CountryController;
 use App\Http\Controllers\Frontend\Tour\CityController;
 use App\Http\Controllers\Frontend\Tour\GuideController;
@@ -107,6 +108,14 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
       Route::group(['prefix' => 'hotel-category/{hotel_category}'], function () {
         Route::get('restore', [HotelCategoryController::class, 'restore'])->name('hotel-category.restore');
         Route::delete('delete', [HotelCategoryController::class, 'delete'])->name('hotel-category.delete-permanently');
+      });
+
+      // Tour rooms category Management
+      Route::resource('room-category', \RoomCategoryController::class, ['except' => ['show']]);
+      // Handle Soft Deleted
+      Route::group(['prefix' => 'room-category/{room_category}'], function () {
+        Route::get('restore', [RoomCategoryController::class, 'restore'])->name('room-category.restore');
+        Route::delete('delete', [RoomCategoryController::class, 'delete'])->name('room-category.delete-permanently');
       });
 
       // Country Management
