@@ -1,6 +1,6 @@
 {{ html()
     ->form($method, $route)
-    ->id('museum-form')
+    ->id('form')
     ->class('form-horizontal')
     ->attribute('enctype', 'multipart/form-data')
     ->open() }}

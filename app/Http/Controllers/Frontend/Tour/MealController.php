@@ -93,6 +93,12 @@ class MealController extends Controller
 
     $tour_meal = new TourMeal($request->all());
 
+    $image = $request->photo_location;
+    if ($image) {
+      $tour_meal->photo_location = $image->store('/objects_photos', 'public');
+      $tour_meal->addMedia('storage/' . $tour_meal->photo_location)->toMediaCollection('photos', 'objects_photos');
+    }
+
     $tour_meal->save();
 
     return redirect()->route('frontend.tour.meal.index')->withFlashSuccess(__('alerts.general.created'));
@@ -138,6 +144,15 @@ class MealController extends Controller
     }
 
     $tour_meal = TourMeal::findOrFail($id);
+
+    $image = $request->photo_location;
+    if ($image) {
+      if (count($tour_meal->media) > 0) {
+        $tour_meal->getMedia('photos')->first()->delete();
+      }
+      $tour_meal->photo_location = $image->store('/objects_photos', 'public');
+      $tour_meal->addMedia('storage/' . $tour_meal->photo_location)->toMediaCollection('photos', 'objects_photos');
+    }
 
     $tour_meal->update($request->all());
 

@@ -40,7 +40,7 @@
           </v-btn>
            <v-spacer></v-spacer>
            <v-btn
-            form="museum-form"
+            form="form"
             type="submit"
             dark
             color="#aa282a"
