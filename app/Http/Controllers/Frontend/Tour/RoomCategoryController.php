@@ -67,7 +67,7 @@ class RoomCategoryController extends Controller
 
     $item = TourRoomCategory::findOrFail($id);
 
-    return view('frontend.tour.hotel.room.edit', compact('room_category'), compact('item'))
+    return view('frontend.tour.hotel.room.edit', compact('item'))
       ->with('method', 'PATCH')
       ->with('action', 'edit')
       ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
