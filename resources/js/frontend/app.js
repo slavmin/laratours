@@ -16,13 +16,13 @@ window.Vue = require('vue');
  */
 // Vue.component('index', require('./components/Index.vue').default);
 // Vue.component('login', require('./components/Login.vue').default);
-Vue.component('branding', require('./components/Branding.vue').default);
+// Vue.component('branding', require('./components/Branding.vue').default);
 Vue.component('changelog', require('./components/Changelog.vue').default);
 // Vue.component('reset-email', require('./components/ResetEmail.vue').default);
 // Vue.component('reset-password', require('./components/ResetPassword.vue').default);
 Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
-Vue.component('customer-type-table', require('./tour/customer/type/Table.vue').default);
-Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').default);
+// Vue.component('customer-type-table', require('./tour/customer/type/Table.vue').default);
+// Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').default);
 // Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
 // Vue.component('hotel-index', require('./tour/object/hotel/Index.vue').default);
 // Vue.component('meal-index', require('./tour/object/meal/Index.vue').default);

@@ -26,7 +26,7 @@
                   @lang('labels.frontend.tours.country.table.name')
                 </th>
                 <th class="text-left">
-                  @lang('labels.frontend.tours.hotel.category.table.description')
+                  @lang('labels.frontend.tours.country.table.description')
                 </th>
                 <th class="text-left">
                   @lang('labels.frontend.tours.country.table.cities_count')

@@ -34,10 +34,10 @@
             <thead>
               <tr>
                 <th class="text-left">
-                  @lang('labels.frontend.tours.country.table.name')
+                  @lang('labels.frontend.tours.city.table.name')
                 </th>
                 <th class="text-left">
-                  @lang('labels.frontend.tours.hotel.category.table.description')
+                  @lang('labels.frontend.tours.city.table.description')
                 </th>
                 <th class="text-right">
                   @lang('labels.general.actions')
