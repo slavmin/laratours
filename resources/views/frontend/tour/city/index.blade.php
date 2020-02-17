@@ -1,62 +1,75 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-info mb-0 mr-1 flex-grow-1">
-                            <nav aria-label="breadcrumb">
-                                <ol class="list-unstyled d-inline">
-                                    <li class="breadcrumb-item d-inline"><a class="text-info text-decoration-none" href="{{ route('frontend.tour.country.index') }}">@lang('labels.frontend.tours.country.management')</a></li>
-                                    <li class="breadcrumb-item d-inline">{{ $country->name }}</li>
-                                    <li class="breadcrumb-item d-inline active" aria-current="page">@lang('labels.frontend.tours.city.management')</li>
-                                </ol>
-                            </nav>
-                        </h6>
-                        <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                            <a href="{{ route('frontend.tour.city.create', $country->id) }}" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
-                                <i class="fas fa-plus"></i></a>
-                        </div><!--btn-toolbar-->
-                    </div>
-                </div><!--col-->
-            </div><!--row-->
+<v-container fluid grid-list-md text-xs-center>
+  <h1 class="text-white text-center">
+    @lang('labels.frontend.tours.city.management')
+  </h1>
+  <h2 class="text-white text-center">
+    <v-btn text dark href="{{ route('frontend.tour.country.index') }}" class="tc-link-no-underline-on-hover">
+      <v-icon>
+        arrow_left
+      </v-icon>
+      @lang('labels.frontend.tours.country.management')
+    </v-btn>
+    {{ $country->name }}
+  </h2>
 
-            @if(count($items)>0)
-            <div class="row mt-4">
-                <div class="col">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>@lang('labels.frontend.tours.city.table.name')</th>
-                                <th><div class="float-right">@lang('labels.general.actions')</div></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($items as $item)
-                                <tr>
-                                    <td>{{$item->name}}</td>
-                                    <td>
-                                        <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                                            {!! $item->action_buttons !!}
-                                        </div><!--float-right-->
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div><!--col-->
-            </div><!--row-->
-            @endif
 
-        </div><!--card-body-->
-    </div><!--card-->
+  <v-row justify="center">
+    <v-btn fab dark class="tc-red-bg tc-link-no-underline-on-hover" title="@lang('buttons.general.crud.create')"
+      href="{{ route('frontend.tour.city.create', $country->id) }}">
+      <i class="material-icons">
+        add
+      </i>
+    </v-btn>
+  </v-row>
+  <v-row>
+    <v-col>
+      <v-card>
+        <v-toolbar prominent dark color="#94CED7" src="/img/frontend/cities_tmpl.jpg"></v-toolbar>
+        @if (count($items)>0)
+        <v-simple-table class="mt-5">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  @lang('labels.frontend.tours.country.table.name')
+                </th>
+                <th class="text-left">
+                  @lang('labels.frontend.tours.hotel.category.table.description')
+                </th>
+                <th class="text-right">
+                  @lang('labels.general.actions')
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($items as $item)
+              <tr>
+                <td>
+                  {{$item->name}}
+                </td>
+                <td>
+                  {{$item->description}}
+                </td>
+                <td>
+                  <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
+                    {!! $item->action_buttons !!}
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </template>
+        </v-simple-table>
+        @endif
+      </v-card>
+    </v-col>
+  </v-row>
+</v-container>
+@include('frontend.tour.includes.pagination-row')
 
-    @include('frontend.tour.includes.pagination-row')
-
-    @include('frontend.tour.includes.trash-bin')
+@include('frontend.tour.includes.trash-bin')
 
 @endsection

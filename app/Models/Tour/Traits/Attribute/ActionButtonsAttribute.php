@@ -7,9 +7,11 @@ trait ActionButtonsAttribute
 {
   public function getCityListButtonAttribute()
   {
-    return '<a href="' . route('frontend.tour.city.index', [$this]) . '" 
-        class="btn btn-outline-info" data-toggle="tooltip" title="' . __('buttons.tours.city_list') . '">
-                                                <i class="fas fa-list-alt"></i></a>';
+    return '<v-btn text icon color="green" class="tc-link-no-underline-on-hover" href="' . route('frontend.tour.city.index', [$this]) . '">
+          <v-icon title="' . __('buttons.tours.city_list') . '">
+            list
+          </v-icon>
+        </v-btn>';
   }
 
   public function getCreateOrderButtonAttribute()
@@ -35,8 +37,11 @@ trait ActionButtonsAttribute
   public function getEditButtonAttribute()
   {
     if ($this->model_alias == 'city') {
-      return '<a href="' . route('frontend.tour.' . $this->model_alias . '.edit', [$this->country_id, $this]) . '"
-        class="btn btn-yellow btn-small"><i class="fas fa-pen" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.update') . '"></i></a>';
+      return '<v-btn text icon color="green" class="tc-link-no-underline-on-hover" href="' . route('frontend.tour.' . $this->model_alias . '.edit', [$this->country_id, $this]) . '">
+                <v-icon title="' . __('labels.general.buttons.update') . '">
+                  edit
+                </v-icon>
+              </v-btn>';
     }
 
     return '<v-btn text icon color="green" class="tc-link-no-underline-on-hover" href="' . route('frontend.tour.' . $this->model_alias . '.edit', $this) . '">
@@ -56,7 +61,9 @@ trait ActionButtonsAttribute
       return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.destroy', [$this->country_id, $this]) . '" method="post">
                 ' . csrf_field() . '
                 <input type="hidden" name="_method" value="DELETE"/>
-                <button class="btn btn-danger" title="' . __('labels.general.buttons.delete') . '"><i class="far fa-trash-alt"></i></button>
+                <v-btn type="submit" text icon color="red" title="' . __('labels.general.buttons.delete') . '">
+                  <v-icon>delete</v-icon>
+                </v-btn>
                 </form>';
     }
 
