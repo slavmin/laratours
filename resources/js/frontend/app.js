@@ -14,27 +14,9 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-// Vue.component('index', require('./components/Index.vue').default);
-// Vue.component('login', require('./components/Login.vue').default);
-// Vue.component('branding', require('./components/Branding.vue').default);
-// Vue.component('changelog', require('./components/Changelog.vue').default);
-// Vue.component('reset-email', require('./components/ResetEmail.vue').default);
-// Vue.component('reset-password', require('./components/ResetPassword.vue').default);
-// Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
-// Vue.component('customer-type-table', require('./tour/customer/type/Table.vue').default);
-// Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').default);
-// Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
-// Vue.component('hotel-index', require('./tour/object/hotel/Index.vue').default);
-// Vue.component('meal-index', require('./tour/object/meal/Index.vue').default);
-Vue.component('guide-index', require('./tour/object/guide/Index.vue').default);
-Vue.component('attendant-index', require('./tour/object/attendant/Index.vue').default);
 Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);
 Vue.component('operator-order-edit', require('./tour/order/OrderTour.vue').default);
-// Vue.component('trash', require('./tour/includes/Trash.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
-// Vue.component('messages', require('./components/Messages.vue').default);
-// Vue.component('footer-component', require('./components/Footer.vue').default);
-// Vue.component('no-data', require('./components/NoData.vue').default);
 Vue.component('documents-index', require('./components/documents/Index.vue').default);
 Vue.component('document-add', require('./components/documents/Add.vue').default);
 Vue.component('document-edit', require('./components/documents/Edit.vue').default);

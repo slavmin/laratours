@@ -11,24 +11,29 @@ use App\Models\Tour\Traits\Attribute\ActionButtonsAttribute;
 
 class TourAttendant extends Model
 {
-    use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
+  use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'description', 'price', 'extra'];
+  protected $fillable = ['name', 'description', 'price', 'extra'];
 
-    protected $casts = [
-        'price' => 'float',
-        'extra' => 'array',
-    ];
+  protected $casts = [
+    'price' => 'float',
+    'extra' => 'array',
+  ];
 
-    protected $appends = ['model_alias'];
+  protected $appends = ['model_alias'];
 
-    public static function getModelAliasAttribute()
-    {
-        return 'attendant';
-    }
+  public static function getModelAliasAttribute()
+  {
+    return 'attendant';
+  }
 
-    public function tours()
-    {
-        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
-    }
+  public function tours()
+  {
+    return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+  }
+
+  public function priceable()
+  {
+    return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
+  }
 }

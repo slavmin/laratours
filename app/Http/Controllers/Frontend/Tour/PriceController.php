@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tour\TourAttendant;
+use App\Models\Tour\TourGuide;
 use App\Models\Tour\TourHotel;
 use App\Models\Tour\TourMeal;
 use App\Models\Tour\TourMuseum;
@@ -41,18 +43,28 @@ class PriceController extends Controller
    */
   public function store(Request $request)
   {
-    $attribute_id = $request->get('attribute_id');
-    $attribute = TourObjectAttributes::findOrFail($attribute_id);
+    $parent_id = $request->get('parent_id');
+
+    switch ($request->get('parent_model')) {
+      case 'guide':
+        $parent = TourGuide::findOrFail($parent_id);
+        break;
+      case 'attendant':
+        $parent = TourAttendant::findOrFail($parent_id);
+        break;
+      default:
+        $parent = TourObjectAttributes::findOrFail($parent_id);
+    };
 
     $item_id = 0;
 
-    $attribute->priceable()->updateOrCreate(
+    $parent->priceable()->updateOrCreate(
       ['id' => $item_id],
       [
         'period_start' => $request->period_start,
         'period_end' => $request->period_end,
         'price' => $request->price,
-        'tour_customer_type_id' => $request->tour_customer_type_id ?? ''
+        'tour_customer_type_id' => $request->tour_customer_type_id ?? null
       ]
     );
 

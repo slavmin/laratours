@@ -102,9 +102,14 @@
         :value="token"
       >
       <input
-        name="attribute_id"
+        name="parent_id"
         type="hidden"
         :value="parentId"
+      >
+      <input
+        name="parent_model"
+        type="hidden"
+        :value="parentModel"
       >
       <input
         name="period_start"
@@ -138,6 +143,10 @@ export default {
       default: null,
     },
     parentId: {
+      type: String,
+      default: '',
+    },
+    parentModel: {
       type: String,
       default: '',
     },

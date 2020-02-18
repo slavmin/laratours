@@ -11,25 +11,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TourGuide extends Model
 {
-    use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
+  use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'description', 'price', 'extra'];
+  protected $fillable = ['name', 'description', 'price', 'extra'];
 
-    protected $appends = ['model_alias'];
+  protected $appends = ['model_alias'];
 
-    protected $casts = [
-        'price' => 'float',
-        'extra' => 'array',
-    ];
+  protected $casts = [
+    'price' => 'float',
+    'extra' => 'array',
+  ];
 
-    public static function getModelAliasAttribute()
-    {
-        return 'guide';
-    }
+  public static function getModelAliasAttribute()
+  {
+    return 'guide';
+  }
 
-    public function tours()
-    {
-        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
-    }
+  public function tours()
+  {
+    return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+  }
 
+  public function priceable()
+  {
+    return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
+  }
 }

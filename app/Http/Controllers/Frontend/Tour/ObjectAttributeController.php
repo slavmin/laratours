@@ -71,6 +71,7 @@ class ObjectAttributeController extends Controller
         $parent = TourTransport::findOrFail($parent_model_id);
         break;
 
+
       default:
         # code...
         break;
@@ -147,8 +148,6 @@ class ObjectAttributeController extends Controller
         'name' => 'required|min:3',
       ]);
     }
-
-
 
     $item = TourObjectAttributes::findOrFail($id);
 
