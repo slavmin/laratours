@@ -17,10 +17,10 @@ window.Vue = require('vue');
 // Vue.component('index', require('./components/Index.vue').default);
 // Vue.component('login', require('./components/Login.vue').default);
 // Vue.component('branding', require('./components/Branding.vue').default);
-Vue.component('changelog', require('./components/Changelog.vue').default);
+// Vue.component('changelog', require('./components/Changelog.vue').default);
 // Vue.component('reset-email', require('./components/ResetEmail.vue').default);
 // Vue.component('reset-password', require('./components/ResetPassword.vue').default);
-Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
+// Vue.component('transport-index', require('./tour/object/transport/Index.vue').default);
 // Vue.component('customer-type-table', require('./tour/customer/type/Table.vue').default);
 // Vue.component('customer-type-add', require('./tour/customer/type/Add.vue').default);
 // Vue.component('museum-index', require('./tour/object/museum/Index.vue').default);
@@ -44,6 +44,7 @@ Vue.component('cities-autocomplete', require('./components/CitiesAutocomplete.vu
 Vue.component('museum-objectable', require('./components/MuseumObjectable.vue').default);
 Vue.component('hotel-objectable', require('./components/HotelObjectable.vue').default);
 Vue.component('meal-objectable', require('./components/MealObjectable.vue').default);
+Vue.component('transport-objectable', require('./components/TransportObjectable.vue').default);
 Vue.component('object-attribute-price', require('./components/ObjectAttributePrice.vue').default);
 
 window.Vuetify = require('vuetify');

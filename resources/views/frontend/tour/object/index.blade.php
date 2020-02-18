@@ -53,22 +53,25 @@
             </v-list-item-subtitle>
             @if(count($item->objectables) > 0)
             <v-divider></v-divider>
-            <div class="text-center mt-3">Экскурсии:</div>
+            <div class="text-center mt-3">@lang('labels.frontend.tours.'.$model_alias.'.table.header')</div>
             <v-simple-table class="objectables-table" dense>
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-left">Название</th>
+                    <th class="text-left">@lang('labels.frontend.tours.'.$model_alias.'.table.name')</th>
+                    @if ($model_alias == "museum")
                     <th class="text-center d-none d-md-table-cell">З/Н</th>
                     <th class="text-center d-none d-md-table-cell">Доп</th>
-                    <th class="text-left">Цены</th>
-                    <th class="text-right">Действия</th>
+                    @endif
+                    <th class="text-left">@lang('labels.frontend.tours.'.$model_alias.'.table.price')</th>
+                    <th class="text-right">@lang('labels.general.actions')</th>
                   </tr>
                 </thead>
                 <tbody>
                   @foreach($item->objectables as $object_attribute)
                   <tr>
                     <td>{{ $object_attribute->name }}</td>
+                    @if ($model_alias == "museum")
                     <td class="text-center d-none d-md-table-cell">
                       @if(isset(json_decode($object_attribute->extra)->isCustomOrder))
                       <v-icon>
@@ -84,6 +87,7 @@
                       </v-icon>
                       @endif
                     </td>
+                    @endif
                     <td>
                       <v-btn icon href="{{ route('frontend.tour.attribute.edit', $object_attribute->id) }}">
                         <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -123,10 +127,6 @@
           <{{ $model_alias}}-objectable :tour-object="{{ $item }}"
             :customers="{{ json_encode($customer_type_options_arrays) }}" token="{{ csrf_token() }}">
           </{{ $model_alias}}-objectable>
-
-          <v-row>
-            <v-col>test</v-col>
-          </v-row>
         </v-card-actions>
       </v-card>
     </v-flex>
