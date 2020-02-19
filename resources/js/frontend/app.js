@@ -5,18 +5,21 @@
  */
 
 require('../bootstrap');
+import store from './store'
 import vuetify from './plugins/vuetify'
-
+window.Vuetify = require('vuetify');
 window.Vue = require('vue');
+Vue.use(Vuetify)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);
-Vue.component('operator-order-edit', require('./tour/order/OrderTour.vue').default);
+// Vue.component('operator-orders-index', require('./tour/order/Index.vue').default);
+// Vue.component('operator-order-edit', require('./tour/order/OrderTour.vue').default);
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
+
 Vue.component('documents-index', require('./components/documents/Index.vue').default);
 Vue.component('document-add', require('./components/documents/Add.vue').default);
 Vue.component('document-edit', require('./components/documents/Edit.vue').default);
@@ -29,10 +32,7 @@ Vue.component('meal-objectable', require('./components/MealObjectable.vue').defa
 Vue.component('transport-objectable', require('./components/TransportObjectable.vue').default);
 Vue.component('object-attribute-price', require('./components/ObjectAttributePrice.vue').default);
 
-window.Vuetify = require('vuetify');
-Vue.use(Vuetify)
-
-import store from './store'
+Vue.component('tour-create', require('./components/TourCreate.vue').default);
 
 
 const app = new Vue({

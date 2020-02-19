@@ -24,14 +24,14 @@ mix.setPublicPath('public')
     .sass('resources/sass/frontend/app.scss', 'css/frontend.css')
     .sass('resources/sass/backend/app.scss', 'css/backend.css')
     .js('resources/js/frontend/app.js', 'js/frontend.js')
-    .js('resources/js/frontend/tour/tour/app.js', 'js/frontend_tour_constructor.js').eslint({
-        fix: false,
-        cache: false,
-    })
-    .js('resources/js/frontend/tour/agency/app.js', 'js/frontend_agency.js').eslint({
-        fix: false,
-        cache: false,
-    })
+    // .js('resources/js/frontend/tour/tour/app.js', 'js/frontend_tour_constructor.js').eslint({
+    //     fix: false,
+    //     cache: false,
+    // })
+    // .js('resources/js/frontend/tour/agency/app.js', 'js/frontend_agency.js').eslint({
+    //     fix: false,
+    //     cache: false,
+    // })
     .eslint({
         fix: false,
         cache: false,

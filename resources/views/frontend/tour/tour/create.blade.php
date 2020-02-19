@@ -1,11 +1,29 @@
 @extends('frontend.layouts.app')
-@push('scripts')
-{!! script(mix('js/frontend_tour_constructor.js')) !!}
-@endpush
+
 @section('content')
-<div id="tour-constructor"></div>
-<tour-add
-    data-app
-    token="{{ csrf_token() }}"
-></tour-add>
+<v-container fluid grid-list-md text-xs-center>
+  <v-row justify="center">
+    <v-col cols="12" md="8">
+      <v-card>
+        <v-toolbar dark color="#66a5ae">
+          <v-card-title>
+            @lang('labels.frontend.tours.'.$model_alias.'.create')
+          </v-card-title>
+        </v-toolbar>
+        <v-card-text>
+          @include('frontend.tour.tour.includes.create-form')
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text color="#aa282a" href="{{ $cancel_route }}">
+            {{ __('buttons.general.cancel') }}
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn form="form" type="submit" dark color="#aa282a">
+            {{ __('buttons.general.crud.update') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
+</v-container>
 @endsection

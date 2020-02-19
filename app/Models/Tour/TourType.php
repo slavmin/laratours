@@ -10,24 +10,24 @@ use App\Models\Traits\HasPagination;
 
 class TourType extends Model
 {
-    use SoftDeletes, UsedByTeams, HasPagination, ActionButtonsAttribute;
+  use SoftDeletes, UsedByTeams, HasPagination, ActionButtonsAttribute;
 
-    protected $fillable = ['name', 'description'];
+  protected $fillable = ['name', 'description'];
 
-    protected $appends = ['model_alias'];
+  protected $appends = ['model_alias'];
 
-    public static function getModelAliasAttribute()
-    {
-        return 'type';
-    }
+  public static function getModelAliasAttribute()
+  {
+    return 'type';
+  }
 
 
-    public static function getTourTypesAttribute($text = '')
-    {
-        $types = self::orderBy('name', 'asc')->get()->pluck('name','id')->toArray();
-        $types_options = ['' => $text];
-        $types_options = array_replace($types_options, $types);
+  public static function getTourTypesAttribute($text = '')
+  {
+    $types = self::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+    // $types_options = ['' => $text];
+    // $types_options = array_replace($types_options, $types);
 
-        return $types_options;
-    }
+    return $types;
+  }
 }
