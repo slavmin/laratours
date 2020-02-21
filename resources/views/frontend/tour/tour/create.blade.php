@@ -10,18 +10,7 @@
             @lang('labels.frontend.tours.'.$model_alias.'.create')
           </v-card-title>
         </v-toolbar>
-        <v-card-text>
-          @include('frontend.tour.tour.includes.create-form')
-        </v-card-text>
-        <v-card-actions>
-          <v-btn text color="#aa282a" href="{{ $cancel_route }}">
-            {{ __('buttons.general.cancel') }}
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn form="form" type="submit" dark color="#aa282a">
-            {{ __('buttons.general.crud.update') }}
-          </v-btn>
-        </v-card-actions>
+        @include('frontend.tour.tour.includes.create-form')
       </v-card>
     </v-col>
   </v-row>

@@ -1,204 +1,277 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-form
-        id="form"
-        ref="form"
-        v-model="formValid"
-        :action="route"
-        method="POST"
-        lazy-validation
-      >
-        <input
-          type="hidden"
-          name="_method"
-          :value="method"
-        >
-        <input
-          type="hidden"
-          name="_token"
-          :value="token"
-        >
-        <input
-          type="hidden"
-          name="tour_type_id"
-          :value="selectedTourTypeId"
-        >
-        <v-select
-          v-model="selectedConstructorTypeId"
-          :items="constructorTypeOptions"
-          :rules="typeRules"
-          color="#aa282a"
-          label="Тип конструктора"
-        />
-        <v-select
-          v-model="selectedTourTypeId"
-          :items="tourTypeOptions"
-          :rules="typeRules"
-          label="Тип тура"
-          append-outer-icon="find_in_page"
-          color="#aa282a"
-          required
-        />
-        <v-text-field
-          v-model="tourName"
-          label="Название тура"
-          name="name"
-          :rules="nameRules"
-          append-outer-icon="title"
-          color="#aa282a"
-          outline
-          required
-        />
-        <v-autocomplete
-          v-model="selectedCountriesIds"
-          :items="countriesOptions"
-          :rules="countriesRules"
-          label="Страны"
-          color="#aa282a"
-          multiple
-          chips
-          required
-        >
-          <template v-slot:selection="data">
-            <v-chip
-              :input-value="data.selected"
-              close
-              class="chip--select-multi"
-              @click="data.select"
-              @click:close="chipRemove(data.item)"
-            >
-              {{ data.item.text }}
-            </v-chip>
-          </template>
-        </v-autocomplete>
-        <v-row>
-          <v-col
-            cols="12"
-            md="6"
+  <div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12">
+          <v-form
+            id="form"
+            ref="form"
+            v-model="formValid"
+            :action="route"
+            method="POST"
+            lazy-validation
           >
-            <v-autocomplete
-              v-if="selectedCountriesIds.length > 0"
-              v-model="selectedCitiesIds"
-              :items="citiesOptions"
-              :rules="citiesRules"
+            <input
+              type="hidden"
+              name="_method"
+              :value="method"
+            >
+            <input
+              type="hidden"
+              name="_token"
+              :value="token"
+            >
+            <input
+              type="hidden"
+              name="tour_constructor_type_id"
+              :value="selectedConstructorTypeId"
+            >
+            <input
+              v-for="id in selectedCountriesIds"
+              :key="`country-${id}`"
+              type="hidden"
+              name="countries_list[]"
+              :value="id"
+            >
+            <input
+              type="hidden"
+              name="country_id"
+              :value="startCountryId"
+            >
+            <input
+              v-for="id in selectedCitiesIds"
+              :key="`city-${id}`"
+              type="hidden"
               name="cities_list[]"
-              label="Города"
-              color="#aa282a"
-              multiple
-              chips
-              required
+              :value="id"
             >
-              <template v-slot:selection="data">
-                <v-chip
-                  :input-value="data.selected"
-                  close
-                  class="chip--select-multi"
-                  @click="data.select"
-                  @click:close="chipRemove(data.item)"
-                >
-                  {{ data.item.text }}
-                </v-chip>
-              </template>
-            </v-autocomplete>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-          >
-            <v-autocomplete
-              v-if="selectedCountriesIds.length > 0"
-              v-model="startCityId"
-              :items="citiesOptions"
-              :rules="citiesRules"
+            <input
+              type="hidden"
               name="city_id"
-              label="Город начала тура"
-              color="#aa282a"
-              chips
-              required
+              :value="startCityId"
             >
-              <template v-slot:selection="data">
-                <v-chip
-                  :input-value="data.selected"
-                  close
-                  class="chip--select-multi"
-                  @click="data.select"
-                  @click:close="chipRemove(data.item)"
+            <input
+              type="hidden"
+              name="tour_type_id"
+              :value="selectedTourTypeId"
+            >
+            <v-select
+              v-model="selectedConstructorTypeId"
+              :items="constructorTypeOptions"
+              item-value="id"
+              item-text="name"
+              :rules="typeRules"
+              color="#aa282a"
+              label="Тип конструктора"
+            />
+            <v-select
+              v-model="selectedTourTypeId"
+              :items="tourTypeOptions"
+              :rules="typeRules"
+              label="Тип тура"
+              append-outer-icon="find_in_page"
+              color="#aa282a"
+              required
+            />
+            <v-text-field
+              v-model="tourName"
+              label="Название тура"
+              name="name"
+              :rules="nameRules"
+              append-outer-icon="title"
+              color="#aa282a"
+              outline
+              required
+            />
+            <v-row>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-autocomplete
+                  v-model="selectedCountriesIds"
+                  :items="countriesOptions"
+                  :rules="countriesRules"
+                  label="Страны"
+                  color="#aa282a"
+                  multiple
+                  chips
+                  required
                 >
-                  {{ data.item.text }}
-                </v-chip>
+                  <template v-slot:selection="data">
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click="data.select"
+                      @click:close="chipRemove(data.item)"
+                    >
+                      {{ data.item.text }}
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-autocomplete
+                  v-model="startCountryId"
+                  :items="countriesOptions"
+                  :rules="countriesRules"
+                  label="Страна начала тура"
+                  color="#aa282a"
+                  chips
+                  required
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click="data.select"
+                      @click:close="startCountryId = NaN"
+                    >
+                      {{ data.item.text }}
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-autocomplete
+                  v-if="selectedCountriesIds.length > 0"
+                  v-model="selectedCitiesIds"
+                  :items="citiesOptions"
+                  :rules="citiesRules"
+                  name="cities_list[]"
+                  label="Города"
+                  color="#aa282a"
+                  multiple
+                  chips
+                  required
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click="data.select"
+                      @click:close="chipRemove(data.item)"
+                    >
+                      {{ data.item.text }}
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col
+                cols="12"
+                md="6"
+              >
+                <v-autocomplete
+                  v-if="selectedCountriesIds.length > 0"
+                  v-model="startCityId"
+                  :items="citiesOptions"
+                  :rules="citiesRules"
+                  name="city_id"
+                  label="Город начала тура"
+                  color="#aa282a"
+                  chips
+                  required
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click="data.select"
+                      @click:close="startCityId = NaN"
+                    >
+                      {{ data.item.text }}
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+            <v-divider />
+            <v-menu
+              v-model="showDateStart"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="startDate"
+                  name="dates[]"
+                  label="Дата начала"
+                  :rules="dateRules"
+                  prepend-icon="event"
+                  readonly
+                  v-on="on"
+                />
               </template>
-            </v-autocomplete>
-          </v-col>
-        </v-row>
-        <v-divider />
-        <v-menu
-          v-model="showDateStart"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="startDate"
-              label="Дата начала"
-              :rules="dateRules"
-              prepend-icon="event"
-              readonly
-              v-on="on"
-            />
-          </template>
-          <v-date-picker
-            v-model="startDate"
-            :min="dateToday"
-            color="#aa282a"
-            locale="ru-ru"
-            first-day-of-week="1"
-            @input="showDateStart = false"
-          />
-        </v-menu>
-        <v-row>
-          <v-col
-            cols="12"
-            md="4"
-          >
-            <v-text-field
-              v-model="tourDays"
-              label="Дней"
-              :rules="daysRules"
-              mask="###"
-              color="#aa282a"
-            />
-          </v-col>
-          <v-col
-            cols="12"
-            md="4"
-          >
-            <v-text-field
-              v-model="tourNights"
-              label="Ночей"
-              :rules="nightsRules"
-              mask="###"
-              color="#aa282a"
-            />
-          </v-col>
-          <v-col
-            cols="12"
-            md="4"
-          >
-            <v-text-field
-              v-model="tourQnt"
-              :rules="qntRules"
-              label="Количество туристов"
-              name="qnt"
-              mask="###"
-              color="#aa282a"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
+              <v-date-picker
+                v-model="startDate"
+                :min="dateToday"
+                color="#aa282a"
+                locale="ru-ru"
+                first-day-of-week="1"
+                @input="showDateStart = false"
+              />
+            </v-menu>
+            <v-row>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-text-field
+                  v-model="tourDays"
+                  name="duration"
+                  label="Дней"
+                  :rules="daysRules"
+                  mask="###"
+                  color="#aa282a"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-text-field
+                  v-model="tourNights"
+                  name="nights"
+                  label="Ночей"
+                  :rules="nightsRules"
+                  mask="###"
+                  color="#aa282a"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-text-field
+                  v-model="tourQnt"
+                  :rules="qntRules"
+                  label="Количество туристов"
+                  name="qnt"
+                  mask="###"
+                  color="#aa282a"
+                />
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions>
       <v-btn
         text
         color="#aa282a"
@@ -206,11 +279,22 @@
       >
         очистить
       </v-btn>
-      <v-btn @click="submit">
-        text
-      </v-btn>
-    </v-col>
-  </v-row>
+      <v-spacer />
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            dark
+            color="#aa282a"
+            @click="submit"
+            v-on="on"
+          >
+            Сохранить
+          </v-btn>
+        </template>
+        <span>Сохранить тур и перейти к выбору объектов тура</span>
+      </v-tooltip>
+    </v-card-actions>
+  </div>
 </template>
 
 <script>
@@ -250,7 +334,9 @@ export default {
       selectedConstructorTypeId: [],
       selectedTourTypeId: [],
       selectedCountriesIds: [],
+      startCountryId: NaN,
       selectedCitiesIds: [],
+      startCityId: NaN,
       showDateStart: false,
       startDate: '',
       dateStart: '',

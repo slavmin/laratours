@@ -79,7 +79,8 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::group(['namespace' => 'Tour', 'as' => 'tour.', 'prefix' => 'operator'], function () {
 
       // Tours Management
-      Route::resource('tour', \TourController::class, ['except' => ['show']]);
+      // Route::resource('tour', \TourController::class, ['except' => ['show']]);
+      Route::resource('tour', \TourController::class);
       // Handle Soft Deleted
       Route::group(['prefix' => 'tour/{tour}'], function () {
         Route::get('restore', [TourController::class, 'restore'])->name('tour.restore');

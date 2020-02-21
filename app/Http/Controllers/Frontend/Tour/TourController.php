@@ -6,7 +6,10 @@ use App\Exceptions\GeneralException;
 use App\Filters\ToursFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
+use App\Models\Tour\TourConstructorType;
+use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourType;
+use App\Repositories\Frontend\Tour\TourRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -96,10 +99,7 @@ class TourController extends Controller
 
     $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-    $constructor_type_options = [
-      ['value' => '0', 'text' => 'Подробный'],
-      ['value' => '1', 'text' => 'Тур от партнёра'],
-    ];
+    $constructor_type_options = TourConstructorType::select('id', 'name')->get()->toArray();
 
     return view('frontend.tour.tour.create', compact('cities_options', 'countries_cities_options', 'tour_type_options', 'constructor_type_options'))
       ->with('method', 'POST')
@@ -120,7 +120,7 @@ class TourController extends Controller
       'cities_list' => 'array|required|min:1',
     ]);
 
-    DB::transaction(function () use ($request) {
+    $tour_id = DB::transaction(function () use ($request) {
       $tour = new Tour($request->all());
       $tour->save();
 
@@ -132,9 +132,11 @@ class TourController extends Controller
         }
         $tour->dates()->createMany($tour_dates);
       }
+
+      return $tour->id;
     });
 
-    return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.created'));
+    return redirect()->route('frontend.tour.tour.show', $tour_id)->withFlashSuccess(__('alerts.general.created'));
   }
 
   /**
@@ -145,7 +147,24 @@ class TourController extends Controller
    */
   public function show($id)
   {
-    //
+    $tour = Tour::find($id);
+
+    switch ($tour->tour_constructor_type_id) {
+      case (1):
+        $view = 'frontend.tour.tour.detailed.index';
+        break;
+      case (2):
+        $view = 'frontend.tour.tour.partner.index';
+        break;
+      default:
+        return redirect()
+          ->route('frontend.tour.tour.index')
+          ->withErrors(['msg' => 'Ошибка при переходе в конструктор тура']);
+    }
+
+    $compact = (new TourRepository)->getTourOptions($tour->id);
+
+    return view($view, $compact);
   }
 
   /**
@@ -185,11 +204,7 @@ class TourController extends Controller
 
     $attendant_options = Tour::getAttendantsOption();
 
-    $constructor_type_options = [
-      '' => 'Выбрать',
-      '0' => 'Подробный',
-      '1' => 'Тур от партнёра'
-    ];
+    $constructor_type_options = TourConstructorType::select('id', 'name')->get()->toArray();
 
     return view('frontend.tour.tour.edit', compact('item', 'tour_dates', 'attributes', 'countries_cities_options', 'cities_options', 'tour_type_options', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options', 'constructor_type_options'))
       ->with('method', 'PATCH')

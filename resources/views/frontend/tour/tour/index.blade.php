@@ -1,3 +1,11 @@
+@push('after-scripts')
+<script>
+  function showExtraRow(id) {
+    const extraRow = document.getElementById(`extra-row-${id}`)
+    extraRow.classList.toggle('d-none') 
+  }
+</script>
+@endpush
 @extends('frontend.layouts.app')
 
 @section('content')
@@ -36,6 +44,9 @@
                 <th>
                   @lang('labels.frontend.tours.'.$model_alias.'.table.duration')
                 </th>
+                <th>
+                  @lang('labels.frontend.tours.'.$model_alias.'.table.nights')
+                </th>
                 <th class="text-right">
                   @lang('labels.general.actions')
                 </th>
@@ -43,7 +54,7 @@
             </thead>
             <tbody>
               @foreach($items as $item)
-              <tr>
+              <tr onclick="showExtraRow({{ $item->id }})">
                 <td>
                   {{$item->name}}
                 </td>
@@ -64,10 +75,16 @@
                   @endif
                 </td>
                 <td>{{$item->duration}}</td>
+                <td>{{$item->nights}}</td>
                 <td>
                   <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                     {!! $item->action_buttons !!}
                   </div>
+                </td>
+              </tr>
+              <tr id="{{ 'extra-row-'.$item->id }}" class="d-none">
+                <td colspan="6">
+                  доп инфа
                 </td>
               </tr>
               @endforeach
@@ -79,59 +96,6 @@
     </v-col>
   </v-row>
 </v-container>
-<div class="card mb-4">
-  <div class="card-body">
-    <div class="row">
-      <div class="col">
-        <div class="d-flex justify-content-between align-items-center">
-          <h6 class="text-info mb-0 mr-1">@lang('labels.frontend.tours.'.$model_alias.'.management')</h6>
-          <div class="btn-toolbar float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-            <a href="" class="btn btn-success ml-1" data-toggle="tooltip" title="@lang('buttons.general.crud.create')">
-              <i class="fas fa-plus"></i></a>
-          </div>
-          <!--btn-toolbar-->
-        </div>
-      </div>
-      <!--col-->
-    </div>
-    <!--row-->
-
-    @if(count($items)>0)
-    <div class="row mt-4">
-      <div class="col">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($items as $item)
-              <tr>
-                <td>{{$item->name}}</td>
-
-                <td>
-                  <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
-                    {!! $item->action_buttons !!}
-                  </div>
-                  <!--float-right-->
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--col-->
-    </div>
-    <!--row-->
-    @endif
-
-  </div>
-  <!--card-body-->
-</div>
-<!--card-->
 
 @include('frontend.tour.includes.pagination-row')
 
