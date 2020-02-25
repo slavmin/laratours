@@ -101,7 +101,6 @@ export default {
     Prices,
     Extra,
     Editor,
-    SaveTourForm,
   },
   props: {
     token: {

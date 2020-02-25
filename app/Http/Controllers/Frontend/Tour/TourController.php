@@ -116,8 +116,10 @@ class TourController extends Controller
     $request->validate([
       'name' => 'required',
       'city_id' => 'exists:tour_cities,id',
+      'country_id' => 'exists:tour_countries,id',
       'tour_type_id' => 'required|exists:tour_types,id',
       'cities_list' => 'array|required|min:1',
+      'countries_list' => 'array|required|min:1',
     ]);
 
     $tour_id = DB::transaction(function () use ($request) {
@@ -164,7 +166,7 @@ class TourController extends Controller
 
     $compact = (new TourRepository)->getTourOptions($tour->id);
 
-    return view($view, $compact);
+    return view($view, $compact)->with('tour_id', $tour->id);
   }
 
   /**
@@ -219,8 +221,10 @@ class TourController extends Controller
     $request->validate([
       'name' => 'required',
       'city_id' => 'exists:tour_cities,id',
+      'country_id' => 'exists:tour_countries,id',
       'tour_type_id' => 'required|exists:tour_types,id',
       'cities_list' => 'array|required|min:1',
+      'countries_list' => 'array|required|min:1',
     ]);
 
     $tour = Tour::findOrFail($id);
@@ -232,7 +236,7 @@ class TourController extends Controller
       $tour->update($request->all());
     }
 
-    DB::transaction(function () use ($tour, $request) {
+    $tour_id = DB::transaction(function () use ($tour, $request) {
 
       if (is_array($request->get('dates'))) {
         $tour_dates = [];
@@ -251,9 +255,11 @@ class TourController extends Controller
         }
         $tour->$k()->sync($output);
       }
+
+      return $tour->id;
     });
 
-    return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.updated'));
+    return redirect()->route('frontend.tour.tour.show', $tour_id)->withFlashSuccess(__('alerts.general.updated'));
   }
 
   /**

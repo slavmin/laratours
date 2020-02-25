@@ -33,6 +33,8 @@ Vue.component('transport-objectable', require('./components/TransportObjectable.
 Vue.component('object-attribute-price', require('./components/ObjectAttributePrice.vue').default);
 
 Vue.component('tour-create', require('./components/TourCreate.vue').default);
+Vue.component('tour-edit', require('./components/TourEdit.vue').default);
+Vue.component('partner-tour', require('./tour/tour/PartnerTour.vue').default);
 
 
 const app = new Vue({

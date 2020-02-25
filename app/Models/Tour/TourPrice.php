@@ -13,7 +13,9 @@ class TourPrice extends Model
     'period_start',
     'period_end',
     'price',
-    'tour_customer_type_id'
+    'tour_customer_type_id',
+    'is_extra',
+    'name'
   ];
 
   public function priceable()

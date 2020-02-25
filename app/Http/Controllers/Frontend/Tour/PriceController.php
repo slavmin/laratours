@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Tour;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tour\Tour;
 use App\Models\Tour\TourAttendant;
 use App\Models\Tour\TourGuide;
 use App\Models\Tour\TourHotel;
@@ -58,15 +59,34 @@ class PriceController extends Controller
 
     $item_id = 0;
 
-    $parent->priceable()->updateOrCreate(
-      ['id' => $item_id],
-      [
-        'period_start' => $request->period_start,
-        'period_end' => $request->period_end,
-        'price' => $request->price,
-        'tour_customer_type_id' => $request->tour_customer_type_id ?? null
-      ]
-    );
+    $prices_array = [];
+    foreach (json_decode($request->prices_array) as $price) {
+      // Skip price for customer, if price == 0 and flag 'is_free' setted to false.
+      if ($price->price == 0 && $price->is_free != 1) {
+        continue;
+      }
+      $parent->priceable()->updateOrCreate(
+        ['id' => $item_id],
+        [
+          'period_start' => $request->period_start,
+          'period_end' => $request->period_end,
+          'price' => $price->price,
+          'tour_customer_type_id' => $price->tour_customer_type_id
+        ]
+      );
+    }
+    // dd(__METHOD__, $prices_array, $request->all());
+
+    // $parent->priceable()->updateOrCreate(
+    //   ['id' => $item_id],
+    //   [
+    //     'period_start' => $request->period_start,
+    //     'period_end' => $request->period_end,
+    //     'price' => $request->price,
+    //     'tour_customer_type_id' => $request->tour_customer_type_id ?? null
+    //   ]
+    // );
+
 
     return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
   }

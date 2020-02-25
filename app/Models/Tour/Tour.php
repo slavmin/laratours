@@ -19,7 +19,7 @@ class Tour extends Model
 
   protected $fillable = [
     'name',
-    'counties_list',
+    'countries_list',
     'country_id',
     'cities_list',
     'city_id',
@@ -38,6 +38,7 @@ class Tour extends Model
     'extra' => 'array',
     'cities_list' => 'array',
     'published' => 'boolean',
+    'countries_list' => 'array',
   ];
 
   protected $supportedRelations = ['dates', 'hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];
@@ -125,6 +126,11 @@ class Tour extends Model
   public function orderprofiles()
   {
     return $this->hasManyThrough('App\Models\Profile', 'App\Models\Tour\TourOrder', 'tour_id', 'profileable_id')->where('profileable_type', 'App\Models\Tour\TourOrder');
+  }
+
+  public function priceable()
+  {
+    return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
   }
 
 

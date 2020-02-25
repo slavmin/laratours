@@ -1,30 +1,18 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<div class="row justify-content-center align-items-center">
-  <div class="col col-sm-8 align-self-center">
-
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <h5 class="card-title mb-0">
-              @lang('labels.frontend.tours.'.$model_alias.'.edit')
-            </h5>
-          </div>
-          <!--col-->
-        </div>
-        <!--row-->
-
-        <hr>
-
+<v-container fluid grid-list-md text-xs-center>
+  <v-row justify="center">
+    <v-col cols="12" md="8">
+      <v-card>
+        <v-toolbar dark color="#66a5ae">
+          <v-card-title>
+            @lang('labels.frontend.tours.'.$model_alias.'.edit')
+          </v-card-title>
+        </v-toolbar>
         @include('frontend.tour.tour.includes.edit-form')
-
-      </div>
-      <!--card-body-->
-    </div>
-    <!--card-->
-
-  </div><!-- col-md-8 -->
-</div><!-- row -->
+      </v-card>
+    </v-col>
+  </v-row>
+</v-container>
 @endsection

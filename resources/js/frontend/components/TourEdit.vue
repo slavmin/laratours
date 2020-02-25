@@ -104,7 +104,7 @@
                       close
                       class="chip--select-multi"
                       @click="data.select"
-                      @click:close="chipRemove(data.item)"
+                      @click:close="chipRemoveCountry(data.item)"
                     >
                       {{ data.item.text }}
                     </v-chip>
@@ -160,7 +160,7 @@
                       close
                       class="chip--select-multi"
                       @click="data.select"
-                      @click:close="chipRemove(data.item)"
+                      @click:close="chipRemoveCity(data.item)"
                     >
                       {{ data.item.text }}
                     </v-chip>
@@ -212,6 +212,7 @@
                   label="Дата начала"
                   :rules="dateRules"
                   prepend-icon="event"
+                  color="#aa282a"
                   readonly
                   v-on="on"
                 />
@@ -299,7 +300,7 @@
 <script>
 import moment from 'moment'
 export default {
-  name: 'TourCreate',
+  name: 'TourEdit',
   props: {
     method: {
       type: String,
@@ -313,6 +314,10 @@ export default {
       type: String,
       default: '',
     },
+    tour: {
+      type: Object,
+      default: () => {},
+    },
     countriesCitiesOptions: {
       type: Object,
       default: () => {},
@@ -322,6 +327,10 @@ export default {
       default: () => {},
     },
     constructorTypeOptions: {
+      type: Array,
+      default: () => {},
+    },
+    tourDates: {
       type: Array,
       default: () => {},
     },
@@ -393,6 +402,9 @@ export default {
       return moment().format('YYYY-MM-DD')
     },
   },
+  mounted() {
+    this.parseTour()
+  },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
@@ -406,10 +418,34 @@ export default {
       this.validate()
       if (this.formValid) document.getElementById('form').submit()
     },
-    chipRemove(item) {
+    chipRemoveCountry(item) {
       this.selectedCountriesIds = this.selectedCountriesIds.filter(id => {
         return id != item.value
       })
+    },
+    chipRemoveCity(item) {
+      this.selectedCitiesIds = this.selectedCitiesIds.filter(id => {
+        return id != item.value
+      })
+    },
+    parseTour() {
+      this.tourName = this.tour.name
+      this.selectedConstructorTypeId = this.tour.tour_constructor_type_id
+      this.selectedTourTypeId = this.tour.tour_type_id
+      this.tour.countries_list.forEach(countryId => {
+        this.selectedCountriesIds.push(parseInt(countryId))
+      })
+      this.startCountryId = parseInt(this.tour.country_id)
+      this.tour.cities_list.forEach(cityId => {
+        this.selectedCitiesIds.push(parseInt(cityId))
+      })
+      this.startCityId = parseInt(this.tour.city_id)
+      this.startDate = moment(this.tourDates[0].date, 'DD/MM/YYYY').format(
+        'YYYY-MM-DD'
+      )
+      this.tourDays = this.tour.duration
+      this.tourNights = this.tour.nights
+      this.tourQnt = this.tour.qnt
     },
   },
 }

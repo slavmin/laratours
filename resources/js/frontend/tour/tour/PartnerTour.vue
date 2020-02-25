@@ -1,98 +1,125 @@
 <template>
   <div>
-    <v-layout 
-      row 
-      wrap
-      justify-center
+    <v-row
+      v-if="showAlert"
+      class="alert"
     >
-      <v-btn
-        color="#aa282a"
-        dark
-        flat
-        @click="showEditor = !showEditor"
-      >
-        {{ showEditor ? 'Скрыть' : 'Программа тура' }}
-        <v-icon right>
-          expand_{{ showEditor ? 'less' : 'more' }}
-        </v-icon>
-      </v-btn>
-      <v-flex 
-        v-if="showEditor"
-        xs12
-      >
-        <Editor />
-      </v-flex>  
-    </v-layout>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-      justify-center
-    >
-      <v-flex 
-        xs12
-        md4
-      >
-        <h2 class="text-xs-center grey--text">
-          Тур от партнёра
-        </h2>
-        <v-text-field
-          v-model="getPartnerTour.partnerName"
-          label="Название партнёра"
-        />
-        <v-layout 
-          row 
-          wrap
+      <v-col cols="10">
+        <v-alert
+          border="left"
+          dense
+          type="success"
+          dismissible
         >
-          <v-text-field
-            v-model.number="getPartnerTour.commission"
-            label="Комиссия в рублях"
-          />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon 
-                color="grey"
-                v-on="on"
-              >
-                info
-              </v-icon>
-            </template>
-            <span>
-              Сумма выплачивается с одного проданного места, вне зависимости от типа туриста
-            </span>
-          </v-tooltip>
-        </v-layout>
-      </v-flex>
-    </v-layout>
-    <v-layout 
-      row 
-      wrap
-      justify-center
-    >
-      <v-flex 
-        xs12
-        md6  
-      >
-        <Prices />
-      </v-flex>  
-      <v-flex 
-        xs12
-        md6
-      >
-        <Extra />
-      </v-flex>
-    </v-layout>
-    <SaveTourForm
-      :token="token"
-    />
+          Тур успешно
+          <strong>обновлён</strong>
+        </v-alert>
+      </v-col>
+    </v-row>
+    <v-container fluid>
+      <v-row justify="center">
+        <v-col cols="12">
+          <v-card>
+            <v-toolbar
+              dark
+              color="#94CED7"
+            >
+              <h1>
+                Тур от партнёра
+              </h1>
+            </v-toolbar>
+            <v-card-text>
+              <v-form ref="form">
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-text-field
+                      v-model="partnerName"
+                      color="#aa282a"
+                      label="Название партнёра"
+                      @input="throttledSave"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-row>
+                      <v-text-field
+                        v-model.number="commission"
+                        color="#aa282a"
+                        label="Комиссия в рублях"
+                        @input="throttledSave"
+                      />
+                      <v-tooltip left>
+                        <template v-slot:activator="{ on }">
+                          <v-icon
+                            color="grey"
+                            v-on="on"
+                          >
+                            info
+                          </v-icon>
+                        </template>
+                        <span>
+                          Сумма выплачивается с одного проданного места, вне
+                          зависимости от
+                          типа туриста
+                        </span>
+                      </v-tooltip>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <Prices :tour-id="parseInt(tourId)" />
+      <Extra :tour-id="parseInt(tourId)" />
+      <v-row justify="center">
+        <v-btn
+          color="#aa282a"
+          dark
+          @click="showEditor = !showEditor"
+        >
+          {{ showEditor ? 'Скрыть' : 'Программа тура' }}
+          <v-icon right>
+            expand_{{ showEditor ? 'less' : 'more' }}
+          </v-icon>
+        </v-btn>
+        <v-col
+          v-if="showEditor"
+          cols="12"
+        >
+          <v-card>
+            <v-toolbar
+              dark
+              color="#94CED7"
+            >
+              <h2>
+                Программа тура
+              </h2>
+            </v-toolbar>
+            <Editor
+              id="editor"
+              v-model="editor"
+              :api-key="tiny.apiKey"
+              :init="tiny.init"
+              @input="throttledSave"
+            />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
-
 <script>
+import axios from 'axios'
 import Prices from './partner/Prices'
 import Extra from './partner/Extra'
-import Editor from './partner/Editor'
-import SaveTourForm from './SaveTourForm'
+import Editor from '@tinymce/tinymce-vue'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PartnerTour',
@@ -100,49 +127,98 @@ export default {
     Prices,
     Extra,
     Editor,
-    SaveTourForm,
   },
   props: {
     token: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
+    tourId: {
+      type: String,
+      default: '',
+    },
+    tourCommission: {
+      type: String,
+      default: '',
+    },
+    tourExtra: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
-      partner: '',
+      partnerName: '',
+      commission: null,
       showEditor: false,
-    };
+      lastCall: '',
+      lastCallTimer: null,
+      showAlert: false,
+      tiny: {
+        apiKey: 'x7zbaypkm5jwplpkson0mxhq5w59oxtrrudgxphqx8llayfd',
+        init: {
+          min_width: '600',
+          branding: false,
+          language: 'ru',
+          language_url: '/fonts/vendor/tinymce/ru.js',
+          height: 500,
+          plugins: 'table link print',
+          default_link_target: '_blank',
+        },
+      },
+      editor: '',
+    }
   },
   computed: {
-    ...mapGetters([
-      'getEditMode',
-      'getPartnerTour',
-    ]),
+    ...mapGetters(['getEditMode', 'getPartnerTour']),
+    extra: function() {
+      return {
+        partner_name: this.partnerName,
+        editor: this.editor,
+      }
+    },
+  },
+  mounted() {
+    this.fillFields()
   },
   methods: {
-    done() {
-      console.log('done')
-    }
-  }
-};
+    save() {
+      this.showAlert = true
+      axios
+        .post('/api/update-partner-tour-data', {
+          tour_id: this.tourId,
+          extra: this.extra,
+          commission: this.commission,
+        })
+        .then(function(response) {
+          console.log(response)
+        })
+      setTimeout(() => {
+        this.showAlert = false
+      }, 2500)
+    },
+    throttledSave: _.debounce(function() {
+      this.save()
+    }, 2000),
+    fillFields() {
+      this.commission = parseInt(this.tourCommission)
+        ? parseInt(this.tourCommission)
+        : 0
+      if (this.tourExtra) {
+        const data = this.tourExtra
+        this.partnerName = data.partner_name
+        this.editor = data.editor
+      }
+    },
+  },
+}
 </script>
 
-<style lang="css" scoped>
-.guide-card {
-  background-color: #E8F5E9;
-}
-.is-select {
-  background-color: #FFAB16;
-  color: white;
-  transform: scale(0.9);
-}
-.wrap {
-  position: relative;
-}
-.done-btn {
+<style lang="scss" scoped>
+.alert {
   position: fixed;
-  top: 50%;
-  right: 24px;
+  z-index: 100;
+  bottom: 12px;
+  right: 12px;
 }
 </style>

@@ -67,27 +67,38 @@
         </v-menu>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row
+      v-for="(customer, i) in resultArray"
+      :key="customer.id"
+    >
       <v-col
         cols="12"
-        lg="6"
+        lg="4"
       >
-        <v-select
-          v-model="customerTypeId"
-          :items="customersArray"
+        <p>
+          {{ customer.name }}
+        </p>
+      </v-col>
+      <v-col
+        cols="12"
+        lg="4"
+      >
+        <v-text-field
+          v-model="resultArray[i].price"
           color="#aa282a"
-          label="Тип туриста"
+          label="Цена"
+          :disabled="resultArray[i].is_free == 1"
         />
       </v-col>
       <v-col
         cols="12"
-        lg="6"
+        lg="4"
       >
-        <v-text-field
-          v-model="price"
-          color="#aa282a"
-          label="Цена"
-          @keyup.enter="submitForm"
+        <v-checkbox
+          v-model="resultArray[i].is_free"
+          label="Бесплатно"
+          value="1"
+          @change="clearPriceValue(i)"
         />
       </v-col>
     </v-row>
@@ -113,15 +124,20 @@
       >
       <input
         name="period_start"
-        type="hidden"
+        type="text"
         :value="dateStart"
       >
       <input
         name="period_end"
-        type="hidden"
+        type="text"
         :value="dateEnd"
       >
       <input
+        type="hidden"
+        :value="JSON.stringify(resultArray)"
+        name="prices_array"
+      >
+      <!-- <input
         name="tour_customer_type_id"
         type="hidden"
         :value="customerTypeId"
@@ -130,7 +146,7 @@
         name="price"
         type="hidden"
         :value="price"
-      >
+      > -->
     </form>
   </v-container>
 </template>
@@ -164,6 +180,7 @@ export default {
       dateEnd: '',
       customerTypeId: null,
       price: null,
+      resultArray: [],
     }
   },
   computed: {
@@ -180,10 +197,29 @@ export default {
       return result
     },
   },
+  mounted() {
+    this.constructResultArray()
+  },
   methods: {
     submitForm() {
       const form = document.getElementById('price-form')
       form.submit()
+    },
+    constructResultArray() {
+      this.resultArray = []
+      this.customersArray.forEach(customer => {
+        this.resultArray.push({
+          tour_customer_type_id: customer.value,
+          name: customer.text,
+          price: null,
+          is_free: false,
+        })
+      })
+    },
+    clearPriceValue(index) {
+      if (this.resultArray[index].is_free == 1) {
+        this.resultArray[index].price = 0
+      }
     },
   },
 }

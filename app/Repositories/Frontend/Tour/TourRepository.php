@@ -36,8 +36,9 @@ class TourRepository
         $compact = compact('museum_options');
         break;
       case (2):
-        $test = 'test';
-        $compact = compact('test');
+        $tour_commission = $tour->commission;
+        $tour_extra = $tour->extra;
+        $compact = compact('tour_commission', 'tour_extra');
         break;
     }
     return $compact;

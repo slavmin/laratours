@@ -23,6 +23,9 @@ import navBar from './modules/navBar'
 import transportDocs from './modules/transportDocs'
 import gibddNotify from './modules/gibddNotify'
 
+// TourClick version 1.4.0 store modules are below
+// TODO: remove upper modules
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
