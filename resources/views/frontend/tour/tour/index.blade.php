@@ -33,6 +33,9 @@
             <thead>
               <tr>
                 <th>
+                  #
+                </th>
+                <th>
                   @lang('labels.frontend.tours.'.$model_alias.'.table.name')
                 </th>
                 <th>
@@ -54,16 +57,25 @@
             </thead>
             <tbody>
               @foreach($items as $item)
-              <tr onclick="showExtraRow({{ $item->id }})">
-                <td>
-                  {{$item->name}}
+              <tr>
+                <td class="grey--text" onclick="showExtraRow({{ $item->id }})">
+                  {{ $item->id }}
                 </td>
-                <td>
+                <td class="title" onclick="showExtraRow({{ $item->id }})">
+                  {{$item->name}}
+                  @if(!$item->published)
+                  <div class="overline red--text">не опубликован</div>
+                  @endif
+                </td>
+                <td onclick="showExtraRow({{ $item->id }})">
                   @if (array_key_exists($item->tour_type_id, $tour_types))
                   {{$tour_types[$item->tour_type_id]}}
                   @endif
+                  @if($item->tour_constructor_type_id == 2)
+                  <span>(Тур от партнёра)</span>
+                  @endif
                 </td>
-                <td>
+                <td onclick="showExtraRow({{ $item->id }})">
                   @if(!is_null($item->cities_list))
                   @foreach($item->cities_list as $city)
                   @if (array_key_exists($city, $cities_names))
@@ -74,8 +86,8 @@
                   N/A
                   @endif
                 </td>
-                <td>{{$item->duration}}</td>
-                <td>{{$item->nights}}</td>
+                <td onclick="showExtraRow({{ $item->id }})">{{$item->duration}}</td>
+                <td onclick="showExtraRow({{ $item->id }})">{{$item->nights}}</td>
                 <td>
                   <div class="float-right" role="toolbar" aria-label="@lang('labels.general.toolbar_btn_groups')">
                     {!! $item->action_buttons !!}
@@ -83,7 +95,7 @@
                 </td>
               </tr>
               <tr id="{{ 'extra-row-'.$item->id }}" class="d-none">
-                <td colspan="6">
+                <td colspan="7">
                   доп инфа
                 </td>
               </tr>

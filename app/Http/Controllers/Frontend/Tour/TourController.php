@@ -218,6 +218,13 @@ class TourController extends Controller
 
   public function update(Request $request, $id)
   {
+    $tour = Tour::findOrFail($id);
+
+    if ($request->toggle_published) {
+      $tour->published = !$tour->published;
+      $tour->save();
+      return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.updated'));
+    }
     $request->validate([
       'name' => 'required',
       'city_id' => 'exists:tour_cities,id',
@@ -227,7 +234,6 @@ class TourController extends Controller
       'countries_list' => 'array|required|min:1',
     ]);
 
-    $tour = Tour::findOrFail($id);
 
     // MySql empty Json fix
     if (!$request->get('cities_list')) {

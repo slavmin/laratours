@@ -111,6 +111,34 @@ trait ActionButtonsAttribute
         class="btn btn-outline-success ml-1"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.restore') . '"></i></a>';
   }
 
+  /**
+   * @return string
+   */
+  public function getTogglePublishedButtonAttribute()
+  {
+    if (!$this->published) {
+      return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.update', $this) . '" method="post">
+                ' . csrf_field() . '
+                <input type="hidden" name="_method" value="PATCH"/>
+                <input type="hidden" name="toggle_published" value="1"/>
+                <v-btn type="submit" text icon color="green darken-2" title="' . __('labels.general.buttons.publish') . '">
+                  <v-icon>publish</v-icon>
+                </v-btn>
+            </form>';
+    } else {
+      return '<form style="display: inline-block;" action="' . route('frontend.tour.' . $this->model_alias . '.update', $this) . '" method="post">
+                ' . csrf_field() . '
+                <input type="hidden" name="_method" value="PATCH"/>
+                <input type="hidden" name="toggle_published" value="1"/>
+                <v-btn type="submit" text icon color="yellow darken-2" title="' . __('labels.general.buttons.unpublish') . '">
+                  <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M9,4H15V12H19.84L12,19.84L4.16,12H9V4Z" />
+                  </svg>
+                </v-btn>
+            </form>';
+    }
+  }
+
 
   /**
    * @return string
@@ -130,6 +158,15 @@ trait ActionButtonsAttribute
         return '
             <div class="ml-1">
               ' . $this->city_list_button . '
+			  ' . $this->edit_button . '
+			  ' . $this->delete_button . '
+			</div>';
+      }
+
+      if ($this->model_alias == 'tour') {
+        return '
+            <div class="ml-1">
+              ' . $this->toggle_published_button . '
 			  ' . $this->edit_button . '
 			  ' . $this->delete_button . '
 			</div>';

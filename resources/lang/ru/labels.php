@@ -33,6 +33,8 @@ return [
       'delete-permanently' => 'Удалить навсегда',
       'order' => 'Заказать',
       'reserve' => 'Бронировать',
+      'publish' => 'Опубликовать',
+      'unpublish' => 'Снять с публикаци'
     ],
     'table' => [
       'name' => 'Имя',
