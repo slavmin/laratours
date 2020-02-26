@@ -67,41 +67,68 @@
         </v-menu>
       </v-col>
     </v-row>
-    <v-row
-      v-for="(customer, i) in resultArray"
-      :key="customer.id"
-    >
-      <v-col
-        cols="12"
-        lg="4"
+    <div v-if="objectModel != 'transport'">
+      <v-row
+        v-for="(customer, i) in resultArray"
+        :key="customer.id"
       >
-        <p>
-          {{ customer.name }}
-        </p>
-      </v-col>
-      <v-col
-        cols="12"
-        lg="4"
+        <v-col
+          cols="12"
+          lg="4"
+        >
+          <p>
+            {{ customer.name }}
+          </p>
+        </v-col>
+        <v-col
+          cols="12"
+          lg="4"
+        >
+          <v-text-field
+            v-model="resultArray[i].price"
+            color="#aa282a"
+            label="Цена"
+            :disabled="resultArray[i].is_free == 1"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          lg="4"
+        >
+          <v-checkbox
+            v-model="resultArray[i].is_free"
+            label="Бесплатно"
+            value="1"
+            @change="clearPriceValue(i)"
+          />
+        </v-col>
+      </v-row>
+    </div>
+    <div v-if="objectModel == 'transport'">
+      <v-row
+        v-for="(type, i) in priceTypeOptions"
+        :key="type.id"
       >
-        <v-text-field
-          v-model="resultArray[i].price"
-          color="#aa282a"
-          label="Цена"
-          :disabled="resultArray[i].is_free == 1"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        lg="4"
-      >
-        <v-checkbox
-          v-model="resultArray[i].is_free"
-          label="Бесплатно"
-          value="1"
-          @change="clearPriceValue(i)"
-        />
-      </v-col>
-    </v-row>
+        <v-col
+          cols="12"
+          lg="6"
+        >
+          <p>
+            {{ type.name }}
+          </p>
+        </v-col>
+        <v-col
+          cols="12"
+          lg="6"
+        >
+          <v-text-field
+            v-model="transportResultArray[i].price"
+            color="#aa282a"
+            label="Цена"
+          />
+        </v-col>
+      </v-row>
+    </div>
     <form
       id="price-form"
       action="/operator/attribute-price"
@@ -124,29 +151,26 @@
       >
       <input
         name="period_start"
-        type="text"
+        type="hidden"
         :value="dateStart"
       >
       <input
         name="period_end"
-        type="text"
+        type="hidden"
         :value="dateEnd"
       >
       <input
+        v-if="objectModel != 'transport'"
         type="hidden"
         :value="JSON.stringify(resultArray)"
         name="prices_array"
       >
-      <!-- <input
-        name="tour_customer_type_id"
-        type="hidden"
-        :value="customerTypeId"
-      >
       <input
-        name="price"
+        v-if="objectModel == 'transport'"
         type="hidden"
-        :value="price"
-      > -->
+        :value="JSON.stringify(transportResultArray)"
+        name="prices_array"
+      >
     </form>
   </v-container>
 </template>
@@ -158,11 +182,19 @@ export default {
       type: Object,
       default: null,
     },
+    priceTypeOptions: {
+      type: Array,
+      default: null,
+    },
     parentId: {
       type: String,
       default: '',
     },
     parentModel: {
+      type: String,
+      default: '',
+    },
+    objectModel: {
       type: String,
       default: '',
     },
@@ -181,6 +213,7 @@ export default {
       customerTypeId: null,
       price: null,
       resultArray: [],
+      transportResultArray: [],
     }
   },
   computed: {
@@ -206,15 +239,26 @@ export default {
       form.submit()
     },
     constructResultArray() {
-      this.resultArray = []
-      this.customersArray.forEach(customer => {
-        this.resultArray.push({
-          tour_customer_type_id: customer.value,
-          name: customer.text,
-          price: null,
-          is_free: false,
+      if (this.objectModel != 'transport') {
+        this.resultArray = []
+        this.customersArray.forEach(customer => {
+          this.resultArray.push({
+            tour_customer_type_id: customer.value,
+            name: customer.text,
+            price: null,
+            is_free: false,
+          })
         })
-      })
+      }
+      if (this.objectModel == 'transport') {
+        this.transportResultArray = []
+        this.priceTypeOptions.forEach(type => {
+          this.transportResultArray.push({
+            tour_price_type_id: type.id,
+            price: null,
+          })
+        })
+      }
     },
     clearPriceValue(index) {
       if (this.resultArray[index].is_free == 1) {

@@ -1,5 +1,5 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<h1>Подробный конструктор</h1>
+<detailed-tour token="{{ csrf_token() }}" tour-id="{{ $tour_id }}"></detailed-tour>
 @endsection

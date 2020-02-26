@@ -3,11 +3,11 @@
 @section('content')
 <v-container fluid grid-list-md text-xs-center>
   <h1 class="text-white text-center">
-    <span>{{ $tour_object_name }}</span>:
+    <span>{{ $tour_object->name }}</span>:
     <span class="font-weight-light">{{ $item->name }}</span>
   </h1>
   <v-row justify="center">
-    <v-col xs="12" lg="8">
+    <v-col xs="12">
       <v-card>
         <v-toolbar prominent dark color="#94CED7" src="/img/frontend/prices-card-header-gradient.jpg">
           <v-btn href="{{ $cancel_route }}" class="tc-link-no-underline-on-hover"
@@ -30,7 +30,7 @@
                 Конец периода
               </th>
               <th>
-                Тип туриста
+                Тип
               </th>
               <th>
                 Стоимость
@@ -48,7 +48,11 @@
                   {{ $price->period_end }}
                 </td>
                 <td>
+                  @if ($tour_object->model_alias != 'transport')
                   {{ $customer_type_options[$price->tour_customer_type_id] }}
+                  @else
+                  {{ $price_types_for_view[$price->tour_price_type_id] ?? '' }}
+                  @endif
                 </td>
                 <td>
                   {{ $price->price }}
@@ -76,8 +80,10 @@
         </v-row>
         <v-divider></v-divider>
         @endif
-        <object-attribute-price parent-id="{{ $item->id }}" parent-model="{{ $item->model_alias }}"
-          :customers="{{ json_encode($customer_type_options) }}" token="{{ csrf_token() }}"></object-attribute-price>
+        <object-attribute-price object-model="{{ $tour_object->model_alias }}"
+          :price-type-options="{{ json_encode($price_type_options) }}" parent-id="{{ $item->id }}"
+          parent-model="{{ $item->model_alias }}" :customers="{{ json_encode($customer_type_options) }}"
+          token="{{ csrf_token() }}"></object-attribute-price>
         <v-card-actions>
           <v-btn text>Вернуться</v-btn>
           <v-spacer></v-spacer>

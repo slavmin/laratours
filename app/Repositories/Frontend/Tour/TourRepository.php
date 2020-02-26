@@ -32,8 +32,22 @@ class TourRepository
 
     switch ($tour->tour_constructor_type_id) {
       case (1):
-        $museum_options = TourMuseum::whereIn('city_id', $tour->cities_list)->get();
-        $compact = compact('museum_options');
+        $attributes = $tour->getAllAttributes();
+
+        $tour_dates = $tour->tour_dates;
+
+        $hotel_options = Tour::getHotelsOption();
+
+        $museum_options = Tour::getMuseumsOption();
+
+        $transport_options = Tour::getTransportsOption();
+
+        $meal_options = Tour::getMealsOption();
+
+        $guide_options = Tour::getGuidesOption();
+
+        $attendant_options = Tour::getAttendantsOption();
+        $compact = compact('tour', 'attributes', 'hotel_options', 'museum_options', 'meal_options', 'transport_options', 'attendant_options', 'guide_options');
         break;
       case (2):
         $tour_commission = $tour->commission;

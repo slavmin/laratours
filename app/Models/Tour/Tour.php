@@ -133,6 +133,11 @@ class Tour extends Model
     return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
   }
 
+  public function object_attributes()
+  {
+    return $this->morphedByMany('App\Models\Tour\TourObjectAttributes', 'tourable');
+  }
+
 
   // Get Tour attributes
   public static function getTourTypeIds()

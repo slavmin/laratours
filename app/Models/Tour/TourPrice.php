@@ -15,7 +15,8 @@ class TourPrice extends Model
     'price',
     'tour_customer_type_id',
     'is_extra',
-    'name'
+    'name',
+    'tour_price_type_id'
   ];
 
   public function priceable()

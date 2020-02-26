@@ -35,6 +35,7 @@ Vue.component('object-attribute-price', require('./components/ObjectAttributePri
 Vue.component('tour-create', require('./components/TourCreate.vue').default);
 Vue.component('tour-edit', require('./components/TourEdit.vue').default);
 Vue.component('partner-tour', require('./tour/tour/PartnerTour.vue').default);
+Vue.component('detailed-tour', require('./tour/tour/DetailedTour.vue').default);
 
 
 const app = new Vue({

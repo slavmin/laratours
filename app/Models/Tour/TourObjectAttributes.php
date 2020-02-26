@@ -34,4 +34,9 @@ class TourObjectAttributes extends Model
   {
     return $this->morphMany('App\Models\Tour\TourPrice', 'priceable');
   }
+
+  public function tours()
+  {
+    return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+  }
 }

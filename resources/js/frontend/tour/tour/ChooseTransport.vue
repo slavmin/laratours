@@ -1,127 +1,55 @@
 <template>
-  <div>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-    >
-      <!-- Choose transport -->
-      <v-flex>
-        <h2 class="text-xs-center grey--text">
-          Выберите транспорт:
-        </h2>
-        <v-layout 
-          v-for="transport in getActualTransport"
-          :key="transport.id"
-          row 
-          wrap
-          align-center
-          mb-5
-        >
-          <v-flex xs12>
-            <div class="text-xs-center display-2">
-              {{ transport.name }}
-            </div>
-            <div class="text-xs-center subheading">
-              {{ getCityName(transport.city_id) }},
-            </div>
-            <v-layout 
-              row 
-              wrap
-              mb-2
-              justify-center
-            >
-              <div class="mr-3">
-                <i 
-                  class="material-icons"
-                  style="font-size: 12px;"
-                >
-                  web
-                </i>
-                <a 
-                  :href="JSON.parse(transport.description).contacts.site"
-                  target="_blank"
-                >
-                  {{ JSON.parse(transport.description).contacts.site }}
-                </a>
-              </div>
-              <div class="mr-3">
-                <i 
-                  class="material-icons"
-                  style="font-size: 12px;"
-                >
-                  email
-                </i>
-                <a 
-                  :href="'mailto:' + JSON.parse(transport.description).contacts.email"
-                >
-                  {{ JSON.parse(transport.description).contacts.email }}
-                </a>
-              </div>
-              <div class="mr-5">
-                <i 
-                  class="material-icons"
-                  style="font-size: 12px;"
-                >
-                  phone
-                </i>
-                {{ JSON.parse(transport.description).contacts.phone }}
-              </div>
-              <div class="mr-3">
-                <i 
-                  class="material-icons"
-                  style="font-size: 12px;"
-                >
-                  person
-                </i>
-                {{ JSON.parse(transport.description).staff.name }}
-              </div>
-              <div>
-                <i 
-                  class="material-icons"
-                  style="font-size: 12px;"
-                >
-                  phone
-                </i>
-                {{ JSON.parse(transport.description).staff.phone }}
-              </div>
-            </v-layout>
-          </v-flex>
-          <v-layout
-            row
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-for="item in transport.objectables"
-              :key="item.id"
-              xs3
-              lg2
-              ma-2
-            >
-              <Transport 
-                :transport="transport"
-                :item="item"
-                :days="days"
-              />
-            </v-flex>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <!-- /Choose transport -->
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
+  <v-row>
+    <!-- Choose transport -->
+    <v-col cols="12">
+      <h2 class="text-xs-center grey--text">
+        Выберите транспорт:
+      </h2>
+      <div
+        v-for="transport in actualTransport"
+        :key="transport.id"
+        align-center
+        mb-5
+        class="text-center"
       >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
-    </v-layout>
-  </div>
+        <div class="display-2">
+          {{ transport.name }}
+          <div class="title">
+            {{ transport.city_name }}
+          </div>
+        </div>
+        <v-row justify-center>
+          <v-col
+            v-for="item in transport.objectables"
+            :key="item.id"
+            xs3
+            lg2
+            ma-2
+          >
+            <Transport
+              :transport="transport"
+              :item="item"
+              :days="days"
+              :tour-date="tourDate"
+              :tour-id="tourId"
+            />
+            <!-- :days="days" -->
+          </v-col>
+        </v-row>
+      </div>
+    </v-col>
+    <!-- /Choose transport -->
+    <v-btn
+      dark
+      fab
+      class="done-btn"
+      color="#aa282a"
+    >
+      <i class="material-icons">
+        arrow_forward
+      </i>
+    </v-btn>
+  </v-row>
 </template>
 
 <script>
@@ -133,82 +61,46 @@ export default {
     Transport,
   },
   props: {
-    tourToEdit: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+    tourId: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
-      choosenTransport: {},
-      duration: NaN,
-      distance: NaN,
-      description: '',
-      active: null,
-      currentPrice: 0,
-      customPrice: NaN,
-      priceTypes: [
-        'Цена за 1 час',
-        'за 1 км',
-        'Ввести вручную'
-      ],
-      currentPriceType: '',
-      daysArray: [],
-    };
+      actualTransport: [],
+      days: 0,
+      tourDate: null,
+    }
   },
-  computed: {
-    ...mapGetters([
-      'allCities',
-      'allTransports',
-      'getActualTransport',
-      'getTour',
-    ]),
-    days: function() {
-      let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
-      return result
-    },
+  mounted() {
+    this.fetchObjects()
   },
   methods: {
-    ...mapActions([
-      'fetchCities',
-      'fetchTransport',
-      'updateActualTransport',
-      'updateTourTransport',
-      'updateConstructorCurrentStage',
-      'updateNewTransportOptions',
-    ]),
-    getCityName(id) {
-      let cityName = ''
-      this.allCities.forEach(city => {
-        if (city.id == id) {
-          cityName = city.name
-        }
-      })
-      return cityName
-    },
-    end() {
-      this.updateConstructorCurrentStage('Transport is set')
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateTourTransport()
-      this.end()
+    fetchObjects() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'transport',
+          },
+        })
+        .then(r => {
+          this.actualTransport = r.data.transport_options
+          this.days = r.data.days
+          this.tourDate = r.data.tour_date
+        })
     },
   },
-};
+}
 </script>
 
 <style lang="css" scoped>
 .transport-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
 .is-select {
-  background-color: #FFAB16;
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }

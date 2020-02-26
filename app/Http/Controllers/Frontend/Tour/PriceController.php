@@ -59,7 +59,6 @@ class PriceController extends Controller
 
     $item_id = 0;
 
-    $prices_array = [];
     foreach (json_decode($request->prices_array) as $price) {
       // Skip price for customer, if price == 0 and flag 'is_free' setted to false.
       if ($price->price == 0 && $price->is_free != 1) {
@@ -71,7 +70,8 @@ class PriceController extends Controller
           'period_start' => $request->period_start,
           'period_end' => $request->period_end,
           'price' => $price->price,
-          'tour_customer_type_id' => $price->tour_customer_type_id
+          'tour_customer_type_id' => $price->tour_customer_type_id ?? null,
+          'tour_price_type_id' => $price->tour_price_type_id ?? null,
         ]
       );
     }
