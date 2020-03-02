@@ -4,6 +4,9 @@
       no-gutters
       justify="center"
     >
+      <!-- <form :action="route">
+        <input type="hidden" name="">
+      </form> -->
       <v-card>
         <v-toolbar
           dark
@@ -67,6 +70,14 @@ export default {
       default: '',
     },
     tourId: {
+      type: String,
+      default: '',
+    },
+    method: {
+      type: String,
+      default: '',
+    },
+    route: {
       type: String,
       default: '',
     },

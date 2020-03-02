@@ -32,6 +32,7 @@
               :days="days"
               :tour-date="tourDate"
               :tour-id="tourId"
+              :was-selected="selectedObjectAttributesIds.includes(item.id)"
             />
             <!-- :days="days" -->
           </v-col>
@@ -71,6 +72,7 @@ export default {
       actualTransport: [],
       days: 0,
       tourDate: null,
+      selectedObjectAttributesIds: [],
     }
   },
   mounted() {
@@ -89,6 +91,8 @@ export default {
           this.actualTransport = r.data.transport_options
           this.days = r.data.days
           this.tourDate = r.data.tour_date
+          this.selectedObjectAttributesIds = r.data.object_attributes
+          console.log(r.data)
         })
     },
   },
@@ -99,7 +103,7 @@ export default {
 .transport-card {
   background-color: #e8f5e9;
 }
-.is-select {
+.is-selected {
   background-color: #ffab16;
   color: white;
   transform: scale(0.9);

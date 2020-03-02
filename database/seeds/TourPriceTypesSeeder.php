@@ -26,5 +26,10 @@ class TourPriceTypesSeeder extends Seeder
       'name'      => 'Разово',
       'value'     => 'instant',
     ]);
+
+    DB::table('tour_price_types')->insert([
+      'name'      => 'За км',
+      'value'     => 'km',
+    ]);
   }
 }

@@ -41,9 +41,9 @@ class Tour extends Model
     'countries_list' => 'array',
   ];
 
-  protected $supportedRelations = ['dates', 'hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];
+  protected $supportedRelations = ['dates', 'hotels', 'meals', 'museums', 'transports', 'guides', 'attendants', 'object_attributes'];
 
-  protected $morphedRelations = ['hotels', 'meals', 'museums', 'transports', 'guides', 'attendants'];
+  protected $morphedRelations = ['hotels', 'meals', 'museums', 'transports', 'guides', 'attendants', 'object_attributes'];
 
   protected $appends = ['model_alias', 'tour_dates'];
 
@@ -135,7 +135,7 @@ class Tour extends Model
 
   public function object_attributes()
   {
-    return $this->morphedByMany('App\Models\Tour\TourObjectAttributes', 'tourable');
+    return $this->morphedByMany('App\Models\Tour\TourObjectAttributes', 'tourable')->withTimestamps();;
   }
 
 

@@ -149,6 +149,9 @@ class TourController extends Controller
    */
   public function show($id)
   {
+
+    $model_alias = Tour::getModelAliasAttribute();
+
     $tour = Tour::find($id);
 
     switch ($tour->tour_constructor_type_id) {
@@ -166,7 +169,11 @@ class TourController extends Controller
 
     $compact = (new TourRepository)->getTourOptions($tour->id);
 
-    return view($view, $compact)->with('tour_id', $tour->id);
+    return view($view, $compact)
+      ->with('tour_id', $tour->id)
+      ->with('method', 'PATCH')
+      ->with('action', 'edit')
+      ->with('route', route('frontend.tour.' . $model_alias . '.update', [$tour->id]));
   }
 
   /**
@@ -225,6 +232,7 @@ class TourController extends Controller
       $tour->save();
       return redirect()->route('frontend.tour.tour.index')->withFlashSuccess(__('alerts.general.updated'));
     }
+
     $request->validate([
       'name' => 'required',
       'city_id' => 'exists:tour_cities,id',
@@ -253,14 +261,14 @@ class TourController extends Controller
         $tour->dates()->createMany($tour_dates);
       }
 
-      foreach ($tour->getAllAttributes() as $k => $v) {
-        $input = !empty($request->get(substr($k, 0, -1) . '_id')) ? $request->get(substr($k, 0, -1) . '_id') : [];
-        $output = [];
-        foreach ($input as $item) {
-          $output[$item] = ['team_id' => $tour->team_id];
-        }
-        $tour->$k()->sync($output);
-      }
+      // foreach ($tour->getAllAttributes() as $k => $v) {
+      //   $input = !empty($request->get(substr($k, 0, -1) . '_id')) ? $request->get(substr($k, 0, -1) . '_id') : [];
+      //   $output = [];
+      //   foreach ($input as $item) {
+      //     $output[$item] = ['team_id' => $tour->team_id];
+      //   }
+      //   $tour->$k()->sync($output);
+      // }
 
       return $tour->id;
     });

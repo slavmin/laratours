@@ -61,9 +61,9 @@ class PriceController extends Controller
 
     foreach (json_decode($request->prices_array) as $price) {
       // Skip price for customer, if price == 0 and flag 'is_free' setted to false.
-      if ($price->price == 0 && $price->is_free != 1) {
-        continue;
-      }
+      // if ($price->price == 0 && $price->is_free != 1) {
+      //   continue;
+      // }
       $parent->priceable()->updateOrCreate(
         ['id' => $item_id],
         [
