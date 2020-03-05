@@ -1,3 +1,13 @@
+@push('after-scripts')
+<script>
+  let messageWrap = document.querySelector('.tc-alert')
+  if (messageWrap) {
+    setTimeout(() => {
+      messageWrap.classList.add("d-none")
+    }, 10000)
+  }
+</script>
+@endpush
 @if($errors->any())
 <v-alert class="tc-alert tc-alert__red" dark dismissible>
   {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
