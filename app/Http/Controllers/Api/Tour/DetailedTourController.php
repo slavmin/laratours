@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Tour;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCity;
+use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourObjectAttributeProperties;
 use App\Models\Tour\TourObjectAttributes;
 use App\Models\Tour\TourPrice;
@@ -38,6 +40,32 @@ class DetailedTourController extends Controller
           'object_attributes' => $tour_object_attributes,
         ];
         break;
+      case 'museum':
+        $museum_options = TourMuseum::with('objectables')->get();
+        $tour_date = $tour->dates[0]->date;
+        $days = $tour->duration;
+
+        foreach ($museum_options as $museum) {
+          foreach ($museum->objectables as $object) {
+            $object['prices'] = $this->getObjectPrices($object->id);
+          }
+        }
+
+        $tour_object_attributes = [];
+        foreach ($tour->object_attributes as $attr) {
+          $tour_object_attributes[] = $attr->id;
+        }
+
+        $customers = TourCustomerType::all()->pluck('name', 'id');
+
+        $result = [
+          'museum_options' => $museum_options,
+          'tour_date'         => $tour_date,
+          'days'              => $days,
+          'object_attributes' => $tour_object_attributes,
+          'customers'         => $customers,
+        ];
+        break;
     }
     return $result;
   }
@@ -56,26 +84,34 @@ class DetailedTourController extends Controller
     return $result;
   }
 
-  public function getObjectPrices($object_attribute_id, $price_types)
+  public function getObjectPrices($object_attribute_id, $price_types = null)
   {
     $result = [];
 
     $price_types_names = TourPriceType::select('name', 'id')->pluck('name', 'id');
 
-    foreach ($price_types as $price_type_id) {
+    // For transport
+    if ($price_types) {
+      foreach ($price_types as $price_type_id) {
 
-      $price = TourPrice::where('priceable_id', $object_attribute_id)
-        ->where('tour_price_type_id', $price_type_id)
-        ->select('price')
-        ->first();
+        $price = TourPrice::where('priceable_id', $object_attribute_id)
+          ->where('tour_price_type_id', $price_type_id)
+          ->select('price')
+          ->first();
 
-      if ($price) {
-        array_push($result, [
-          'tour_price_type_id' => $price_type_id,
-          'tour_price_type_name' => $price_types_names[$price_type_id],
-          'price' => $price->price,
-        ]);
+        if ($price) {
+          array_push($result, [
+            'tour_price_type_id' => $price_type_id,
+            'tour_price_type_name' => $price_types_names[$price_type_id],
+            'price' => $price->price,
+          ]);
+        }
       }
+    } else {
+      // For museums
+      $result = TourPrice::where('priceable_id', $object_attribute_id)
+        ->select('price', 'tour_customer_type_id')
+        ->get();
     }
 
     return $result;
@@ -91,11 +127,11 @@ class DetailedTourController extends Controller
 
     $properties->object_attribute_id = $request->object_attribute_id;
     $properties->tour_id = $request->tour_id;
-    $properties->tour_price_type_id = $request->tour_price_type_id;
-    $properties->value = $request->value;
-    $properties->duration = $request->duration;
+    $properties->tour_price_type_id = $request->tour_price_type_id ?? null;
+    $properties->value = $request->value ?? null;
+    $properties->duration = $request->duration ?? null;
     $properties->days_array = json_encode($request->get('days_array[]'));
-    $properties->days = $request->days;
+    $properties->days = $request->days ?? null;
 
     $properties->save();
 

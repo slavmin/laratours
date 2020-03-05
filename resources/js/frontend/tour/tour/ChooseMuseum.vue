@@ -1,316 +1,104 @@
 <template>
-  <div>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-    >
-      <v-flex>
-        <h2 class="text-xs-center grey--text">
-          Выберите музеи и экскурсии:
-        </h2>
-        <v-layout 
-          v-for="museum in getActualMuseum"
-          :key="museum.id"
-          row 
-          wrap
-          align-center
-          mb-5
-        >
-          <v-flex xs12>
-            <div class="text-xs-center display-2">
-              {{ museum.name }}
-            </div>
-            <div class="text-xs-center subheading">
-              {{ getCityName(museum.city_id) }},
-              <i 
-                class="material-icons"
-                style="font-size: 12px;"
-              >
-                phone
-              </i>
-              {{ JSON.parse(museum.extra).contacts.phone }}
-            </div>
-          </v-flex>
-          <v-layout
-            row
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-for="item in museum.objectables"
-              :key="item.id"
-              xs3
-              lg2
-              ma-2
-            >
-              <v-card 
-                :id="'museum-' + museum.id + '-card-' + item.id"
-                class="museum-card"
-                :class="[
-                  {'is-select' : item.selected}, 
-                  {'is-custom-order': JSON.parse(item.extra).isCustomOrder}
-                ]"
-                pa-3
-              >
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline mb-2">
-                      {{ item.name }}
-                      <i 
-                        class="material-icons ml-2"
-                        style="color: grey; font-size: 20px;"
-                        :title="item.description"
-                      >
-                        info
-                      </i>
-                    </div>
-                    <v-divider />
-                    <v-select
-                      v-model="item.day"
-                      :items="days"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="День тура"
-                      outline
-                    />
-                    <v-text-field
-                      :id="'about' + [item.id]"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="Описание"
-                      append-outer-icon="watch"
-                      class="mt-3"
-                      color="#aa282a"
-                    />
-                    <!-- Regular events -->
-                    <div
-                      v-if="!JSON.parse(item.extra).isCustomOrder"
-                    >
-                      <div
-                        v-for="(price, i) in JSON.parse(item.extra).priceList"
-                        :key="i"
-                        row
-                        justify-content-between
-                        wrap
-                      >
-                        <span class="grey--text text--darken-1">
-                          {{ price.customerName }}: 
-                        </span>
-                        <p 
-                          style="display: inline-block;"
-                        >
-                          {{ price.price }}
-                        </p>
-                      </div>
-                      <br>
-                      <div class="mt-2">
-                        Длительность: {{ JSON.parse(item.extra).duration }}ч.
-                      </div>
-                    </div>
-                    <!-- Custom events. ЗАКАЗ НАРЯД -->
-                    <div
-                      v-if="JSON.parse(item.extra).isCustomOrder"
-                    >
-                      <v-layout 
-                        row 
-                        wrap
-                        justify-space-between
-                      >
-                        <v-flex xs8>
-                          <span class="grey--text text--darken-1">
-                            Цена: 
-                          </span>  
-                          <p 
-                            style="display: inline-block;"
-                          >
-                            {{ JSON.parse(item.extra).price }}
-                          </p>
-                          <br>
-                          <span class="grey--text text--darken-1">
-                            Кол-во человек: 
-                          </span>  
-                          <p 
-                            style="display: inline-block;"
-                          >
-                            {{ JSON.parse(item.extra).count }}
-                          </p>
-                        </v-flex>
-                        <v-flex xs4>
-                          <v-text-field
-                            v-model.number="item.count"
-                            :disabled="item.selected"
-                            label="Штук"
-                            type="number"
-                          />
-                        </v-flex>
-                      </v-layout>
-                    </div>
-
-                    <div
-                      v-if="item.count"
-                      class="body-2"
-                    >
-                      <v-divider />
-                      <span class="grey--text text--darken-1">
-                        Итого: 
-                      </span>  
-                      <p 
-                        style="display: inline-block;"
-                      >
-                        {{ item.count * JSON.parse(item.extra).price }}
-                      </p>
-                    </div>
-                  </div>
-                </v-card-title>
-                <v-card-actions>
-                  <v-btn 
-                    flat
-                    :dark="item.selected"
-                    @click="choose(museum, item)"
-                  >
-                    {{ item.selected ? 'Убрать' : 'Выбрать' }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
+  <v-row>
+    <v-col cols="12">
+      <h2 class="grey--text">
+        Выберите музеи и экскурсии:
+      </h2>
+      <v-row
+        v-for="museum in actualMuseums"
+        :key="museum.id"
+        justify-center
       >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
-    </v-layout>
-  </div>
+        <v-col cols="12">
+          <div class="display-2">
+            {{ museum.name }}
+            <div class="title">
+              {{ museum.city_name }}
+            </div>
+          </div>
+        </v-col>
+        <v-col
+          v-for="item in museum.objectables"
+          :key="item.id"
+        >
+          <Excursion
+            :museum="museum"
+            :item="item"
+            :days="days"
+            :tour-date="tourDate"
+            :tour-id="tourId"
+            :was-selected="selectedObjectAttributesIds.includes(item.id)"
+            :customers="customers"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import Excursion from './Excursion'
 export default {
-
   name: 'ChooseMuseum',
+  components: {
+    Excursion,
+  },
   props: {
-    tourToEdit: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+    tourId: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
-      about: '',
-    };
+      actualMuseums: [],
+      days: 0,
+      tourDate: null,
+      selectedObjectAttributesIds: [],
+      customers: [],
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'getActualMuseum',
-      'getTour'
-    ]),
-    days: function() {
+    daysArray: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
+      for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
   },
-  created() {
-    // this.updateActualMuseum()
-  },
   mounted() {
-    // this.fillStorageInEditMode()
+    this.fetchObjects()
   },
   methods: {
-    ...mapActions([
-      'updateActualMuseum',
-      'updateNewMuseumOptions',
-      'updateTourMuseum',
-      'updateConstructorCurrentStage',
-      'updateMuseumInEditMode',
-    ]),
-    getCityName(id) {
-      let cityName = ''
-      this.allCities.forEach(city => {
-        if (city.id == id) {
-          cityName = city.name
-        }
-      })
-      return cityName
-    },
-    choose(museum, item) {
-      let updData = {}
-      if (!JSON.parse(item.extra).isCustomOrder) {
-        updData = {
-          'museum': museum,
-          'item': {
-            ...item,
-            selected: !item.selected,
-            'about': document.getElementById('about' + item.id).value,
-            isCustomOrder: false,
-          }, 
-        }
-      } else {
-        updData = {
-          museum: museum,
-          item: {
-            ...item,
-            selected: !item.selected,
-            isCustomOrder: true,
-          }
-        }
-      }
-      this.updateNewMuseumOptions(updData)
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateTourMuseum()
-      this.end()
-    },
-    unselect(item) {
-      item.selected = false
-    },
-    end() {
-      this.updateConstructorCurrentStage('Museum is set')
-    },
-    fillStorageInEditMode() {
-      if (this.tourToEdit != {}) {
-        let museum = []
-        this.tourToEdit.extra.museum.forEach(m =>  {
-          console.log(m)
-          let updData = {
-            ...m
-          }
-          updData.obj.selected = true
-          museum.push(updData)
+    fetchObjects() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'museum',
+          },
         })
-        console.log(museum)
-        this.updateMuseumInEditMode(museum)
-        // let el = document.getElementById()
-      }
-    }
-  }
-};
+        .then(r => {
+          this.actualMuseums = r.data.museum_options
+          this.days = r.data.days
+          this.tourDate = r.data.tour_date
+          this.selectedObjectAttributesIds = r.data.object_attributes
+          this.customers = r.data.customers
+          console.log(r)
+        })
+    },
+  },
+}
 </script>
 
 <style lang="css" scoped>
 .museum-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
 .is-custom-order {
   background-color: rgb(77, 238, 187);
 }
-.is-select {
-  background-color: #FFAB16;
+.is-selected {
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }

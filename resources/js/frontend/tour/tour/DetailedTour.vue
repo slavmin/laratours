@@ -20,10 +20,16 @@
             </h1>
           </v-toolbar-title>
           <v-spacer />
-          <v-btn icon>
+          <v-btn
+            icon
+            @click="changeStep('transport')"
+          >
             <v-icon>mdi-train-car</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            @click="changeStep('museum')"
+          >
             <v-icon>mdi-bank-outline</v-icon>
           </v-btn>
           <v-btn icon>
@@ -51,7 +57,14 @@
           </v-btn>
         </v-toolbar>
         <v-card-text>
-          <ChooseTransport :tour-id="parseInt(tourId)" />
+          <ChooseTransport
+            v-if="show.transport"
+            :tour-id="parseInt(tourId)"
+          />
+          <ChooseMuseum
+            v-if="show.museum"
+            :tour-id="parseInt(tourId)"
+          />
         </v-card-text>
       </v-card>
     </v-row>
@@ -59,10 +72,12 @@
 </template>
 <script>
 import ChooseTransport from './ChooseTransport'
+import ChooseMuseum from './ChooseMuseum'
 export default {
   name: 'DetailedTour',
   components: {
     ChooseTransport,
+    ChooseMuseum,
   },
   props: {
     token: {
@@ -80,6 +95,22 @@ export default {
     route: {
       type: String,
       default: '',
+    },
+  },
+  data: () => {
+    return {
+      show: {
+        transport: true,
+        museum: false,
+      },
+    }
+  },
+  methods: {
+    changeStep(stepName) {
+      for (const key in this.show) {
+        this.show[key] = false
+      }
+      this.show[stepName] = true
     },
   },
 }
