@@ -1,135 +1,88 @@
 <template>
-  <div>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-    >
-      <v-flex>
-        <h2 class="text-xs-center grey--text">
-          Выберите гида:
-        </h2>
-        <v-layout 
-          row 
-          wrap
-          align-center
-          mb-5
+  <v-row>
+    <v-col cols="12">
+      <h2 class="grey--text">
+        Выберите гида:
+      </h2>
+      <v-row justify-center>
+        <v-col
+          v-for="guide in actualGuides"
+          :key="guide.id"
         >
-          <v-flex xs12>
-            <div class="text-xs-center display-2">
-              <!-- {{ getCityName(guide.city_id) }} -->
-            </div>
-          </v-flex>
-          <v-layout
-            row
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-for="guide in getActualGuide"
-              :key="guide.id"
-              xs3
-              lg2
-              ma-2
-            >
-              <Guide 
-                :guide="guide"
-              />
-            </v-flex>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
-      >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
-    </v-layout>
-  </div>
+          <Guide
+            :guide="guide"
+            :days="days"
+            :tour-date="tourDate"
+            :tour-id="tourId"
+            :was-selected="selectedGuidesIds.includes(guide.id)"
+            :customers="customers"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import Guide from './Guide'
 export default {
-
   name: 'ChooseGuide',
   components: {
     Guide,
   },
+  props: {
+    tourId: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
-      about: '',
-      duration: NaN,
-    };
+      actualGuides: [],
+      days: 0,
+      tourDate: null,
+      selectedGuidesIds: [],
+      customers: [],
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'getActualGuide',
-      'getTour'
-    ]),
-    days: function() {
+    daysArray: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
+      for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
   },
+  mounted() {
+    this.fetchObjects()
+  },
   methods: {
-    ...mapActions([
-      'updateActualGuide',
-      'updateNewGuideOptions',
-      'updateTourGuide',
-      'updateConstructorCurrentStage',
-    ]),
-    getCityName(id) {
-      let cityName = ''
-      this.allCities.forEach(city => {
-        if (city.id == id) {
-          cityName = city.name
-        }
-      })
-      return cityName
+    fetchObjects() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'guide',
+          },
+        })
+        .then(r => {
+          console.log(r)
+          this.actualGuides = r.data.guide_options
+          this.days = r.data.days
+          this.tourDate = r.data.tour_date
+          this.selectedGuidesIds = r.data.choosen_guides
+          this.customers = r.data.customers
+        })
     },
-    choose(guide) {
-      // if (guide.duration) {
-      //   guide.totalPrice = guide.price * guide.duration
-      // } else {
-      //   guide.totalPrice = guide.price
-      // }
-      let updGuide = {
-        ...guide,
-        selected: !guide.selected,
-        'about': this.about,
-      }
-      this.updateNewGuideOptions(updGuide)
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateTourGuide()
-      this.end()
-    },
-    end() {
-      this.updateConstructorCurrentStage('Show attendant')
-    },
-  }
-};
+  },
+}
 </script>
 
 <style lang="css" scoped>
 .guide-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
-.is-select {
-  background-color: #FFAB16;
+.is-selected {
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }

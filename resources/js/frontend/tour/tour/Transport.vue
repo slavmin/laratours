@@ -28,7 +28,6 @@
           multiple
           clearable
           item-color="#aa282a"
-          :dark="item.selected"
           :disabled="isSelected"
           label="День тура"
           outline
@@ -37,77 +36,6 @@
           @change="validate"
         />
       </v-form>
-      <!-- <div>
-        <v-row mb-3>
-          <v-col cols="6">
-            <span class="grey--text text--darken-1 body-2">
-              {{ item.prices }}:
-            </span>
-            <p style="display: inline-block;">
-              {{ JSON.parse(item.extra).prices[0].value }}
-            </p>
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-                v-model="item.duration.hours"
-                label="Часов"
-                :disabled="item.selected"
-                @input="calculateTotal(item, 'hours')"
-              />
-          </v-col>
-        </v-row>
-        <v-row
-          row
-          justify-content-between
-          align-center
-          wrap
-          mb-3
-        >
-          <v-col cols="6">
-            <span class="grey--text text--darken-1 body-2">
-              {{ JSON.parse(item.extra).prices[1].name }}:
-            </span>
-            <p style="display: inline-block;">
-              {{ JSON.parse(item.extra).prices[1].value }}
-            </p>
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-                v-model="item.duration.kilometers"
-                :disabled="item.selected"
-                label="Км"
-                @input="calculateTotal(item, 'kilometers')"
-              />
-          </v-col>
-        </v-row>
-      </div> -->
-      <!-- <div>
-        <v-row
-          row
-          justify-content-between
-          align-center
-          wrap
-          mb-3
-        >
-          <v-col xs6>
-            <span class="grey--text text--darken-1 body-2">
-              Вручную:
-            </span>
-          </v-col>
-          <v-col xs6>
-            <v-text-field
-              v-model="item.manualPrice"
-              :disabled="item.selected"
-              @input="calculateTotal(item, 'manual')"
-            />
-          </v-col>
-        </v-row>
-      </div> -->
-      <!-- <v-row mb-3>
-        <v-col class="body-2">
-          Итого: {{ item.price }}
-        </v-col>
-      </v-row> -->
       <div class="mt-2">
         Мест: {{ JSON.parse(item.extra).scheme.totalPassengersCount }}
       </div>

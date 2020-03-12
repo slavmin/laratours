@@ -60,10 +60,15 @@ class PriceController extends Controller
     $item_id = 0;
 
     foreach (json_decode($request->prices_array) as $price) {
-      // Skip price for customer, if price == 0 and flag 'is_free' setted to false.
-      // if ($price->price == 0 && $price->is_free != 1) {
-      //   continue;
-      // }
+      // For Hotels.
+      // Skip price if flag 'is_free' was setted to false and price value = null.
+      if (isset($price->is_free) && $price->is_free == 0 && $price->price == null) {
+        continue;
+      }
+      // For Transport.
+      if (!isset($price->is_free) && $price->price == null) {
+        continue;
+      }
       $parent->priceable()->updateOrCreate(
         ['id' => $item_id],
         [
@@ -75,18 +80,6 @@ class PriceController extends Controller
         ]
       );
     }
-    // dd(__METHOD__, $prices_array, $request->all());
-
-    // $parent->priceable()->updateOrCreate(
-    //   ['id' => $item_id],
-    //   [
-    //     'period_start' => $request->period_start,
-    //     'period_end' => $request->period_end,
-    //     'price' => $request->price,
-    //     'tour_customer_type_id' => $request->tour_customer_type_id ?? null
-    //   ]
-    // );
-
 
     return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
   }

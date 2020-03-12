@@ -1,72 +1,53 @@
 <template>
-  <v-card 
+  <v-card
     class="guide-card"
-    :class="{'is-select' : guide.selected}"
+    :class="{'is-selected' : isSelected}"
     pa-3
+    max-width="250px"
+    outlined
   >
-    <v-card-title primary-title>
-      <div>
-        <div class="headline mb-2">
-          {{ guide.name }}
-          <i 
-            class="material-icons ml-2"
-            style="color: grey; font-size: 20px;"
-            :title="JSON.parse(guide.description).about"
-          >
-            info
-          </i>
-        </div>
-        <v-divider />
-        <v-select
-          v-model="guide.daysArray"
-          :items="days"
-          multiple
-          color="#aa282a"
-          :dark="guide.selected"
-          :disabled="guide.selected"
-          label="День тура"
-          outline
-          @change="daysSelected(guide)"
-        />
-        <v-text-field
-          v-model="guide.totalPrice"
-          :dark="guide.selected"
-          :disabled="guide.selected"
-          label="Стоимость"
-          mask="######"
-          class="mt-3"
-          color="#aa282a"
-        />
-        <v-text-field
-          v-model="about"
-          :dark="guide.selected"
-          :disabled="guide.selected"
-          label="Описание"
-          append-outer-icon="description"
-          class="mt-3"
-          color="#aa282a"
-        />
-        <!-- <br>
-        <span class="grey--text text--darken-1">
-          Цена за час: {{ guide.price }}
-        </span>
-        <br>
-        <span class="grey--text text--darken-1">
-          Итого: {{ guide.price * guide.duration }}
-        </span> -->
-      </div>
-      <div
-        v-show="!guide.selected"
+    <v-card-title>
+      {{ guide.name }}
+    </v-card-title>
+    <v-card-text>
+      <v-form
+        ref="form"
+        v-model="valid"
       >
-        <v-btn 
+        <v-select
+          v-model="selectedDays"
+          :items="daysArray"
+          multiple
+          item-color="#aa282a"
+          :dark="isSelected"
+          :disabled="isSelected"
+          :rules="[v => v.length > 0 || 'Выберите день']"
+          label="День тура"
+          required
+        />
+      </v-form>
+      <div
+        v-for="(price, i) in guide.prices"
+        :key="i"
+        row
+        justify-content-between
+        wrap
+      >
+        <span class="grey--text text--darken-1">
+          {{ customers[price.tour_customer_type_id] }}:
+        </span>
+        <p style="display: inline-block;">
+          {{ price.price }}
+        </p>
+      </div>
+      <!-- <div v-show="!guide.selected">
+        <v-btn
           color="#aa282a"
           dark
           flat
           @click="showGuideDetails = !showGuideDetails"
         >
-          <v-icon
-            class="mr-2"
-          >
+          <v-icon class="mr-2">
             hotel
           </v-icon>
           <v-icon>
@@ -76,34 +57,30 @@
             expand_{{ showGuideDetails ? 'less' : 'more' }}
           </v-icon>
         </v-btn>
-        <div
-          v-show="showGuideDetails"  
-        >
+        <div v-show="showGuideDetails">
           <div>
-            <v-switch 
+            <v-switch
               v-model="options.hotel"
               label="Проживание"
-              color="#aa282a" 
+              color="#aa282a"
             />
             <v-checkbox
               v-if="options.hotel"
               v-model="options.isHotelSngl"
               label="Сингл"
-              color="#aa282a" 
+              color="#aa282a"
             />
             <v-divider />
-            <v-switch 
+            <v-switch
               v-model="options.meal"
               label="Питание"
-              color="#aa282a" 
+              color="#aa282a"
             />
           </div>
         </div>
       </div>
-      <div
-        v-show="!guide.selected"
-      >
-        <v-btn 
+      <div v-show="!guide.selected">
+        <v-btn
           color="#aa282a"
           dark
           flat
@@ -114,120 +91,156 @@
             expand_{{ showEvents ? 'less' : 'more' }}
           </v-icon>
         </v-btn>
-        <div
-          v-show="showEvents"  
-        >
-          <v-switch 
+        <div v-show="showEvents">
+          <v-switch
             v-for="(museum, i) in museums"
             :key="`${guide.name}-${i}`"
             v-model="museum.selected"
             :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
-            color="#aa282a" 
+            color="#aa282a"
           />
         </div>
-      </div>
-    </v-card-title>
+      </div> -->
+    </v-card-text>
     <v-card-actions>
-      <v-btn 
-        flat
-        :dark="guide.selected"
-        @click="choose(guide)"
+      <v-btn
+        v-if="isSelected"
+        color="#aa282a"
+        small
+        dark
+        @click="removeFromTour"
       >
-        {{ guide.selected ? 'Убрать' : 'Выбрать' }}
+        Убрать
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        v-if="!isSelected"
+        color="#aa282a"
+        small
+        dark
+        @click="addToTour"
+      >
+        Выбрать
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Guide',
   props: {
+    meal: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     guide: {
       type: Object,
-      default() {
+      default: () => {
         return {}
-      }
+      },
+    },
+    days: {
+      type: Number,
+      default: () => {
+        return []
+      },
+    },
+    tourId: {
+      type: Number,
+      default: () => {
+        return []
+      },
+    },
+    tourDate: {
+      type: String,
+      default: () => {
+        return []
+      },
+    },
+    wasSelected: {
+      type: Boolean,
+      default: false,
+    },
+    customers: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {
-      about: '',
-      showGuideDetails: false,
-      options: {
-        hotel: false,
-        isHotelSngl: true,
-        meal: false,
-      },
-      showEvents: false,
+      valid: false,
+      dialog: false,
+      selectedDays: [],
+      loader: false,
+      isSelected: false,
     }
   },
   computed: {
-    ...mapGetters([
-      'getTour',
-    ]),
-    days: function() {
+    daysArray: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
-      return result
-    },
-    museums() {
-      let result = []
-      this.getTour.museum.forEach((museum) => {
-        let adlPrice = JSON.parse(museum.obj.extra).priceList.find((price) => {
-          return price.customerName.includes('Взр')
-        })
-        result.push({
-          museum: museum.museum.name,
-          eventId: museum.obj.id,
-          event: museum.obj.name,
-          museumId: museum.museum.id,
-          day: museum.obj.day,
-          price: adlPrice.price,
-          selected: false,
-        })
-      })
+      for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
   },
   mounted() {
-    if (this.guide.options) this.options = this.guide.options
-    if (this.guide.events) {
-      this.guide.events.forEach((event) => {
-        let selectedEvent = this.museums.find(museum => museum.eventId == event.eventId)
-        selectedEvent.selected = true
-      })
+    if (this.wasSelected) {
+      this.isSelected = true
+      this.fetchItemData()
     }
   },
   methods: {
-    ...mapActions([
-      'updateNewGuideOptions',
-    ]),
-    choose(guide) {
-      // if (guide.duration) {
-      //   guide.totalPrice = guide.price * guide.duration
-      // } else {
-      //   guide.totalPrice = guide.price
-      // }
-      let selectedEvents = []
-      this.museums.forEach((museum) => {
-        if (museum.selected) selectedEvents.push(museum)
-      })
-      let updGuide = {
-        ...guide,
-        selected: !guide.selected,
-        about: this.about,
-        events: selectedEvents,
-        options: this.options,
+    validate() {
+      if (this.$refs.form.validate()) {
+        this.snackbar = true
       }
-      this.updateNewGuideOptions(updGuide)
     },
-    daysSelected(guide) {
-      guide.day = guide.daysArray.length
+    addToTour() {
+      this.validate()
+      if (this.valid) {
+        this.loader = true
+        axios
+          .post('/api/add-detailed-tour-object-attribute', {
+            object_attribute_id: this.guide.id,
+            parent_model_alias: 'guide',
+            tour_id: this.tourId,
+            days: this.selectedDays.length,
+            'days_array[]': this.selectedDays,
+          })
+          // .then(r => console.log(r))
+          .finally(() => {
+            this.loader = false
+            this.isSelected = true
+          })
+      }
     },
-  }
+    fetchItemData() {
+      this.loader = true
+      axios
+        .get('/api/get-detailed-tour-object-attribute-properties', {
+          params: {
+            object_attribute_id: this.guide.id,
+            tour_id: this.tourId,
+          },
+        })
+        .then(r => {
+          this.selectedDays = JSON.parse(r.data.days_array)
+        })
+        .finally(() => (this.loader = false))
+    },
+    removeFromTour() {
+      this.loader = true
+      this.isSelected = false
+      axios
+        .post('/api/remove-detailed-tour-object-attribute', {
+          tour_id: this.tourId,
+          object_attribute_id: this.guide.id,
+          parent_model_alias: 'guide',
+        })
+        .finally(() => (this.loader = false))
+    },
+  },
 }
 </script>

@@ -39,17 +39,6 @@
         </v-row>
       </div>
     </v-col>
-    <!-- /Choose transport -->
-    <v-btn
-      dark
-      fab
-      class="done-btn"
-      color="#aa282a"
-    >
-      <i class="material-icons">
-        arrow_forward
-      </i>
-    </v-btn>
   </v-row>
 </template>
 
@@ -92,7 +81,6 @@ export default {
           this.days = r.data.days
           this.tourDate = r.data.tour_date
           this.selectedObjectAttributesIds = r.data.object_attributes
-          console.log(r.data)
         })
     },
   },

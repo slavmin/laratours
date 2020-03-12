@@ -9,13 +9,11 @@
         :key="museum.id"
         justify-center
       >
-        <v-col cols="12">
-          <div class="display-2">
-            {{ museum.name }}
-            <div class="title">
-              {{ museum.city_name }}
-            </div>
-          </div>
+        <v-col
+          cols="12"
+          class="display-2"
+        >
+          {{ museum.name }}
         </v-col>
         <v-col
           v-for="item in museum.objectables"
@@ -83,7 +81,6 @@ export default {
           this.tourDate = r.data.tour_date
           this.selectedObjectAttributesIds = r.data.object_attributes
           this.customers = r.data.customers
-          console.log(r)
         })
     },
   },

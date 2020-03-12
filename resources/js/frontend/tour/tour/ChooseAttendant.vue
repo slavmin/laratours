@@ -1,138 +1,88 @@
 <template>
-  <div>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-    >
-      <v-flex>
-        <h2 class="text-xs-center grey--text">
-          Выберите сопровождающего:
-        </h2>
-        <v-layout 
-          row 
-          wrap
-          align-center
-          mb-5
+  <v-row>
+    <v-col cols="12">
+      <h2 class="grey--text">
+        Выберите сопровождающего:
+      </h2>
+      <v-row justify-center>
+        <v-col
+          v-for="attendant in actualAttendants"
+          :key="attendant.id"
         >
-          <v-flex xs12>
-            <div class="text-xs-center display-2">
-              <!-- {{ getCityName(guide.city_id) }} -->
-            </div>
-          </v-flex>
-          <v-layout
-            row
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-for="attendant in getActualAttendant"
-              :key="attendant.id"
-              xs3
-              lg2
-              ma-2
-            >
-              <Attendant 
-                :attendant="attendant"
-              />
-            </v-flex>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
-      >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
-    </v-layout>
-  </div>
+          <Attendant
+            :attendant="attendant"
+            :days="days"
+            :tour-date="tourDate"
+            :tour-id="tourId"
+            :was-selected="selectedAttendantsIds.includes(attendant.id)"
+            :customers="customers"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import Attendant from './Attendant'
 export default {
-
   name: 'ChooseAttendant',
   components: {
     Attendant,
   },
+  props: {
+    tourId: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
-      about: '',
-      duration: NaN,
-    };
+      actualAttendants: [],
+      days: 0,
+      tourDate: null,
+      selectedAttendantsIds: [],
+      customers: [],
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'getActualAttendant',
-      'getTour'
-    ]),
-    days: function() {
+    daysArray: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
+      for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
   },
-  created() {
-    // this.updateActualAttendant()
+  mounted() {
+    this.fetchObjects()
   },
   methods: {
-    ...mapActions([
-      'updateActualAttendant',
-      'updateNewAttendantOptions',
-      'updateTourAttendant',
-      'updateConstructorCurrentStage',
-    ]),
-    getCityName(id) {
-      let cityName = ''
-      this.allCities.forEach(city => {
-        if (city.id == id) {
-          cityName = city.name
-        }
-      })
-      return cityName
+    fetchObjects() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'attendant',
+          },
+        })
+        .then(r => {
+          console.log(r)
+          this.actualAttendants = r.data.attendant_options
+          this.days = r.data.days
+          this.tourDate = r.data.tour_date
+          this.selectedAttendantsIds = r.data.choosen_attendants
+          this.customers = r.data.customers
+        })
     },
-    choose(attendant) {
-      // if (attendant.duration) {
-      //   attendant.totalPrice = attendant.price * attendant.duration
-      // } else {
-      //   attendant.totalPrice = attendant.price
-      // }
-      let updAttendant = {
-        ...attendant,
-        selected: !attendant.selected,
-      }
-      this.updateNewAttendantOptions(updAttendant)
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateTourAttendant()
-      this.end()
-    },
-    end() {
-      this.updateConstructorCurrentStage('Show services')
-      console.log(this.getTour)
-    },
-  }
-};
+  },
+}
 </script>
 
 <style lang="css" scoped>
 .attendant-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
-.is-select {
-  background-color: #FFAB16;
+.is-selected {
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }

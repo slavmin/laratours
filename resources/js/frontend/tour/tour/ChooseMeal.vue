@@ -1,239 +1,96 @@
 <template>
-  <div>
-    <v-layout
-      row
-      wrap
-      class="wrap"
-    >
-      <v-flex>
-        <h2 class="text-xs-center grey--text">
-          Выберите питание:
-        </h2>
-        <v-layout 
-          v-for="meal in getActualMeal"
-          :key="meal.id"
-          row 
-          wrap
-          align-center
-          mb-5
-        >
-          <v-flex xs12>
-            <div class="text-xs-center display-2">
-              {{ meal.name }}
-            </div>
-            <div class="text-xs-center subheading">
-              {{ getCityName(meal.city_id) }},
-              <i 
-                class="material-icons"
-                style="font-size: 12px;"
-              >
-                phone
-              </i>
-              {{ JSON.parse(meal.extra).contacts.phone }}
-            </div>
-          </v-flex>
-          <v-layout
-            row
-            wrap
-            justify-center
-          >
-            <v-flex
-              v-for="item in meal.objectables"
-              :key="item.id"
-              xs3
-              lg2
-              ma-2
-            >
-              <v-card 
-                :id="'meal-' + meal.id + '-card-' + meal.id"
-                class="meal-card"
-                :class="{'is-select' : item.selected}"
-                pa-3
-              >
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline mb-2">
-                      {{ item.name }}
-                      <i 
-                        class="material-icons ml-2"
-                        style="color: grey; font-size: 20px;"
-                        :title="item.description"
-                      >
-                        info
-                      </i>
-                    </div>
-                    <v-divider />
-                    <v-select
-                      v-model="item.daysArray"
-                      :items="days"
-                      multiple
-                      color="#aa282a"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="День тура"
-                      outline
-                      @change="calcTotalPrice(item)"
-                    />
-                    <v-text-field
-                      :id="'about' + [item.id]"
-                      :dark="item.selected"
-                      :disabled="item.selected"
-                      label="Описание"
-                      append-outer-icon="watch"
-                      class="mt-3"
-                      color="#aa282a"
-                    />
-                    <v-layout
-                      row
-                      justify-content-between
-                      wrap
-                    >
-                      <span class="grey--text text--darken-1">
-                        {{ item.description }}: 
-                      </span>
-                      <p 
-                        style="display: inline-block;"
-                      >
-                        {{ item.price }}
-                      </p>
-                    </v-layout>
-                    <br>
-                    <v-layout
-                      v-if="item.totalPrice"
-                      row
-                      justify-content-between
-                      wrap
-                    >
-                      <span class="grey--text text--darken-1">
-                        Итого: 
-                      </span>
-                      <p 
-                        style="display: inline-block;"
-                      >
-                        {{ item.totalPrice }}
-                      </p>
-                    </v-layout>
-                  </div>
-                </v-card-title>
-                <v-card-actions>
-                  <v-btn 
-                    flat
-                    :dark="item.selected"
-                    @click="choose(meal, item)"
-                  >
-                    {{ item.selected ? 'Убрать' : 'Выбрать' }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-btn 
-        dark
-        fab
-        class="done-btn"
-        color="#aa282a"
-        @click="done"
+  <v-row>
+    <v-col cols="12">
+      <h2 class="grey--text">
+        Выберите размещение:
+      </h2>
+      <v-row
+        v-for="meal in actualMeals"
+        :key="meal.id"
+        justify-center
       >
-        <i class="material-icons">
-          arrow_forward
-        </i>
-      </v-btn>
-    </v-layout>
-  </div>
+        <v-col
+          cols="12"
+          class="display-2"
+        >
+          {{ meal.name }}
+        </v-col>
+        <v-col
+          v-for="item in meal.objectables"
+          :key="item.id"
+        >
+          <Meal
+            :meal="meal"
+            :item="item"
+            :days="days"
+            :tour-date="tourDate"
+            :tour-id="tourId"
+            :was-selected="selectedObjectAttributesIds.includes(item.id)"
+            :customers="customers"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import Meal from './Meal'
 export default {
-
   name: 'ChooseMeal',
+  components: { Meal },
   props: {
-    tourToEdit: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+    tourId: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
-      about: '',
-    };
+      actualMeals: [],
+      days: 0,
+      tourDate: null,
+      selectedObjectAttributesIds: [],
+      customers: [],
+    }
   },
   computed: {
-    ...mapGetters([
-      'allCities',
-      'getActualMeal',
-      'getTour',
-    ]),
-    days: function() {
+    daysArray: function() {
       let result = []
-      for (let i = 1; i <= this.getTour.options.days; i++) {
-        result.push(i)
-      } 
+      for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
   },
-  created() {
-    // this.updateActualMeal()
-  },
   mounted() {
+    this.fetchObjects()
   },
   methods: {
-    ...mapActions([
-      'updateActualMeal',
-      'updateNewMealOptions',
-      'updateTourMeal',
-      'updateConstructorCurrentStage',
-    ]),
-    getCityName(id) {
-      let cityName = ''
-      this.allCities.forEach(city => {
-        if (city.id == id) {
-          cityName = city.name
-        }
-      })
-      return cityName
+    fetchObjects() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'meal',
+          },
+        })
+        .then(r => {
+          this.actualMeals = r.data.meal_options
+          this.days = r.data.days
+          this.tourDate = r.data.tour_date
+          this.selectedObjectAttributesIds = r.data.object_attributes
+          this.customers = r.data.customers
+        })
     },
-    calcTotalPrice(item) {
-      item.day = item.daysArray.length
-      console.log(item)
-      item.totalPrice = item.price * item.day
-    },
-    choose(meal, item) {
-      if (!item.day) item.totalPrice = item.price
-      let updData = {
-        'meal': meal,
-        'item': {
-          ...item,
-          selected: !item.selected,
-        }, 
-      }
-      this.updateNewMealOptions(updData)
-    },
-    done() {
-      this.$emit('scrollme')
-      this.updateTourMeal()
-      this.end()
-    },
-    unselect(item) {
-      item.selected = false
-    },
-    end() {
-      this.updateConstructorCurrentStage('Meal is set')
-    },
-  }
-};
+  },
+}
 </script>
 
 <style lang="css" scoped>
 .meal-card {
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
 }
-.is-select {
-  background-color: #FFAB16;
+.is-selected {
+  background-color: #ffab16;
   color: white;
   transform: scale(0.9);
 }

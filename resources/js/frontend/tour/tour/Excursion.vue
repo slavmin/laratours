@@ -170,9 +170,6 @@ export default {
   },
   data() {
     return {
-      showDriverDetails: false,
-      driversCount: 1,
-      drivers: [{ hotel: false, isHotelSngl: true, meal: false }],
       valid: false,
       dialog: false,
       selectedDay: null,

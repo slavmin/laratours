@@ -4,9 +4,6 @@
       no-gutters
       justify="center"
     >
-      <!-- <form :action="route">
-        <input type="hidden" name="">
-      </form> -->
       <v-card>
         <v-toolbar
           dark
@@ -22,17 +19,23 @@
           <v-spacer />
           <v-btn
             icon
+            title="Транспорт"
             @click="changeStep('transport')"
           >
             <v-icon>mdi-train-car</v-icon>
           </v-btn>
           <v-btn
             icon
+            title="Музеи и экскурсии"
             @click="changeStep('museum')"
           >
             <v-icon>mdi-bank-outline</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            title="Размещения"
+            @click="changeStep('hotel')"
+          >
             <svg
               style="width:24px;height:24px"
               viewBox="0 0 24 24"
@@ -43,11 +46,26 @@
               />
             </svg>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            title="Питание"
+            @click="changeStep('meal')"
+          >
             <v-icon>mdi-silverware</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            title="Гиды"
+            @click="changeStep('guide')"
+          >
             <v-icon>mdi-human-greeting</v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            title="Сопровождающие"
+            @click="changeStep('attendant')"
+          >
+            <v-icon>mdi-human-handsup</v-icon>
           </v-btn>
           <v-btn icon>
             <v-icon>mdi-playlist-plus</v-icon>
@@ -65,6 +83,22 @@
             v-if="show.museum"
             :tour-id="parseInt(tourId)"
           />
+          <ChooseHotel
+            v-if="show.hotel"
+            :tour-id="parseInt(tourId)"
+          />
+          <ChooseMeal
+            v-if="show.meal"
+            :tour-id="parseInt(tourId)"
+          />
+          <ChooseGuide
+            v-if="show.guide"
+            :tour-id="parseInt(tourId)"
+          />
+          <ChooseAttendant
+            v-if="show.attendant"
+            :tour-id="parseInt(tourId)"
+          />
         </v-card-text>
       </v-card>
     </v-row>
@@ -73,11 +107,20 @@
 <script>
 import ChooseTransport from './ChooseTransport'
 import ChooseMuseum from './ChooseMuseum'
+import ChooseHotel from './ChooseHotel'
+import ChooseMeal from './ChooseMeal'
+import ChooseGuide from './ChooseGuide'
+import ChooseAttendant from './ChooseAttendant'
+
 export default {
   name: 'DetailedTour',
   components: {
     ChooseTransport,
     ChooseMuseum,
+    ChooseHotel,
+    ChooseMeal,
+    ChooseGuide,
+    ChooseAttendant,
   },
   props: {
     token: {
@@ -102,6 +145,10 @@ export default {
       show: {
         transport: true,
         museum: false,
+        hotel: false,
+        meal: false,
+        guide: false,
+        attendant: false,
       },
     }
   },

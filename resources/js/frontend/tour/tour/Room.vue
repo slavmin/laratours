@@ -1,13 +1,13 @@
 <template>
   <v-card
-    class="attendant-card"
+    class="hotel-card"
     :class="{'is-selected' : isSelected}"
     pa-3
     max-width="250px"
     outlined
   >
     <v-card-title>
-      {{ attendant.name }}
+      {{ item.name }}
     </v-card-title>
     <v-card-text>
       <v-form
@@ -15,19 +15,19 @@
         v-model="valid"
       >
         <v-select
-          v-model="selectedDays"
-          :items="daysArray"
+          v-model="selectedNights"
+          :items="nightsArray"
           multiple
           item-color="#aa282a"
-          :dark="isSelected"
           :disabled="isSelected"
-          :rules="[v => v.length > 0 || 'Выберите день']"
-          label="День тура"
+          :rules="[v => v.length > 0 || 'Выберите ночь остановки']"
+          label="Ночь тура"
+          outline
           required
         />
       </v-form>
       <div
-        v-for="(price, i) in attendant.prices"
+        v-for="(price, i) in item.prices"
         :key="i"
         row
         justify-content-between
@@ -40,67 +40,6 @@
           {{ price.price }}
         </p>
       </div>
-      <!-- <div v-show="!attendant.selected">
-        <v-btn
-          color="#aa282a"
-          dark
-          flat
-          @click="showAttendantDetails = !showAttendantDetails"
-        >
-          <v-icon class="mr-2">
-            hotel
-          </v-icon>
-          <v-icon>
-            fastfood
-          </v-icon>
-          <v-icon right>
-            expand_{{ showAttendantDetails ? 'less' : 'more' }}
-          </v-icon>
-        </v-btn>
-        <div v-show="showAttendantDetails">
-          <div>
-            <v-switch
-              v-model="options.hotel"
-              label="Проживание"
-              color="#aa282a"
-            />
-            <v-checkbox
-              v-if="options.hotel"
-              v-model="options.isHotelSngl"
-              label="Сингл"
-              color="#aa282a"
-            />
-            <v-divider />
-            <v-switch
-              v-model="options.meal"
-              label="Питание"
-              color="#aa282a"
-            />
-          </div>
-        </div>
-      </div>
-      <div v-show="!attendant.selected">
-        <v-btn
-          color="#aa282a"
-          dark
-          flat
-          @click="showEvents = !showEvents"
-        >
-          Экскурсии
-          <v-icon right>
-            expand_{{ showEvents ? 'less' : 'more' }}
-          </v-icon>
-        </v-btn>
-        <div v-show="showEvents">
-          <v-switch
-            v-for="(museum, i) in museums"
-            :key="`${attendant.name}-${i}`"
-            v-model="museum.selected"
-            :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
-            color="#aa282a"
-          />
-        </div>
-      </div> -->
     </v-card-text>
     <v-card-actions>
       <v-btn
@@ -123,26 +62,34 @@
         Выбрать
       </v-btn>
     </v-card-actions>
+    <v-overlay
+      :value="loader"
+      style="z-index: 10000;"
+    >
+      <v-progress-circular
+        indeterminate
+        size="64"
+      />
+    </v-overlay>
   </v-card>
 </template>
-
 <script>
 export default {
-  name: 'Attendant',
+  name: 'Room',
   props: {
-    meal: {
+    hotel: {
       type: Object,
       default: () => {
         return {}
       },
     },
-    attendant: {
+    item: {
       type: Object,
       default: () => {
         return {}
       },
     },
-    days: {
+    nights: {
       type: Number,
       default: () => {
         return []
@@ -173,15 +120,15 @@ export default {
     return {
       valid: false,
       dialog: false,
-      selectedDays: [],
+      selectedNights: [],
       loader: false,
       isSelected: false,
     }
   },
   computed: {
-    daysArray: function() {
+    nightsArray: function() {
       let result = []
-      for (let n = 1; n <= this.days; n++) result.push(n)
+      for (let n = 1; n <= this.nights; n++) result.push(n)
       return result
     },
   },
@@ -203,11 +150,12 @@ export default {
         this.loader = true
         axios
           .post('/api/add-detailed-tour-object-attribute', {
-            object_attribute_id: this.attendant.id,
-            parent_model_alias: 'attendant',
+            object_id: this.hotel.id,
+            object_attribute_id: this.item.id,
+            parent_model_alias: 'hotel',
             tour_id: this.tourId,
-            days: this.selectedDays.length,
-            'days_array[]': this.selectedDays,
+            days: this.selectedNights.length,
+            'days_array[]': this.selectedNights,
           })
           // .then(r => console.log(r))
           .finally(() => {
@@ -221,12 +169,12 @@ export default {
       axios
         .get('/api/get-detailed-tour-object-attribute-properties', {
           params: {
-            object_attribute_id: this.attendant.id,
+            object_attribute_id: this.item.id,
             tour_id: this.tourId,
           },
         })
         .then(r => {
-          this.selectedDays = JSON.parse(r.data.days_array)
+          this.selectedNights = JSON.parse(r.data.days_array)
         })
         .finally(() => (this.loader = false))
     },
@@ -236,8 +184,7 @@ export default {
       axios
         .post('/api/remove-detailed-tour-object-attribute', {
           tour_id: this.tourId,
-          object_attribute_id: this.attendant.id,
-          parent_model_alias: 'attendant',
+          object_attribute_id: this.item.id,
         })
         .finally(() => (this.loader = false))
     },

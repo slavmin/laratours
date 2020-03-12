@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Api\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
+use App\Models\Tour\TourAttendant;
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourGuide;
+use App\Models\Tour\TourHotel;
+use App\Models\Tour\TourMeal;
 use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourObjectAttributeProperties;
 use App\Models\Tour\TourObjectAttributes;
@@ -23,6 +27,7 @@ class DetailedTourController extends Controller
     $tour = Tour::find($tour_id);
 
     switch ($request->model_alias) {
+
       case 'transport':
         $transport_options = TourTransport::with('objectables')->get();
         $tour_date = $tour->dates[0]->date;
@@ -40,6 +45,7 @@ class DetailedTourController extends Controller
           'object_attributes' => $tour_object_attributes,
         ];
         break;
+
       case 'museum':
         $museum_options = TourMuseum::with('objectables')->get();
         $tour_date = $tour->dates[0]->date;
@@ -64,6 +70,110 @@ class DetailedTourController extends Controller
           'days'              => $days,
           'object_attributes' => $tour_object_attributes,
           'customers'         => $customers,
+        ];
+        break;
+
+      case 'hotel':
+        $hotel_options = TourHotel::with('objectables')->get();
+        $tour_date = $tour->dates[0]->date;
+        $nights = $tour->nights;
+
+        foreach ($hotel_options as $hotel) {
+          foreach ($hotel->objectables as $object) {
+            $object['prices'] = $this->getObjectPrices($object->id);
+          }
+        }
+
+        $tour_object_attributes = [];
+        foreach ($tour->object_attributes as $attr) {
+          $tour_object_attributes[] = $attr->id;
+        }
+
+        $customers = TourCustomerType::all()->pluck('name', 'id');
+
+        $result = [
+          'hotel_options'     => $hotel_options,
+          'tour_date'         => $tour_date,
+          'nights'            => $nights,
+          'object_attributes' => $tour_object_attributes,
+          'customers'         => $customers,
+        ];
+        break;
+
+      case 'meal':
+        $meal_options = TourMeal::with('objectables')->get();
+        $tour_date = $tour->dates[0]->date;
+        $days = $tour->duration;
+
+        foreach ($meal_options as $meal) {
+          foreach ($meal->objectables as $object) {
+            $object['prices'] = $this->getObjectPrices($object->id);
+          }
+        }
+
+        $tour_object_attributes = [];
+        foreach ($tour->object_attributes as $attr) {
+          $tour_object_attributes[] = $attr->id;
+        }
+
+        $customers = TourCustomerType::all()->pluck('name', 'id');
+
+        $result = [
+          'meal_options'      => $meal_options,
+          'tour_date'         => $tour_date,
+          'days'              => $days,
+          'object_attributes' => $tour_object_attributes,
+          'customers'         => $customers,
+        ];
+        break;
+
+      case 'guide':
+        $guide_options = TourGuide::all();
+        $tour_date = $tour->dates[0]->date;
+        $days = $tour->duration;
+
+        foreach ($guide_options as $guide) {
+          $guide['prices'] = $this->getObjectPrices($guide->id);
+        }
+
+        $choosen_guides = [];
+        foreach ($tour->guides as $guide) {
+          $choosen_guides[] = $guide->id;
+        }
+
+        $customers = TourCustomerType::all()->pluck('name', 'id');
+
+        $result = [
+          'guide_options'     => $guide_options,
+          'tour_date'         => $tour_date,
+          'days'              => $days,
+          'choosen_guides'    => $choosen_guides,
+          'customers'         => $customers,
+        ];
+        break;
+
+      case 'attendant':
+        $attendant_options = TourAttendant::all();
+        $tour_date = $tour->dates[0]->date;
+        $days = $tour->duration;
+
+        foreach ($attendant_options as $attendant) {
+          $attendant['prices'] = $this->getObjectPrices($attendant->id);
+        }
+
+        $choosen_attendants = [];
+        foreach ($tour->attendants as $attendant) {
+          $choosen_attendants[] = $attendant->id;
+        }
+
+        $customers = TourCustomerType::all()->pluck('name', 'id');
+
+        $result = [
+          'attendant_options'     => $attendant_options,
+          'tour_date'             => $tour_date,
+          'days'                  => $days,
+          'choosen_attendants'    => $choosen_attendants,
+          'customers'             => $customers,
         ];
         break;
     }
@@ -137,10 +247,21 @@ class DetailedTourController extends Controller
 
     $tour = Tour::find($request->tour_id);
 
-    $object_attribute = TourObjectAttributes::find($request->object_attribute_id);
-    $tour->object_attributes()->attach($object_attribute);
+    switch ($request->parent_model_alias) {
+      case 'guide':
+        $guide = TourGuide::find($request->object_attribute_id);
+        $tour->guides()->attach($guide);
+        break;
+      case 'attendant':
+        $attendant = TourAttendant::find($request->object_attribute_id);
+        $tour->attendants()->attach($attendant);
+        break;
+      default:
+        $object_attribute = TourObjectAttributes::find($request->object_attribute_id);
+        $tour->object_attributes()->attach($object_attribute);
+    }
 
-    return $tour->object_attributes;
+    return 'ok';
   }
 
   public function getDetailedTourObjectAttributeProperties(Request $request)
@@ -153,10 +274,21 @@ class DetailedTourController extends Controller
   {
     $tour = Tour::find($request->tour_id);
 
-    $tour->object_attributes()->detach($request->object_attribute_id);
+    switch ($request->parent_model_alias) {
+      case 'guide':
+        $tour->guides()->detach($request->object_attribute_id);
+        break;
+      case 'attendant':
+        $tour->attendants()->detach($request->object_attribute_id);
+        break;
+      default:
+        $tour->object_attributes()->detach($request->object_attribute_id);
+    }
 
     $properties = TourObjectAttributeProperties::where('tour_id', $request->tour_id)->where('object_attribute_id', $request->object_attribute_id)->first();
-    $properties->forceDelete();
+    if ($properties) {
+      $properties->forceDelete();
+    }
   }
 
   public static function formatOptions($arr)
