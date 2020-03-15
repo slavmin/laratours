@@ -69,11 +69,15 @@
                 </td>
                 <td onclick="showExtraRow({{ $item->id }})">
                   @if (array_key_exists($item->tour_type_id, $tour_types))
-                  {{$tour_types[$item->tour_type_id]}}
+                  <div>{{$tour_types[$item->tour_type_id]}}</div>
                   @endif
-                  @if($item->tour_constructor_type_id == 2)
-                  <span>(Тур от партнёра)</span>
-                  @endif
+                  <div class="grey--text">
+                    @if($item->tour_constructor_type_id == 1)
+                    (Подробный)
+                    @else
+                    (Тур от партнёра)
+                    @endif
+                  </div>
                 </td>
                 <td onclick="showExtraRow({{ $item->id }})">
                   @if(!is_null($item->cities_list))
