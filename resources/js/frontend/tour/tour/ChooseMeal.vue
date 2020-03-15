@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <h2 class="grey--text">
-        Выберите размещение:
+        Выберите питание:
       </h2>
       <v-row
         v-for="meal in actualMeals"

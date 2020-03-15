@@ -123,6 +123,15 @@
         Выбрать
       </v-btn>
     </v-card-actions>
+    <v-overlay
+      :value="loader"
+      style="z-index: 10000;"
+    >
+      <v-progress-circular
+        indeterminate
+        size="64"
+      />
+    </v-overlay>
   </v-card>
 </template>
 

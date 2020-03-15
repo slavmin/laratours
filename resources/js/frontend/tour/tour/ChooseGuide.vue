@@ -65,7 +65,6 @@ export default {
           },
         })
         .then(r => {
-          console.log(r)
           this.actualGuides = r.data.guide_options
           this.days = r.data.days
           this.tourDate = r.data.tour_date

@@ -65,7 +65,6 @@ export default {
           },
         })
         .then(r => {
-          console.log(r)
           this.actualAttendants = r.data.attendant_options
           this.days = r.data.days
           this.tourDate = r.data.tour_date

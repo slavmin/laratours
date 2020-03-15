@@ -7,6 +7,7 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourAttendant;
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourExtra;
 use App\Models\Tour\TourGuide;
 use App\Models\Tour\TourHotel;
 use App\Models\Tour\TourMeal;
@@ -176,6 +177,76 @@ class DetailedTourController extends Controller
           'customers'             => $customers,
         ];
         break;
+
+      case 'tour':
+        $tour = Tour::find($tour_id);
+
+        $object_attributes = $tour->object_attributes;
+        $transport = [];
+        $museum = [];
+        $meal = [];
+        $hotel = [];
+
+        foreach ($object_attributes as $attr) {
+          $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+            ->where('object_attribute_id', $attr->id)
+            ->first();
+
+          switch ($attr->objectable_type) {
+            case ("App\Models\Tour\TourTransport"):
+              $transport[] = $attr;
+              break;
+            case ("App\Models\Tour\TourMuseum"):
+              $attr['prices'] = $this->getObjectPrices($attr->id);
+              $museum[] = $attr;
+              break;
+            case ("App\Models\Tour\TourHotel"):
+              $attr['prices'] = $this->getObjectPrices($attr->id);
+              $hotel[] = $attr;
+              break;
+            case ("App\Models\Tour\TourMeal"):
+              $attr['prices'] = $this->getObjectPrices($attr->id);
+              $meal[] = $attr;
+              break;
+          }
+        }
+        $guide = $tour->guides;
+        foreach ($guide as $g) {
+          $g['prices'] = $this->getObjectPrices($g->id);
+          $g['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+            ->where('object_attribute_id', $g->id)
+            ->first();
+        }
+
+        $attendant = $tour->attendants;
+        foreach ($attendant as $at) {
+          $at['prices'] = $this->getObjectPrices($at->id);
+          $at['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+            ->where('object_attribute_id', $at->id)
+            ->first();
+        }
+
+        $customers = TourCustomerType::select('id', 'name')
+          ->get()
+          ->toArray();
+
+        $extras = TourExtra::where('tour_id', $tour->id)
+          ->select('id', 'name', 'value', 'commission', 'margin')
+          ->get()
+          ->toArray();
+
+        $result = [
+          'transport'         => $transport,
+          'museum'            => $museum,
+          'hotel'             => $hotel,
+          'meal'              => $meal,
+          'guide'             => $guide,
+          'attendant'         => $attendant,
+          'customers'         => $customers,
+          'extras'            => $extras,
+          'tour_qnt'          => $tour->qnt,
+        ];
+        break;
     }
     return $result;
   }
@@ -240,7 +311,7 @@ class DetailedTourController extends Controller
     $properties->tour_price_type_id = $request->tour_price_type_id ?? null;
     $properties->value = $request->value ?? null;
     $properties->duration = $request->duration ?? null;
-    $properties->days_array = json_encode($request->get('days_array[]'));
+    $properties->days_array = json_encode($request->get('days_array[]')) ?? null;
     $properties->days = $request->days ?? null;
 
     $properties->save();
@@ -264,10 +335,49 @@ class DetailedTourController extends Controller
     return 'ok';
   }
 
+  public function addOrUpdateDetailedTourExtra(Request $request)
+  {
+    $extra_id = $request->extra_id;
+    TourExtra::updateOrCreate(['id' => $extra_id], $request->all());
+  }
+
+  public function getDetailedTourExtras(Request $request)
+  {
+    $tour_id = $request->tour_id;
+    $tour_extras = TourExtra::where('tour_id', $tour_id)
+      ->select('id', 'name', 'value', 'margin', 'commission')
+      ->get();
+    return $tour_extras;
+  }
+
+  public function deleteDetailedTourExtra(Request $request)
+  {
+    $tour_extra = TourExtra::find($request->extra_id);
+    $tour_extra->delete();
+    return $tour_extra;
+  }
+
   public function getDetailedTourObjectAttributeProperties(Request $request)
   {
     $result = TourObjectAttributeProperties::where('tour_id', $request->tour_id)->where('object_attribute_id', $request->object_attribute_id)->first();
     return $result;
+  }
+
+  public function updateDetailedTourObjectAttributeProperty(Request $request)
+  {
+    $is_extra = $request->is_extra;
+    if (!$is_extra) {
+      $property = TourObjectAttributeProperties::where('object_attribute_id', $request->object_attribute_id)
+        ->where('tour_id', $request->tour_id)->first();
+      $property['margin'] = $request->margin ?? 0;
+      $property['commission'] = $request->commission ?? 0;
+      $property->save();
+    } else {
+      $tour_extra = TourExtra::find($request->object_attribute_id);
+      $tour_extra['margin'] = $request->margin ?? 0;
+      $tour_extra['commission'] = $request->commission ?? 0;
+      $tour_extra->save();
+    }
   }
 
   public function removeDetailedTourObjectAttribute(Request $request)
@@ -289,6 +399,30 @@ class DetailedTourController extends Controller
     if ($properties) {
       $properties->forceDelete();
     }
+  }
+
+  public static function saveDetailedTourPrices(Request $request)
+  {
+    $prices_array = $request->prices_array;
+    $tour = Tour::find($request->tour_id);
+
+    $saved_prices = $tour->priceable;
+
+    foreach ($saved_prices as $price) {
+      $tour->priceable()->delete($price->id);
+    }
+
+    foreach ($prices_array as $price) {
+      $tour->priceable()->updateOrCreate(
+        ['id' => 0],
+        [
+          'tour_id' => $tour->id,
+          'price' => $price['price'],
+          'tour_customer_type_id' => $price['id'],
+        ]
+      );
+    }
+    return 'ok';
   }
 
   public static function formatOptions($arr)

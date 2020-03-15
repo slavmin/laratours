@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row
       no-gutters
       justify="center"
@@ -20,6 +20,7 @@
           <v-btn
             icon
             title="Транспорт"
+            :color="show.transport ? 'yellow' : ''"
             @click="changeStep('transport')"
           >
             <v-icon>mdi-train-car</v-icon>
@@ -27,6 +28,7 @@
           <v-btn
             icon
             title="Музеи и экскурсии"
+            :color="show.museum ? 'yellow' : ''"
             @click="changeStep('museum')"
           >
             <v-icon>mdi-bank-outline</v-icon>
@@ -34,6 +36,7 @@
           <v-btn
             icon
             title="Размещения"
+            :color="show.hotel ? 'yellow' : ''"
             @click="changeStep('hotel')"
           >
             <svg
@@ -49,6 +52,7 @@
           <v-btn
             icon
             title="Питание"
+            :color="show.meal ? 'yellow' : ''"
             @click="changeStep('meal')"
           >
             <v-icon>mdi-silverware</v-icon>
@@ -56,6 +60,7 @@
           <v-btn
             icon
             title="Гиды"
+            :color="show.guide ? 'yellow' : ''"
             @click="changeStep('guide')"
           >
             <v-icon>mdi-human-greeting</v-icon>
@@ -63,14 +68,23 @@
           <v-btn
             icon
             title="Сопровождающие"
+            :color="show.attendant ? 'yellow' : ''"
             @click="changeStep('attendant')"
           >
             <v-icon>mdi-human-handsup</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            :color="show.services ? 'yellow' : ''"
+            @click="changeStep('services')"
+          >
             <v-icon>mdi-playlist-plus</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn
+            icon
+            :color="show.calculate ? 'yellow' : ''"
+            @click="changeStep('calculate')"
+          >
             <v-icon>mdi-cash-100</v-icon>
           </v-btn>
         </v-toolbar>
@@ -99,6 +113,14 @@
             v-if="show.attendant"
             :tour-id="parseInt(tourId)"
           />
+          <ChooseServices
+            v-if="show.services"
+            :tour-id="parseInt(tourId)"
+          />
+          <Calculate
+            v-if="show.calculate"
+            :tour-id="parseInt(tourId)"
+          />
         </v-card-text>
       </v-card>
     </v-row>
@@ -111,7 +133,9 @@ import ChooseHotel from './ChooseHotel'
 import ChooseMeal from './ChooseMeal'
 import ChooseGuide from './ChooseGuide'
 import ChooseAttendant from './ChooseAttendant'
+import ChooseServices from './ChooseServices'
 
+import Calculate from './Calculate'
 export default {
   name: 'DetailedTour',
   components: {
@@ -121,6 +145,8 @@ export default {
     ChooseMeal,
     ChooseGuide,
     ChooseAttendant,
+    ChooseServices,
+    Calculate,
   },
   props: {
     token: {
@@ -149,6 +175,8 @@ export default {
         meal: false,
         guide: false,
         attendant: false,
+        services: false,
+        calculate: false,
       },
     }
   },
