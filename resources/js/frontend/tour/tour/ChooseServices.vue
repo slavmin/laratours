@@ -8,17 +8,17 @@
       </v-col>
     </v-row>
     <TourExtras :tour-id="tourId" />
-    <TourPersonal />
+    <!-- <TourPersonal /> -->
   </div>
 </template>
 <script>
 import TourExtras from './TourExtras'
-import TourPersonal from './TourPersonal'
+// import TourPersonal from './TourPersonal'
 export default {
   name: 'ChooseServices',
   components: {
     TourExtras,
-    TourPersonal,
+    // TourPersonal,
   },
   props: {
     tourId: {
