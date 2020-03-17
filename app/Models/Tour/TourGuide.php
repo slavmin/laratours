@@ -13,7 +13,20 @@ class TourGuide extends Model
 {
   use UsedByTeams, HasProfile, HasPagination, SoftDeletes, ActionButtonsAttribute;
 
-  protected $fillable = ['name', 'description', 'price', 'extra'];
+  protected $fillable = [
+    'name',
+    'description',
+    'price',
+    'extra',
+    'city_id',
+    'country_id',
+    'address',
+    'grade_list',
+    'lang_list',
+    'email',
+    'phone',
+    'secret_phone'
+  ];
 
   protected $appends = ['model_alias'];
 

@@ -2,10 +2,14 @@
 
 @section('content')
 <v-container fluid grid-list-md text-xs-center>
-  <v-row justify="center">
-    <v-col cols="12" md="6">
+  <v-row>
+    <v-col cols="12">
       <v-card>
         <v-toolbar dark color="#66a5ae">
+          <v-btn text href="{{ $cancel_route }}">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-card-title>
             @lang('labels.frontend.tours.attendant.edit')
           </v-card-title>
@@ -26,7 +30,7 @@
     </v-col>
   </v-row>
   <v-row justify="center">
-    <v-col xs="12" lg="8">
+    <v-col xs="12">
       <v-card>
         <v-toolbar prominent dark color="#94CED7" src="/img/frontend/prices-card-header-gradient.jpg">
           <v-btn href="{{ $cancel_route }}" class="tc-link-no-underline-on-hover"
@@ -88,7 +92,7 @@
           </template>
         </v-simple-table>
         @else
-        <v-row justify="center mt-5">
+        <v-row justify="center">
           <div class="display-1">
             Цены и периоды не заполнены.
           </div>

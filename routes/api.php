@@ -25,6 +25,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('api-login');
 Route::group(['middleware' => ['auth:api']], function () {
   Route::post('/logout', [AuthController::class, 'logout'])->name('api-logout');
   Route::get('/tour-options', [TourOptionsController::class, 'getOptions'])->name('api-tour-options');
+  Route::get('/tour-countries-with-cities', [TourOptionsController::class, 'getCountriesWithCities'])->name('tour-countries-with-cities');
 
   Route::post('/update-partner-tour-data', [PartnerTourController::class, 'updatePartnerTourData'])->name('update-partner-tour-data');
 

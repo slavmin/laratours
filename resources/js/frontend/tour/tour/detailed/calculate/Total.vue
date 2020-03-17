@@ -29,9 +29,11 @@
               </td>
               <td>
                 <v-text-field
+                  v-model="marginForAll"
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
+                  @input="setMarginForAll"
                 />
               </td>
               <td>
@@ -76,6 +78,7 @@ export default {
       charge: 0,
       priceWithMargin: 0,
       priceWithCommission: 0,
+      marginForAll: null,
     }
   },
   watch: {
@@ -110,6 +113,26 @@ export default {
       this.charge = charge.toFixed(2)
       this.priceWithMargin = priceWithMargin.toFixed(2)
       this.priceWithCommission = priceWithCommission.toFixed(2)
+    },
+    setMarginForAll() {
+      const parts = [
+        'transport',
+        'museum',
+        'hotel',
+        'meal',
+        'guide',
+        'attendant',
+        'extras',
+      ]
+      parts.forEach(part => {
+        this.tourData[part].forEach(part => {
+          if (part.hasOwnProperty('properties')) {
+            part.properties.margin = this.marginForAll
+          } else {
+            part.margin = this.marginForAll
+          }
+        })
+      })
     },
   },
 }

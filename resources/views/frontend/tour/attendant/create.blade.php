@@ -2,10 +2,14 @@
 
 @section('content')
 <v-container fluid grid-list-md text-xs-center>
-  <v-row justify="center">
-    <v-col cols="12" md="6">
+  <v-row>
+    <v-col cols="12">
       <v-card>
         <v-toolbar dark color="#66a5ae">
+          <v-btn text href="{{ $cancel_route }}">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-card-title>
             @lang('labels.frontend.tours.attendant.create')
           </v-card-title>
