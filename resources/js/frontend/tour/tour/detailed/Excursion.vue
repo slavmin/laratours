@@ -216,7 +216,7 @@ export default {
           .post('/api/add-detailed-tour-object-attribute', {
             object_id: this.museum.id,
             object_attribute_id: this.item.id,
-            parent_model_alias: 'museum',
+            object_type: 'museum',
             tour_id: this.tourId,
             'days_array[]': [this.selectedDay],
           })

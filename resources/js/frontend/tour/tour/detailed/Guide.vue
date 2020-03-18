@@ -25,26 +25,23 @@
           label="День тура"
           required
         />
+        <v-text-field
+          v-model="price"
+          item-color="#aa282a"
+          :dark="isSelected"
+          :disabled="isSelected"
+          :rules=" [v => !!v || 'Заполните']"
+          color="#aa282a"
+          label="Цена"
+          required
+        />
       </v-form>
-      <div
-        v-for="(price, i) in guide.prices"
-        :key="i"
-        row
-        justify-content-between
-        wrap
-      >
-        <span class="grey--text text--darken-1">
-          {{ customers[price.tour_customer_type_id] }}:
-        </span>
-        <p style="display: inline-block;">
-          {{ price.price }}
-        </p>
-      </div>
-      <!-- <div v-show="!guide.selected">
+      <div v-show="!isSelected">
         <v-btn
           color="#aa282a"
           dark
-          flat
+          small
+          text
           @click="showGuideDetails = !showGuideDetails"
         >
           <v-icon class="mr-2">
@@ -60,30 +57,27 @@
         <div v-show="showGuideDetails">
           <div>
             <v-switch
-              v-model="options.hotel"
+              v-model="hotel"
+              :value="parseInt(1)"
               label="Проживание"
-              color="#aa282a"
-            />
-            <v-checkbox
-              v-if="options.hotel"
-              v-model="options.isHotelSngl"
-              label="Сингл"
               color="#aa282a"
             />
             <v-divider />
             <v-switch
-              v-model="options.meal"
+              v-model="meal"
+              :value="parseInt(1)"
               label="Питание"
               color="#aa282a"
             />
           </div>
         </div>
       </div>
-      <div v-show="!guide.selected">
+      <div v-show="!isSelected">
         <v-btn
           color="#aa282a"
           dark
-          flat
+          small
+          text
           @click="showEvents = !showEvents"
         >
           Экскурсии
@@ -93,14 +87,15 @@
         </v-btn>
         <div v-show="showEvents">
           <v-switch
-            v-for="(museum, i) in museums"
-            :key="`${guide.name}-${i}`"
-            v-model="museum.selected"
-            :label="`День: ${museum.day}. ${museum.museum}: ${museum.event}. Цена: ${museum.price}`"
+            v-for="museum in $parent.museums"
+            :key="museum.id"
+            v-model="selectedMuseums"
+            :value="museum.id"
+            :label="museum.name"
             color="#aa282a"
           />
         </div>
-      </div> -->
+      </div>
     </v-card-text>
     <v-card-actions>
       <v-btn
@@ -139,12 +134,6 @@
 export default {
   name: 'Guide',
   props: {
-    meal: {
-      type: Object,
-      default: () => {
-        return {}
-      },
-    },
     guide: {
       type: Object,
       default: () => {
@@ -185,6 +174,12 @@ export default {
       selectedDays: [],
       loader: false,
       isSelected: false,
+      price: null,
+      showGuideDetails: false,
+      hotel: 0,
+      meal: 0,
+      showEvents: false,
+      selectedMuseums: [],
     }
   },
   computed: {
@@ -213,12 +208,15 @@ export default {
         axios
           .post('/api/add-detailed-tour-object-attribute', {
             object_attribute_id: this.guide.id,
-            parent_model_alias: 'guide',
+            object_type: 'guide',
             tour_id: this.tourId,
             days: this.selectedDays.length,
             'days_array[]': this.selectedDays,
+            value: this.price,
+            hotel: this.hotel,
+            meal: this.meal,
+            'events[]': this.selectedMuseums,
           })
-          // .then(r => console.log(r))
           .finally(() => {
             this.loader = false
             this.isSelected = true
@@ -236,6 +234,10 @@ export default {
         })
         .then(r => {
           this.selectedDays = JSON.parse(r.data.days_array)
+          this.price = r.data.value
+          this.hotel = r.data.hotel
+          this.meal = r.data.meal
+          this.selectedMuseums = JSON.parse(r.data.events)
         })
         .finally(() => (this.loader = false))
     },
@@ -246,7 +248,7 @@ export default {
         .post('/api/remove-detailed-tour-object-attribute', {
           tour_id: this.tourId,
           object_attribute_id: this.guide.id,
-          parent_model_alias: 'guide',
+          object_type: 'guide',
         })
         .finally(() => (this.loader = false))
     },

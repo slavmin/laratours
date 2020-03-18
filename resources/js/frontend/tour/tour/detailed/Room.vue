@@ -152,7 +152,7 @@ export default {
           .post('/api/add-detailed-tour-object-attribute', {
             object_id: this.hotel.id,
             object_attribute_id: this.item.id,
-            parent_model_alias: 'hotel',
+            object_type: 'hotel',
             tour_id: this.tourId,
             days: this.selectedNights.length,
             'days_array[]': this.selectedNights,

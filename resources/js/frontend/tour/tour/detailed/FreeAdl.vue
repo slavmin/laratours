@@ -1,38 +1,98 @@
 <template>
   <v-card
-    class="meal-card"
+    class="freeadl-card"
     :class="{'is-selected' : isSelected}"
     pa-3
     max-width="250px"
     outlined
   >
-    <v-card-title>
-      {{ item.name }}
-    </v-card-title>
     <v-card-text>
       <v-form
         ref="form"
         v-model="valid"
       >
+        <v-text-field
+          v-model="name"
+          item-color="#aa282a"
+          :dark="isSelected"
+          :disabled="isSelected"
+          :rules=" [v => !!v || 'Заполните']"
+          color="#aa282a"
+          label="Имя"
+          required
+        />
         <v-select
           v-model="selectedDays"
           :items="daysArray"
           multiple
           item-color="#aa282a"
+          color="#aa282a"
+          :dark="isSelected"
           :disabled="isSelected"
           :rules="[v => v.length > 0 || 'Выберите день']"
           label="День тура"
-          outline
           required
         />
       </v-form>
-      <div
-        v-for="(price, i) in item.prices"
-        :key="i"
-      >
-        <p style="display: inline-block;">
-          {{ price.price }}
-        </p>
+      <div v-show="!isSelected">
+        <v-btn
+          color="#aa282a"
+          dark
+          small
+          text
+          @click="showFreeAdlDetails = !showFreeAdlDetails"
+        >
+          <v-icon class="mr-2">
+            hotel
+          </v-icon>
+          <v-icon>
+            fastfood
+          </v-icon>
+          <v-icon right>
+            expand_{{ showFreeAdlDetails ? 'less' : 'more' }}
+          </v-icon>
+        </v-btn>
+        <div v-show="showFreeAdlDetails">
+          <div>
+            <v-switch
+              v-model="hotel"
+              :value="parseInt(1)"
+              label="Проживание"
+              color="#aa282a"
+            />
+            <v-divider />
+            <v-switch
+              v-model="meal"
+              :value="parseInt(1)"
+              label="Питание"
+              color="#aa282a"
+            />
+          </div>
+        </div>
+      </div>
+      <div v-show="!isSelected">
+        <v-btn
+          color="#aa282a"
+          dark
+          small
+          text
+          @click="showEvents = !showEvents"
+        >
+          Экскурсии
+          <v-icon right>
+            expand_{{ showEvents ? 'less' : 'more' }}
+          </v-icon>
+        </v-btn>
+        <div v-show="showEvents">
+          <v-switch
+            v-for="museum in $parent.museums"
+            :key="museum.id"
+            v-model="selectedMuseums"
+            :value="museum.id"
+            :label="museum.name"
+            color="#aa282a"
+          />
+        </div>
       </div>
     </v-card-text>
     <v-card-actions>
@@ -67,17 +127,12 @@
     </v-overlay>
   </v-card>
 </template>
+
 <script>
 export default {
-  name: 'Meal',
+  name: 'FreeAdl',
   props: {
-    meal: {
-      type: Object,
-      default: () => {
-        return {}
-      },
-    },
-    item: {
+    freeAdl: {
       type: Object,
       default: () => {
         return {}
@@ -117,6 +172,13 @@ export default {
       selectedDays: [],
       loader: false,
       isSelected: false,
+      name: null,
+      showFreeAdlDetails: false,
+      hotel: 0,
+      meal: 0,
+      showEvents: false,
+      selectedMuseums: [],
+      id: 0,
     }
   },
   computed: {
@@ -129,7 +191,13 @@ export default {
   mounted() {
     if (this.wasSelected) {
       this.isSelected = true
-      this.fetchItemData()
+      this.name = this.freeAdl.name
+      this.selectedDays = JSON.parse(this.freeAdl.days_array)
+      this.price = this.freeAdl.value
+      this.hotel = this.freeAdl.hotel
+      this.meal = this.freeAdl.meal
+      this.selectedMuseums = JSON.parse(this.freeAdl.events)
+      this.id = this.freeAdl.id
     }
   },
   methods: {
@@ -144,33 +212,22 @@ export default {
         this.loader = true
         axios
           .post('/api/add-detailed-tour-object-attribute', {
-            object_id: this.meal.id,
-            object_attribute_id: this.item.id,
-            object_type: 'meal',
+            object_attribute_id: this.id,
+            object_type: 'freeadl',
             tour_id: this.tourId,
             days: this.selectedDays.length,
             'days_array[]': this.selectedDays,
+            value: this.price,
+            hotel: this.hotel,
+            meal: this.meal,
+            'events[]': this.selectedMuseums,
+            name: this.name,
           })
-          // .then(r => console.log(r))
           .finally(() => {
             this.loader = false
             this.isSelected = true
           })
       }
-    },
-    fetchItemData() {
-      this.loader = true
-      axios
-        .get('/api/get-detailed-tour-object-attribute-properties', {
-          params: {
-            object_attribute_id: this.item.id,
-            tour_id: this.tourId,
-          },
-        })
-        .then(r => {
-          this.selectedDays = JSON.parse(r.data.days_array)
-        })
-        .finally(() => (this.loader = false))
     },
     removeFromTour() {
       this.loader = true
@@ -178,7 +235,8 @@ export default {
       axios
         .post('/api/remove-detailed-tour-object-attribute', {
           tour_id: this.tourId,
-          object_attribute_id: this.item.id,
+          object_attribute_id: this.id,
+          object_type: 'freeadl',
         })
         .finally(() => (this.loader = false))
     },

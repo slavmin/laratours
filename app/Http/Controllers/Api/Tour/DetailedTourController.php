@@ -178,6 +178,18 @@ class DetailedTourController extends Controller
         ];
         break;
 
+      case 'freeadl':
+        $freeadls = TourObjectAttributeProperties::where('tour_id', $tour->id)->where('object_type', 'freeadl')->get();
+        $tour_date = $tour->dates[0]->date;
+        $days = $tour->duration;
+
+        $result = [
+          'freeadls'      => $freeadls,
+          'tour_date'     => $tour_date,
+          'days'          => $days,
+        ];
+        break;
+
       case 'tour':
         $tour = Tour::find($tour_id);
 
@@ -316,13 +328,14 @@ class DetailedTourController extends Controller
     $properties->days = $request->days ?? null;
     $properties->hotel = $request->hotel ?? null;
     $properties->meal = $request->meal ?? null;
-    $properties->events = $request->events ?? null;
+    $properties->events = json_encode($request->get('events[]')) ?? null;
+    $properties->name = $request->name ?? null;
 
     $properties->save();
 
     $tour = Tour::find($request->tour_id);
 
-    switch ($request->parent_model_alias) {
+    switch ($request->object_type) {
       case 'guide':
         $guide = TourGuide::find($request->object_attribute_id);
         $tour->guides()->attach($guide);
@@ -388,18 +401,26 @@ class DetailedTourController extends Controller
   {
     $tour = Tour::find($request->tour_id);
 
-    switch ($request->parent_model_alias) {
+    switch ($request->object_type) {
       case 'guide':
         $tour->guides()->detach($request->object_attribute_id);
         break;
       case 'attendant':
         $tour->attendants()->detach($request->object_attribute_id);
         break;
+      case 'freeadl':
+        $tour->object_attributes()->detach($request->object_attribute_id);
+        $properties = TourObjectAttributeProperties::find($request->object_attribute_id);
+        $properties->forceDelete();
+        break;
       default:
         $tour->object_attributes()->detach($request->object_attribute_id);
     }
 
-    $properties = TourObjectAttributeProperties::where('tour_id', $request->tour_id)->where('object_attribute_id', $request->object_attribute_id)->first();
+    $properties = TourObjectAttributeProperties::where('tour_id', $request->tour_id)
+      ->where('object_attribute_id', $request->object_attribute_id)
+      ->where('object_type', $request->object_type)
+      ->first();
     if ($properties) {
       $properties->forceDelete();
     }

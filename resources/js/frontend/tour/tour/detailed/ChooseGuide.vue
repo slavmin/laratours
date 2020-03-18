@@ -43,6 +43,7 @@ export default {
       tourDate: null,
       selectedGuidesIds: [],
       customers: [],
+      museums: [],
     }
   },
   computed: {
@@ -54,6 +55,7 @@ export default {
   },
   mounted() {
     this.fetchObjects()
+    this.fetchMuseums()
   },
   methods: {
     fetchObjects() {
@@ -71,6 +73,16 @@ export default {
           this.selectedGuidesIds = r.data.choosen_guides
           this.customers = r.data.customers
         })
+    },
+    fetchMuseums() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'museum',
+          },
+        })
+        .then(r => (this.museums = r.data.museum_options))
     },
   },
 }
