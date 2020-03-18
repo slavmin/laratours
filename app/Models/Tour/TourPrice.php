@@ -14,6 +14,7 @@ class TourPrice extends Model
     'period_end',
     'price',
     'tour_customer_type_id',
+    'accom_type',
     'is_extra',
     'name',
     'tour_price_type_id'

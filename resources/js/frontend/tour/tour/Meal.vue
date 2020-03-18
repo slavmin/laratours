@@ -29,13 +29,7 @@
       <div
         v-for="(price, i) in item.prices"
         :key="i"
-        row
-        justify-content-between
-        wrap
       >
-        <span class="grey--text text--darken-1">
-          {{ customers[price.tour_customer_type_id] }}:
-        </span>
         <p style="display: inline-block;">
           {{ price.price }}
         </p>

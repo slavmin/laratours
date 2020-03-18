@@ -77,6 +77,7 @@ class PriceController extends Controller
           'price' => $price->price,
           'tour_customer_type_id' => $price->tour_customer_type_id ?? null,
           'tour_price_type_id' => $price->tour_price_type_id ?? null,
+          'accom_type' => $price->accom_type ?? null,
         ]
       );
     }

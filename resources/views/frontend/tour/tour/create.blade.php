@@ -3,7 +3,7 @@
 @section('content')
 <v-container fluid grid-list-md text-xs-center>
   <v-row justify="center">
-    <v-col cols="12" md="8">
+    <v-col cols="12">
       <v-card>
         <v-toolbar dark color="#66a5ae">
           <v-card-title>

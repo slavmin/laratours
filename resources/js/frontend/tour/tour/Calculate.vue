@@ -189,10 +189,11 @@ export default {
         )
       }
       if (item.objectable_type == 'App\\Models\\Tour\\TourMeal') {
-        return (
-          this.priceByType(item, customerTypeId) *
-          parseInt(item.properties.days)
-        )
+        let price = 0
+        if (item.prices.length > 0) {
+          price = parseFloat(item.prices[0].price).toFixed(2)
+        }
+        return price * parseInt(item.properties.days)
       }
       if (item.model_alias == 'guide') {
         let price = this.priceByType(item, customerTypeId)

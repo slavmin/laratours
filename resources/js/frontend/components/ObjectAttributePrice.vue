@@ -67,64 +67,98 @@
         </v-menu>
       </v-col>
     </v-row>
-    <div v-if="objectModel != 'transport'">
-      <v-row
-        v-for="(customer, i) in resultArray"
-        :key="customer.id"
-      >
+    <div v-if="objectModel == 'museum'">
+      <v-row justify="center">
         <v-col
+          v-for="(customer, i) in resultArray"
+          :key="customer.id"
           cols="12"
-          lg="4"
+          lg="6"
         >
-          <p>
-            {{ customer.name }}
-          </p>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="resultArray[i].price"
+                color="#aa282a"
+                :label="customer.name"
+                :disabled="resultArray[i].is_free == 1"
+                outlined
+              />
+              <v-checkbox
+                v-model="resultArray[i].is_free"
+                label="Бесплатно"
+                value="1"
+                @change="clearPriceValue(i)"
+              />
+            </v-col>
+          </v-row>
         </v-col>
+      </v-row>
+    </div>
+    <div v-if="objectModel == 'hotel'">
+      <v-row justify="center">
         <v-col
+          v-for="(customer, i) in resultArray"
+          :key="`${customer.id}-${i}`"
           cols="12"
-          lg="4"
+          md="4"
         >
           <v-text-field
             v-model="resultArray[i].price"
+            :label="`${customer.name} ${customer.accom_type}`"
             color="#aa282a"
-            label="Цена"
-            :disabled="resultArray[i].is_free == 1"
+            outlined
           />
         </v-col>
+      </v-row>
+      <v-row
+        v-if="hotelInfantType.hasOwnProperty('value')"
+        justify="center"
+      >
         <v-col
           cols="12"
-          lg="4"
+          md="4"
         >
+          <p class="body-1 grey--text">
+            {{ hotelInfantType.text }}
+          </p>
           <v-checkbox
-            v-model="resultArray[i].is_free"
+            v-model="hotelInfantIsFree"
             label="Бесплатно"
             value="1"
-            @change="clearPriceValue(i)"
+            color="#aa282a"
           />
         </v-col>
       </v-row>
     </div>
     <div v-if="objectModel == 'transport'">
-      <v-row
-        v-for="(type, i) in priceTypeOptions"
-        :key="type.id"
-      >
+      <v-row>
         <v-col
+          v-for="(type, i) in priceTypeOptions"
+          :key="type.id"
           cols="12"
-          lg="6"
-        >
-          <p>
-            {{ type.name }}
-          </p>
-        </v-col>
-        <v-col
-          cols="12"
-          lg="6"
+          md="6"
         >
           <v-text-field
             v-model="transportResultArray[i].price"
+            :label="type.name"
             color="#aa282a"
+            outlined
+          />
+        </v-col>
+      </v-row>
+    </div>
+    <div v-if="objectModel == 'meal'">
+      <v-row justify="center">
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-text-field
+            v-model="resultArray[0].price"
             label="Цена"
+            color="#aa282a"
+            outlined
           />
         </v-col>
       </v-row>
@@ -214,6 +248,10 @@ export default {
       price: null,
       resultArray: [],
       transportResultArray: [],
+      hotelCustomerTypes: [],
+      hotelInfantType: {},
+      hotelAccoms: ['Основное', 'Single', 'Дополнительное'],
+      hotelInfantIsFree: false,
     }
   },
   computed: {
@@ -236,10 +274,19 @@ export default {
   methods: {
     submitForm() {
       const form = document.getElementById('price-form')
+      if (this.hotelInfantIsFree == true) {
+        const inf = {
+          tour_customer_type_id: this.hotelInfantType.value,
+          name: this.hotelInfantType.text,
+          price: 0,
+          is_free: true,
+        }
+        this.resultArray.push(inf)
+      }
       form.submit()
     },
     constructResultArray() {
-      if (this.objectModel != 'transport') {
+      if (this.objectModel == 'museum') {
         this.resultArray = []
         this.customersArray.forEach(customer => {
           this.resultArray.push({
@@ -256,6 +303,33 @@ export default {
           this.transportResultArray.push({
             tour_price_type_id: type.id,
             price: null,
+          })
+        })
+      }
+      if (this.objectModel == 'meal') {
+        this.resultArray = [{ price: null }]
+      }
+      if (this.objectModel == 'hotel') {
+        this.resultArray = []
+        const adult = this.customersArray.find(
+          customer => customer.text == 'Взрослый'
+        )
+        const child = this.customersArray.find(
+          customer => customer.text == 'Ребенок'
+        )
+        this.hotelInfantType = this.customersArray.find(
+          customer => customer.text == 'Инфант'
+        )
+        this.hotelCustomerTypes = [adult, child]
+        this.hotelCustomerTypes.forEach(type => {
+          this.hotelAccoms.forEach(accom => {
+            this.resultArray.push({
+              tour_customer_type_id: parseInt(type.value),
+              accom_type: accom,
+              name: type.text,
+              price: null,
+              is_free: false,
+            })
           })
         })
       }
