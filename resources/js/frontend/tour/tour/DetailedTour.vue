@@ -127,15 +127,15 @@
   </v-container>
 </template>
 <script>
-import ChooseTransport from './ChooseTransport'
-import ChooseMuseum from './ChooseMuseum'
-import ChooseHotel from './ChooseHotel'
-import ChooseMeal from './ChooseMeal'
-import ChooseGuide from './ChooseGuide'
-import ChooseAttendant from './ChooseAttendant'
-import ChooseServices from './ChooseServices'
+import ChooseTransport from './detailed/ChooseTransport'
+import ChooseMuseum from './detailed/ChooseMuseum'
+import ChooseHotel from './detailed/ChooseHotel'
+import ChooseMeal from './detailed/ChooseMeal'
+import ChooseGuide from './detailed/ChooseGuide'
+import ChooseAttendant from './detailed/ChooseAttendant'
+import ChooseServices from './detailed/ChooseServices'
 
-import Calculate from './Calculate'
+import Calculate from './detailed/Calculate'
 export default {
   name: 'DetailedTour',
   components: {

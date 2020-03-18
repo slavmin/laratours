@@ -307,12 +307,16 @@ class DetailedTourController extends Controller
     }
 
     $properties->object_attribute_id = $request->object_attribute_id;
+    $properties->object_type = $request->object_type;
     $properties->tour_id = $request->tour_id;
     $properties->tour_price_type_id = $request->tour_price_type_id ?? null;
     $properties->value = $request->value ?? null;
     $properties->duration = $request->duration ?? null;
     $properties->days_array = json_encode($request->get('days_array[]')) ?? null;
     $properties->days = $request->days ?? null;
+    $properties->hotel = $request->hotel ?? null;
+    $properties->meal = $request->meal ?? null;
+    $properties->events = $request->events ?? null;
 
     $properties->save();
 

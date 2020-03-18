@@ -36,8 +36,47 @@
           @change="validate"
         />
       </v-form>
-      <div class="mt-2">
-        Мест: {{ JSON.parse(item.extra).scheme.totalPassengersCount }}
+      <v-row>
+        <v-col>
+          <v-radio-group
+            v-model="selectedPriceId"
+            :disabled="isManualPrice"
+          >
+            <v-radio
+              v-for="price in prices"
+              :key="`${item.id}-price-${price.tour_price_type_id}`"
+              :label="`${price.tour_price_type_name} ${price.price}`"
+              :value="price.tour_price_type_id"
+              color="#aa282a"
+            />
+          </v-radio-group>
+          <v-checkbox
+            v-model="isManualPrice"
+            color="#aa282a"
+            label="Вручную"
+          />
+        </v-col>
+      </v-row>
+      <div v-if="selectedPriceId && !isManualPrice">
+        <v-text-field
+          v-model="duration"
+          name="name"
+          color="#aa282a"
+          label="Количество"
+        />
+      </div>
+      <div v-if="isManualPrice">
+        <v-text-field
+          v-model="manualPriceValue"
+          color="#aa282a"
+          label="Общая стоимость"
+        />
+      </div>
+      <div v-if="totalPrice()">
+        Итого:
+        <span class="body-1">
+          {{ totalPrice() }}
+        </span>
       </div>
       <div v-show="!isSelected">
         <v-btn
@@ -46,7 +85,7 @@
           text
           @click="showDriverDetails = !showDriverDetails"
         >
-          Водители: {{ driversCount }}
+          Водители: {{ drivers.length }}
           <v-icon right>
             expand_{{ showDriverDetails ? 'less' : 'more' }}
           </v-icon>
@@ -74,26 +113,20 @@
           </v-btn>
           <v-divider />
           <div
-            v-for="i in driversCount"
+            v-for="(driver, i) in drivers"
             :key="i"
           >
             <p class="body-2">
-              Водитель {{ i }}
+              Водитель {{ i + 1 }}
             </p>
             <v-switch
-              v-model="drivers[i - 1].hotel"
+              v-model="driver.hotel"
               label="Проживание"
-              color="#aa282a"
-            />
-            <v-checkbox
-              v-if="drivers[i - 1].hotel"
-              v-model="drivers[i - 1].isHotelSngl"
-              label="Сингл"
               color="#aa282a"
             />
             <v-divider />
             <v-switch
-              v-model="drivers[i - 1].meal"
+              v-model="driver.meal"
               label="Питание"
               color="#aa282a"
             />
@@ -117,116 +150,31 @@
         v-if="!isSelected"
         justify="center"
       >
-        <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="360"
-          @input="fetchPrices(item)"
+        <v-btn
+          color="#aa282a"
+          small
+          :disabled="!valid"
+          :dark="valid"
+          @click="addToTour"
+        >
+          Выбрать
+        </v-btn>
+        <v-tooltip
+          v-if="!valid"
+          bottom
         >
           <template v-slot:activator="{ on }">
-            <v-btn
-              color="#aa282a"
+            <v-icon
+              color="grey"
+              dark
               small
-              :disabled="!valid"
-              :dark="valid"
               v-on="on"
             >
-              Выбрать
-            </v-btn>
-            <v-tooltip
-              v-if="!valid"
-              bottom
-            >
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  color="grey"
-                  dark
-                  small
-                  v-on="on"
-                >
-                  help
-                </v-icon>
-              </template>
-              <span>Выберите дни работы транспорта</span>
-            </v-tooltip>
+              help
+            </v-icon>
           </template>
-          <v-card>
-            <v-card-title class="headline">
-              {{ item.name }}
-            </v-card-title>
-            <v-card-text>
-              <v-row>
-                <v-col cols="6">
-                  <v-radio-group
-                    v-model="selectedPriceId"
-                    :disabled="isManualPrice"
-                  >
-                    <v-radio
-                      v-for="price in prices"
-                      :key="`${item.id}-price-${price.tour_price_type_id}`"
-                      :label="price.tour_price_type_name"
-                      :value="price.tour_price_type_id"
-                      color="#aa282a"
-                    />
-                  </v-radio-group>
-                </v-col>
-                <v-col cols="6">
-                  <v-checkbox
-                    v-model="isManualPrice"
-                    color="#aa282a"
-                    label="Вручную"
-                  />
-                </v-col>
-              </v-row>
-              <div v-if="selectedPriceId && !isManualPrice">
-                <div>
-                  Цена за единицу:
-                  <span class="body-1">
-                    {{ selectedPrice.price }}
-                  </span>
-                </div>
-                <v-text-field
-                  v-model="duration"
-                  name="name"
-                  color="#aa282a"
-                  label="Количество"
-                />
-              </div>
-              <div v-if="isManualPrice">
-                <v-text-field
-                  v-model="manualPriceValue"
-                  color="#aa282a"
-                  label="Введите общую стоимость"
-                />
-              </div>
-              <div v-if="totalPrice()">
-                Итого:
-                <span class="body-1">
-                  {{ totalPrice() }}
-                </span>
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                color="#aa282a"
-                text
-                @click="dialog = false"
-              >
-                Закрыть
-              </v-btn>
-              <v-spacer />
-              <v-btn
-                v-if="totalPrice()"
-                color="#aa282a"
-                small
-                dark
-                @click="addToTour"
-              >
-                Сохранить
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+          <span>Выберите дни работы транспорта</span>
+        </v-tooltip>
       </v-row>
     </v-card-actions>
     <v-alert
@@ -341,12 +289,23 @@ export default {
       }
       return 'Выберите тип'
     },
+    hotelsCount: function() {
+      let result = 0
+      this.drivers.forEach(driver => {
+        if (driver.hotel) result += 1
+      })
+      return result
+    },
+    mealsCount: function() {
+      let result = 0
+      this.drivers.forEach(driver => {
+        if (driver.meal) result += 1
+      })
+      return result
+    },
   },
   mounted() {
-    if (this.item.drivers) {
-      this.drivers = this.item.drivers
-      this.driversCount = this.item.drivers.length
-    }
+    this.fetchPrices()
     if (this.wasSelected) {
       this.isSelected = true
       this.fetchItemData()
@@ -400,13 +359,15 @@ export default {
         .post('/api/add-detailed-tour-object-attribute', {
           object_id: this.transport.id,
           object_attribute_id: this.item.id,
-          parent_model_alias: 'transport',
+          object_type: 'transport',
           tour_id: this.tourId,
           tour_price_type_id: !this.isManualPrice ? this.selectedPriceId : null,
           value: this.totalPrice(),
           duration: !this.isManualPrice ? this.duration : null,
           days: this.selectedDays.length,
           'days_array[]': this.selectedDays,
+          hotel: this.hotelsCount,
+          meal: this.mealsCount,
         })
         // .then(r => console.log(r))
         .finally(() => {
@@ -437,6 +398,7 @@ export default {
             this.isManualPrice = true
             this.manualPriceValue = r.data.value
           }
+          this.parseDriversProperties(r.data.hotel, r.data.meal)
         })
         .finally(() => (this.loader = false))
     },
@@ -450,6 +412,16 @@ export default {
         })
         // .then(r => console.log(r))
         .finally(() => (this.loader = false))
+    },
+    parseDriversProperties(hotelsCount, mealsCount) {
+      const length = hotelsCount >= mealsCount ? hotelsCount : mealsCount
+      this.drivers = []
+      for (let i = 0; i < length; i++) {
+        this.drivers.push({
+          hotel: i + 1 <= hotelsCount,
+          meal: i + 1 <= mealsCount,
+        })
+      }
     },
   },
 }

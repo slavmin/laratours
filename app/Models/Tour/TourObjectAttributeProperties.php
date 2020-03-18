@@ -19,6 +19,10 @@ class TourObjectAttributeProperties extends Model
     'tour_id',
     'tour_price_type_id',
     'object_attribute_id',
+    'object_type',
+    'hotel',
+    'meal',
+    'events',
     'days_array',
     'days'
   ];

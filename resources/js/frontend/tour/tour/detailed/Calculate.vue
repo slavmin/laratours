@@ -100,15 +100,15 @@
   </div>
 </template>
 <script>
-import Transport from './detailed/calculate/Transport'
-import Museum from './detailed/calculate/Museum'
-import Hotel from './detailed/calculate/Hotel'
-import Meal from './detailed/calculate/Meal'
-import Guide from './detailed/calculate/Guide'
-import Attendant from './detailed/calculate/Attendant'
-import Extra from './detailed/calculate/Extra'
-import Total from './detailed/calculate/Total'
-import TotalForAll from './detailed/calculate/TotalForAll'
+import Transport from './calculate/Transport'
+import Museum from './calculate/Museum'
+import Hotel from './calculate/Hotel'
+import Meal from './calculate/Meal'
+import Guide from './calculate/Guide'
+import Attendant from './calculate/Attendant'
+import Extra from './calculate/Extra'
+import Total from './calculate/Total'
+import TotalForAll from './calculate/TotalForAll'
 export default {
   name: 'Calculate',
   components: {
