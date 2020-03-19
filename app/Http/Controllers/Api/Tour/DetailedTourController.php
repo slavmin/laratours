@@ -401,6 +401,18 @@ class DetailedTourController extends Controller
     return $result;
   }
 
+  public function getDetailedTourExcursions(Request $request)
+  {
+    $all_object_attributes = Tour::find($request->tour_id)->object_attributes;
+    $result = [];
+    foreach ($all_object_attributes as $attr) {
+      if ($attr->objectable_type == 'App\Models\Tour\TourMuseum') {
+        $result[] = $attr;
+      }
+    }
+    return $result;
+  }
+
   public function updateDetailedTourObjectAttributeProperty(Request $request)
   {
     $is_extra = $request->is_extra;

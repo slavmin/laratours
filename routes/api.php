@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:api']], function () {
   Route::get('/get-detailed-tour-objects', [DetailedTourController::class, 'getDetailedTourObjects'])->name('get-detailed-tour-objects');
   Route::get('/get-detailed-tour-object-attribute-prices', [DetailedTourController::class, 'getDetailedTourObjectAttributePrices'])->name('get-detailed-tour-object-attribute-prices');
   Route::post('/add-detailed-tour-object-attribute', [DetailedTourController::class, 'addDetailedTourObjectAttribute'])->name('add-detailed-tour-object-attribute');
+  Route::get('/get-detailed-tour-excursions', [DetailedTourController::class, 'getDetailedTourExcursions'])->name('get-detailed-tour-excursions');
   Route::post('/add-or-update-detailed-tour-extra', [DetailedTourController::class, 'addOrUpdateDetailedTourExtra'])->name('add-or-detailed-tour-extra');
   Route::get('/get-detailed-tour-extra', [DetailedTourController::class, 'getDetailedTourExtras'])->name('get-detailed-tour-extra');
   Route::post('/delete-detailed-tour-extra', [DetailedTourController::class, 'deleteDetailedTourExtra'])->name('delete-detailed-tour-extra');

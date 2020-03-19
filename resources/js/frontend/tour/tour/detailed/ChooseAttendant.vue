@@ -75,13 +75,12 @@ export default {
     },
     fetchMuseums() {
       axios
-        .get('/api/get-detailed-tour-objects', {
+        .get('/api/get-detailed-tour-excursions', {
           params: {
             tour_id: this.tourId,
-            model_alias: 'museum',
           },
         })
-        .then(r => (this.museums = r.data.museum_options))
+        .then(r => (this.museums = r.data))
     },
   },
 }

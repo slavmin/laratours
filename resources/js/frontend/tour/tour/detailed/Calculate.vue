@@ -190,7 +190,6 @@ export default {
           },
         })
         .then(r => {
-          console.log(r)
           this.tourData = r.data
         })
         .then(r => {
@@ -401,7 +400,7 @@ export default {
         })
         if (Array.isArray(guide.events)) {
           guide.events.forEach(eventId => {
-            this.getPersonalEventsPrice(eventId)
+            this.getPersonalEventPrice(eventId)
           })
         }
         return this.pricePerSeat(result)
@@ -419,7 +418,7 @@ export default {
         })
         if (Array.isArray(attendant.events)) {
           attendant.events.forEach(eventId => {
-            this.getPersonalEventsPrice(eventId)
+            this.getPersonalEventPrice(eventId)
           })
         }
         return this.pricePerSeat(result)
@@ -438,7 +437,7 @@ export default {
           }
         })
         events.forEach(eventId => {
-          this.getPersonalEventsPrice(eventId)
+          result += this.getPersonalEventPrice(eventId)
         })
         return this.pricePerSeat(result)
       }
@@ -465,8 +464,9 @@ export default {
       }
       return result
     },
-    getPersonalEventsPrice(eventId) {
-      // console.log(eventId, this.tourData)
+    getPersonalEventPrice(eventId) {
+      const event = this.tourData.museum.find(museum => museum.id == eventId)
+      return parseFloat(this.getPrice(event))
     },
     marginPersonalPrice(type, index, margin) {
       let price = 0
