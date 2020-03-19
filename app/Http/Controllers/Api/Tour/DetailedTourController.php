@@ -200,23 +200,37 @@ class DetailedTourController extends Controller
         $hotel = [];
 
         foreach ($object_attributes as $attr) {
-          $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
-            ->where('object_attribute_id', $attr->id)
-            ->first();
+
 
           switch ($attr->objectable_type) {
             case ("App\Models\Tour\TourTransport"):
+              $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                ->where('object_type', 'transport')
+                ->where('object_attribute_id', $attr->id)
+                ->first();
               $transport[] = $attr;
               break;
             case ("App\Models\Tour\TourMuseum"):
+              $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                ->where('object_type', 'museum')
+                ->where('object_attribute_id', $attr->id)
+                ->first();
               $attr['prices'] = $this->getObjectPrices($attr->id);
               $museum[] = $attr;
               break;
             case ("App\Models\Tour\TourHotel"):
+              $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                ->where('object_type', 'hotel')
+                ->where('object_attribute_id', $attr->id)
+                ->first();
               $attr['prices'] = $this->getObjectPrices($attr->id);
               $hotel[] = $attr;
               break;
             case ("App\Models\Tour\TourMeal"):
+              $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                ->where('object_type', 'meal')
+                ->where('object_attribute_id', $attr->id)
+                ->first();
               $attr['prices'] = $this->getObjectPrices($attr->id);
               $meal[] = $attr;
               break;
@@ -226,6 +240,7 @@ class DetailedTourController extends Controller
         foreach ($guide as $g) {
           $g['prices'] = $this->getObjectPrices($g->id);
           $g['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+            ->where('object_type', 'guide')
             ->where('object_attribute_id', $g->id)
             ->first();
         }
@@ -234,6 +249,7 @@ class DetailedTourController extends Controller
         foreach ($attendant as $at) {
           $at['prices'] = $this->getObjectPrices($at->id);
           $at['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)
+            ->where('object_type', 'attendant')
             ->where('object_attribute_id', $at->id)
             ->first();
         }
