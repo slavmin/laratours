@@ -376,7 +376,10 @@ class DetailedTourController extends Controller
 
   public function getDetailedTourObjectAttributeProperties(Request $request)
   {
-    $result = TourObjectAttributeProperties::where('tour_id', $request->tour_id)->where('object_attribute_id', $request->object_attribute_id)->first();
+    $result = TourObjectAttributeProperties::where('tour_id', $request->tour_id)
+      ->where('object_attribute_id', $request->object_attribute_id)
+      ->where('object_type', $request->object_type)
+      ->first();
     return $result;
   }
 

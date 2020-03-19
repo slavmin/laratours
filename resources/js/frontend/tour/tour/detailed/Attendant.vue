@@ -230,6 +230,7 @@ export default {
         .get('/api/get-detailed-tour-object-attribute-properties', {
           params: {
             object_attribute_id: this.attendant.id,
+            object_type: 'attendant',
             tour_id: this.tourId,
           },
         })

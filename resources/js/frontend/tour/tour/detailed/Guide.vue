@@ -229,6 +229,7 @@ export default {
         .get('/api/get-detailed-tour-object-attribute-properties', {
           params: {
             object_attribute_id: this.guide.id,
+            object_type: 'guide',
             tour_id: this.tourId,
           },
         })

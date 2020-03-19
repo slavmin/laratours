@@ -233,6 +233,7 @@ export default {
         .get('/api/get-detailed-tour-object-attribute-properties', {
           params: {
             object_attribute_id: this.item.id,
+            object_type: 'museum',
             tour_id: this.tourId,
           },
         })
