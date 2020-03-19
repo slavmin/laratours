@@ -103,12 +103,55 @@ export default {
         'attendant',
         'extras',
       ]
+      const personal = ['drivers']
       parts.forEach(part => {
         this.tourData[part].forEach(part => {
           charge += parseFloat(this.$parent.getPrice(part))
           priceWithMargin += parseFloat(this.$parent.marginPrice(part))
           priceWithCommission += parseFloat(this.$parent.commissPrice(part))
         })
+      })
+      this.$parent.drivers.forEach((driver, i) => {
+        charge += parseFloat(this.$parent.getPersonalPrice('driver', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('driver', i, driver.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'driver',
+            i,
+            driver.margin,
+            driver.commission
+          )
+        )
+      })
+      this.$parent.personalGuides.forEach((guide, i) => {
+        charge += parseFloat(this.$parent.getPersonalPrice('guide', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('guide', i, guide.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'guide',
+            i,
+            guide.margin,
+            guide.commission
+          )
+        )
+      })
+      this.$parent.personalAttendants.forEach((attendant, i) => {
+        charge += parseFloat(this.$parent.getPersonalPrice('attendant', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('attendant', i, attendant.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'attendant',
+            i,
+            attendant.margin,
+            attendant.commission
+          )
+        )
       })
       this.charge = charge.toFixed(2)
       this.priceWithMargin = priceWithMargin.toFixed(2)

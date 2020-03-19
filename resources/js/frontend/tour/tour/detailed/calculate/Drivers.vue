@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <h3 class="grey--text">
-        Сопровождающие
+        Персонал: Водители
       </h3>
     </v-col>
     <v-col cols="12">
@@ -32,43 +32,38 @@
           </thead>
           <tbody>
             <tr
-              v-for="item in items"
-              :key="item.name"
+              v-for="(driver, i) in drivers"
+              :key="i"
             >
               <td class="tc-max-width__250">
                 <div class="body-1">
-                  {{ item.name }}
-                </div>
-                <div>
-                  Дни тура: {{ item.properties.days_array }}
+                  Водитель {{ i + 1 }}
                 </div>
               </td>
               <td class="text-center">
-                {{ $parent.getPrice(item) }}
+                {{ $parent.getPersonalPrice('driver', i) }}
               </td>
               <td>
                 <v-text-field
-                  v-model.number="item.properties.margin"
+                  v-model.number="driver.margin"
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
-                  @input="$parent.throttledSave(item)"
                 />
               </td>
               <td>
-                {{ $parent.marginPrice(item) }}
+                {{ $parent.marginPersonalPrice('driver', i, driver.margin) }}
               </td>
               <td>
                 <v-text-field
-                  v-model.number="item.properties.commission"
+                  v-model.number="driver.commission"
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
-                  @input="$parent.throttledSave(item)"
                 />
               </td>
               <td>
-                {{ $parent.commissPrice(item) }}
+                {{ $parent.commissPersonalPrice('driver', i, driver.margin, driver.commission) }}
               </td>
             </tr>
           </tbody>
@@ -79,9 +74,9 @@
 </template>
 <script>
 export default {
-  name: 'CalculateAttendantTable',
+  name: 'CalculatePersonalDriversTable',
   props: {
-    items: {
+    drivers: {
       type: Array,
       default: () => [],
     },

@@ -44,12 +44,7 @@
                 </div>
               </td>
               <td class="text-center">
-                <div>
-                  {{ $parent.getPrice(item) }}
-                </div>
-                <div class="subheading grey--text">
-                  {{ $parent.getPriceCustomerName(item) }}
-                </div>
+                {{ $parent.getPrice(item) }}
               </td>
               <td>
                 <v-text-field

@@ -408,6 +408,7 @@ export default {
       axios
         .post('/api/remove-detailed-tour-object-attribute', {
           tour_id: this.tourId,
+          object_type: 'transport',
           object_attribute_id: this.item.id,
         })
         // .then(r => console.log(r))

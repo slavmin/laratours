@@ -48,9 +48,27 @@
           v-if="tourData.extras.length > 0"
           :items="tourData.extras"
         />
+        <v-divider />
+        <Drivers
+          :v-if="drivers.length > 0"
+          :drivers="drivers"
+        />
+        <PersonalGuides
+          :v-if="personalGuides.length > 0"
+          :guides="personalGuides"
+        />
+        <PersonalAttendants
+          :v-if="personalAttendants.length > 0"
+          :attendants="personalAttendants"
+        />
+        <PersonalFreeAdls
+          :v-if="personalFreeAdls.length > 0"
+          :freeadls="personalFreeAdls"
+        />
       </v-col>
       <v-overlay
-        :value="loader"
+        :value="
+          loader"
         style="z-index: 10000;"
       >
         <v-progress-circular
@@ -107,6 +125,10 @@ import Meal from './calculate/Meal'
 import Guide from './calculate/Guide'
 import Attendant from './calculate/Attendant'
 import Extra from './calculate/Extra'
+import Drivers from './calculate/Drivers'
+import PersonalGuides from './calculate/PersonalGuides'
+import PersonalAttendants from './calculate/PersonalAttendants'
+import PersonalFreeAdls from './calculate/PersonaFreeAdls'
 import Total from './calculate/Total'
 import TotalForAll from './calculate/TotalForAll'
 export default {
@@ -119,6 +141,10 @@ export default {
     Guide,
     Attendant,
     Extra,
+    Drivers,
+    PersonalGuides,
+    PersonalAttendants,
+    PersonalFreeAdls,
     Total,
     TotalForAll,
   },
@@ -143,10 +169,15 @@ export default {
       loader: false,
       selectedCustomerTypeId: null,
       adultType: {},
+      drivers: [],
+      personalGuides: [],
+      personalAttendants: [],
+      personalFreeAdls: [],
     }
   },
   mounted() {
     this.fetchTourData()
+    this.fetchFreeAdls()
   },
   methods: {
     fetchTourData() {
@@ -161,8 +192,23 @@ export default {
         .then(r => (this.tourData = r.data))
         .then(r => {
           this.setDefaultCustomerTypeId()
+          this.parseDrivers()
+          this.parseGuides()
+          this.parseAttendants()
         })
         .finally(() => (this.loader = false))
+    },
+    fetchFreeAdls() {
+      axios
+        .get('/api/get-detailed-tour-objects', {
+          params: {
+            tour_id: this.tourId,
+            model_alias: 'freeadl',
+          },
+        })
+        .then(r => {
+          this.personalFreeAdls = r.data.freeadls
+        })
     },
     setDefaultCustomerTypeId() {
       this.adultType = this.tourData.customers.find(customer => {
@@ -196,11 +242,11 @@ export default {
         return price * parseInt(item.properties.days)
       }
       if (item.model_alias == 'guide') {
-        let price = this.priceByType(item, customerTypeId)
+        let price = parseFloat(item.properties.value).toFixed(2)
         return this.pricePerSeat(price)
       }
       if (item.model_alias == 'attendant') {
-        let price = this.priceByType(item, customerTypeId)
+        let price = parseFloat(item.properties.value).toFixed(2)
         return this.pricePerSeat(price)
       }
       return 0
@@ -245,14 +291,17 @@ export default {
       let margin = 0
       // For Everything else
       if (item.hasOwnProperty('properties')) {
-        margin = item.properties.margin ? parseInt(item.properties.margin) : 0
+        margin = item.properties.margin ? item.properties.margin : 0
       }
       //For Tour extras
       else {
-        margin = item.margin ? parseInt(item.margin) : 0
+        margin = item.margin ? item.margin : 0
       }
-      const result = price + (price * margin) / 100
+      const result = this.marginFormula(price, margin)
       return result.toFixed(2)
+    },
+    marginFormula(price, margin) {
+      return price + (price * parseInt(margin)) / 100
     },
     commissPrice(item, customerTypeId = this.selectedCustomerTypeId) {
       const marginPrice = this.marginPrice(item, customerTypeId)
@@ -266,14 +315,172 @@ export default {
       else {
         commission = item.commission
       }
-      result = commission
+      result = this.commissFormula(marginPrice, commission)
+      return result
+    },
+    commissFormula(marginPrice, commission) {
+      return commission
         ? (marginPrice / (1 - parseInt(commission) / 100)).toFixed(2)
         : marginPrice
+    },
+    parseDrivers() {
+      this.drivers = []
+      this.tourData.transport.forEach(transport => {
+        const hotelsCount = transport.properties.hotel
+        const mealsCount = transport.properties.meal
+        const days = JSON.parse(transport.properties.days_array)
+        const length = hotelsCount >= mealsCount ? hotelsCount : mealsCount
+        for (let i = 0; i < length; i++) {
+          this.drivers.push({
+            hotel: i + 1 <= hotelsCount,
+            meal: i + 1 <= mealsCount,
+            days: days,
+          })
+        }
+      })
+    },
+    parseGuides() {
+      this.personalGuides = []
+      this.tourData.guide.forEach(guide => {
+        const hotelsCount = guide.properties.hotel
+        const mealsCount = guide.properties.meal
+        const events = JSON.parse(guide.properties.events)
+        const days = JSON.parse(guide.properties.days_array)
+        this.personalGuides.push({
+          name: guide.name,
+          hotel: hotelsCount,
+          meal: mealsCount,
+          days: days,
+          events: events,
+        })
+      })
+    },
+    parseAttendants() {
+      this.personalAttendants = []
+      this.tourData.attendant.forEach(attendant => {
+        const hotelsCount = attendant.properties.hotel
+        const mealsCount = attendant.properties.meal
+        const events = JSON.parse(attendant.properties.events)
+        const days = JSON.parse(attendant.properties.days_array)
+        this.personalAttendants.push({
+          name: attendant.name,
+          hotel: hotelsCount,
+          meal: mealsCount,
+          days: days,
+          events: events,
+        })
+      })
+    },
+    getPersonalPrice(type, index) {
+      if (type == 'driver') {
+        const driver = this.drivers[index]
+        let result = 0
+        driver.days.forEach(day => {
+          if (driver.hotel === true) {
+            result += this.getPersonalHotelPrice(day)
+          }
+          if (driver.meal === true) {
+            result += this.getPersonalMealPrice(day)
+          }
+        })
+        return this.pricePerSeat(result)
+      }
+      if (type == 'guide') {
+        const guide = this.personalGuides[index]
+        let result = 0
+        guide.days.forEach(day => {
+          if (guide.hotel == true) {
+            result += this.getPersonalHotelPrice(day)
+          }
+          if (guide.meal == true) {
+            result += this.getPersonalMealPrice(day)
+          }
+        })
+        guide.events.forEach(eventId => {
+          this.getPersonalEventsPrice(eventId)
+        })
+        return this.pricePerSeat(result)
+      }
+      if (type == 'attendant') {
+        const attendant = this.personalAttendants[index]
+        let result = 0
+        attendant.days.forEach(day => {
+          if (attendant.hotel == true) {
+            result += this.getPersonalHotelPrice(day)
+          }
+          if (attendant.meal == true) {
+            result += this.getPersonalMealPrice(day)
+          }
+        })
+        attendant.events.forEach(eventId => {
+          this.getPersonalEventsPrice(eventId)
+        })
+        return this.pricePerSeat(result)
+      }
+      if (type == 'freeadl') {
+        const freeadl = this.personalFreeAdls[index]
+        let result = 0
+        const days = JSON.parse(freeadl.days_array)
+        const events = JSON.parse(freeadl.events)
+        days.forEach(day => {
+          if (freeadl.hotel == true) {
+            result += this.getPersonalHotelPrice(day)
+          }
+          if (freeadl.meal == true) {
+            result += this.getPersonalMealPrice(day)
+          }
+        })
+        events.forEach(eventId => {
+          this.getPersonalEventsPrice(eventId)
+        })
+        return this.pricePerSeat(result)
+      }
+    },
+    getPersonalHotelPrice(day) {
+      const hotel = this.tourData.hotel.find(item => {
+        const hotelDays = JSON.parse(item.properties.days_array)
+        return hotelDays.includes(day)
+      })
+      let result = 0
+      if (hotel !== undefined) {
+        result = this.getPrice(hotel, this.adultType.id)
+      }
+      return result
+    },
+    getPersonalMealPrice(day) {
+      const meal = this.tourData.meal.find(item => {
+        const mealDays = JSON.parse(item.properties.days_array)
+        return mealDays.includes(day)
+      })
+      let result = 0
+      if (meal !== undefined) {
+        result = this.getPrice(meal)
+      }
+      return result
+    },
+    getPersonalEventsPrice(eventId) {
+      // console.log(eventId, this.tourData)
+    },
+    marginPersonalPrice(type, index, margin) {
+      let price = 0
+      price = this.getPersonalPrice(type, index)
+      const result = this.marginFormula(
+        parseFloat(price),
+        parseInt(margin ? margin : 0)
+      )
+      return result.toFixed(2)
+    },
+    commissPersonalPrice(type, index, margin, commission) {
+      let price = 0
+      price = this.marginPersonalPrice(type, index, margin)
+      const result = this.commissFormula(
+        parseFloat(price),
+        parseInt(commission ? commission : 0)
+      )
       return result
     },
     throttledSave: _.debounce(function(item, isExtra = false) {
       this.loader = true
-      console.log(item, isExtra)
       axios
         .post('/api/update-detailed-tour-object-attribute-property', {
           object_attribute_id: item.id,
@@ -282,7 +489,6 @@ export default {
           commission: !isExtra ? item.properties.commission : item.commission,
           is_extra: isExtra,
         })
-        .then(r => console.log(r))
         .finally(() => (this.loader = false))
     }, 1500),
   },
