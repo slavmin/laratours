@@ -85,7 +85,8 @@
           parent-model="{{ $item->model_alias }}" :customers="{{ json_encode($customer_type_options) }}"
           token="{{ csrf_token() }}"></object-attribute-price>
         <v-card-actions>
-          <v-btn text>Вернуться</v-btn>
+          <v-btn href="{{ $cancel_route }}" class="tc-link-no-underline-on-hover"
+            title="{{__('buttons.general.cancel')}}" text>Вернуться</v-btn>
           <v-spacer></v-spacer>
           <v-btn form="price-form" dark type="submit" color="#aa282a">
             Добавить

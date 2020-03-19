@@ -334,7 +334,6 @@ export default {
       }
     },
     fetchPrices() {
-      this.loader = true
       axios
         .get('/api/get-detailed-tour-object-attribute-prices', {
           params: {
@@ -348,7 +347,6 @@ export default {
           // console.log(r)
           this.prices = r.data
         })
-        .finally(() => (this.loader = false))
     },
     close() {
       console.log('dialog closed')
