@@ -399,9 +399,11 @@ export default {
             result += this.getPersonalMealPrice(day)
           }
         })
-        guide.events.forEach(eventId => {
-          this.getPersonalEventsPrice(eventId)
-        })
+        if (Array.isArray(guide.events)) {
+          guide.events.forEach(eventId => {
+            this.getPersonalEventsPrice(eventId)
+          })
+        }
         return this.pricePerSeat(result)
       }
       if (type == 'attendant') {
@@ -415,9 +417,11 @@ export default {
             result += this.getPersonalMealPrice(day)
           }
         })
-        attendant.events.forEach(eventId => {
-          this.getPersonalEventsPrice(eventId)
-        })
+        if (Array.isArray(attendant.events)) {
+          attendant.events.forEach(eventId => {
+            this.getPersonalEventsPrice(eventId)
+          })
+        }
         return this.pricePerSeat(result)
       }
       if (type == 'freeadl') {
