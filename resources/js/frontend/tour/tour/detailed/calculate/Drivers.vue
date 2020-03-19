@@ -35,7 +35,7 @@
               v-for="(driver, i) in drivers"
               :key="i"
             >
-              <td class="tc-max-width__250">
+              <td class="tc-calculate-width__200">
                 <div class="body-1">
                   Водитель {{ i + 1 }}
                 </div>

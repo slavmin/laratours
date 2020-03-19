@@ -24,7 +24,7 @@
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td class="tc-calculate-width__200">
                 {{ charge }}
               </td>
               <td>

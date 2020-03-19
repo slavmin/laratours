@@ -19,7 +19,7 @@
                 v-for="customer in tourData.customers"
                 :key="customer.id"
               >
-                <td class="text-left">
+                <td class="text-left tc-calculate-width__200">
                   {{ customer.name }}
                 </td>
                 <td class="text-right">

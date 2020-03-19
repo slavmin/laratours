@@ -35,7 +35,7 @@
               v-for="item in items"
               :key="item.name"
             >
-              <td class="tc-max-width__250">
+              <td class="tc-calculate-width__200">
                 <div class="body-1">
                   {{ item.name }}
                 </div>

@@ -201,7 +201,6 @@ class DetailedTourController extends Controller
 
         foreach ($object_attributes as $attr) {
 
-
           switch ($attr->objectable_type) {
             case ("App\Models\Tour\TourTransport"):
               $attr['properties'] = TourObjectAttributeProperties::where('tour_id', $tour_id)

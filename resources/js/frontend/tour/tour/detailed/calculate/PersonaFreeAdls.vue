@@ -35,7 +35,7 @@
               v-for="(freeadl, i) in freeadls"
               :key="i"
             >
-              <td class="tc-max-width__250">
+              <td class="tc-calculate-width__200">
                 <div class="body-1">
                   {{ freeadl.name }}
                 </div>
