@@ -486,6 +486,12 @@ export default {
       )
       return result
     },
+    pseudoOverlay: _.debounce(function() {
+      this.loader = true
+      setTimeout(() => {
+        this.loader = false
+      }, 1000)
+    }, 1500),
     throttledSave: _.debounce(function(item, isExtra = false) {
       this.loader = true
       axios

@@ -103,7 +103,6 @@ export default {
         'attendant',
         'extras',
       ]
-      const personal = ['drivers']
       parts.forEach(part => {
         this.tourData[part].forEach(part => {
           charge += parseFloat(this.$parent.getPrice(part))
@@ -150,6 +149,20 @@ export default {
             i,
             attendant.margin,
             attendant.commission
+          )
+        )
+      })
+      this.$parent.personalFreeAdls.forEach((freeadl, i) => {
+        charge += parseFloat(this.$parent.getPersonalPrice('freeadl', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('freeadl', i, freeadl.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'freeadl',
+            i,
+            freeadl.margin,
+            freeadl.commission
           )
         )
       })

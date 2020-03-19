@@ -112,11 +112,56 @@ export default {
             )
           })
         })
+        priceWithCommission += parseFloat(this.getAllPersonalPrice())
         this.pricesArray.push({
           id: customer.id,
           price: priceWithCommission.toFixed(2),
         })
       })
+    },
+    getAllPersonalPrice() {
+      let priceWithCommission = 0
+      this.$parent.drivers.forEach((driver, i) => {
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'driver',
+            i,
+            driver.margin,
+            driver.commission
+          )
+        )
+      })
+      this.$parent.personalGuides.forEach((guide, i) => {
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'guide',
+            i,
+            guide.margin,
+            guide.commission
+          )
+        )
+      })
+      this.$parent.personalAttendants.forEach((attendant, i) => {
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'attendant',
+            i,
+            attendant.margin,
+            attendant.commission
+          )
+        )
+      })
+      this.$parent.personalFreeAdls.forEach((freeadl, i) => {
+        priceWithCommission += parseFloat(
+          this.$parent.commissPersonalPrice(
+            'freeadl',
+            i,
+            freeadl.margin,
+            freeadl.commission
+          )
+        )
+      })
+      return priceWithCommission
     },
     getPriceValueByCustomerTypeId(customerTypeId) {
       const result = this.pricesArray.find(price => price.id == customerTypeId)

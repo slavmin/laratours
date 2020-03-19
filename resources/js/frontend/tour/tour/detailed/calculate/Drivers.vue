@@ -49,6 +49,7 @@
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
+                  @input="$parent.pseudoOverlay"
                 />
               </td>
               <td>
@@ -60,6 +61,7 @@
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
+                  @input="$parent.pseudoOverlay"
                 />
               </td>
               <td>
