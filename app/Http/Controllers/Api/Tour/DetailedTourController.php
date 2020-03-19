@@ -315,7 +315,10 @@ class DetailedTourController extends Controller
     $properties = (new TourObjectAttributeProperties);
 
     if (isset($request->object_attribute_properties_id)) {
-      $properties = TourObjectAttributeProperties::where('tour_id', $request->tour_id)->where('object_attribute_id', $request->object_attribute_id)->first();
+      $properties = TourObjectAttributeProperties::where('tour_id', $request->tour_id)
+        ->where('object_type', $request->object_type)
+        ->where('object_attribute_id', $request->object_attribute_id)
+        ->first();
     }
 
     $properties->object_attribute_id = $request->object_attribute_id;
@@ -377,8 +380,8 @@ class DetailedTourController extends Controller
   public function getDetailedTourObjectAttributeProperties(Request $request)
   {
     $result = TourObjectAttributeProperties::where('tour_id', $request->tour_id)
-      ->where('object_attribute_id', $request->object_attribute_id)
       ->where('object_type', $request->object_type)
+      ->where('object_attribute_id', $request->object_attribute_id)
       ->first();
     return $result;
   }
