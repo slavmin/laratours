@@ -76,6 +76,7 @@ export default {
           },
         })
         .then(r => {
+          console.log(r)
           this.actualMuseums = r.data.museum_options
           this.days = r.data.days
           this.tourDate = r.data.tour_date

@@ -47,7 +47,10 @@
                 <div>
                   {{ $parent.getPrice(item) }}
                 </div>
-                <div class="subheading grey--text">
+                <div
+                  v-if="!JSON.parse(item.extra).isCustomOrder"
+                  class="subheading grey--text"
+                >
                   {{ $parent.getPriceCustomerName(item) }}
                 </div>
               </td>

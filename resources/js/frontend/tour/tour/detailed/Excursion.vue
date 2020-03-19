@@ -4,7 +4,7 @@
     pa-3
     :class="[
       {'is-selected' : isSelected}, 
-      {'is-custom-order': JSON.parse(item.extra).isCustomOrder}
+      {'is-custom-order': isCustomOrder}
     ]"
     max-width="250px"
     outlined
@@ -70,7 +70,7 @@
           </v-col>
           <v-col xs4>
             <v-text-field
-              v-model.number="item.count"
+              v-model.number="customOrderCount"
               :disabled="item.selected"
               label="Штук"
               type="number"
@@ -79,7 +79,7 @@
         </v-row>
 
         <div
-          v-if="item.count"
+          v-if="customOrderCount"
           class="body-2"
         >
           <v-divider />
@@ -87,7 +87,7 @@
             Итого:
           </span>
           <p style="display: inline-block;">
-            {{ item.count * JSON.parse(item.extra).price }}
+            {{ customOrderTotalPrice() }}
           </p>
         </div>
       </div>
@@ -187,6 +187,11 @@ export default {
       isManualPrice: false,
       manualPriceValue: null,
       isSelected: false,
+      customOrderCount: null,
+      customOrderPrice: null,
+      customOrderTotalPrice: () => {
+        return this.customOrderCount * this.customOrderPrice
+      },
     }
   },
   computed: {
@@ -195,11 +200,19 @@ export default {
       for (let n = 1; n <= this.days; n++) result.push(n)
       return result
     },
+    isCustomOrder: function() {
+      const extra = JSON.parse(this.item.extra)
+      const result = extra.isCustomOrder
+      return result
+    },
   },
   mounted() {
     if (this.wasSelected) {
       this.isSelected = true
       this.fetchItemData()
+    }
+    if (this.isCustomOrder) {
+      this.customOrderPrice = JSON.parse(this.item.extra).price
     }
   },
   methods: {
@@ -219,6 +232,8 @@ export default {
             object_type: 'museum',
             tour_id: this.tourId,
             'days_array[]': [this.selectedDay],
+            duration: this.isCustomOrder ? this.customOrderCount : null,
+            value: this.isCustomOrder ? this.customOrderTotalPrice() : null,
           })
           // .then(r => console.log(r))
           .finally(() => {
@@ -238,7 +253,7 @@ export default {
           },
         })
         .then(r => {
-          this.selectedDay = JSON.parse(r.data.days_array)
+          this.selectedDay = JSON.parse(r.data.days_array)[0]
           if (r.data.tour_price_type_id) {
             this.selectedPriceId = r.data.tour_price_type_id
             this.duration = r.data.duration
@@ -246,6 +261,7 @@ export default {
             this.isManualPrice = true
             this.manualPriceValue = r.data.value
           }
+          this.customOrderCount = r.data.duration
         })
         .finally(() => (this.loader = false))
     },
