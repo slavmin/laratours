@@ -16,7 +16,7 @@
           {{ meal.name }}
         </v-col>
         <v-col
-          v-for="item in meal.objectables"
+          v-for="item in sortObjectables(meal)"
           :key="item.id"
         >
           <Meal
@@ -80,6 +80,19 @@ export default {
           this.selectedObjectAttributesIds = r.data.object_attributes
           this.customers = r.data.customers
         })
+    },
+    sortObjectables(meal) {
+      let result = meal.objectables.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (a.name < b.name) {
+          return -1
+        }
+        return 0
+      })
+
+      return result
     },
   },
 }
