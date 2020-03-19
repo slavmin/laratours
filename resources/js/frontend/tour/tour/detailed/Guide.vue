@@ -233,6 +233,7 @@ export default {
           },
         })
         .then(r => {
+          console.log(r)
           this.selectedDays = JSON.parse(r.data.days_array)
           this.price = r.data.value
           this.hotel = r.data.hotel

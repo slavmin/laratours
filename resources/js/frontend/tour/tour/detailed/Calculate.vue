@@ -189,7 +189,10 @@ export default {
             model_alias: 'tour',
           },
         })
-        .then(r => (this.tourData = r.data))
+        .then(r => {
+          console.log(r)
+          this.tourData = r.data
+        })
         .then(r => {
           this.setDefaultCustomerTypeId()
           this.parseDrivers()
