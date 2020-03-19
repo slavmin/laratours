@@ -3,70 +3,181 @@
     <v-row>
       <v-col
         cols="12"
-        lg="6"
+        md="3"
       >
-        <v-menu
-          v-model="showDateStart"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
+        <v-select
+          v-model="filterValue"
+          :items="filterOptions"
+          color="#aa282a"
+          label="Фильтр периодов"
+        />
+        <v-btn
+          v-if="filterValue != null"
+          small
+          text
+          color="#aa282a"
+          @click="clearFilter"
         >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="dateStart"
-              color="#aa282a"
-              label="Начало периода"
-              prepend-icon="event"
-              clearable
-              readonly
-              v-on="on"
-            />
-          </template>
-          <v-date-picker
-            v-model="dateStart"
-            color="#aa282a"
-            :first-day-of-week="1"
-            locale="ru-ru"
-            @input="showDateStart = false"
-          />
-        </v-menu>
-      </v-col>
-      <v-col
-        cols="12"
-        lg="6"
-      >
-        <v-menu
-          v-model="showDateEnd"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="dateEnd"
-              color="#aa282a"
-              label="Конец периода"
-              prepend-icon="event"
-              clearable
-              readonly
-              v-on="on"
-            />
-          </template>
-          <v-date-picker
-            v-model="dateEnd"
-            color="#aa282a"
-            :min="dateStart"
-            :first-day-of-week="1"
-            locale="ru-ru"
-            @input="showDateEnd = false"
-          />
-        </v-menu>
+          Показать все
+        </v-btn>
       </v-col>
     </v-row>
+    <v-simple-table v-if="item.priceable.length > 0">
+      <template v-slot:default>
+        <thead>
+          <th>
+            Начало периода
+          </th>
+          <th>
+            Конец периода
+          </th>
+          <th>
+            Тип
+          </th>
+          <th>
+            Стоимость
+          </th>
+          <th>
+            Действия
+          </th>
+        </thead>
+        <tbody>
+          <tr
+            v-for="price in filteredPrices"
+            :key="price.id"
+          >
+            <td>
+              {{ price.period_start }}
+            </td>
+            <td>
+              {{ price.period_end }}
+            </td>
+            <td>
+              <div v-if="objectModel != 'transport'">
+                {{ customers[price.tour_customer_type_id] }}
+              </div>
+              <div v-if="objectModel == 'transport'">
+                {{ priceTypesForView[price.tour_price_type_id] }}
+              </div>
+            </td>
+            <td>
+              {{ price.price }}
+            </td>
+            <td>
+              <form
+                method="POST"
+                :action="`/operator/attribute-price/${price.id}`"
+              >
+                <input
+                  type="hidden"
+                  name="_method"
+                  value="DELETE"
+                >
+                <input
+                  type="hidden"
+                  name="_token"
+                  :value="token"
+                >
+                <v-btn
+                  icon
+                  small
+                  color="red"
+                  type="submit"
+                  title="Удалить"
+                >
+                  <v-icon>close</v-icon>
+                </v-btn>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+    <v-row
+      v-if="item.priceable.length == 0"
+      class="center mt-5"
+    >
+      <div class="display-1">
+        Цены и периоды не заполнены.
+      </div>
+    </v-row>
+    <v-divider />
+    <v-form
+      ref="period"
+      v-model="valid"
+    >
+      <v-row>
+        <v-col
+          cols="12"
+          lg="6"
+        >
+          <v-menu
+            v-model="showDateStart"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="dateStart"
+                color="#aa282a"
+                label="Начало периода"
+                :rules="[v => !!v || 'Выберите']"
+                prepend-icon="event"
+                clearable
+                readonly
+                required
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="dateStart"
+              color="#aa282a"
+              :first-day-of-week="1"
+              locale="ru-ru"
+              @input="showDateStart = false"
+            />
+          </v-menu>
+        </v-col>
+        <v-col
+          cols="12"
+          lg="6"
+        >
+          <v-menu
+            v-model="showDateEnd"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="dateEnd"
+                color="#aa282a"
+                label="Конец периода"
+                :rules="[v => !!v || 'Выберите']"
+                prepend-icon="event"
+                clearable
+                readonly
+                required
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="dateEnd"
+              color="#aa282a"
+              :min="dateStart"
+              :first-day-of-week="1"
+              locale="ru-ru"
+              @input="showDateEnd = false"
+            />
+          </v-menu>
+        </v-col>
+      </v-row>
+    </v-form>
     <div v-if="objectModel == 'museum'">
       <v-row justify="center">
         <v-col
@@ -206,6 +317,24 @@
         name="prices_array"
       >
     </form>
+    <v-row style="margin: 16px;">
+      <v-btn
+        :href="cancelRoute"
+        class="tc-link-no-underline-on-hover"
+        text
+      >
+        Вернуться
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        form="price-form"
+        dark
+        color="#aa282a"
+        @click="submitForm"
+      >
+        Добавить
+      </v-btn>
+    </v-row>
   </v-container>
 </template>
 <script>
@@ -219,6 +348,10 @@ export default {
     priceTypeOptions: {
       type: Array,
       default: null,
+    },
+    priceTypesForView: {
+      type: Object,
+      default: () => {},
     },
     parentId: {
       type: String,
@@ -237,6 +370,14 @@ export default {
       required: true,
       default: null,
     },
+    item: {
+      type: Object,
+      default: () => {},
+    },
+    cancelRoute: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -245,13 +386,14 @@ export default {
       showDateEnd: false,
       dateEnd: '',
       customerTypeId: null,
-      price: null,
       resultArray: [],
       transportResultArray: [],
       hotelCustomerTypes: [],
       hotelInfantType: {},
       hotelAccoms: ['Основное', 'Single', 'Дополнительное'],
       hotelInfantIsFree: false,
+      filterValue: null,
+      valid: false,
     }
   },
   computed: {
@@ -267,23 +409,53 @@ export default {
       })
       return result
     },
+    filterOptions: function() {
+      let result = []
+      this.item.priceable.forEach(price => {
+        const period = `${price.period_start} - ${price.period_end}`
+        if (!result.includes(period)) result.push(period)
+      })
+      return result
+    },
+    filteredPrices: function() {
+      let result = []
+      if (this.filterValue == null) {
+        result = this.item.priceable
+      } else {
+        this.item.priceable.forEach(price => {
+          const period = `${price.period_start} - ${price.period_end}`
+          if (period == this.filterValue) {
+            result.push(price)
+          }
+        })
+      }
+      return result
+    },
   },
   mounted() {
     this.constructResultArray()
   },
   methods: {
-    submitForm() {
-      const form = document.getElementById('price-form')
-      if (this.hotelInfantIsFree == true) {
-        const inf = {
-          tour_customer_type_id: this.hotelInfantType.value,
-          name: this.hotelInfantType.text,
-          price: 0,
-          is_free: true,
-        }
-        this.resultArray.push(inf)
+    validate() {
+      if (this.$refs.period.validate()) {
+        this.snackbar = true
       }
-      form.submit()
+    },
+    submitForm() {
+      this.validate()
+      if (this.valid) {
+        const form = document.getElementById('price-form')
+        if (this.hotelInfantIsFree == true) {
+          const inf = {
+            tour_customer_type_id: this.hotelInfantType.value,
+            name: this.hotelInfantType.text,
+            price: 0,
+            is_free: true,
+          }
+          this.resultArray.push(inf)
+        }
+        form.submit()
+      }
     },
     constructResultArray() {
       if (this.objectModel == 'museum') {
@@ -338,6 +510,9 @@ export default {
       if (this.resultArray[index].is_free == 1) {
         this.resultArray[index].price = 0
       }
+    },
+    clearFilter() {
+      this.filterValue = null
     },
   },
 }
