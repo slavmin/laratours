@@ -80,16 +80,19 @@ export default {
           this.selectedObjectAttributesIds = r.data.object_attributes
           this.customers = r.data.customers
         })
+        .then(r => this.sortObjectables())
     },
-    sortObjectables(meal) {
-      meal.objectables.sort((a, b) => {
-        if (a.name > b.name) {
-          return 1
-        }
-        if (a.name < b.name) {
-          return -1
-        }
-        return 0
+    sortObjectables() {
+      this.actualMeals.forEach(meal => {
+        meal.objectables.sort((a, b) => {
+          if (a.name > b.name) {
+            return 1
+          }
+          if (a.name < b.name) {
+            return -1
+          }
+          return 0
+        })
       })
     },
   },
