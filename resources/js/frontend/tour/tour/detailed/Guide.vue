@@ -91,7 +91,7 @@
             :key="museum.id"
             v-model="selectedMuseums"
             :value="museum.id"
-            :label="museum.name"
+            :label="`${museum.museum_name}: ${museum.name}`"
             color="#aa282a"
           />
         </div>

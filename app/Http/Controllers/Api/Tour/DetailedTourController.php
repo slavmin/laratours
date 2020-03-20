@@ -407,6 +407,8 @@ class DetailedTourController extends Controller
     $result = [];
     foreach ($all_object_attributes as $attr) {
       if ($attr->objectable_type == 'App\Models\Tour\TourMuseum') {
+        $museum = TourMuseum::find($attr->objectable_id);
+        $attr['museum_name'] = $museum->name;
         $result[] = $attr;
       }
     }
