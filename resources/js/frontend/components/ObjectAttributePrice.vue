@@ -181,10 +181,25 @@
     <div v-if="objectModel == 'museum'">
       <v-row justify="center">
         <v-col
+          cols="12"
+          md="6"
+          lg="4"
+        >
+          <v-text-field
+            v-model="priceForAllValue"
+            label="Одна цена на все типы"
+            color="#aa282a"
+            @input="priceForAll"
+          />
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col
           v-for="(customer, i) in resultArray"
           :key="customer.id"
           cols="12"
-          lg="6"
+          md="6"
+          lg="4"
         >
           <v-row>
             <v-col>
@@ -394,6 +409,7 @@ export default {
       hotelInfantIsFree: false,
       filterValue: null,
       valid: false,
+      priceForAllValue: null,
     }
   },
   computed: {
@@ -513,6 +529,9 @@ export default {
     },
     clearFilter() {
       this.filterValue = null
+    },
+    priceForAll() {
+      this.resultArray.forEach(price => (price.price = this.priceForAllValue))
     },
   },
 }
