@@ -148,27 +148,10 @@ class ObjectAttributeController extends Controller
         'name' => 'required|min:3',
       ]);
     }
-
     $item = TourObjectAttributes::findOrFail($id);
+    // dd($request->all(), $item);
 
     $item->update($request->all());
-
-    // if (is_array($request->prices)) {
-    //   $prices = [];
-    //   foreach ($request->prices as $priceObj) {
-    //     $price = json_decode($priceObj);
-    //     $price = [
-    //       'period_start'          => $price->period_start,
-    //       'period_end'            => $price->period_end,
-    //       'price'                 => $price->price,
-    //       'tour_customer_type_id' => $price->tour_customer_type_id ?? '',
-    //     ];
-    //     !empty($price) ? $prices[] = $price : null;
-    //   }
-    //   // dd($prices);
-    //   TourPrice::where(['priceable_id' => $item->id])->delete();
-    //   $item->priceable()->createMany($prices);
-    // }
 
     return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
   }

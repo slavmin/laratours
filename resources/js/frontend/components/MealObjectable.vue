@@ -44,18 +44,10 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-text-field
-              v-model="name"
-              label="Название"
-              outline
-              color="#aa282a"
-              class="mb-3"
-              @keyup.enter="submitForm"
-            />
             <v-form
               :id="'form' + tourObject.id"
               ref="form"
-              lazy-validation
+              v-model="valid"
               :action="editMode ? `/operator/attribute/${objectAttribute.id}` : '/operator/attribute'"
               method="POST"
             >
@@ -80,11 +72,24 @@
                 name="parent_model_alias"
                 value="meal"
               >
-              <input
+              <v-text-field
                 v-model="name"
-                type="hidden"
                 name="name"
-              >
+                label="Название"
+                outline
+                color="#aa282a"
+                class="mb-3"
+                :rules="[v => !!v || 'Заполните']"
+                required
+              />
+              <v-text-field
+                v-model="description"
+                name="description"
+                label="Описание"
+                outline
+                color="#aa282a"
+                class="mb-3"
+              />
             </v-form>
           </v-container>
         </v-card-text>
@@ -101,8 +106,7 @@
           <v-btn
             color="#aa282a"
             dark
-            type="submit"
-            :form="'form' + tourObject.id"
+            @click="submitForm"
           >
             Сохранить
           </v-btn>
@@ -148,12 +152,17 @@ export default {
     return {
       dialog: false,
       name: '',
+      description: '',
+      valid: false,
     }
   },
   mounted() {
     if (this.editMode) this.parseInfo()
   },
   methods: {
+    validate() {
+      this.$refs.form.validate()
+    },
     close() {
       if (this.editMode) {
         this.parseInfo()
@@ -166,10 +175,14 @@ export default {
     },
     parseInfo() {
       this.name = this.objectAttribute.name
+      this.description = this.objectAttribute.description
     },
     submitForm() {
-      const form = document.getElementById(`form${this.tourObject.id}`)
-      form.submit()
+      this.validate()
+      if (this.valid) {
+        const form = document.getElementById(`form${this.tourObject.id}`)
+        form.submit()
+      }
     },
   },
 }
