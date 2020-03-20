@@ -19,7 +19,6 @@
         }).ready(function () {
             $(".inputmask, [data-inputmask], [data-inputmask-mask], [data-inputmask-alias],[data-inputmask-regex]").each(function (ndx, lmnt) {
                 if (lmnt.inputmask === undefined) {
-                    console.log(lmnt)
                     Inputmask().mask(lmnt);
                 }
             });
