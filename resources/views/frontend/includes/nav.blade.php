@@ -56,7 +56,7 @@
     @if(config('access.registration'))
     <li>
       <v-btn text dark href="{{route('frontend.auth.register')}}"
-        class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">
+        class="{{ active_class(Active::checkRoute('frontend.auth.register')) }}">
         @lang('navs.frontend.register')
       </v-btn>
     </li>
