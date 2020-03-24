@@ -56,7 +56,7 @@ class TourController extends Controller
     //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
     //     }])->orderBy($orderBy, $sort)->paginate();
     // }
-    $items = Tour::with(['orderprofiles' => function ($query) {
+    $items = Tour::with('dates')->with(['orderprofiles' => function ($query) {
       $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
     }]);
 

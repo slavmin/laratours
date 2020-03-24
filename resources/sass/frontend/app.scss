@@ -90,3 +90,23 @@
 .tc-calculate-width__200 {
     width: 200px !important;
 }
+
+.tc-order-table {
+    width: 100%;
+
+    td,
+    th {
+        font-size: 16px;
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        border-bottom: 2px solid #cac8c9;
+        color: #868080;
+        padding-top: 24px;
+        padding-bottom: 36px;
+        font-size: 20px;
+        font-weight: normal;
+    }
+}
