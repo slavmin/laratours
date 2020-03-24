@@ -130,6 +130,7 @@ class MealController extends Controller
 
   public function update(Request $request, $id)
   {
+
     if ($request->get('attribute')) {
       $request->validate([
         'attribute.*.name' => 'required|min:3',

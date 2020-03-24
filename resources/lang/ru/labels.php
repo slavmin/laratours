@@ -193,6 +193,7 @@ return [
         'created_at' => 'Создан',
         'edit_information' => 'Редактирование информации',
         'email' => 'E-mail',
+        'phone' => 'Телефон',
         'last_updated' => 'Обновлён',
         'name' => 'Логин',
         'first_name' => 'Имя',

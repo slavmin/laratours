@@ -38,6 +38,7 @@ Vue.component('tour-edit', require('./components/TourEdit.vue').default);
 Vue.component('partner-tour', require('./tour/tour/PartnerTour.vue').default);
 Vue.component('detailed-tour', require('./tour/tour/DetailedTour.vue').default);
 
+Vue.component('order-form', require('./components/OrderForm.vue').default);
 
 
 const app = new Vue({
