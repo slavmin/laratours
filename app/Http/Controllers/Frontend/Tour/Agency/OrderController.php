@@ -10,8 +10,11 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Tour\TourCustomer;
+use App\Models\Tour\TourCustomerType;
 use App\Models\Tour\TourObjectAttributeProperties;
 use App\Models\Tour\TourObjectAttributes;
+use App\Models\Tour\TourPrice;
 use App\Models\Tour\TourTransport;
 use Illuminate\Support\Facades\DB;
 
@@ -72,6 +75,17 @@ class OrderController extends Controller
       $tour_transport[] = TourObjectAttributes::where('id', $id)->select('id', 'name', 'description', 'extra')->AllTeams()->get();
     }
 
+    $tour_prices = TourPrice::where('priceable_type', 'App\Models\Tour\Tour')
+      ->where('priceable_id', $tour->id)
+      ->select('price', 'tour_customer_type_id')
+      ->AllTeams()
+      ->get();
+
+    $customer_options = TourCustomerType::where('team_id', $tour->team_id)
+      ->AllTeams()
+      ->pluck('name', 'id')
+      ->toArray();
+
     if (!$tour) {
       return redirect()->back()->withFlashDanger(__('alerts.general.not_found'));
     }
@@ -83,6 +97,8 @@ class OrderController extends Controller
       ->with('cancel_route', route('frontend.agency.tour-list'))
       ->with('tour', $tour)
       ->with('tour_transport', $tour_transport)
+      ->with('tour_prices', $tour_prices)
+      ->with('customer_options', $customer_options)
       ->with('statuses', [])
       ->with('profiles', [0 => []])
       ->with('model_alias', $model_alias);

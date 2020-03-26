@@ -112,6 +112,32 @@
       cols="12"
       md="6"
       lg="4"
+      align-self="end"
+      class="pb-5"
+    >
+      <v-select
+        v-model="price"
+        :items="prices"
+        color="#aa282a"
+        clearable
+        label="Тип туриста"
+      />
+      <input
+        v-model="price"
+        type="hidden"
+        :name="`customer[${index}][price]`"
+      >
+      <h4
+        v-if="price"
+        class="text-right"
+      >
+        Цена: {{ price }}
+      </h4>
+    </v-col>
+    <!-- <v-col
+      cols="12"
+      md="6"
+      lg="4"
     >
       <v-checkbox
         v-model="isPens"
@@ -128,11 +154,12 @@
         label="Single-размещение"
         color="#aa282a"
       />
-    </v-col>
+    </v-col> -->
   </v-row>
 </template>
 <script>
 import moment from 'moment'
+import { mapActions } from 'vuex'
 export default {
   name: 'TouristForm',
   props: {
@@ -154,6 +181,14 @@ export default {
       type: Number,
       default: 0,
     },
+    prices: {
+      type: Array,
+      default: () => [],
+    },
+    customerOptions: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -162,6 +197,7 @@ export default {
       isPens: false,
       isForeigner: false,
       isSinglePlace: false,
+      price: null,
     }
   },
   computed: {
@@ -203,6 +239,20 @@ export default {
       }
       return rfLocalPass
     },
+  },
+  watch: {
+    price: function(val) {
+      if (val === undefined) {
+        val = 0
+      }
+      this.updateProfilePrice({
+        id: this.index,
+        price: val,
+      })
+    },
+  },
+  methods: {
+    ...mapActions(['updateProfilePrice']),
   },
 }
 </script>

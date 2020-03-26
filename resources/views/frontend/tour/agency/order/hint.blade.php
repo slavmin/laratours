@@ -25,7 +25,7 @@
         <br>
         Заполняется только цифрами: 4605390089
       </p>
-      <v-divider />
+      <v-divider></v-divider>
 
       <h4 class="subheading">
         Загранпаспорт гражданина РФ
@@ -41,7 +41,7 @@
         <br>
         Заполняется только цифрами: 520022196
       </p>
-      <v-divider />
+      <v-divider></v-divider>
 
       <h4 class="subheading">
         Свидетельство о рождении, выданное в РФ
@@ -60,13 +60,6 @@
       </p>
     </v-card-text>
 
-    <v-divider />
-
-    <v-card-actions>
-      <v-spacer />
-      <v-btn color="#aa282a" dark @click="dialog = false">
-        Закрыть
-      </v-btn>
-    </v-card-actions>
+    <v-divider></v-divider>
   </v-card>
 </v-dialog>

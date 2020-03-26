@@ -318,122 +318,9 @@ export default {
             }
         },
         setProfilePrice(state, data) {
-            const pricelist = state.priceList
-            let profile = state.profiles.find(profile => profile.id == data.profileId)
-            profile.name = data.name
-            let profilePrice = 0
-            let profileCommission = 0
-            switch (data.profileCustomerType) {
-                case 'CHD':
-                    let price = pricelist.find((price) => {
-                        let age = JSON.parse(price.age)
-                        if (age && (age.ageFrom <= data.age && data.age < age.ageTo)) {
-                            return price
-                        }
-                    })
-                    // Hack to fix no-price if child younger than prices in pricelist
-                    if (!price) {
-                        price = pricelist.find((price) => {
-                            return price.isChd
-                        })
-                    }
-                    // If still no price, use ADL price
-                    if (!price) {
-                        price = state.priceList.find(price => price.name.includes('Взросл'))
-                    }
-                    switch (data.profilePlace) {
-                        case 'EXTRA':
-                            profilePrice = price.commissionExtraPrice
-                            profileCommission = price.commissionExtraPrice - price.addPrice
-                            break
-                        case 'SNGL':
-                            profilePrice = price.commissionSinglePrice
-                            profileCommission = price.commissionSinglePrice - price.singlePrice
-                            break
-                        case 'STD':
-                            console.log(profilePrice)
-                            profilePrice = price.commissionStandardPrice
-                            profileCommission = price.commissionStandardPrice - price.standardPrice
-                            break
-                        default:
-                            console.log('error')
-                    }
-                    break
-                case 'PENS':
-                    price = state.priceList.find((price) => price.age && JSON.parse(price.age).isPens)
-                    // If still no price, use ADL price
-                    if (!price) {
-                        price = state.priceList.find(price => price.name.includes('Взросл'))
-                    }
-                    switch (data.profilePlace) {
-                        case 'EXTRA':
-                            profilePrice = price.commissionExtraPrice
-                            profileCommission = price.commissionExtraPrice - price.addPrice
-                            break
-                        case 'SNGL':
-                            profilePrice = price.commissionSinglePrice
-                            profileCommission = price.commissionSinglePrice - price.singlePrice
-                            break
-                        case 'STD':
-                            profilePrice = price.commissionStandardPrice
-                            profileCommission = price.commissionStandardPrice - price.standardPrice
-                            break
-                        default:
-                            console.log('error')
-                    }
-                    break
-                case 'FRGN':
-                    price = state.priceList.find(price => price.name.includes('Иностр'))
-                    // If still no price, use ADL price
-                    if (!price) {
-                        price = state.priceList.find(price => price.name.includes('Взросл'))
-                    }
-                    switch (data.profilePlace) {
-                        case 'EXTRA':
-                            profilePrice = price.commissionExtraPrice
-                            profileCommission = price.commissionExtraPrice - price.addPrice
-                            break
-                        case 'SNGL':
-                            profilePrice = price.commissionSinglePrice
-                            profileCommission = price.commissionSinglePrice - price.singlePrice
-                            break
-                        case 'STD':
-                            profilePrice = price.commissionStandardPrice
-                            profileCommission = price.commissionStandardPrice - price.standardPrice
-                            break
-                        default:
-                            console.log('error')
-                    }
-                    break
-                case 'ADL':
-                    price = state.priceList.find(price => price.name.includes('Взросл'))
-                    switch (data.profilePlace) {
-                        case 'EXTRA':
-                            profilePrice = price.commissionExtraPrice
-                            profileCommission = price.commissionExtraPrice - price.addPrice
-                            break
-                        case 'SNGL':
-                            profilePrice = price.commissionSinglePrice
-                            profileCommission = price.commissionSinglePrice - price.singlePrice
-                            break
-                        case 'STD':
-                            profilePrice = price.commissionStandardPrice
-                            profileCommission = price.commissionStandardPrice - price.standardPrice
-                            break
-                        default:
-                            console.log('error', profile, priceList)
-                    }
-                    break
-                default:
-                    console.log('error data: ', data, profile)
-            }
-            // console.log(profile.name)
-            if (profile.name != '') {
-                profile.price = profilePrice + profile.extraEventsPrice
-                profile.commission = profileCommission + profile.extraEventsCommission
-            }
-            profile.priceWithoutMeal =
-                profilePrice - state.defaultMealPrice
+            state.profilePrices[data.id] = data.price
+            // Hack for refresh getOrderPrice
+            state.profilePrices = state.profilePrices.filter(price => true)
         },
         setOrderPrice(state) {
             let result = 0
@@ -570,6 +457,7 @@ export default {
         extraEvents: [],
         partnerPrices: [],
         partnerExtra: [],
+        profilePrices: [0, 0, 0]
     },
     getters: {
         getOrderEditMode(state) {
@@ -640,7 +528,9 @@ export default {
             }
         },
         getOrderPrice(state) {
-            return state.orderPrice
+            let result = 0
+            state.profilePrices.forEach(price => result += price)
+            return result
         },
         getOrderCommission(state) {
             return state.orderCommission
