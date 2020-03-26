@@ -6,6 +6,7 @@
     focusable
     hover
   >
+    {{ seatsInCurrentOrder }}
     <v-expansion-panel
       v-for="i in [0, 1, 2]"
       :key="i"
@@ -18,6 +19,11 @@
           :customer="customers[i]"
           :index="i"
         />
+        <BusScheme
+          edit-mode
+          :transport="transport[0][0]"
+          :profile-id="i"
+        />
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -25,12 +31,21 @@
 
 <script>
 import TouristForm from './TouristForm'
+import BusScheme from './BusScheme'
 export default {
   name: 'OrderForm',
-  components: { TouristForm },
+  components: { TouristForm, BusScheme },
   props: {
     old: {
       type: Object,
+      default: () => {},
+    },
+    transport: {
+      type: Array,
+      default: () => [],
+    },
+    profiles: {
+      type: Array,
       default: () => [],
     },
   },
@@ -38,12 +53,28 @@ export default {
     return {
       panel: [0],
       customers: [],
+      seatsInCurrentOrder: [],
     }
   },
   mounted() {
-    if (this.old.hasOwnProperty('customer')) {
+    if (this.old !== undefined && this.old.hasOwnProperty('customer')) {
       this.customers = this.old.customer
     }
+    this.orderedSeats()
+  },
+  methods: {
+    orderedSeats() {
+      let result = []
+      this.profiles.map(profile => {
+        let content = Object.assign({}, profile.content)
+        for (let key in content) {
+          if (content[key].hasOwnProperty('busSeatId')) {
+            result.push(content[key].busSeatId)
+          }
+        }
+      })
+      this.seatsInCurrentOrder = result
+    },
   },
 }
 </script>

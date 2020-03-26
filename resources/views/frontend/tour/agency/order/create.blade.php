@@ -54,7 +54,9 @@
           <h3 class="text-grey text-center">
             Данные туристов
           </h3>
-          <order-form :old="{{ json_encode(old()) }}"></order-form>
+          <order-form @if (old()) :old="{{ json_encode(old()) }}" @endif :transport="{{ json_encode($tour_transport) }}"
+            :profiles="{{ json_encode($tour->orderprofiles) }}">
+          </order-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>

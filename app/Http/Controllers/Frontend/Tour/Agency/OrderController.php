@@ -10,6 +10,9 @@ use App\Models\Tour\Tour;
 use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Tour\TourObjectAttributeProperties;
+use App\Models\Tour\TourObjectAttributes;
+use App\Models\Tour\TourTransport;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -56,6 +59,19 @@ class OrderController extends Controller
 
     $tour = Tour::whereId($tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
 
+    $tour_transport_ids = TourObjectAttributeProperties::where('tour_id', $tour->id)
+      ->where('object_type', 'transport')
+      ->select('object_attribute_id')
+      ->AllTeams()
+      ->pluck('object_attribute_id')
+      ->toArray();
+
+    $tour_transport = [];
+
+    foreach ($tour_transport_ids as $id) {
+      $tour_transport[] = TourObjectAttributes::where('id', $id)->select('id', 'name', 'description', 'extra')->AllTeams()->get();
+    }
+
     if (!$tour) {
       return redirect()->back()->withFlashDanger(__('alerts.general.not_found'));
     }
@@ -66,6 +82,7 @@ class OrderController extends Controller
       ->with('route', route('frontend.agency.' . $model_alias . '.store'))
       ->with('cancel_route', route('frontend.agency.tour-list'))
       ->with('tour', $tour)
+      ->with('tour_transport', $tour_transport)
       ->with('statuses', [])
       ->with('profiles', [0 => []])
       ->with('model_alias', $model_alias);
