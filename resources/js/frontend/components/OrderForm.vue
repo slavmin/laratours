@@ -6,7 +6,6 @@
     focusable
     hover
   >
-    {{ seatsInCurrentOrder }}
     <v-expansion-panel
       v-for="i in [0, 1, 2]"
       :key="i"
@@ -32,6 +31,7 @@
 <script>
 import TouristForm from './TouristForm'
 import BusScheme from './BusScheme'
+import { mapActions } from 'vuex'
 export default {
   name: 'OrderForm',
   components: { TouristForm, BusScheme },
@@ -63,6 +63,7 @@ export default {
     this.orderedSeats()
   },
   methods: {
+    ...mapActions(['updateOrderedSeats']),
     orderedSeats() {
       let result = []
       this.profiles.map(profile => {
@@ -73,7 +74,7 @@ export default {
           }
         }
       })
-      this.seatsInCurrentOrder = result
+      this.updateOrderedSeats(result)
     },
   },
 }

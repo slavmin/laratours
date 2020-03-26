@@ -15,6 +15,11 @@
           >
             {{ choosenSeats[0] }}
           </v-chip>
+          <input
+            type="hidden"
+            :name="`customer[${profileId}][busSeatId]`"
+            :value="choosenSeats[0]"
+          >
         </h4>
       </v-col>
     </v-row>
