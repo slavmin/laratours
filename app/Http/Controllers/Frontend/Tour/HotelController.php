@@ -107,7 +107,12 @@ class HotelController extends Controller
 
     $tour_hotel->save();
 
-    return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(__('alerts.general.created'));
+    return redirect()->route('frontend.tour.hotel.index')->withFlashSuccess(
+      __('alerts.general.created')
+        . '. id: <span id="created-object-id">'
+        . $tour_hotel->id
+        . '</span>'
+    );
   }
 
 

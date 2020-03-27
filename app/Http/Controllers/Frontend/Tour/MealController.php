@@ -101,7 +101,10 @@ class MealController extends Controller
 
     $tour_meal->save();
 
-    return redirect()->route('frontend.tour.meal.index')->withFlashSuccess(__('alerts.general.created'));
+    return redirect()->route('frontend.tour.meal.index')->withFlashSuccess(__('alerts.general.created')
+      . '. id: <span id="created-object-id">'
+      . $tour_meal->id
+      . '</span>');
   }
 
 

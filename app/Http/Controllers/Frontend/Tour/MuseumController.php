@@ -106,7 +106,12 @@ class MuseumController extends Controller
 
     $museum->save();
 
-    return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(__('alerts.general.created'));
+    return redirect()->route('frontend.tour.museum.index')->withFlashSuccess(
+      __('alerts.general.created')
+        . '. id: <span id="created-object-id">'
+        . $museum->id
+        . '</span>'
+    );
   }
 
 

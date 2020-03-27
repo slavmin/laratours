@@ -117,7 +117,12 @@ class TransportController extends Controller
 
     $transport->save();
 
-    return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(__('alerts.general.created'));
+    return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(
+      __('alerts.general.created')
+        . '. id: <span id="created-object-id">'
+        . $transport->id
+        . '</span>'
+    );
   }
 
   /**
