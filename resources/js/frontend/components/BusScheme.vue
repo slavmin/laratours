@@ -184,6 +184,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    choosenSeat: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -274,6 +278,9 @@ export default {
   },
   created() {
     this.attribute = 'attribute[' + this.transport.id + ']'
+    if (this.choosenSeat !== '') {
+      this.choosenSeats.push(this.choosenSeat)
+    }
   },
   mounted() {
     if (this.transport.extra !== null && this.transport.extra !== undefined) {

@@ -116,22 +116,23 @@
       class="pb-5"
     >
       <v-select
-        v-model="price"
+        v-model="customer.price"
         :items="prices"
         color="#aa282a"
         clearable
         label="Тип туриста"
+        @change="newPrice(customer.price)"
       />
       <input
-        v-model="price"
+        v-model="customer.price"
         type="hidden"
         :name="`customer[${index}][price]`"
       >
       <h4
-        v-if="price"
+        v-if="customer.price"
         class="text-right"
       >
-        Цена: {{ price }}
+        Цена: {{ customer.price }}
       </h4>
     </v-col>
     <!-- <v-col
@@ -174,6 +175,7 @@ export default {
           passport: null,
           address: null,
           is_rf_int_passport: null,
+          price: null,
         }
       },
     },
@@ -184,10 +186,6 @@ export default {
     prices: {
       type: Array,
       default: () => [],
-    },
-    customerOptions: {
-      type: Object,
-      default: () => {},
     },
   },
   data() {
@@ -241,18 +239,26 @@ export default {
     },
   },
   watch: {
-    price: function(val) {
-      if (val === undefined) {
-        val = 0
-      }
-      this.updateProfilePrice({
-        id: this.index,
-        price: val,
-      })
+    customer: {
+      handler: function() {
+        this.newPrice(this.customer.price)
+      },
     },
+  },
+  mounted() {
+    if (this.customer.name !== null) {
+      this.newPrice(this.customer.price)
+    }
   },
   methods: {
     ...mapActions(['updateProfilePrice']),
+    newPrice(price) {
+      if (price === undefined) price = 0
+      this.updateProfilePrice({
+        id: this.index,
+        price: price,
+      })
+    },
   },
 }
 </script>

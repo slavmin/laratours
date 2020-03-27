@@ -444,6 +444,8 @@ return [
           'tour_name' => 'Имя тура',
           'tour_id' => 'ID тура',
           'status' => 'Статус',
+          'operator_status' => 'Статус оператора',
+          'agency_status' => 'Статус агентства',
           'operator' => 'Оператор',
           'agency' => 'Агентство',
           'agent' => 'Агент',
@@ -451,6 +453,9 @@ return [
           'guest' => 'Гость',
           'sort' => 'Позиция',
           'total' => 'всего типов|типов всего',
+          'tourists_data' => 'Данные о туристах',
+          'price' => 'Стоимость',
+          'commission' => 'Комиссия',
         ],
       ],
       'filter' => [

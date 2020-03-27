@@ -16,8 +16,11 @@ trait ActionButtonsAttribute
 
   public function getCreateOrderButtonAttribute()
   {
-    return '<a href="' . route('frontend.agency.order.create', $this) . '"
-        class="btn btn-success ml-1"><i class="fas fa-plus-circle" data-toggle="tooltip" data-placement="top" title="' . __('labels.general.buttons.reserve') . '"></i></a>';
+    return '<v-btn color="#aa282a" small dark 
+              href="' . route('frontend.agency.order.create', $this) . '"
+              title="' . __('labels.general.buttons.reserve') . '">
+              ' . __('labels.general.buttons.reserve') . '
+            </v-btn>';
   }
 
   public function getCreateButtonAttribute()

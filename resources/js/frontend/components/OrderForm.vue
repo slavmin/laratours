@@ -24,6 +24,7 @@
             edit-mode
             :transport="transport[0][0]"
             :profile-id="i"
+            :choosen-seat="busSeats[i]"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,6 +39,7 @@
         </h5>
         <input
           name="total_price"
+          type="hidden"
           :value="orderPrice"
         >
       </v-col>
@@ -53,6 +55,10 @@ export default {
   name: 'OrderForm',
   components: { TouristForm, BusScheme },
   props: {
+    privateForm: {
+      type: Boolean,
+      default: false,
+    },
     old: {
       type: Object,
       default: () => {},
@@ -65,7 +71,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    tourPrices: {
+    prices: {
       type: Array,
       default: () => [],
     },
@@ -79,22 +85,23 @@ export default {
       panel: [0],
       customers: [],
       seatsInCurrentOrder: [],
+      busSeats: [],
     }
   },
   computed: {
     ...mapGetters({
       orderPrice: 'getOrderPrice',
     }),
-    prices: function() {
-      let result = []
-      this.tourPrices.forEach(price => {
-        result.push({
-          value: parseFloat(price.price),
-          text: this.customerOptions[price.tour_customer_type_id],
-        })
+  },
+  created() {
+    if (this.privateForm) {
+      this.customers = this.old
+      this.panel = []
+      this.customers.forEach((customer, i) => {
+        this.panel.push(i)
+        this.busSeats.push(customer.busSeatId)
       })
-      return result
-    },
+    }
   },
   mounted() {
     if (this.old !== undefined && this.old.hasOwnProperty('customer')) {

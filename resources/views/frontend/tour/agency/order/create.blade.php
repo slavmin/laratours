@@ -65,5 +65,7 @@
           {{ html()->form()->close() }}
         </v-card-actions>
       </v-card>
+    </v-col>
+  </v-row>
 </v-container>
 @endsection

@@ -318,7 +318,7 @@ export default {
             }
         },
         setProfilePrice(state, data) {
-            state.profilePrices[data.id] = data.price
+            state.profilePrices[data.id] = parseFloat(data.price)
             // Hack for refresh getOrderPrice
             state.profilePrices = state.profilePrices.filter(price => true)
         },

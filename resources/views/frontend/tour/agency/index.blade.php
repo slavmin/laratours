@@ -68,9 +68,7 @@
                 </v-tooltip>
               </td>
               <td>
-                <v-btn href="{{ route('frontend.agency.order.create', $item->id) }}" color="#aa282a" small dark>
-                  Заказать
-                </v-btn>
+                {!! $item->action_buttons !!}
               </td>
             </tr>
             @endforeach
