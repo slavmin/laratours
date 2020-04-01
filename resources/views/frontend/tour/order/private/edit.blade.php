@@ -60,6 +60,21 @@
                         :transport="{{ json_encode($tour_transport) }}"
                         :profiles="{{ json_encode($tour->orderprofiles) }}" :prices="{{ json_encode($prices) }}">
                     </order-form>
+                    @can('administer-tours')
+                    {{-- Operator --}}
+                    <v-row>
+                        <v-col class="grey-text body-1" cols="4">
+                            Статус заказа:
+                        </v-col>
+                        <v-col cols="8">
+                            {{ html()->select('status', __('labels.frontend.tours.order.statuses'), $item->status??0)
+                        ->class('form-control') }}
+                        </v-col>
+                    </v-row>
+                    @else
+                    {{-- Agency --}}
+
+                    @endcan
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -69,14 +84,9 @@
             </v-card>
         </v-col>
     </v-row>
+
 </v-container>
-@can('administer-tours')
-{{-- Operator --}}
 
-@else
-{{-- Agency --}}
-
-@endcan
 <div class="row justify-content-center align-items-center">
     <div class="col col-sm-8 align-self-center">
 
@@ -92,7 +102,6 @@
                     <!--col-->
                 </div>
                 <!--row-->
-
                 <div class="list-group list-group-flush">
                     @foreach($audits as $audit)
                     <div class="list-group-item">
