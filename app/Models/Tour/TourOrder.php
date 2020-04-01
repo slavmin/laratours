@@ -43,6 +43,7 @@ class TourOrder extends Model implements AuditableInterface
     protected $auditInclude  = [
         'status',
         'message',
+        'price',
     ];
 
     /**

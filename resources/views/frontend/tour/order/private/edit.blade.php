@@ -119,7 +119,7 @@
                                 <span
                                     class="{{ $statuses[$value] }}">@lang('labels.frontend.tours.order.statuses.'.$value)</span>
                                 @endif
-                                @if ($attribute == 'message')
+                                @if ($attribute == 'message' && $value != '')
                                 <span>
                                     <v-icon>message</v-icon>{{ $value }}
                                 </span>
