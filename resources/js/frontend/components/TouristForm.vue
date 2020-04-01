@@ -175,7 +175,7 @@ export default {
           passport: null,
           address: null,
           is_rf_int_passport: null,
-          price: null,
+          price: 0,
         }
       },
     },
@@ -241,6 +241,7 @@ export default {
   watch: {
     customer: {
       handler: function() {
+        console.log(this.customer.price)
         this.newPrice(this.customer.price)
       },
     },

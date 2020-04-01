@@ -11,6 +11,10 @@ use App\Models\Tour\TourOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourCity;
+use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourObjectAttributeProperties;
+use App\Models\Tour\TourObjectAttributes;
+use App\Models\Tour\TourPrice;
 
 class OrderController extends Controller
 {
@@ -80,6 +84,38 @@ class OrderController extends Controller
 
         $tour = Tour::whereId($item->tour_id)->first();
 
+        $tour_transport_ids = TourObjectAttributeProperties::where('tour_id', $tour->id)
+            ->where('object_type', 'transport')
+            ->select('object_attribute_id')
+            ->AllTeams()
+            ->pluck('object_attribute_id')
+            ->toArray();
+
+        $tour_transport = [];
+
+        foreach ($tour_transport_ids as $id) {
+            $tour_transport[] = TourObjectAttributes::where('id', $id)->select('id', 'name', 'description', 'extra')->AllTeams()->get();
+        }
+
+        $tour_prices = TourPrice::where('priceable_type', 'App\Models\Tour\Tour')
+            ->where('priceable_id', $tour->id)
+            ->select('price', 'tour_customer_type_id')
+            ->AllTeams()
+            ->get();
+
+        $customer_options = TourCustomerType::where('team_id', $tour->team_id)
+            ->AllTeams()
+            ->pluck('name', 'id')
+            ->toArray();
+
+        $prices = [];
+        foreach ($tour_prices as $tour_price) {
+            $prices[] = [
+                'value' => $tour_price->price,
+                'text'  => $customer_options[$tour_price->tour_customer_type_id]
+            ];
+        }
+
         if (!$tour) {
             session()->put('flash_danger', __('alerts.general.not_found'));
         }
@@ -96,7 +132,7 @@ class OrderController extends Controller
 
         $documents = $item->getSharedDocuments($item->id);
 
-        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents'))
+        return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'tour_transport', 'prices', 'customer_options', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
             ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
@@ -110,7 +146,7 @@ class OrderController extends Controller
         $request->validate([
             'customer.*.first_name' => 'required|min:3|max:191',
             'customer.*.last_name' => 'required|min:3|max:191',
-            'customer.*.email' => 'required|email|max:191',
+            // 'customer.*.email' => 'required|email|max:191',
             //'customer.*.phone'=> 'required|regex:/\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/',
         ]);
 
