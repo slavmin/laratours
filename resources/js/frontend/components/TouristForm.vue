@@ -121,19 +121,63 @@
         color="#aa282a"
         clearable
         label="Тип туриста"
+        :disabled="tourPriceIsChanged"
         @change="newPrice(customer.price)"
       />
       <input
         v-model="customer.price"
-        type="hidden"
         :name="`customer[${index}][price]`"
+        type="hidden"
       >
       <h4
         v-if="customer.price"
         class="text-right"
       >
-        Цена: {{ customer.price }}
+        Цена:
+        <span v-if="!manualPriceFlag">{{ customer.price }}</span>
+        <v-text-field
+          v-if="manualPriceFlag"
+          v-model="customer.price"
+          color="#aa282a"
+        />
+        <v-btn
+          v-if="!manualPriceFlag"
+          icon
+          @click="enterManualPrice"
+        >
+          <v-icon color="yellow">
+            edit
+          </v-icon>
+        </v-btn>
       </h4>
+      <div
+        v-if="tourPriceIsChanged"
+        class="text-right"
+      >
+        Изменилась цена в туре!
+        <v-btn
+          icon
+          @click="enableEditPrice"
+        >
+          <v-icon color="yellow">
+            edit
+          </v-icon>
+        </v-btn>
+      </div>
+      <div
+        v-if="editPriceFlag"
+        class="text-right"
+      >
+        Старая цена: {{ oldPrice }}
+        <v-btn
+          icon
+          @click="returnPrice"
+        >
+          <v-icon color="green">
+            restore
+          </v-icon>
+        </v-btn>
+      </div>
     </v-col>
     <!-- <v-col
       cols="12"
@@ -175,7 +219,7 @@ export default {
           passport: null,
           address: null,
           is_rf_int_passport: null,
-          price: 0,
+          price: null,
         }
       },
     },
@@ -196,6 +240,10 @@ export default {
       isForeigner: false,
       isSinglePlace: false,
       price: null,
+      tourPriceIsChanged: false,
+      editPriceFlag: false,
+      oldPrice: null,
+      manualPriceFlag: false,
     }
   },
   computed: {
@@ -241,7 +289,6 @@ export default {
   watch: {
     customer: {
       handler: function() {
-        console.log(this.customer.price)
         this.newPrice(this.customer.price)
       },
     },
@@ -250,15 +297,38 @@ export default {
     if (this.customer.name !== null) {
       this.newPrice(this.customer.price)
     }
+    this.isTourPriceChanged()
   },
   methods: {
     ...mapActions(['updateProfilePrice']),
     newPrice(price) {
-      if (price === undefined) price = 0
+      if (price === null) price = 0
       this.updateProfilePrice({
         id: this.index,
         price: price,
       })
+    },
+    isTourPriceChanged() {
+      if (
+        this.customer.price != 0 &&
+        !this.prices.find(price => price.value == this.customer.price)
+      ) {
+        this.tourPriceIsChanged = true
+      }
+    },
+    enableEditPrice() {
+      this.editPriceFlag = true
+      this.tourPriceIsChanged = false
+      this.oldPrice = this.customer.price
+    },
+    returnPrice() {
+      this.editPriceFlag = false
+      this.tourPriceIsChanged = true
+      this.customer.price = this.oldPrice
+    },
+    enterManualPrice() {
+      console.log('manualprice')
+      this.manualPriceFlag = true
     },
   },
 }
