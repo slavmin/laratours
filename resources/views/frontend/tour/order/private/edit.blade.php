@@ -124,6 +124,11 @@
                                     <v-icon>message</v-icon>{{ $value }}
                                 </span>
                                 @endif
+                                @if ($attribute == 'price')
+                                <span>
+                                    Изменение цены: {{ $value }}
+                                </span>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
