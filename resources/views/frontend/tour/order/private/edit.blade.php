@@ -124,7 +124,7 @@
                                     <v-icon>message</v-icon>{{ $value }}
                                 </span>
                                 @endif
-                                @if ($attribute == 'price')
+                                @if ($attribute == 'total_price')
                                 <span>
                                     Изменение цены: {{ $value }}
                                 </span>
