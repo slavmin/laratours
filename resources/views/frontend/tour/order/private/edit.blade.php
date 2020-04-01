@@ -75,6 +75,11 @@
                     {{-- Agency --}}
 
                     @endcan
+                    <v-row>
+                        <v-col>
+                            <v-text-field label="Комментарий" color="#aa282a" name="message" textarea></v-text-field>
+                        </v-col>
+                    </v-row>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -110,9 +115,14 @@
                             <div class="w-auto">{{ $audit->user->name }}</div>
                             <div class="w-25">
                                 @foreach($audit->new_values as $attribute => $value)
-                                @if (array_key_exists($item->status, $statuses))
+                                @if ($attribute == 'status' && array_key_exists($item->status, $statuses))
                                 <span
                                     class="{{ $statuses[$value] }}">@lang('labels.frontend.tours.order.statuses.'.$value)</span>
+                                @endif
+                                @if ($attribute == 'message')
+                                <span>
+                                    <v-icon>message</v-icon>{{ $value }}
+                                </span>
                                 @endif
                                 @endforeach
                             </div>
