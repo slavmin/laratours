@@ -19,6 +19,7 @@
             :customer="customers[i]"
             :index="i"
             :prices="prices"
+            :private-form="privateForm"
           />
           <BusScheme
             edit-mode

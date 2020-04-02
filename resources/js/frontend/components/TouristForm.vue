@@ -74,10 +74,10 @@
           cols="8"
         >
           <v-text-field
+            v-mask="passportMask.mask"
             :name="`customer[${index}][passport]`"
             color="#aa282a"
             :label="passportMask.label"
-            :mask="passportMask.mask"
             :placeholder="passportMask.placeholder"
             :value="customer.passport"
             maxlength="191"
@@ -129,84 +129,101 @@
         :name="`customer[${index}][price]`"
         type="hidden"
       >
-      <h4
-        v-if="customer.price"
-        class="text-right"
-      >
-        Цена:
-        <span v-if="!manualPriceFlag">{{ customer.price }}</span>
-        <v-text-field
-          v-if="manualPriceFlag"
-          v-model="customer.price"
-          color="#aa282a"
-        />
-        <v-btn
-          v-if="!manualPriceFlag"
-          icon
-          @click="enterManualPrice"
+      <div v-if="!privateForm">
+        <h4
+          v-if="customer.price"
+          class="text-right"
         >
-          <v-icon color="yellow">
-            edit
-          </v-icon>
-        </v-btn>
-      </h4>
-      <div
-        v-if="tourPriceIsChanged"
-        class="text-right"
-      >
-        Изменилась цена в туре!
-        <v-btn
-          icon
-          @click="enableEditPrice"
-        >
-          <v-icon color="yellow">
-            edit
-          </v-icon>
-        </v-btn>
+          Цена:
+          <span v-if="!manualPriceFlag">{{ customer.price }}</span>
+        </h4>
       </div>
-      <div
-        v-if="editPriceFlag"
-        class="text-right"
-      >
-        Старая цена: {{ oldPrice }}
-        <v-btn
-          icon
-          @click="returnPrice"
+      <div v-if="privateForm">
+        <h4
+          v-if="customer.price"
+          class="text-right"
         >
-          <v-icon color="green">
-            restore
-          </v-icon>
-        </v-btn>
+          Цена:
+          <span v-if="!manualPriceFlag">{{ customer.price }}</span>
+          <v-text-field
+            v-if="manualPriceFlag"
+            v-model="customer.price"
+            color="#aa282a"
+            @input="newPrice(customer.price)"
+          />
+          <v-btn
+            v-if="!manualPriceFlag"
+            icon
+            @click="enterManualPrice"
+          >
+            <v-icon color="yellow">
+              edit
+            </v-icon>
+          </v-btn>
+        </h4>
+        <div
+          v-if="tourPriceIsChanged"
+          class="text-right"
+        >
+          Изменилась цена в туре!
+          <v-btn
+            icon
+            @click="enableEditPrice"
+          >
+            <v-icon color="yellow">
+              edit
+            </v-icon>
+          </v-btn>
+        </div>
+        <div
+          v-if="editPriceFlag"
+          class="text-right"
+        >
+          Старая цена: {{ oldPrice }}
+          <v-btn
+            icon
+            @click="returnPrice"
+          >
+            <v-icon color="green">
+              restore
+            </v-icon>
+          </v-btn>
+        </div>
       </div>
     </v-col>
-    <!-- <v-col
-      cols="12"
-      md="6"
-      lg="4"
-    >
-      <v-checkbox
-        v-model="isPens"
-        label="Пенсионер"
-        color="#aa282a"
-      />
-      <v-checkbox
-        v-model="isForeigner"
-        label="Иностранец"
-        color="#aa282a"
-      />
-      <v-checkbox
-        v-model="isSinglePlace"
-        label="Single-размещение"
-        color="#aa282a"
-      />
+    <!--
+          <v-col
+          cols="12"
+          md="6"
+          lg="4"
+        >
+        <v-checkbox
+          v-model="isPens"
+          label="Пенсионер"
+          color="#aa282a"
+        />
+        <v-checkbox
+          v-model="isForeigner"
+          label="Иностранец"
+          color="#aa282a"
+        />
+        <v-checkbox
+          v-model="isSinglePlace"
+          label="Single-размещение"
+          color="#aa282a"
+        />
     </v-col> -->
   </v-row>
 </template>
 <script>
 import moment from 'moment'
 import { mapActions } from 'vuex'
+import { mask } from 'vue-the-mask'
 export default {
   name: 'TouristForm',
+  directives: {
+    mask,
+  },
   props: {
     customer: {
       type: Object,
@@ -230,6 +247,10 @@ export default {
     prices: {
       type: Array,
       default: () => [],
+    },
+    privateForm: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -297,7 +318,9 @@ export default {
     if (this.customer.name !== null) {
       this.newPrice(this.customer.price)
     }
-    this.isTourPriceChanged()
+    if (this.privateForm) {
+      this.isTourPriceChanged()
+    }
   },
   methods: {
     ...mapActions(['updateProfilePrice']),
