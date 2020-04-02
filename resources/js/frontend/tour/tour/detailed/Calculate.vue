@@ -219,7 +219,11 @@ export default {
       })
       this.selectedCustomerTypeId = this.adultType.id
     },
-    getPrice(item, customerTypeId = this.selectedCustomerTypeId) {
+    getPrice(
+      item,
+      customerTypeId = this.selectedCustomerTypeId,
+      isSingle = false
+    ) {
       // For Tour Extras
       if (!item.hasOwnProperty('properties')) {
         return this.pricePerSeat(item.value)
@@ -233,7 +237,7 @@ export default {
       }
       if (item.objectable_type == 'App\\Models\\Tour\\TourHotel') {
         return (
-          this.priceByType(item, customerTypeId) *
+          this.priceByType(item, customerTypeId, isSingle) *
           parseInt(item.properties.days)
         )
       }
@@ -278,14 +282,47 @@ export default {
       result = result.toFixed(2)
       return result
     },
-    priceByType(item, customerTypeId = this.selectedCustomerTypeId) {
-      let result = item.prices.find(price => {
-        return price.tour_customer_type_id == customerTypeId
-      })
-      if (!result) {
+    priceByType(
+      item,
+      customerTypeId = this.selectedCustomerTypeId,
+      isSingle = false
+    ) {
+      let result = null
+      if (item.objectable_type == 'App\\Models\\Tour\\TourHotel') {
+        if (!isSingle) {
+          result = item.prices.find(price => {
+            return price.tour_customer_type_id == customerTypeId
+          })
+          if (!result) {
+            result = item.prices.find(price => {
+              return price.tour_customer_type_id == this.adultType.id
+            })
+          }
+        } else {
+          result = item.prices.find(price => {
+            return (
+              price.tour_customer_type_id == customerTypeId &&
+              price.accom_type == 'Single'
+            )
+          })
+          if (!result) {
+            result = item.prices.find(price => {
+              return (
+                price.tour_customer_type_id == this.adultType.id &&
+                price.accom_type == 'Single'
+              )
+            })
+          }
+        }
+      } else {
         result = item.prices.find(price => {
-          return price.tour_customer_type_id == this.adultType.id
+          return price.tour_customer_type_id == customerTypeId
         })
+        if (!result) {
+          result = item.prices.find(price => {
+            return price.tour_customer_type_id == this.adultType.id
+          })
+        }
       }
       return parseFloat(result.price).toFixed(2)
     },
@@ -330,12 +367,14 @@ export default {
       this.drivers = []
       this.tourData.transport.forEach(transport => {
         const hotelsCount = transport.properties.hotel
+        const isSingle = transport.properties.is_single
         const mealsCount = transport.properties.meal
         const days = JSON.parse(transport.properties.days_array)
         const length = hotelsCount >= mealsCount ? hotelsCount : mealsCount
         for (let i = 0; i < length; i++) {
           this.drivers.push({
             hotel: i + 1 <= hotelsCount,
+            isSingle: isSingle == 1,
             meal: i + 1 <= mealsCount,
             days: days,
           })
@@ -346,12 +385,14 @@ export default {
       this.personalGuides = []
       this.tourData.guide.forEach(guide => {
         const hotelsCount = guide.properties.hotel
+        const isSingle = guide.properties.is_single
         const mealsCount = guide.properties.meal
         const events = JSON.parse(guide.properties.events)
         const days = JSON.parse(guide.properties.days_array)
         this.personalGuides.push({
           name: guide.name,
           hotel: hotelsCount,
+          isSingle: isSingle == 1,
           meal: mealsCount,
           days: days,
           events: events,
@@ -362,12 +403,14 @@ export default {
       this.personalAttendants = []
       this.tourData.attendant.forEach(attendant => {
         const hotelsCount = attendant.properties.hotel
+        const isSingle = attendant.properties.is_single
         const mealsCount = attendant.properties.meal
         const events = JSON.parse(attendant.properties.events)
         const days = JSON.parse(attendant.properties.days_array)
         this.personalAttendants.push({
           name: attendant.name,
           hotel: hotelsCount,
+          isSingle: isSingle == 1,
           meal: mealsCount,
           days: days,
           events: events,
@@ -380,7 +423,7 @@ export default {
         let result = 0
         driver.days.forEach(day => {
           if (driver.hotel === true) {
-            result += this.getPersonalHotelPrice(day)
+            result += this.getPersonalHotelPrice(day, driver.isSingle)
           }
           if (driver.meal === true) {
             result += this.getPersonalMealPrice(day)
@@ -393,7 +436,7 @@ export default {
         let result = 0
         guide.days.forEach(day => {
           if (guide.hotel == true) {
-            result += this.getPersonalHotelPrice(day)
+            result += this.getPersonalHotelPrice(day, guide.isSingle)
           }
           if (guide.meal == true) {
             result += this.getPersonalMealPrice(day)
@@ -411,7 +454,7 @@ export default {
         let result = 0
         attendant.days.forEach(day => {
           if (attendant.hotel == true) {
-            result += this.getPersonalHotelPrice(day)
+            result += this.getPersonalHotelPrice(day, attendant.isSingle)
           }
           if (attendant.meal == true) {
             result += this.getPersonalMealPrice(day)
@@ -431,7 +474,7 @@ export default {
         const events = JSON.parse(freeadl.events)
         days.forEach(day => {
           if (freeadl.hotel == true) {
-            result += this.getPersonalHotelPrice(day)
+            result += this.getPersonalHotelPrice(day, freeadl.isSingle)
           }
           if (freeadl.meal == true) {
             result += this.getPersonalMealPrice(day)
@@ -443,14 +486,14 @@ export default {
         return this.pricePerSeat(result)
       }
     },
-    getPersonalHotelPrice(day) {
+    getPersonalHotelPrice(day, isSingle = false) {
       const hotel = this.tourData.hotel.find(item => {
         const hotelDays = JSON.parse(item.properties.days_array)
         return hotelDays.includes(day)
       })
       let result = 0
       if (hotel !== undefined) {
-        result = this.getPrice(hotel, this.adultType.id)
+        result = this.getPrice(hotel, this.adultType.id, isSingle)
       }
       return result
     },

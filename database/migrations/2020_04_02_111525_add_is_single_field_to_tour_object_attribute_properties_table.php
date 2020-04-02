@@ -14,7 +14,7 @@ class AddIsSingleFieldToTourObjectAttributePropertiesTable extends Migration
     public function up()
     {
         Schema::table('tour_object_attribute_properties', function (Blueprint $table) {
-            $table->boolean('is_single')->after('hotel')->default(0);
+            $table->boolean('is_single')->after('hotel')->nullable();
         });
     }
 

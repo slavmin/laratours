@@ -326,7 +326,7 @@ class DetailedTourController extends Controller
         } else {
             // For museums
             $result = TourPrice::where('priceable_id', $object_attribute_id)
-                ->select('price', 'tour_customer_type_id')
+                ->select('price', 'tour_customer_type_id', 'accom_type')
                 ->get();
         }
 
