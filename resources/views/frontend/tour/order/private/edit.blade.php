@@ -58,7 +58,8 @@
                     </h3>
                     <order-form private-form :old="{{ json_encode($item->profiles[0]->content) }}"
                         :transport="{{ json_encode($tour_transport) }}"
-                        :profiles="{{ json_encode($tour->orderprofiles) }}" :prices="{{ json_encode($prices) }}">
+                        :profiles="{{ json_encode($tour->orderprofiles) }}" :prices="{{ json_encode($prices) }}"
+                        tour-date="{{ $tour_date }}">
                     </order-form>
                     @can('administer-tours')
                     {{-- Operator --}}

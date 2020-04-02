@@ -58,7 +58,7 @@
                     <order-form @if (old()) :old="{{ json_encode(old()) }}" @endif
                         :transport="{{ json_encode($tour_transport) }}"
                         :profiles="{{ json_encode($tour->orderprofiles) }}" :prices="{{ json_encode($prices) }}"
-                        :customer-options="{{ json_encode($customer_options) }}">
+                        :customer-options="{{ json_encode($customer_options) }}" tour-date="{{ $tour_date }}">
                     </order-form>
                 </v-card-text>
                 <v-card-actions>

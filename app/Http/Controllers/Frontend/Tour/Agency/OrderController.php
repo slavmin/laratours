@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourCustomer;
 use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourDate;
 use App\Models\Tour\TourObjectAttributeProperties;
 use App\Models\Tour\TourObjectAttributes;
 use App\Models\Tour\TourPrice;
@@ -62,6 +63,8 @@ class OrderController extends Controller
 
         $tour = Tour::whereId($tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
 
+        $tour_date = TourDate::where('tour_id', $tour->id)->AllTeams()->first();
+
         $tour_transport_ids = TourObjectAttributeProperties::where('tour_id', $tour->id)
             ->where('object_type', 'transport')
             ->select('object_attribute_id')
@@ -104,6 +107,7 @@ class OrderController extends Controller
             ->with('route', route('frontend.agency.' . $model_alias . '.store'))
             ->with('cancel_route', route('frontend.agency.tour-list'))
             ->with('tour', $tour)
+            ->with('tour_date', $tour_date['date'])
             ->with('tour_transport', $tour_transport)
             ->with('prices', $prices)
             ->with('customer_options', $customer_options)
@@ -165,6 +169,8 @@ class OrderController extends Controller
 
         $tour = Tour::whereId($item->tour_id)->whereIn('team_id', $subscriptions)->AllTeams()->first();
 
+        $tour_date = TourDate::where('tour_id', $tour->id)->AllTeams()->first();
+
         if (!$tour) {
             return redirect()->back()->withFlashDanger(__('alerts.general.not_found'));
         }
@@ -216,6 +222,7 @@ class OrderController extends Controller
         return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'documents', 'tour_transport', 'prices'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
+            ->with('tour_date', $tour_date['date'])
             ->with('route', route('frontend.agency.' . $model_alias . '.update', [$item->id]))
             ->with('cancel_route', route('frontend.agency.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);

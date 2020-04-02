@@ -39,35 +39,49 @@
       md="6"
       lg="4"
     >
-      <v-menu
-        v-model="showDatePicker"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        transition="scale-transition"
-        offset-y
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="customer.dob"
-            :name="`customer[${index}][dob]`"
-            label="Дата рождения"
-            color="#aa282a"
-            readonly
-            clearable
-            outlined
-            v-on="on"
-          />
-        </template>
-        <v-date-picker
-          v-model="customer.dob"
-          :max="dateToday"
-          color="#aa282a"
-          locale="ru-ru"
-          first-day-of-week="1"
-          @input="showDatePicker = false"
-        />
-      </v-menu>
+      <v-row align-items="center">
+        <v-col
+          class="py-0"
+          cols="8"
+        >
+          <v-menu
+            v-model="showDatePicker"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="customer.dob"
+                :name="`customer[${index}][dob]`"
+                label="Дата рождения"
+                color="#aa282a"
+                readonly
+                clearable
+                outlined
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="customer.dob"
+              :max="dateToday"
+              color="#aa282a"
+              locale="ru-ru"
+              first-day-of-week="1"
+              @input="showDatePicker = false"
+            />
+          </v-menu>
+        </v-col>
+        <v-col
+          v-if="age"
+          cols="4"
+          class="py-0"
+        >
+          {{ age }}
+        </v-col>
+      </v-row>
       <v-row>
         <v-col
           class="py-0"
@@ -252,6 +266,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    tourDate: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -265,6 +283,7 @@ export default {
       editPriceFlag: false,
       oldPrice: null,
       manualPriceFlag: false,
+      age: null,
     }
   },
   computed: {
@@ -286,21 +305,19 @@ export default {
         placeholder: '52 0022196',
       }
       const birthCert = {
+        mask: 'XXXXXXXXXXXXXXX',
         label: 'Свидетельство о рождении',
         placeholder: 'VII-МЮ 123456',
       }
-      // if (this.isForeigner) {
-      //   return foreignerPass
-      // }
-      // else if (this.age < 14 && !this.profile.isRfIntPass) {
-      //   return birthCert
-      // }
-      // else if (this.profile.isRfIntPass) {
-      //   return rfInternationalPass
-      // }
-      // else {
-      //   return rfLocalPass
-      // }
+      if (this.isForeigner) {
+        return foreignerPass
+      } else if (this.age < 14 && !this.customer.is_rf_int_passport) {
+        return birthCert
+      } else if (this.customer.is_rf_int_passport) {
+        return rfInternationalPass
+      } else {
+        return rfLocalPass
+      }
       if (this.customer.is_rf_int_passport) {
         return rfInternationalPass
       }
@@ -312,6 +329,12 @@ export default {
       handler: function() {
         this.newPrice(this.customer.price)
       },
+    },
+    customer: {
+      handler: function() {
+        this.age = moment().diff(this.customer.dob, 'years')
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -350,7 +373,6 @@ export default {
       this.customer.price = this.oldPrice
     },
     enterManualPrice() {
-      console.log('manualprice')
       this.manualPriceFlag = true
     },
   },

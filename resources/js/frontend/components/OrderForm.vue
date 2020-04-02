@@ -20,6 +20,7 @@
             :index="i"
             :prices="prices"
             :private-form="privateForm"
+            :tour-date="tourDate"
           />
           <BusScheme
             edit-mode
@@ -79,6 +80,10 @@ export default {
     customerOptions: {
       type: Object,
       default: () => {},
+    },
+    tourDate: {
+      type: String,
+      default: null,
     },
   },
   data() {

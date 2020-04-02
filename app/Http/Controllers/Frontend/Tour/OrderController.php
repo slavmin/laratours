@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\TourCity;
 use App\Models\Tour\TourCustomerType;
+use App\Models\Tour\TourDate;
 use App\Models\Tour\TourObjectAttributeProperties;
 use App\Models\Tour\TourObjectAttributes;
 use App\Models\Tour\TourPrice;
@@ -84,6 +85,8 @@ class OrderController extends Controller
 
         $tour = Tour::whereId($item->tour_id)->first();
 
+        $tour_date = TourDate::where('tour_id', $tour->id)->AllTeams()->first();
+
         $tour_transport_ids = TourObjectAttributeProperties::where('tour_id', $tour->id)
             ->where('object_type', 'transport')
             ->select('object_attribute_id')
@@ -135,6 +138,7 @@ class OrderController extends Controller
         return view('frontend.tour.order.private.edit', compact('item', 'tour', 'profiles', 'statuses', 'audits', 'tour_transport', 'prices', 'customer_options', 'documents'))
             ->with('method', 'PATCH')
             ->with('action', 'edit')
+            ->with('tour_date', $tour_date)
             ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
             ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
             ->with('model_alias', $model_alias);
@@ -162,7 +166,7 @@ class OrderController extends Controller
             ['type' => 'customer', 'content' => $profile]
         );
 
-        return redirect()->route('frontend.tour.order.index')->withFlashSuccess(__('alerts.general.updated'));
+        return redirect()->route('frontend.tour.order.edit', $tour_order->id)->withFlashSuccess(__('alerts.general.updated'));
     }
 
 
