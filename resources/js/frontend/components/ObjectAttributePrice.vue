@@ -34,6 +34,9 @@
           <th>
             Тип
           </th>
+          <th v-if="objectModel == 'hotel'">
+            Вариант
+          </th>
           <th>
             Стоимость
           </th>
@@ -59,6 +62,9 @@
               <div v-if="objectModel == 'transport'">
                 {{ priceTypesForView[price.tour_price_type_id] }}
               </div>
+            </td>
+            <td v-if="objectModel == 'hotel'">
+              {{ price.accom_type }}
             </td>
             <td>
               {{ price.price }}

@@ -9,6 +9,7 @@
                 <th class="text-left">
                   Тип
                 </th>
+                <th />
                 <th class="text-right">
                   Цена
                 </th>
@@ -22,9 +23,23 @@
                 <td class="text-left tc-calculate-width__200">
                   {{ customer.name }}
                 </td>
-                <td class="text-right">
-                  {{ getPriceValueByCustomerTypeId(customer.id) }}
+                <td
+                  class="overline grey--text text-right"
+                  style="line-height: 22px;"
+                >
+                  Цена:
+                  <br>
+                  Цена с наценкой:
+                  <br>
+                  Итого:
+                  <br>
+                  <br>
+                  Прибыль оператора:
                 </td>
+                <td
+                  class="text-right"
+                  v-html="getPriceValueByCustomerTypeId(customer.id)"
+                />
               </tr>
             </tbody>
           </template>
@@ -104,24 +119,42 @@ export default {
         'extras',
       ]
       this.tourData.customers.forEach(customer => {
+        let price = 0
+        let priceWithMargin = 0
         let priceWithCommission = 0
         parts.forEach(part => {
           this.tourData[part].forEach(part => {
+            price += parseFloat(this.$parent.getPrice(part, customer.id))
+            priceWithMargin += parseFloat(
+              this.$parent.marginPrice(part, customer.id)
+            )
             priceWithCommission += parseFloat(
               this.$parent.commissPrice(part, customer.id)
             )
           })
         })
-        priceWithCommission += parseFloat(this.getAllPersonalPrice())
+        const personalPrices = this.getAllPersonalPrice()
+        price += parseFloat(personalPrices.price)
+        priceWithMargin += parseFloat(personalPrices.priceWithMargin)
+        priceWithCommission += parseFloat(personalPrices.priceWithCommission)
         this.pricesArray.push({
           id: customer.id,
-          price: priceWithCommission.toFixed(2),
+          price: price.toFixed(2),
+          priceWithMargin: priceWithMargin.toFixed(2),
+          priceWithCommission: priceWithCommission.toFixed(2),
         })
       })
+      console.log(this.pricesArray)
     },
     getAllPersonalPrice() {
+      let price = 0
+      let priceWithMargin = 0
       let priceWithCommission = 0
       this.$parent.drivers.forEach((driver, i) => {
+        price += parseFloat(this.$parent.getPersonalPrice('driver', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('driver', i, driver.margin)
+        )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'driver',
@@ -132,6 +165,10 @@ export default {
         )
       })
       this.$parent.personalGuides.forEach((guide, i) => {
+        price += parseFloat(this.$parent.getAllPersonalPrice('guide', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('guide', i, guide.margin)
+        )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'guide',
@@ -142,6 +179,10 @@ export default {
         )
       })
       this.$parent.personalAttendants.forEach((attendant, i) => {
+        price += parseFloat(this.$parent.getAllPersonalPrice('attendant', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('attendant', i, attendant.margin)
+        )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'attendant',
@@ -152,6 +193,11 @@ export default {
         )
       })
       this.$parent.personalFreeAdls.forEach((freeadl, i) => {
+        price += parseFloat(this.$parent.getAllPersonalPrice('freeadl', i))
+        priceWithMargin += parseFloat(
+          this.$parent.marginPersonalPrice('freeadl', i, freeadl.margin)
+        )
+        let priceWithMargin = 0
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'freeadl',
@@ -161,12 +207,15 @@ export default {
           )
         )
       })
-      return priceWithCommission
+      return { price, priceWithMargin, priceWithCommission }
     },
     getPriceValueByCustomerTypeId(customerTypeId) {
       const result = this.pricesArray.find(price => price.id == customerTypeId)
       if (result) {
-        return result.price
+        return `${result.price}<br>
+                ${result.priceWithMargin}<br>
+                ${result.priceWithCommission}<br><br>
+                ${result.priceWithMargin - result.price}`
       }
     },
     savePrices() {

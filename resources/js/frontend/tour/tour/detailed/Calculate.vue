@@ -504,6 +504,83 @@ export default {
         })
         .finally(() => (this.loader = false))
     }, 1500),
+    calculatePricesForCustomerId(customerId) {
+      let charge = 0
+      let priceWithMargin = 0
+      let priceWithCommission = 0
+      const parts = [
+        'transport',
+        'museum',
+        'hotel',
+        'meal',
+        'guide',
+        'attendant',
+        'extras',
+      ]
+      parts.forEach(part => {
+        this.tourData[part].forEach(part => {
+          charge += parseFloat(this.getPrice(part))
+          priceWithMargin += parseFloat(this.marginPrice(part))
+          priceWithCommission += parseFloat(this.commissPrice(part))
+        })
+      })
+      this.drivers.forEach((driver, i) => {
+        charge += parseFloat(this.getPersonalPrice('driver', i))
+        priceWithMargin += parseFloat(
+          this.marginPersonalPrice('driver', i, driver.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.commissPersonalPrice(
+            'driver',
+            i,
+            driver.margin,
+            driver.commission
+          )
+        )
+      })
+      this.personalGuides.forEach((guide, i) => {
+        charge += parseFloat(this.getPersonalPrice('guide', i))
+        priceWithMargin += parseFloat(
+          this.marginPersonalPrice('guide', i, guide.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.commissPersonalPrice('guide', i, guide.margin, guide.commission)
+        )
+      })
+      this.personalAttendants.forEach((attendant, i) => {
+        charge += parseFloat(this.getPersonalPrice('attendant', i))
+        priceWithMargin += parseFloat(
+          this.marginPersonalPrice('attendant', i, attendant.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.commissPersonalPrice(
+            'attendant',
+            i,
+            attendant.margin,
+            attendant.commission
+          )
+        )
+      })
+      this.personalFreeAdls.forEach((freeadl, i) => {
+        charge += parseFloat(this.getPersonalPrice('freeadl', i))
+        priceWithMargin += parseFloat(
+          this.marginPersonalPrice('freeadl', i, freeadl.margin)
+        )
+        priceWithCommission += parseFloat(
+          this.commissPersonalPrice(
+            'freeadl',
+            i,
+            freeadl.margin,
+            freeadl.commission
+          )
+        )
+      })
+      return {
+        charge: charge.toFixed(2),
+        priceWithMargin: priceWithMargin.toFixed(2),
+        priceWithCommission: priceWithCommission.toFixed(2),
+      }
+    },
   },
 }
 </script>

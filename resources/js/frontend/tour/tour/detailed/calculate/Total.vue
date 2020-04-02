@@ -25,7 +25,7 @@
           <tbody>
             <tr>
               <td class="tc-calculate-width__200">
-                {{ charge }}
+                {{ prices.charge }}
               </td>
               <td>
                 <v-text-field
@@ -37,7 +37,7 @@
                 />
               </td>
               <td>
-                {{ priceWithMargin }}
+                {{ prices.priceWithMargin }}
               </td>
               <td>
                 <v-text-field
@@ -47,7 +47,7 @@
                 />
               </td>
               <td>
-                {{ priceWithCommission }}
+                {{ prices.priceWithCommission }}
               </td>
             </tr>
           </tbody>
@@ -75,101 +75,23 @@ export default {
   },
   data() {
     return {
-      charge: 0,
-      priceWithMargin: 0,
-      priceWithCommission: 0,
+      prices: {
+        charge: 0,
+        priceWithMargin: 0,
+        priceWithCommission: 0,
+      },
       marginForAll: null,
     }
   },
   watch: {
     customerTypeId: function() {
-      this.calculatePrices()
+      this.prices = this.$parent.calculatePricesForCustomerId()
     },
   },
   mounted() {
-    this.calculatePrices()
+    this.prices = this.$parent.calculatePricesForCustomerId()
   },
   methods: {
-    calculatePrices() {
-      let charge = 0
-      let priceWithMargin = 0
-      let priceWithCommission = 0
-      const parts = [
-        'transport',
-        'museum',
-        'hotel',
-        'meal',
-        'guide',
-        'attendant',
-        'extras',
-      ]
-      parts.forEach(part => {
-        this.tourData[part].forEach(part => {
-          charge += parseFloat(this.$parent.getPrice(part))
-          priceWithMargin += parseFloat(this.$parent.marginPrice(part))
-          priceWithCommission += parseFloat(this.$parent.commissPrice(part))
-        })
-      })
-      this.$parent.drivers.forEach((driver, i) => {
-        charge += parseFloat(this.$parent.getPersonalPrice('driver', i))
-        priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('driver', i, driver.margin)
-        )
-        priceWithCommission += parseFloat(
-          this.$parent.commissPersonalPrice(
-            'driver',
-            i,
-            driver.margin,
-            driver.commission
-          )
-        )
-      })
-      this.$parent.personalGuides.forEach((guide, i) => {
-        charge += parseFloat(this.$parent.getPersonalPrice('guide', i))
-        priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('guide', i, guide.margin)
-        )
-        priceWithCommission += parseFloat(
-          this.$parent.commissPersonalPrice(
-            'guide',
-            i,
-            guide.margin,
-            guide.commission
-          )
-        )
-      })
-      this.$parent.personalAttendants.forEach((attendant, i) => {
-        charge += parseFloat(this.$parent.getPersonalPrice('attendant', i))
-        priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('attendant', i, attendant.margin)
-        )
-        priceWithCommission += parseFloat(
-          this.$parent.commissPersonalPrice(
-            'attendant',
-            i,
-            attendant.margin,
-            attendant.commission
-          )
-        )
-      })
-      this.$parent.personalFreeAdls.forEach((freeadl, i) => {
-        charge += parseFloat(this.$parent.getPersonalPrice('freeadl', i))
-        priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('freeadl', i, freeadl.margin)
-        )
-        priceWithCommission += parseFloat(
-          this.$parent.commissPersonalPrice(
-            'freeadl',
-            i,
-            freeadl.margin,
-            freeadl.commission
-          )
-        )
-      })
-      this.charge = charge.toFixed(2)
-      this.priceWithMargin = priceWithMargin.toFixed(2)
-      this.priceWithCommission = priceWithCommission.toFixed(2)
-    },
     setMarginForAll() {
       const parts = [
         'transport',
