@@ -353,6 +353,7 @@ class DetailedTourController extends Controller
         $properties->days_array = json_encode($request->get('days_array[]')) ?? null;
         $properties->days = $request->days ?? null;
         $properties->hotel = $request->hotel ?? null;
+        $properties->is_single = $request->is_single ?? null;
         $properties->meal = $request->meal ?? null;
         $properties->events = json_encode($request->get('events[]')) ?? null;
         $properties->name = $request->name ?? null;

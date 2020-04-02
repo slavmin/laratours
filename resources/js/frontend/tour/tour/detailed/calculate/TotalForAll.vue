@@ -144,7 +144,6 @@ export default {
           priceWithCommission: priceWithCommission.toFixed(2),
         })
       })
-      console.log(this.pricesArray)
     },
     getAllPersonalPrice() {
       let price = 0
@@ -165,7 +164,7 @@ export default {
         )
       })
       this.$parent.personalGuides.forEach((guide, i) => {
-        price += parseFloat(this.$parent.getAllPersonalPrice('guide', i))
+        price += parseFloat(this.$parent.getPersonalPrice('guide', i))
         priceWithMargin += parseFloat(
           this.$parent.marginPersonalPrice('guide', i, guide.margin)
         )
@@ -179,7 +178,7 @@ export default {
         )
       })
       this.$parent.personalAttendants.forEach((attendant, i) => {
-        price += parseFloat(this.$parent.getAllPersonalPrice('attendant', i))
+        price += parseFloat(this.$parent.getPersonalPrice('attendant', i))
         priceWithMargin += parseFloat(
           this.$parent.marginPersonalPrice('attendant', i, attendant.margin)
         )
@@ -193,7 +192,7 @@ export default {
         )
       })
       this.$parent.personalFreeAdls.forEach((freeadl, i) => {
-        price += parseFloat(this.$parent.getAllPersonalPrice('freeadl', i))
+        price += parseFloat(this.$parent.getPersonalPrice('freeadl', i))
         priceWithMargin += parseFloat(
           this.$parent.marginPersonalPrice('freeadl', i, freeadl.margin)
         )
@@ -215,7 +214,7 @@ export default {
         return `${result.price}<br>
                 ${result.priceWithMargin}<br>
                 ${result.priceWithCommission}<br><br>
-                ${result.priceWithMargin - result.price}`
+                ${parseFloat(result.priceWithMargin - result.price).toFixed(2)}`
       }
     },
     savePrices() {

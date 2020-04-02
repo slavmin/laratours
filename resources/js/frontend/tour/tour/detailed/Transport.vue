@@ -124,6 +124,12 @@
               label="Проживание"
               color="#aa282a"
             />
+            <v-switch
+              v-if="driver.hotel"
+              v-model="isSingle"
+              label="Сингл"
+              color="#aa282a"
+            />
             <v-divider />
             <v-switch
               v-model="driver.meal"
@@ -257,6 +263,7 @@ export default {
       isManualPrice: false,
       manualPriceValue: null,
       isSelected: false,
+      isSingle: false,
     }
   },
   computed: {
@@ -365,6 +372,7 @@ export default {
           days: this.selectedDays.length,
           'days_array[]': this.selectedDays,
           hotel: this.hotelsCount,
+          is_single: this.isSingle,
           meal: this.mealsCount,
         })
         // .then(r => console.log(r))

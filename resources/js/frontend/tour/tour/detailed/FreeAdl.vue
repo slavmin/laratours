@@ -60,6 +60,12 @@
               label="Проживание"
               color="#aa282a"
             />
+            <v-switch
+              v-if="hotel"
+              v-model="isSingle"
+              label="Сингл"
+              color="#aa282a"
+            />
             <v-divider />
             <v-switch
               v-model="meal"
@@ -179,6 +185,7 @@ export default {
       showEvents: false,
       selectedMuseums: [],
       id: 0,
+      isSingle: false,
     }
   },
   computed: {
@@ -195,6 +202,7 @@ export default {
       this.selectedDays = JSON.parse(this.freeAdl.days_array)
       this.price = this.freeAdl.value
       this.hotel = this.freeAdl.hotel
+      this.isSingle = this.freeAdl.is_single
       this.meal = this.freeAdl.meal
       this.selectedMuseums = JSON.parse(this.freeAdl.events)
       this.id = this.freeAdl.id
@@ -219,6 +227,7 @@ export default {
             'days_array[]': this.selectedDays,
             value: this.price,
             hotel: this.hotel,
+            is_single: this.isSingle,
             meal: this.meal,
             'events[]': this.selectedMuseums,
             name: this.name,

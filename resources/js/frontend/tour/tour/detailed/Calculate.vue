@@ -193,6 +193,7 @@ export default {
           this.tourData = r.data
         })
         .then(r => {
+          console.log(this.tourData)
           this.setDefaultCustomerTypeId()
           this.parseDrivers()
           this.parseGuides()
