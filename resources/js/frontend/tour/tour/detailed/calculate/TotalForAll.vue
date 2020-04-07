@@ -55,6 +55,72 @@
         />
       </v-overlay>
     </v-row>
+    <h2 class="grey--text">
+      Округление
+    </h2>
+    <v-row justify="center">
+      <v-col>
+        <v-radio-group
+          v-model="roundPricesParameter"
+          row
+        >
+          <v-radio
+            label="до 100"
+            color="#aa282a"
+            value="100"
+          />
+          <v-radio
+            label="до 1000"
+            color="#aa282a"
+            value="1000"
+          />
+        </v-radio-group>
+        <v-radio-group
+          v-model="roundPricesMinusValue"
+          row
+        >
+          <v-radio
+            label="не вычитать"
+            color="#aa282a"
+            value="0"
+          />
+          <v-radio
+            label="минус 10"
+            color="#aa282a"
+            value="10"
+          />
+          <v-radio
+            label="минус 100"
+            color="#aa282a"
+            value="100"
+          />
+        </v-radio-group>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn
+          dark
+          small
+          text
+          color="#aa282a"
+          @click="roundPrices"
+        >
+          Округлить
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn
+          dark
+          small
+          text
+          color="#aa282a"
+          @click="resetPrices"
+        >
+          Сбросить
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row
       class="justify-end"
       style="margin: 16px;"
@@ -101,6 +167,8 @@ export default {
       loader: false,
       saved: false,
       error: false,
+      roundPricesParameter: 0,
+      roundPricesMinusValue: 0,
     }
   },
   mounted() {
@@ -243,6 +311,83 @@ export default {
       setTimeout(() => {
         this.error = false
       }, 3000)
+    },
+    roundPrices() {
+      this.pricesArray.map(item => {
+        item.price = this.roundFunction(item.price)
+        item.priceWithMargin = this.roundFunction(item.priceWithMargin)
+        item.priceWithCommission = this.roundFunction(item.priceWithCommission)
+      })
+    },
+    roundFunction(price) {
+      let digitsArray = parseInt(price)
+        .toString()
+        .split('')
+      digitsArray.forEach((digit, i) => {
+        digitsArray[i] = parseInt(digit)
+      })
+      const length = digitsArray.length
+      let result = ''
+      switch (this.roundPricesParameter) {
+        case '100':
+          // If price is 56, 64, etc. return 100
+          if (digitsArray.length <= 2) {
+            result = 100
+            break
+          }
+          // If already round, ex. 12500
+          if (digitsArray[length - 1] == 0 && digitsArray[length - 2] == 0) {
+            return parseInt(price) - parseInt(this.roundPricesMinusValue)
+          }
+          // If price is 159, 122, 798
+          digitsArray[length - 1] = 0
+          digitsArray[length - 2] = 0
+          digitsArray[length - 3] += 1
+          for (let k = length - 3; k > 0; k--) {
+            if (digitsArray[k] == 10) {
+              digitsArray[k] = 0
+              digitsArray[k - 1] += 1
+            }
+          }
+          break
+        case '1000':
+          // If price is 856, 164, etc. return 1000
+          if (digitsArray.length <= 3) {
+            result = 1000
+            break
+          }
+          // If already round, ex. 25000
+          if (
+            digitsArray[length - 1] == 0 &&
+            digitsArray[length - 2] == 0 &&
+            digitsArray[length - 3] == 0
+          ) {
+            return parseInt(price) - parseInt(this.roundPricesMinusValue)
+          }
+          // If price is 1159, 2122, 8798
+          digitsArray[length - 1] = 0
+          digitsArray[length - 2] = 0
+          digitsArray[length - 3] = 0
+          digitsArray[length - 4] += 1
+          for (let k = length - 4; k > 0; k--) {
+            if (digitsArray[k] == 10) {
+              digitsArray[k] = 0
+              digitsArray[k - 1] += 1
+            }
+          }
+          break
+        default:
+          return parseInt(price) - parseInt(this.roundPricesMinusValue)
+      }
+      digitsArray.forEach(digit => {
+        result += digit.toString()
+      })
+      return parseInt(result) - parseInt(this.roundPricesMinusValue)
+    },
+    resetPrices() {
+      this.roundPricesParameter = 0
+      this.roundPricesMinusValue = 0
+      this.calculatePrices()
     },
   },
 }
