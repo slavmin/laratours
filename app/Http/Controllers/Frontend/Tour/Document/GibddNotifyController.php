@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Document;
+namespace App\Http\Controllers\Frontend\Tour\Document;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\Frontend\Api\Document\GibddNotifyRepository;
 use Exception;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 
-class GibddNotifyController extends BaseController
+class GibddNotifyController extends Controller
 {
     public function getWord(Request $request)
     {
@@ -36,6 +37,7 @@ class GibddNotifyController extends BaseController
         $tour_id = $request->tour_id;
 
         $tour_transport_days = (new GibddNotifyRepository)->getTourTransportDays($tour_id);
+
         $request->tour_day
             ? $req_tour_day = $request->tour_day
             : $req_tour_day = $tour_transport_days[0];

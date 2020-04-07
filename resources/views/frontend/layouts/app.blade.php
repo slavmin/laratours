@@ -48,6 +48,8 @@
     </style>
 
     @stack('after-styles')
+
+    @stack('scripts')
 </head>
 
 <body>

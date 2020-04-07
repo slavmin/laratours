@@ -26,7 +26,7 @@
           уведомление.
         </p>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <v-select
           v-model="delay"
           :items="delaysArray"
@@ -38,7 +38,7 @@
           При возникновении проблем с работой сервиса из-за медленного интернет
           соединения попробуйте увеличить это значение.
         </p>
-      </div>
+      </div> -->
       <div class="row justify-content-end">
         <v-btn
           v-if="step != 0"

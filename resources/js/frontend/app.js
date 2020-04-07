@@ -40,6 +40,9 @@ Vue.component('detailed-tour', require('./tour/tour/DetailedTour.vue').default);
 
 Vue.component('order-form', require('./components/OrderForm.vue').default);
 
+Vue.component('tour-routes', require('./components/TourRoutes.vue').default);
+
+
 
 const app = new Vue({
     vuetify,
