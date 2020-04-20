@@ -494,6 +494,85 @@ class DetailedTourController extends Controller
         return 'ok';
     }
 
+    public function getTourDataForEditor(Request $request)
+    {
+        $tour_id = $request->tour_id;
+        $tour = Tour::find($tour_id);
+        $tour_objects = $tour->object_attributes;
+
+        foreach ($tour_objects as $object) {
+            $o = $this->getObjectInfoForEditor($object, $tour_id);
+            $result[] =  [
+                'company' => $o['company'],
+                'object' => $object,
+                'properties' => $o['properties'],
+                'photo' => $o['company']->getMedia('photos')->first() ? $o['company']->getMedia('photos')->first()->getUrl() : ''
+            ];
+        }
+
+
+        return [
+            'tour_objects' => $result,
+            'tour_duration' => $tour->duration,
+        ];
+    }
+
+    protected function getObjectInfoForEditor($object_attribute, $tour_id)
+    {
+        switch ($object_attribute->objectable_type) {
+            case 'App\Models\Tour\TourTransport':
+                $company = TourTransport::find($object_attribute->objectable_id);
+                $properties = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                    ->where('object_type', 'transport')
+                    ->where('object_attribute_id', $object_attribute->id)
+                    ->first();
+                break;
+            case 'App\Models\Tour\TourMeal':
+                $company = TourMeal::find($object_attribute->objectable_id);
+                $properties = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                    ->where('object_type', 'meal')
+                    ->where('object_attribute_id', $object_attribute->id)
+                    ->first();
+                break;
+            case 'App\Models\Tour\TourMuseum':
+                $company = TourMuseum::find($object_attribute->objectable_id);
+                $properties = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                    ->where('object_type', 'museum')
+                    ->where('object_attribute_id', $object_attribute->id)
+                    ->first();
+                break;
+            case 'App\Models\Tour\TourHotel':
+                $company = TourHotel::find($object_attribute->objectable_id);
+                $properties = TourObjectAttributeProperties::where('tour_id', $tour_id)
+                    ->where('object_type', 'hotel')
+                    ->where('object_attribute_id', $object_attribute->id)
+                    ->first();
+                break;
+
+            default:
+                $company = [];
+                $properties = [];
+                break;
+        }
+
+        return [
+            'company' => $company,
+            'properties' => $properties
+        ];
+    }
+
+    public function saveDetailedTourProgram(Request $request)
+    {
+        $tour_id = $request->tour_id;
+        $program = $request->program;
+        $tour = Tour::find($tour_id);
+        $tour->extra = [
+            'program' => $program,
+        ];
+        $tour->save();
+        return $tour;
+    }
+
     public static function formatOptions($arr)
     {
         $arr = $arr->map(function ($item) {
