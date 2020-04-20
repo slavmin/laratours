@@ -6,7 +6,7 @@
   }
   function showProgram(extra) {
     let newWin = window.open('about:blank')
-    newWin.document.write(program.extra)
+    newWin.document.write(extra.program)
   }
 </script>
 @endpush
