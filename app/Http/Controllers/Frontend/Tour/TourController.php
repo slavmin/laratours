@@ -35,27 +35,6 @@ class TourController extends Controller
 
         $model_alias = Tour::getModelAliasAttribute();
 
-        // if (!is_null($city_id) && !is_null($type_id)) {
-
-        //     $items = Tour::with(['orderprofiles' => function ($query) {
-        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-        //     }])->where('city_id', $city_id)->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-        // } elseif (!is_null($type_id)) {
-
-        //     $items = Tour::with(['orderprofiles' => function ($query) {
-        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-        //     }])->where('tour_type_id', $type_id)->orderBy($orderBy, $sort)->paginate();
-        // } elseif (!is_null($city_id)) {
-
-        //     $items = Tour::with(['orderprofiles' => function ($query) {
-        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-        //     }])->where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
-        // } else {
-
-        //     $items = Tour::with(['orderprofiles' => function ($query) {
-        //         $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
-        //     }])->orderBy($orderBy, $sort)->paginate();
-        // }
         $items = Tour::with('dates')->with(['orderprofiles' => function ($query) {
             $query->select(['profiles.profileable_id as order_id', 'profiles.type', 'profiles.content']);
         }]);

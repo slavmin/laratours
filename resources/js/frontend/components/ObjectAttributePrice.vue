@@ -1,10 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col
-        cols="12"
-        md="3"
-      >
+      <v-col cols="12" md="3">
         <v-select
           v-model="filterValue"
           :items="filterOptions"
@@ -45,10 +42,7 @@
           </th>
         </thead>
         <tbody>
-          <tr
-            v-for="price in filteredPrices"
-            :key="price.id"
-          >
+          <tr v-for="price in filteredPrices" :key="price.id">
             <td>
               {{ price.period_start }}
             </td>
@@ -74,23 +68,9 @@
                 method="POST"
                 :action="`/operator/attribute-price/${price.id}`"
               >
-                <input
-                  type="hidden"
-                  name="_method"
-                  value="DELETE"
-                >
-                <input
-                  type="hidden"
-                  name="_token"
-                  :value="token"
-                >
-                <v-btn
-                  icon
-                  small
-                  color="red"
-                  type="submit"
-                  title="Удалить"
-                >
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="hidden" name="_token" :value="token" />
+                <v-btn icon small color="red" type="submit" title="Удалить">
                   <v-icon>close</v-icon>
                 </v-btn>
               </form>
@@ -99,24 +79,15 @@
         </tbody>
       </template>
     </v-simple-table>
-    <v-row
-      v-if="item.priceable.length == 0"
-      class="center mt-5"
-    >
+    <v-row v-if="item.priceable.length == 0" class="center mt-5">
       <div class="display-1">
         Цены и периоды не заполнены.
       </div>
     </v-row>
     <v-divider />
-    <v-form
-      ref="period"
-      v-model="valid"
-    >
+    <v-form ref="period" v-model="valid">
       <v-row>
-        <v-col
-          cols="12"
-          lg="6"
-        >
+        <v-col cols="12" lg="6">
           <v-menu
             v-model="showDateStart"
             :close-on-content-click="false"
@@ -147,10 +118,7 @@
             />
           </v-menu>
         </v-col>
-        <v-col
-          cols="12"
-          lg="6"
-        >
+        <v-col cols="12" lg="6">
           <v-menu
             v-model="showDateEnd"
             :close-on-content-click="false"
@@ -186,11 +154,7 @@
     </v-form>
     <div v-if="objectModel == 'museum'">
       <v-row justify="center">
-        <v-col
-          cols="12"
-          md="6"
-          lg="4"
-        >
+        <v-col cols="12" md="6" lg="4">
           <v-text-field
             v-model="priceForAllValue"
             label="Одна цена на все типы"
@@ -243,14 +207,8 @@
           />
         </v-col>
       </v-row>
-      <v-row
-        v-if="hotelInfantType.hasOwnProperty('value')"
-        justify="center"
-      >
-        <v-col
-          cols="12"
-          md="4"
-        >
+      <v-row v-if="hotelInfantType.hasOwnProperty('value')" justify="center">
+        <v-col cols="12" md="4">
           <p class="body-1 grey--text">
             {{ hotelInfantType.text }}
           </p>
@@ -282,10 +240,7 @@
     </div>
     <div v-if="objectModel == 'meal'">
       <v-row justify="center">
-        <v-col
-          cols="12"
-          md="6"
-        >
+        <v-col cols="12" md="6">
           <v-text-field
             v-model="resultArray[0].price"
             label="Цена"
@@ -295,65 +250,31 @@
         </v-col>
       </v-row>
     </div>
-    <form
-      id="price-form"
-      action="/operator/attribute-price"
-      method="POST"
-    >
-      <input
-        name="_token"
-        type="hidden"
-        :value="token"
-      >
-      <input
-        name="parent_id"
-        type="hidden"
-        :value="parentId"
-      >
-      <input
-        name="parent_model"
-        type="hidden"
-        :value="parentModel"
-      >
-      <input
-        name="period_start"
-        type="hidden"
-        :value="dateStart"
-      >
-      <input
-        name="period_end"
-        type="hidden"
-        :value="dateEnd"
-      >
+    <form id="price-form" action="/operator/attribute-price" method="POST">
+      <input name="_token" type="hidden" :value="token" />
+      <input name="parent_id" type="hidden" :value="parentId" />
+      <input name="period_start" type="hidden" :value="dateStart" />
+      <input name="period_end" type="hidden" :value="dateEnd" />
       <input
         v-if="objectModel != 'transport'"
         type="hidden"
         :value="JSON.stringify(resultArray)"
         name="prices_array"
-      >
+      />
       <input
         v-if="objectModel == 'transport'"
         type="hidden"
         :value="JSON.stringify(transportResultArray)"
         name="prices_array"
-      >
+      />
     </form>
     <v-row style="margin: 16px;">
-      <v-btn
-        :href="cancelRoute"
-        class="tc-link-no-underline-on-hover"
-        text
-      >
-        Вернуться
+      <v-btn :href="cancelRoute" class="tc-link-no-underline-on-hover" text>
+        закрыть
       </v-btn>
       <v-spacer />
-      <v-btn
-        form="price-form"
-        dark
-        color="#aa282a"
-        @click="submitForm"
-      >
-        Добавить
+      <v-btn form="price-form" dark color="#aa282a" @click="submitForm">
+        Сохранить
       </v-btn>
     </v-row>
   </v-container>

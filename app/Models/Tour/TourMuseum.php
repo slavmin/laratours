@@ -17,65 +17,66 @@ use Spatie\Image\Manipulations;
 
 class TourMuseum extends Model implements HasMedia
 {
-  use
-    SoftDeletes,
-    UsedByTeams,
-    UsedByCity,
-    HasPagination,
-    HasProfile,
-    HasObjectAttributes,
-    ActionButtonsAttribute,
-    HasMediaTrait;
+    use
+        SoftDeletes,
+        UsedByTeams,
+        UsedByCity,
+        HasPagination,
+        HasProfile,
+        HasObjectAttributes,
+        ActionButtonsAttribute,
+        HasMediaTrait;
 
-  protected $fillable = [
-    'name',
-    'city_id',
-    'description',
-    'qnt',
-    'extra',
-    'types_list',
-    'address',
-    'museum_site',
-    'museum_email',
-    'museum_phone',
-    'staff_name',
-    'staff_phone'
-  ];
+    protected $fillable = [
+        'name',
+        'city_id',
+        'description',
+        'qnt',
+        'extra',
+        'types_list',
+        'address',
+        'museum_site',
+        'museum_email',
+        'museum_phone',
+        'staff_name',
+        'staff_phone'
+    ];
 
-  protected $appends = ['model_alias'];
+    protected $appends = ['model_alias'];
 
-  protected $casts = [
-    'extra' => 'array',
-  ];
+    protected $casts = [
+        'extra' => 'array',
+        'types_list' => 'array'
+    ];
 
-  public static function getModelAliasAttribute()
-  {
-    return 'museum';
-  }
+    public static function getModelAliasAttribute()
+    {
+        return 'museum';
+    }
 
-  public function tours()
-  {
-    return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
-  }
+    public function tours()
+    {
+        return $this->morphToMany('App\Models\Tour\Tour', 'tourable');
+    }
 
-  public function registerMediaCollections()
-  {
-    $this->addMediaCollection('objects')->singleFile();
-  }
+    public function registerMediaCollections()
+    {
+        $this->addMediaCollection('objects')->singleFile();
+    }
 
-  /**
-   * @param Media|null $media
-   * @throws \Spatie\Image\Exceptions\InvalidManipulation
-   */
-  public function registerMediaConversions(Media $media = null)
-  {
-    $this->addMediaConversion('thumb')
-      ->crop(Manipulations::CROP_TOP, 80, 80);
-    // ->nonQueued();
+    /**
+     * @param Media|null $media
+     * @throws \Spatie\Image\Exceptions\InvalidManipulation
+     */
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this->addMediaConversion('thumb')
+            ->crop(Manipulations::CROP_TOP, 80, 80);
+        // ->nonQueued();
 
-    $this->addMediaConversion('portrait')
-      ->fit(Manipulations::FIT_FILL, 480, 480)
-      ->background('ffffff');
-    // ->nonQueued();
-  }
+        $this->addMediaConversion('portrait')
+            ->fit(Manipulations::FIT_FILL, 480, 480)
+            ->background('ffffff');
+        // ->nonQueued();
+    }
 }

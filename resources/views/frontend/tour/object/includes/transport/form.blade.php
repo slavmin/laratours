@@ -8,10 +8,10 @@
     <v-col md="6" sm="12">
         <h2>Общая информация:</h2>
         {{-- Name --}}
-        <v-text-field name="name" label="{{ __('validation.attributes.frontend.general.name') }}"
+        <v-text-field name="name" label="{{ __('validation.attributes.frontend.general.name') }} *"
             value="{{ $item->name ?? '' }}" maxlength="191" outlined></v-text-field>
         {{-- INN --}}
-        <v-text-field name="inn" label="{{ __('validation.attributes.frontend.company.inn') }}"
+        <v-text-field name="inn" label="{{ __('validation.attributes.frontend.company.inn') }} *"
             value="{{ $item->inn ?? '' }}" maxlength="191" outlined required></v-text-field>
         {{-- City --}}
         <cities-autocomplete label="{{ __('labels.frontend.tours.city.name') }}"

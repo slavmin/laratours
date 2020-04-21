@@ -27,6 +27,7 @@ Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
 
 Vue.component('cities-autocomplete', require('./components/CitiesAutocomplete.vue').default);
 Vue.component('museum-objectable', require('./components/MuseumObjectable.vue').default);
+Vue.component('museum-type-select', require('./components/MuseumTypeSelect.vue').default);
 Vue.component('hotel-objectable', require('./components/HotelObjectable.vue').default);
 Vue.component('meal-objectable', require('./components/MealObjectable.vue').default);
 Vue.component('transport-objectable', require('./components/TransportObjectable.vue').default);

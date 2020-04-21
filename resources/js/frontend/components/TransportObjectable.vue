@@ -1,247 +1,153 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    fullscreen
-    hide-overlay
-    transition="dialog-bottom-transition"
-    @input="parseInfo"
-  >
-    <template v-slot:activator="{ on }">
-      <v-btn
-        :icon="editMode"
-        :fab="!editMode"
-        small
-        :color="editMode ? 'yellow' : '#aa282a'"
-        :title="(editMode ? 'Редактировать' :'Добавить') + ' транспорт'"
-        dark
-        v-on="on"
-      >
-        <i class="material-icons">
-          {{ editMode ? 'edit' : 'add' }}
-        </i>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-toolbar
-        dark
-        color="#66a5ae"
-      >
-        <v-btn
-          icon
-          @click="close"
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
-        <v-toolbar-title>
-          {{ editMode ? 'Редактировать' :'Добавить' }} транспорт
-        </v-toolbar-title>
-        <v-spacer />
-      </v-toolbar>
-      <v-container>
-        <v-layout
-          row
-          wrap
-        >
-          <!-- Add transport form -->
-          <v-flex
-            mt-5
-            xs12
-            column
-            class="add-transport-form"
-          >
-            <v-container>
-              <v-layout
-                row
-                wrap
-              >
-                <v-flex xs6>
-                  <h2 class="grey--text text--darken-1 mb-2">
-                    Транспорт:
-                  </h2>
-                  <v-form
-                    :id="'form' + tourObject.id"
-                    ref="form"
-                    lazy-validation
-                    :action="editMode ? `/operator/attribute/${objectAttribute.id}` : '/operator/attribute'"
-                    method="POST"
-                  >
-                    <input
-                      v-if="editMode"
-                      type="hidden"
-                      name="_method"
-                      value="PATCH"
-                    >
-                    <input
-                      type="hidden"
-                      name="_token"
-                      :value="token"
-                    >
-                    <input
-                      type="hidden"
-                      name="parent_model_id"
-                      :value="tourObject.id"
-                    >
-                    <input
-                      type="hidden"
-                      name="parent_model_alias"
-                      value="transport"
-                    >
-                    <input
-                      type="hidden"
-                      :value="JSON.stringify(extra)"
-                      name="extra"
-                    >
-                    <input
-                      type="hidden"
-                      name="id"
-                      value="0"
-                    >
-                    <input
-                      type="hidden"
-                      name="customer_type_id"
-                      value="1"
-                    >
-                    <input
-                      type="hidden"
-                      name="qnt"
-                      value="1"
-                    >
-                    <input
-                      type="hidden"
-                      value="0"
-                      name="price"
-                    >
-                    <v-text-field
-                      v-model="name"
-                      name="name"
-                      label="Название"
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      color="#aa282a"
-                      required
-                    />
-                    <v-text-field
-                      v-model="description"
-                      name="description"
-                      label="Описание"
-                      color="#aa282a"
-                    />
-                    <v-select
-                      v-model="grade"
-                      :items="grades"
-                      color="#aa282a"
-                      :menu-props="{ maxHeight: '400' }"
-                      :rules="[v => !!v || 'Это обязательное поле']"
-                      label="Класс обслуживания"
-                      multiple
-                      hint="Можно выбрать несколько"
-                      persistent-hint
-                    />
-                  </v-form>
-                </v-flex>
-                <!-- <v-flex
-                  xs3
-                  offset-xs3
+  <v-card>
+    <v-container>
+      <v-layout row wrap>
+        <!-- Add transport form -->
+        <v-flex mt-5 xs12 column class="add-transport-form">
+          <v-container>
+            <v-layout row wrap>
+              <v-flex xs6>
+                <h2 class="grey--text text--darken-1 mb-2">
+                  Транспорт:
+                </h2>
+                <v-form
+                  :id="'form' + tourObject.id"
+                  ref="form"
+                  lazy-validation
+                  :action="
+                    editMode
+                      ? `/operator/attribute/${objectAttribute.id}`
+                      : '/operator/attribute'
+                  "
+                  method="POST"
                 >
-                  <h2 class="grey--text text--darken-1 mb-2">
-                    Цены
-                  </h2>
-                  <v-text-field
-                    v-model="price0"
-                    color="#aa282a"
-                    label="1 час"
+                  <input
+                    v-if="editMode"
+                    type="hidden"
+                    name="_method"
+                    value="PATCH"
                   />
-                  <v-text-field
-                    v-model="price1"
-                    color="#aa282a"
-                    label="1 км"
+                  <input type="hidden" name="_token" :value="token" />
+                  <input
+                    type="hidden"
+                    name="parent_model_id"
+                    :value="tourObject.id"
                   />
-                </v-flex> -->
-              </v-layout>
-              <v-layout
-                row
-                wrap
-                mt-5
-              >
-                <v-flex>
-                  <v-layout
-                    row
-                    wrap
-                    justify-start
+                  <input
+                    type="hidden"
+                    name="parent_model_alias"
+                    value="transport"
+                  />
+                  <input
+                    type="hidden"
+                    :value="JSON.stringify(extra)"
+                    name="extra"
+                  />
+                  <input type="hidden" name="id" value="0" />
+                  <input type="hidden" name="customer_type_id" value="1" />
+                  <input type="hidden" name="qnt" value="1" />
+                  <input type="hidden" value="0" name="price" />
+                  <v-text-field
+                    v-model="name"
+                    name="name"
+                    label="Название"
+                    :rules="[v => !!v || 'Это обязательное поле']"
+                    color="#aa282a"
+                    required
+                  />
+                  <v-textarea
+                    v-model="description"
+                    name="description"
+                    label="Описание"
+                    rows="1"
+                    color="#aa282a"
+                  />
+                  <v-select
+                    v-model="grade"
+                    :items="grades"
+                    color="#aa282a"
+                    :menu-props="{ maxHeight: '400' }"
+                    :rules="[v => !!v || 'Это обязательное поле']"
+                    label="Класс обслуживания"
+                    multiple
+                    hint="Можно выбрать несколько"
+                    persistent-hint
+                  />
+                </v-form>
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap mt-5>
+              <v-flex>
+                <v-layout row wrap justify-start>
+                  <v-btn
+                    small
+                    text
+                    color="#aa282a"
+                    dark
+                    @click="showScheme = !showScheme"
                   >
-                    <v-btn
-                      small
-                      text
-                      color="#aa282a"
-                      dark
-                      @click="showScheme = !showScheme"
-                    >
-                      {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
-                      <v-icon right>
-                        expand_{{ showScheme ? 'less' : 'more' }}
-                      </v-icon>
-                    </v-btn>
-                  </v-layout>
-                  <div v-if="showScheme">
-                    <Scheme
-                      :company-id="tourObject.id"
-                      :token="token"
-                      new
-                      :current-scheme="currentScheme"
-                      @update="updateScheme"
-                    />
-                  </div>
-                </v-flex>
-              </v-layout>
-              <v-layout
-                row
-                wrap
-                mt-5
+                    {{ showScheme ? 'Скрыть схему' : 'Показать схему' }}
+                    <v-icon right>
+                      expand_{{ showScheme ? 'less' : 'more' }}
+                    </v-icon>
+                  </v-btn>
+                </v-layout>
+                <div v-if="showScheme">
+                  <Scheme
+                    :company-id="tourObject.id"
+                    :token="token"
+                    new
+                    :current-scheme="currentScheme"
+                    @update="updateScheme"
+                  />
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap mt-5>
+              <v-flex>
+                <v-row>
+                  <v-btn
+                    small
+                    text
+                    color="#aa282a"
+                    dark
+                    @click="showDocs = !showDocs"
+                  >
+                    {{ showDocs ? 'Скрыть' : 'Документы' }}
+                    <v-icon right>
+                      expand_{{ showDocs ? 'less' : 'more' }}
+                    </v-icon>
+                  </v-btn>
+                </v-row>
+                <div v-if="showDocs">
+                  <TransportDocs
+                    edit-mode
+                    :bus-data="
+                      objectAttribute.hasOwnProperty(extra)
+                        ? JSON.parse(objectAttribute.extra)
+                        : {}
+                    "
+                    @update="updateTransportData"
+                  />
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap justify-end>
+              <v-btn
+                type="submit"
+                dark
+                color="#aa282a"
+                :form="'form' + tourObject.id"
               >
-                <v-flex>
-                  <v-row>
-                    <v-btn
-                      small
-                      text
-                      color="#aa282a"
-                      dark
-                      @click="showDocs = !showDocs"
-                    >
-                      {{ showDocs ? 'Скрыть' : 'Документы' }}
-                      <v-icon right>
-                        expand_{{ showDocs ? 'less' : 'more' }}
-                      </v-icon>
-                    </v-btn>
-                  </v-row>
-                  <div v-if="showDocs">
-                    <TransportDocs
-                      edit-mode
-                      :bus-data="JSON.parse(objectAttribute.extra)"
-                      @update="updateTransportData"
-                    />
-                  </div>
-                </v-flex>
-              </v-layout>
-              <v-layout
-                row
-                wrap
-                justify-end
-              >
-                <v-btn
-                  type="submit"
-                  dark
-                  color="#aa282a"
-                  :form="'form' + tourObject.id"
-                >
-                  Сохранить
-                </v-btn>
-              </v-layout>
-            </v-container>
-            <!-- /Add transport form -->
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-card>
-  </v-dialog>
+                Сохранить
+              </v-btn>
+            </v-layout>
+          </v-container>
+          <!-- /Add transport form -->
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -249,7 +155,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import Scheme from './Scheme'
 import TransportDocs from './TransportDocs'
 export default {
-  name: 'AddObjectables',
+  name: 'TransportObjectable',
   components: {
     Scheme,
     TransportDocs,
@@ -262,7 +168,7 @@ export default {
     },
     objectAttribute: {
       type: Object,
-      default: null,
+      default: () => {},
     },
     objectAttributePrices: {
       type: Array,

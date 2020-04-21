@@ -24,5 +24,12 @@ module.exports = {
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'vue/no-v-html': 'off',
         'vue/html-self-closing': 'off',
+        'vue/max-attributes-per-line': [2, {
+            'singleline': 20,
+            'multiline': {
+                'max': 1,
+                'allowFirstLine': false
+            }
+        }]
     }
 }
