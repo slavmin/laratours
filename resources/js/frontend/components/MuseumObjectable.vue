@@ -94,14 +94,6 @@
                       mask="#####"
                     />
                   </v-flex>
-                  <v-flex>
-                    <v-text-field
-                      v-model="customOrder.about"
-                      label="Описание"
-                      outline
-                      color="#aa282a"
-                    />
-                  </v-flex>
                 </v-layout>
               </div>
             </v-flex>
