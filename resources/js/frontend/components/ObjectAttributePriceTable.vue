@@ -18,7 +18,7 @@
         <div v-if="objectModel == 'transport'" class="d-inline">
           {{ priceTypesForView[price.tour_price_type_id] }}
         </div>
-        <div v-if="i == 0" class="d-inline">
+        <div v-if="i == 0 && prices.length > 1" class="d-inline">
           <v-btn
             text
             :class="showAll ? 'red--text' : 'green--text'"
@@ -34,6 +34,7 @@
       </td>
       <td>
         {{ price.price }}
+        <EditPrice :price="price" :token="token" />
       </td>
       <td>
         <form method="POST" :action="`/operator/attribute-price/${price.id}`">
@@ -49,8 +50,10 @@
 </template>
 
 <script>
+import EditPrice from './ObjectAttributePriceEditDialog'
 export default {
   name: 'ObjectATtributePriceTable',
+  components: { EditPrice },
   props: {
     prices: {
       type: Array,

@@ -245,17 +245,10 @@
   </v-container>
 </template>
 <script>
-<<<<<<< HEAD
-import EditPrice from './ObjectAttributePriceEditDialog'
-export default {
-  name: 'ObjectAttributePrice',
-  components: { EditPrice },
-=======
 import PriceTable from './ObjectAttributePriceTable'
 export default {
   name: 'ObjectAttributePrice',
   components: { PriceTable },
->>>>>>> shoom1337
   props: {
     customers: {
       type: Object,
