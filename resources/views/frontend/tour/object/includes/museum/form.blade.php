@@ -15,10 +15,10 @@
         <cities-autocomplete label="{{ __('labels.frontend.tours.city.name') }} *"
             city-id="{{ $item->city_id??$city_id }}"></cities-autocomplete>
         {{-- Address --}}
-        <v-text-field name="address" label="{{ __('validation.attributes.frontend.general.address') }}"
-            value="{{ $item->address ?? '' }}" maxlength="191" outlined></v-text-field>
+        <v-text-field name="address" label="{{ __('validation.attributes.frontend.general.address') }} *"
+            value="{{ $item->address ?? '' }}" maxlength="191" outlined required></v-text-field>
         {{-- Type --}}
-        <museum-type-select saved-types="{{ $item->types_list ? json_encode($item->types_list) : '' }}">
+        <museum-type-select saved-types="{{ $item ? json_encode($item->types_list) : '' }}">
         </museum-type-select>
         {{-- Description --}}
         <v-text-field name="description" label="{{ __('validation.attributes.frontend.general.description') }}"

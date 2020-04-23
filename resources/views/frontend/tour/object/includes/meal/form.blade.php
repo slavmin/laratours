@@ -15,8 +15,8 @@
         <cities-autocomplete label="{{ __('labels.frontend.tours.city.name') }} *"
             city-id="{{ $item->city_id??$city_id }}"></cities-autocomplete>
         {{-- Address --}}
-        <v-text-field name="address" label="{{ __('validation.attributes.frontend.general.address') }}"
-            value="{{ $item->address ?? '' }}" maxlength="191" outlined></v-text-field>
+        <v-text-field name="address" label="{{ __('validation.attributes.frontend.general.address') }} *"
+            value="{{ $item->address ?? '' }}" maxlength="191" outlined required></v-text-field>
         {{-- Description --}}
         <v-text-field name="description" label="{{ __('validation.attributes.frontend.general.description') }}"
             value="{{ $item->description ?? '' }}" maxlength="191" outlined></v-text-field>
