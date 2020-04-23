@@ -1,0 +1,88 @@
+<template>
+  <tbody>
+    <tr
+      v-for="(price, i) in prices"
+      v-show="i == 0 || (i > 0 && showAll)"
+      :key="price.id"
+    >
+      <td>
+        {{ price.period_start }}
+      </td>
+      <td>
+        {{ price.period_end }}
+      </td>
+      <td>
+        <div v-if="objectModel != 'transport'">
+          {{ customers[price.tour_customer_type_id] }}
+          <div v-if="i == 0" class="d-inline">
+            <v-btn
+              text
+              :class="showAll ? 'red--text' : 'green--text'"
+              @click="showAll = !showAll"
+            >
+              <v-icon> expand_{{ showAll ? 'less' : 'more' }} </v-icon>
+              ({{ prices.length - 1 }})
+            </v-btn>
+          </div>
+        </div>
+        <div v-if="objectModel == 'transport'">
+          {{ priceTypesForView[price.tour_price_type_id] }}
+        </div>
+      </td>
+      <td v-if="objectModel == 'hotel'">
+        {{ price.accom_type }}
+      </td>
+      <td>
+        {{ price.price }}
+      </td>
+      <td>
+        <form method="POST" :action="`/operator/attribute-price/${price.id}`">
+          <input type="hidden" name="_method" value="DELETE" />
+          <input type="hidden" name="_token" :value="token" />
+          <v-btn icon small color="red" type="submit" title="Удалить">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</template>
+
+<script>
+export default {
+  name: 'ObjectATtributePriceTable',
+  props: {
+    prices: {
+      type: Array,
+      default: () => [],
+    },
+    customers: {
+      type: Object,
+      default: () => {},
+    },
+    priceTypesForView: {
+      type: Object,
+      default: () => {},
+    },
+    objectModel: {
+      type: String,
+      default: '',
+    },
+    token: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      showAll: false,
+    }
+  },
+}
+</script>
+
+<style scoped>
+tr:last-child {
+  border-bottom: 2px solid black;
+}
+</style>

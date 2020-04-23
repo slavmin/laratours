@@ -7,16 +7,8 @@
           :items="filterOptions"
           color="#aa282a"
           label="Фильтр периодов"
+          clearable
         />
-        <v-btn
-          v-if="filterValue != null"
-          small
-          text
-          color="#aa282a"
-          @click="clearFilter"
-        >
-          Показать все
-        </v-btn>
       </v-col>
     </v-row>
     <v-simple-table v-if="item.priceable.length > 0">
@@ -41,42 +33,15 @@
             Действия
           </th>
         </thead>
-        <tbody>
-          <tr v-for="price in filteredPrices" :key="price.id">
-            <td>
-              {{ price.period_start }}
-            </td>
-            <td>
-              {{ price.period_end }}
-            </td>
-            <td>
-              <div v-if="objectModel != 'transport'">
-                {{ customers[price.tour_customer_type_id] }}
-              </div>
-              <div v-if="objectModel == 'transport'">
-                {{ priceTypesForView[price.tour_price_type_id] }}
-              </div>
-            </td>
-            <td v-if="objectModel == 'hotel'">
-              {{ price.accom_type }}
-            </td>
-            <td>
-              {{ price.price }}
-            </td>
-            <td>
-              <form
-                method="POST"
-                :action="`/operator/attribute-price/${price.id}`"
-              >
-                <input type="hidden" name="_method" value="DELETE" />
-                <input type="hidden" name="_token" :value="token" />
-                <v-btn icon small color="red" type="submit" title="Удалить">
-                  <v-icon>close</v-icon>
-                </v-btn>
-              </form>
-            </td>
-          </tr>
-        </tbody>
+        <PriceTable
+          v-for="(period, key) in filteredPrices"
+          :key="key"
+          :prices="period"
+          :customers="customers"
+          :price-types-for-view="priceTypesForView"
+          :object-model="objectModel"
+          :token="token"
+        />
       </template>
     </v-simple-table>
     <v-row v-if="item.priceable.length == 0" class="center mt-5">
@@ -280,8 +245,10 @@
   </v-container>
 </template>
 <script>
+import PriceTable from './ObjectAttributePriceTable'
 export default {
   name: 'ObjectAttributePrice',
+  components: { PriceTable },
   props: {
     customers: {
       type: Object,
@@ -372,6 +339,7 @@ export default {
           }
         })
       }
+      result = this.compactPricesByPeriod(result)
       return result
     },
   },
@@ -454,11 +422,19 @@ export default {
         this.resultArray[index].price = 0
       }
     },
-    clearFilter() {
-      this.filterValue = null
-    },
     priceForAll() {
       this.resultArray.forEach(price => (price.price = this.priceForAllValue))
+    },
+    compactPricesByPeriod(prices) {
+      let result = {}
+      prices.forEach(price => {
+        const period = `${price.period_start}-${price.period_end}`
+        if (!Object.keys(result).includes(period)) {
+          result[period] = []
+        }
+        result[period].push(price)
+      })
+      return result
     },
   },
 }
