@@ -1,9 +1,6 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-text-field
         v-model="name"
         name="name"
@@ -13,7 +10,7 @@
         outlined
         required
       />
-      <v-text-field
+      <v-textarea
         v-model="description"
         name="description"
         label="Описание"
@@ -22,37 +19,7 @@
         outlined
       />
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <v-autocomplete
-        v-model="gradeList"
-        name="grade_list[]"
-        :items="countriesOptions"
-        :rules="[v => !!v || 'Выберите класс']"
-        label="Класс"
-        color="#aa282a"
-        outlined
-        clearable
-        disabled
-      />
-      <v-autocomplete
-        v-model="langList"
-        name="lang_list[]"
-        :items="countriesOptions"
-        :rules="[v => !!v || 'Выберите язык']"
-        label="Язык"
-        color="#aa282a"
-        outlined
-        clearable
-        disabled
-      />
-    </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-autocomplete
         v-model="countryId"
         name="country_id"
@@ -85,10 +52,7 @@
         outlined
       />
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-text-field
         v-model="email"
         name="email"
@@ -103,11 +67,14 @@
         name="phone"
         label="Телефон"
         placeholder="(555) 555-5555"
+        persistent-hint
+        hint="Может выводиться в описании тура"
         autocomplete="tel"
         maxlength="14"
         color="#aa282a"
         outlined
       />
+      <hr />
       <v-text-field
         v-model="secretPhone"
         type="tel"
@@ -115,20 +82,40 @@
         name="secret_phone"
         label="Секретный телефон"
         placeholder="(555) 555-5555"
+        persistent-hint
+        hint="Виден только оператору"
         autocomplete="tel"
         maxlength="14"
         color="#aa282a"
         outlined
       />
     </v-col>
-    <v-overlay
-      :value="loader"
-      style="z-index: 10000;"
-    >
-      <v-progress-circular
-        indeterminate
-        size="64"
+    <!-- <v-col cols="12" md="6">
+      <v-autocomplete
+        v-model="gradeList"
+        name="grade_list[]"
+        :items="countriesOptions"
+        :rules="[v => !!v || 'Выберите класс']"
+        label="Класс"
+        color="#aa282a"
+        outlined
+        clearable
+        disabled
       />
+      <v-autocomplete
+        v-model="langList"
+        name="lang_list[]"
+        :items="countriesOptions"
+        :rules="[v => !!v || 'Выберите язык']"
+        label="Язык"
+        color="#aa282a"
+        outlined
+        clearable
+        disabled
+      />
+    </v-col> -->
+    <v-overlay :value="loader" style="z-index: 10000;">
+      <v-progress-circular indeterminate size="64" />
     </v-overlay>
   </v-row>
 </template>
