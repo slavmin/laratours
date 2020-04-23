@@ -34,16 +34,26 @@
       </td>
       <td>
         {{ price.price }}
-        <EditPrice :price="price" :token="token" />
       </td>
       <td>
-        <form method="POST" :action="`/operator/attribute-price/${price.id}`">
-          <input type="hidden" name="_method" value="DELETE" />
-          <input type="hidden" name="_token" :value="token" />
-          <v-btn icon small color="red" type="submit" title="Удалить">
-            <v-icon>close</v-icon>
-          </v-btn>
-        </form>
+        <v-row>
+          <EditPrice
+            :price="price"
+            :header-text="
+              objectModel == 'transport'
+                ? priceTypesForView[price.tour_price_type_id]
+                : customers[price.tour_customer_type_id]
+            "
+            :token="token"
+          />
+          <form method="POST" :action="`/operator/attribute-price/${price.id}`">
+            <input type="hidden" name="_method" value="DELETE" />
+            <input type="hidden" name="_token" :value="token" />
+            <v-btn icon small color="red" type="submit" title="Удалить">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </form>
+        </v-row>
       </td>
     </tr>
   </tbody>

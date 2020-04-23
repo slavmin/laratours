@@ -117,6 +117,8 @@ class PriceController extends Controller
     public function update(Request $request, $id)
     {
         $tour_price = TourPrice::find($id);
+        $tour_price->period_end = $request->period_end;
+        $tour_price->period_start = $request->period_start;
         $tour_price->price = $request->price;
         $tour_price->save();
 
