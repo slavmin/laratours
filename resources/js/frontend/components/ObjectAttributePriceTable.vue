@@ -12,21 +12,21 @@
         {{ price.period_end }}
       </td>
       <td>
-        <div v-if="objectModel != 'transport'">
+        <div v-if="objectModel != 'transport'" class="d-inline">
           {{ customers[price.tour_customer_type_id] }}
-          <div v-if="i == 0" class="d-inline">
-            <v-btn
-              text
-              :class="showAll ? 'red--text' : 'green--text'"
-              @click="showAll = !showAll"
-            >
-              <v-icon> expand_{{ showAll ? 'less' : 'more' }} </v-icon>
-              ({{ prices.length - 1 }})
-            </v-btn>
-          </div>
         </div>
-        <div v-if="objectModel == 'transport'">
+        <div v-if="objectModel == 'transport'" class="d-inline">
           {{ priceTypesForView[price.tour_price_type_id] }}
+        </div>
+        <div v-if="i == 0" class="d-inline">
+          <v-btn
+            text
+            :class="showAll ? 'red--text' : 'green--text'"
+            @click="showAll = !showAll"
+          >
+            <v-icon> expand_{{ showAll ? 'less' : 'more' }} </v-icon>
+            ({{ prices.length - 1 }})
+          </v-btn>
         </div>
       </td>
       <td v-if="objectModel == 'hotel'">
