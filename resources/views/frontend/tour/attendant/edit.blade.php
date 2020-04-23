@@ -29,5 +29,10 @@
             </v-card>
         </v-col>
     </v-row>
+    <v-row justify="center">
+        <v-col xs="12">
+            <h2 class="white--text text-center">Цены указываются непосредственно при создании тура.</h2>
+        </v-col>
+    </v-row>
 </v-container>
 @endsection
