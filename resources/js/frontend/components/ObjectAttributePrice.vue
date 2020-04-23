@@ -42,7 +42,11 @@
           </th>
         </thead>
         <tbody>
-          <tr v-for="price in filteredPrices" :key="price.id">
+          <tr
+            v-for="price in filteredPrices"
+            :id="`price-row-${price.id}`"
+            :key="price.id"
+          >
             <td>
               {{ price.period_start }}
             </td>
@@ -62,18 +66,21 @@
             </td>
             <td>
               {{ price.price }}
+              <EditPrice :price="price" :token="token" />
             </td>
             <td>
-              <form
-                method="POST"
-                :action="`/operator/attribute-price/${price.id}`"
-              >
-                <input type="hidden" name="_method" value="DELETE" />
-                <input type="hidden" name="_token" :value="token" />
-                <v-btn icon small color="red" type="submit" title="Удалить">
-                  <v-icon>close</v-icon>
-                </v-btn>
-              </form>
+              <v-row justify="space-around">
+                <form
+                  method="POST"
+                  :action="`/operator/attribute-price/${price.id}`"
+                >
+                  <input type="hidden" name="_method" value="DELETE" />
+                  <input type="hidden" name="_token" :value="token" />
+                  <v-btn icon small color="red" type="submit" title="Удалить">
+                    <v-icon>close</v-icon>
+                  </v-btn>
+                </form>
+              </v-row>
             </td>
           </tr>
         </tbody>
@@ -280,8 +287,10 @@
   </v-container>
 </template>
 <script>
+import EditPrice from './ObjectAttributePriceEditDialog'
 export default {
   name: 'ObjectAttributePrice',
+  components: { EditPrice },
   props: {
     customers: {
       type: Object,
@@ -337,6 +346,7 @@ export default {
       filterValue: null,
       valid: false,
       priceForAllValue: null,
+      pricesByPeriod: {},
     }
   },
   computed: {
@@ -426,14 +436,16 @@ export default {
       }
       if (this.objectModel == 'hotel') {
         this.resultArray = []
-        const adult = this.customersArray.find(
-          customer => customer.text == 'Взрослый'
+        const adult = this.customersArray.find(customer =>
+          customer.text.toLowerCase().includes('взрослый')
         )
         const child = this.customersArray.find(
-          customer => customer.text == 'Ребенок'
+          customer =>
+            customer.text.toLowerCase().includes('ребенок') ||
+            customer.text.toLowerCase().includes('ребёнок')
         )
-        this.hotelInfantType = this.customersArray.find(
-          customer => customer.text == 'Инфант'
+        this.hotelInfantType = this.customersArray.find(customer =>
+          customer.text.toLowerCase().includes('инфант')
         )
         this.hotelCustomerTypes = [adult, child]
         this.hotelCustomerTypes.forEach(type => {
