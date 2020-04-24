@@ -7,6 +7,8 @@ use App\Filters\ToursFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourConstructorType;
+use App\Models\Tour\TourCustomer;
+use App\Models\Tour\TourCustomerType;
 use App\Models\Tour\TourMuseum;
 use App\Models\Tour\TourType;
 use App\Repositories\Frontend\Tour\TourRepository;
@@ -49,13 +51,15 @@ class TourController extends Controller
 
         $tour_types = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        $req_params = $request->all();
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
-        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted', 'req_params'))
+
+        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted'))
             ->with('city_id', (int) $city_id)
             ->with('type_id', (int) $type_id)
             ->with('route', route('frontend.tour.' . $model_alias . '.store'))
             ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+            ->with('customer_type_options', $customer_type_options)
             ->with('model_alias', $model_alias);
     }
 
@@ -79,6 +83,7 @@ class TourController extends Controller
         $tour_type_options = TourType::getTourTypesAttribute(__('validation.attributes.frontend.general.select'));
 
         $constructor_type_options = TourConstructorType::select('id', 'name')->get()->toArray();
+
 
         return view('frontend.tour.tour.create', compact('cities_options', 'countries_cities_options', 'tour_type_options', 'constructor_type_options'))
             ->with('method', 'POST')
