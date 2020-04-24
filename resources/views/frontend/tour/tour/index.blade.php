@@ -37,9 +37,6 @@
                         <thead>
                             <tr>
                                 <th>
-                                    #
-                                </th>
-                                <th>
                                     @lang('labels.frontend.tours.'.$model_alias.'.table.name')
                                 </th>
                                 <th>
@@ -53,9 +50,7 @@
                                 </th>
                                 <th>
                                     @lang('labels.frontend.tours.'.$model_alias.'.table.duration')
-                                </th>
-                                <th>
-                                    @lang('labels.frontend.tours.'.$model_alias.'.table.nights')
+                                    /@lang('labels.frontend.tours.'.$model_alias.'.table.nights')
                                 </th>
                                 <th class="text-right">
                                     @lang('labels.general.actions')
@@ -64,10 +59,7 @@
                         </thead>
                         <tbody>
                             @foreach($items as $item)
-                            <tr>
-                                <td class="grey--text" onclick="showExtraRow({{ $item->id }})">
-                                    {{ $item->id }}
-                                </td>
+                            <tr class="my-2">
                                 <td class="title" onclick="showExtraRow({{ $item->id }})">
                                     {{$item->name}}
                                     <div class="subtitle-1 grey--text">
@@ -100,9 +92,10 @@
                                     N/A
                                     @endif
                                 </td>
-                                <td onclick="showExtraRow({{ $item->id }})"> 0 / {{ $item->qnt }}</td>
-                                <td onclick="showExtraRow({{ $item->id }})">{{$item->duration}}</td>
-                                <td onclick="showExtraRow({{ $item->id }})">{{$item->nights}}</td>
+                                <td onclick="showExtraRow({{ $item->id }})">
+                                    <div>0/{{ $item->qnt }}</div>
+                                </td>
+                                <td onclick="showExtraRow({{ $item->id }})">{{$item->duration}}/{{$item->nights}}</td>
                                 <td>
                                     <div class="float-right" role="toolbar"
                                         aria-label="@lang('labels.general.toolbar_btn_groups')">
