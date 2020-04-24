@@ -23,7 +23,7 @@ class HotelController extends Controller
 
         $city_name = TourHotel::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
+        $city_param = !is_null($city_id) ? $city_id : '';
 
         $name_param = !is_null($request->name) ? $request->name : '';
 
@@ -32,13 +32,6 @@ class HotelController extends Controller
 
         $model_alias = TourHotel::getModelAliasAttribute();
 
-        // if (!is_null($city_id)) {
-
-        //     $items = TourHotel::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
-        // } else {
-
-        //     $items = TourHotel::orderBy($orderBy, $sort)->paginate();
-        // }
         $items = (new ObjectsFilter(TourHotel::with('objectables'), $request))->apply()->paginate();
 
         $deleted = TourHotel::onlyTrashed()->get();
@@ -62,7 +55,7 @@ class HotelController extends Controller
             ->with('model_alias', $model_alias)
             ->with('customer_type_options', $customer_type_options)
             ->with('customer_type_options_arrays', $customer_type_options_arrays)
-            ->with('name', $name_param);
+            ->with('name_param', $name_param);
     }
 
     public function show($id)

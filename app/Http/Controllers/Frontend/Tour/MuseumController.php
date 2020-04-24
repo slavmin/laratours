@@ -22,7 +22,7 @@ class MuseumController extends Controller
 
         $city_name = TourMuseum::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-        $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
+        $city_param = !is_null($city_id) ? $city_id : '';
 
         $name_param = !is_null($request->name) ? $request->name : '';
 
@@ -54,7 +54,7 @@ class MuseumController extends Controller
             ->with('model_alias', $model_alias)
             ->with('customer_type_options', $customer_type_options)
             ->with('customer_type_options_arrays', $customer_type_options_arrays)
-            ->with('name', $name_param);
+            ->with('name_param', $name_param);
     }
 
     public function show($id)

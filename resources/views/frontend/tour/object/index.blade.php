@@ -1,11 +1,12 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-{{-- @include('frontend.tour.includes.city-select-form') --}}
 <v-container fluid grid-list-md text-xs-center>
     <h1 class="text-white text-center">
         @lang('labels.frontend.tours.'.$model_alias.'.management')
     </h1>
+    <filter-for-objects model-alias="{{ $model_alias }}" name-param="{{ $name_param }}" city-param="{{ $city_param }}"
+        cities="{{ json_encode($cities_for_filter) }}"></filter-for-objects>
     <v-layout row wrap justify-center mb-5>
         <v-btn fab dark class="tc-red-bg tc-link-no-underline-on-hover" title="@lang('buttons.general.crud.create')"
             href="{{ route('frontend.tour.'.$model_alias.'.create', $city_param) }}">

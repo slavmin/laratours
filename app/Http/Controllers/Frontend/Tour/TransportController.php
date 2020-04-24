@@ -11,246 +11,237 @@ use App\Models\Tour\TourTransport;
 
 class TransportController extends Controller
 {
-  protected $transport;
+    protected $transport;
 
-  protected $city_id;
-
-
-  /**
-   * Display a listing of the resource.
-   *
-   * @param Request $request
-   * @return \Illuminate\Http\Response
-   */
-  public function index(Request $request)
-  {
-    $city_id = $this->getCityId($request);
-
-    $city_name = TourTransport::getCityName($city_id, __('labels.frontend.tours.all_cities'));
-
-    $city_param = !is_null($city_id) ? 'city_id=' . $city_id : [];
-
-    $name_param = !is_null($request->name) ? $request->name : '';
-
-    $orderBy = 'name';
-    $sort = 'asc';
-
-    $model_alias = TourTransport::getModelAliasAttribute();
-
-    // if (!is_null($city_id)) {
-
-    //     $items = TourTransport::where('city_id', $city_id)->orderBy($orderBy, $sort)->paginate();
-
-    // } else {
-
-    //     $items = TourTransport::orderBy($orderBy, $sort)->paginate();
-
-    // }
-    $items = (new ObjectsFilter(TourTransport::with('objectables'), $request))->apply()->paginate();
+    protected $city_id;
 
 
-    $deleted = TourTransport::onlyTrashed()->get();
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $city_id = $this->getCityId($request);
 
-    $cities_names = TourTransport::getCitiesAttribute();
+        $city_name = TourTransport::getCityName($city_id, __('labels.frontend.tours.all_cities'));
 
-    $cities_select = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+        $city_param = !is_null($city_id) ? $city_id : '';
 
-    $cities_ids = TourTransport::select('city_id')->pluck('city_id')->toArray();
+        $name_param = !is_null($request->name) ? $request->name : '';
 
-    $cities_for_filter = TourTransport::getCitiesForFilterAttribute($cities_ids);
+        $orderBy = 'name';
+        $sort = 'asc';
 
-    $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
+        $model_alias = TourTransport::getModelAliasAttribute();
 
-    return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
-      ->with('city_id', (int) $city_id)
-      ->with('city_name', $city_name)
-      ->with('city_param', $city_param)
-      ->with('model_alias', $model_alias)
-      ->with('customer_type_options_arrays', $customer_type_options_arrays)
-      ->with('name', $name_param);
-  }
+        $items = (new ObjectsFilter(TourTransport::with('objectables'), $request))->apply()->paginate();
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @param Request $request
-   * @return \Illuminate\Http\Response
-   */
-  public function create(Request $request)
-  {
-    $model_alias = TourTransport::getModelAliasAttribute();
 
-    $city_id = $this->getCityId($request);
+        $deleted = TourTransport::onlyTrashed()->get();
 
-    $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+        $cities_names = TourTransport::getCitiesAttribute();
 
-    return view('frontend.tour.object.create', compact('cities_options'))
-      ->with('method', 'POST')
-      ->with('action', 'create')
-      ->with('route', route('frontend.tour.' . $model_alias . '.store'))
-      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
-      ->with('item', [])
-      ->with('city_id', (int) $city_id)
-      ->with('model_alias', $model_alias);
-  }
+        $cities_select = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
-  {
-    $request->validate([
-      'name' => 'required',
-      'city_id' => 'exists:tour_cities,id',
-    ]);
+        $cities_ids = TourTransport::select('city_id')->pluck('city_id')->toArray();
 
-    $transport = new TourTransport($request->all());
+        $cities_for_filter = TourTransport::getCitiesForFilterAttribute($cities_ids);
 
-    $image = $request->photo_location;
-    if ($image) {
-      $transport->photo_location = $image->store('/objects_photos', 'public');
-      $transport->addMedia('storage/' . $transport->photo_location)->toMediaCollection('photos', 'objects_photos');
+        $customer_type_options_arrays = TourCustomerType::getCustomerTypesAttributeArrays(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.object.index', compact('items', 'cities_names', 'cities_select', 'deleted', 'cities_for_filter'))
+            ->with('city_id', (int) $city_id)
+            ->with('city_name', $city_name)
+            ->with('city_param', $city_param)
+            ->with('model_alias', $model_alias)
+            ->with('customer_type_options_arrays', $customer_type_options_arrays)
+            ->with('name_param', $name_param);
     }
 
-    $transport->save();
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $model_alias = TourTransport::getModelAliasAttribute();
 
-    return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(
-      __('alerts.general.created')
-        . '. id: <span id="created-object-id">'
-        . $transport->id
-        . '</span>'
-    );
-  }
+        $city_id = $this->getCityId($request);
 
-  /**
-   * Display the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function show($id)
-  {
-    //
-  }
+        $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
 
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function edit($id)
-  {
-    $model_alias = TourTransport::getModelAliasAttribute();
-
-    $item = TourTransport::findOrFail($id);
-
-    $attributes = $item->objectables->toArray();
-
-    $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
-
-    $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
-
-    $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
-
-    return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
-      ->with('method', 'PATCH')
-      ->with('action', 'edit')
-      ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
-      ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
-      ->with('model_alias', $model_alias);
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, $id)
-  {
-    if ($request->get('attribute')) {
-      $request->validate([
-        'attribute.*.name' => 'required|min:3',
-        'attribute.*.price' => 'required',
-        'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
-      ]);
-    } else {
-      $request->validate([
-        'name' => 'required',
-        'city_id' => 'exists:tour_cities,id',
-      ]);
+        return view('frontend.tour.object.create', compact('cities_options'))
+            ->with('method', 'POST')
+            ->with('action', 'create')
+            ->with('route', route('frontend.tour.' . $model_alias . '.store'))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+            ->with('item', [])
+            ->with('city_id', (int) $city_id)
+            ->with('model_alias', $model_alias);
     }
 
-    $transport = TourTransport::findOrFail($id);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'city_id' => 'exists:tour_cities,id',
+        ]);
 
-    $image = $request->photo_location;
-    if ($image) {
-      if (count($transport->media) > 0) {
-        $transport->getMedia('photos')->first()->delete();
-      }
-      $transport->photo_location = $image->store('/objects_photos', 'public');
-      $transport->addMedia('storage/' . $transport->photo_location)->toMediaCollection('photos', 'objects_photos');
+        $transport = new TourTransport($request->all());
+
+        $image = $request->photo_location;
+        if ($image) {
+            $transport->photo_location = $image->store('/objects_photos', 'public');
+            $transport->addMedia('storage/' . $transport->photo_location)->toMediaCollection('photos', 'objects_photos');
+        }
+
+        $transport->save();
+
+        return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(
+            __('alerts.general.created')
+                . '. id: <span id="created-object-id">'
+                . $transport->id
+                . '</span>'
+        );
     }
 
-    $transport->update($request->all());
-
-    $transport->saveObjectAttributes($request->get('attribute'));
-
-    return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy($id)
-  {
-    $transport = TourTransport::findOrFail($id);
-    $transport->delete();
-
-    return redirect()->route('frontend.tour.transport.index')->withFlashWarning(__('alerts.general.deleted'));
-  }
-
-
-  public function restore($id)
-  {
-    $transport = TourTransport::withTrashed()->find($id);
-
-    if ($transport->deleted_at === null) {
-      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
-    if ($transport->restore()) {
-      return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(__('alerts.general.restored'));
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $model_alias = TourTransport::getModelAliasAttribute();
+
+        $item = TourTransport::findOrFail($id);
+
+        $attributes = $item->objectables->toArray();
+
+        $attributes = !empty($attributes) ? $attributes : [0 => ['id' => 0]];
+
+        $cities_options = TourTransport::getCitiesOptgroupAttribute(__('validation.attributes.frontend.general.select'));
+
+        $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
+
+        return view('frontend.tour.object.edit', compact('item', 'cities_options', 'customer_type_options', 'attributes'))
+            ->with('method', 'PATCH')
+            ->with('action', 'edit')
+            ->with('route', route('frontend.tour.' . $model_alias . '.update', [$item->id]))
+            ->with('cancel_route', route('frontend.tour.' . $model_alias . '.index'))
+            ->with('model_alias', $model_alias);
     }
 
-    throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
-  }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        if ($request->get('attribute')) {
+            $request->validate([
+                'attribute.*.name' => 'required|min:3',
+                'attribute.*.price' => 'required',
+                'attribute.*.customer_type_id' => 'nullable|exists:tour_customer_types,id',
+            ]);
+        } else {
+            $request->validate([
+                'name' => 'required',
+                'city_id' => 'exists:tour_cities,id',
+            ]);
+        }
 
-  public function delete($id)
-  {
-    $transport = TourTransport::withTrashed()->find($id);
+        $transport = TourTransport::findOrFail($id);
 
-    if ($transport->deleted_at === null) {
-      throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        $image = $request->photo_location;
+        if ($image) {
+            if (count($transport->media) > 0) {
+                $transport->getMedia('photos')->first()->delete();
+            }
+            $transport->photo_location = $image->store('/objects_photos', 'public');
+            $transport->addMedia('storage/' . $transport->photo_location)->toMediaCollection('photos', 'objects_photos');
+        }
+
+        $transport->update($request->all());
+
+        $transport->saveObjectAttributes($request->get('attribute'));
+
+        return redirect()->back()->withFlashSuccess(__('alerts.general.updated'));
     }
 
-    $transport->forceDelete();
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $transport = TourTransport::findOrFail($id);
+        $transport->delete();
 
-    return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
-  }
+        return redirect()->route('frontend.tour.transport.index')->withFlashWarning(__('alerts.general.deleted'));
+    }
 
-  public static function getCityId(Request $request)
-  {
-    $city_ids = TourTransport::getCityIds();
-    return $request->has('city_id') && $request->query('city_id') != 0
-      && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
-  }
+
+    public function restore($id)
+    {
+        $transport = TourTransport::withTrashed()->find($id);
+
+        if ($transport->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        if ($transport->restore()) {
+            return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(__('alerts.general.restored'));
+        }
+
+        throw new GeneralException(__('exceptions.frontend.tours.restore_error'));
+    }
+
+    public function delete($id)
+    {
+        $transport = TourTransport::withTrashed()->find($id);
+
+        if ($transport->deleted_at === null) {
+            throw new GeneralException(__('exceptions.frontend.tours.cant_restore'));
+        }
+
+        $transport->forceDelete();
+
+        return redirect()->route('frontend.tour.transport.index')->withFlashSuccess(__('alerts.general.deleted_permanently'));
+    }
+
+    public static function getCityId(Request $request)
+    {
+        $city_ids = TourTransport::getCityIds();
+        return $request->has('city_id') && $request->query('city_id') != 0
+            && in_array($request->query('city_id'), $city_ids) ? $request->query('city_id') : null;
+    }
 }
