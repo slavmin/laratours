@@ -100,31 +100,31 @@ class TourOrder extends Model implements AuditableInterface
         return Tour::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
     }
 
-    /**
-     * @return mixed
-     */
-    public static function getTourInfos()
-    {
-        $columns = ['id', 'name', 'cities_list', 'extra', 'deleted_at'];
+    // /**
+    //  * @return mixed
+    //  */
+    // public static function getTourInfos()
+    // {
+    //     $columns = ['id', 'name', 'cities_list', 'extra', 'deleted_at'];
 
-        $tours = Tour::select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
+    //     $tours = Tour::select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
 
-        $trashed_tours = Tour::onlyTrashed()->select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
+    //     $trashed_tours = Tour::onlyTrashed()->select($columns)->orderBy('name', 'asc')->get()->keyBy('id')->toArray();
 
-        $result = [];
+    //     $result = [];
 
-        // Add 'ordered_qnt' field and it's value to all tourinfos
-        foreach ($tours as $tour) {
-            $tour['ordered_qnt'] = Tour::find($tour['id'])->ordered_qnt;
-            $result[$tour['id']] = $tour;
-        }
-        foreach ($trashed_tours as $tour) {
-            $tour['ordered_qnt'] = Tour::onlyTrashed()->find($tour['id'])->ordered_qnt;
-            $result[$tour['id']] = $tour;
-        }
+    //     // Add 'ordered_qnt' field and it's value to all tourinfos
+    //     foreach ($tours as $tour) {
+    //         $tour['ordered_qnt'] = Tour::find($tour['id'])->ordered_qnt;
+    //         $result[$tour['id']] = $tour;
+    //     }
+    //     foreach ($trashed_tours as $tour) {
+    //         $tour['ordered_qnt'] = Tour::onlyTrashed()->find($tour['id'])->ordered_qnt;
+    //         $result[$tour['id']] = $tour;
+    //     }
 
-        return $result;
-    }
+    //     return $result;
+    // }
 
     protected static function boot()
     {

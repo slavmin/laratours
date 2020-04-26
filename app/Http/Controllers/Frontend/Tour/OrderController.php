@@ -39,11 +39,22 @@ class OrderController extends Controller
 
         $tour_names = TourOrder::getTourNames();
 
-        $tour_infos = TourOrder::getTourInfos();
+        // $tour_infos = TourOrder::getTourInfos();
 
-        $items = TourOrder::with(['profiles', 'tour:id,name']);
+        $items = TourOrder::with(['profiles']);
 
         $items = (new OrdersFilter($items, $request))->apply()->orderBy($orderBy, $sort)->paginate();
+
+        $orders_by_tours = [];
+
+        foreach ($items as $order) {
+            if ($order->tour->name == null) {
+                $order->tour = Tour::onlyTrashed()->where('id', $order->tour_id)->with('orders')->first();
+            }
+            if (!in_array($order->tour, $orders_by_tours)) {
+                array_push($orders_by_tours, $order->tour);
+            }
+        }
 
         $cities_names = TourCity::withoutGlobalScope('team')->get()->pluck('name', 'id')->toArray();
 
@@ -55,7 +66,7 @@ class OrderController extends Controller
 
         $req_params = $request->all();
 
-        return view('frontend.tour.order.private.index', compact('items', 'agencies', 'deleted', 'tour_names', 'tour_infos', 'cities_names', 'req_params'))
+        return view('frontend.tour.order.private.index', compact('items', 'orders_by_tours', 'agencies', 'deleted', 'tour_names', 'cities_names', 'req_params'))
             ->with('statuses', $statuses)
             ->with('model_alias', $model_alias);
     }

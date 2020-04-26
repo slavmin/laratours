@@ -1,0 +1,23 @@
+.tc-tour-qnt {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 24px;
+    color: white;
+    margin-left: 6px;
+    margin-right: 12px;
+}
+
+.tc-tour-qnt-total {
+    background: #a6a6ff;
+}
+
+.tc-tour-qnt-ordered {
+    background: #40be1c;
+}
+
+.tc-tour-qnt-free {
+    background: #f98b8b;
+}

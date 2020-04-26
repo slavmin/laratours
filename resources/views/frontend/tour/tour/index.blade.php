@@ -13,7 +13,6 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
 {{-- @include('frontend.tour.includes.city-type-select-form') --}}
 <v-container fluid grid-list-md text-xs-center>
     <h1 class="text-white text-center">
@@ -63,7 +62,9 @@
                                 <td class="title" onclick="showExtraRow({{ $item->id }})">
                                     {{$item->name}}
                                     <div class="subtitle-1 grey--text">
+                                        @if(count($item->dates) > 0)
                                         {{ $item->dates[0]->date }}
+                                        @endif
                                     </div>
                                     @if(!$item->published)
                                     <div class="overline red--text">не опубликован</div>
