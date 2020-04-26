@@ -53,8 +53,9 @@ class TourController extends Controller
 
         $customer_type_options = TourCustomerType::getCustomerTypesAttribute(__('validation.attributes.frontend.general.select'));
 
+        $req_params = $request->all();
 
-        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted'))
+        return view('frontend.tour.tour.index', compact('items', 'cities_names', 'cities_select', 'tour_types', 'deleted', 'req_params'))
             ->with('city_id', (int) $city_id)
             ->with('type_id', (int) $type_id)
             ->with('route', route('frontend.tour.' . $model_alias . '.store'))

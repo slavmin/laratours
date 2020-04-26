@@ -1,44 +1,24 @@
 <template>
-  <v-container grid-list-xs>
-    <v-row row wrap>
+  <v-container>
+    <v-row>
       <h2 class="text-center white--text">
-        <v-btn text dark @click="showFilters = !showFilters">
-          Фильтры
+        <v-btn dark text @click="showFilters = !showFilters">
+          Фильтры ({{ activeFiltersCount }})
           <v-icon> expand_{{ showFilters ? 'less' : 'more' }} </v-icon>
         </v-btn>
       </h2>
     </v-row>
-    <v-row v-if="showFilters" justify-center>
-      <form action="/operator/order" method="GET">
+    <div v-if="showFilters">
+      <form action="/operator/tour" method="GET">
         <v-row row wrap>
           <v-col>
             <v-text-field
-              v-model="filterValues.id"
-              name="id"
-              label="Номер заявки"
+              v-model="filterValues.tour_name"
+              name="tour_name"
+              label="Название тура"
               dark
               clearable
             />
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="filterValues.tourist_name"
-              name="tourist_name"
-              label="ФИО туриста"
-              dark
-              clearable
-            />
-          </v-col>
-          <v-col>
-            <v-select
-              v-model="filterValues.status"
-              :items="statusesTranslated"
-              item-value="id"
-              dark
-              label="Статус"
-              clearable
-            />
-            <input type="hidden" name="status" :value="filterValues.status" />
           </v-col>
           <v-col>
             <input type="hidden" name="city_id" :value="filterValues.city_id" />
@@ -80,6 +60,7 @@
                   prepend-icon="event"
                   dark
                   readonly
+                  clearable
                   v-on="on"
                 />
               </template>
@@ -117,6 +98,7 @@
                   prepend-icon="event"
                   dark
                   readonly
+                  clearable
                   v-on="on"
                 />
               </template>
@@ -139,12 +121,12 @@
           </v-btn>
         </v-row>
       </form>
-    </v-row>
+    </div>
   </v-container>
 </template>
 <script>
 export default {
-  name: 'OrderFilters',
+  name: 'TourFilters',
   props: {
     reqParams: {
       type: Object,
@@ -178,7 +160,7 @@ export default {
         status: null,
         city_id: null,
         date_start: null,
-        tourist_name: null,
+        tour_name: null,
       },
       showDateStart: false,
       showDateEnd: false,
@@ -195,6 +177,15 @@ export default {
       }
       return result
     },
+    activeFiltersCount: function() {
+      let result = 0
+      for (const key in this.filterValues) {
+        if (this.filterValues[key] != null) {
+          result += 1
+        }
+      }
+      return result
+    },
     allCities() {
       let result = []
       for (let key in this.cities) {
@@ -208,19 +199,10 @@ export default {
   },
   mounted() {
     for (const key in this.reqParams) {
-      if (key === 'id') {
-        let id = parseInt(this.reqParams.id)
-        id ? '' : (id = null)
-        this.filterValues.id = id
-      }
-      if (key === 'status') {
-        let status = parseInt(this.reqParams.status)
-        if (status == 0) {
-          this.filterValues.status = 0
-          return
-        }
-        status ? '' : (status = null)
-        this.filterValues.status = status
+      if (key === 'tour_name') {
+        let tour_name = this.reqParams.tour_name
+        tour_name ? '' : (tour_name = null)
+        this.filterValues.tour_name = tour_name
       }
       if (key === 'city_id') {
         let city_id = parseInt(this.reqParams.city_id)
@@ -237,11 +219,6 @@ export default {
         date_end ? '' : (date_end = null)
         this.filterValues.date_end = date_end
       }
-      if (key === 'tourist_name') {
-        let tourist_name = this.reqParams.tourist_name
-        tourist_name ? '' : (tourist_name = null)
-        this.filterValues.tourist_name = tourist_name
-      }
     }
   },
   methods: {
@@ -256,13 +233,11 @@ export default {
       this.fetch()
     },
     clear() {
-      this.filterValues.id = null
-      this.filterValues.status = null
       this.filterValues.city_id = null
       this.filterValues.date_start = null
       this.filterValues.date_end = null
-      this.filterValues.tourist_name = null
-      location.replace('/operator/order')
+      this.filterValues.tour_name = null
+      location.replace('/operator/tour')
     },
   },
 }

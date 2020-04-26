@@ -18,6 +18,8 @@
     <h1 class="text-white text-center">
         @lang('labels.frontend.tours.'.$model_alias.'.management')
     </h1>
+    <filter-for-tours :req-params="{{ json_encode($req_params) }}" :cities="{{ json_encode($cities_names) }}">
+    </filter-for-tours>
     <v-row justify="center">
         <v-btn fab dark class="tc-red-bg tc-link-no-underline-on-hover" title="@lang('buttons.general.crud.create')"
             href="{{ route('frontend.tour.'.$model_alias.'.create') }}">
