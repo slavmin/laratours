@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Tour\DetailedTourController;
 use App\Http\Controllers\Api\Tour\TourOptionsController;
 use App\Http\Controllers\Api\Tour\PartnerTourController;
+use App\Http\Controllers\Api\Document\LabelsController;
 use Illuminate\Http\Request;
 
 /*
@@ -47,4 +48,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/save-detailed-tour-prices', [DetailedTourController::class, 'saveDetailedTourPrices'])->name('save-detailed-tour-prices');
     Route::get('/get-detailed-tour-data-for-editor', [DetailedTourController::class, 'getTourDataForEditor'])->name('get-detailed-tour-data-for-editor');
     Route::post('/save-detailed-tour-program', [DetailedTourController::class, 'saveDetailedTourProgram'])->name('save-detailed-tour-program');
+    Route::get('/label-options', [LabelsController::class, 'getInfo'])->name('api-label-options');
 });

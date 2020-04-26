@@ -1,28 +1,12 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-text-field
-        v-model="name"
-        name="name"
-        label="Название документа"
-      />
+      <v-text-field v-model="name" name="name" label="Название документа" />
     </v-card-title>
     <v-card-text>
-      <v-text-field
-        v-model="description"
-        name="description"
-        label="Описание"
-      />
-      <input
-        v-model="content"
-        type="hidden"
-        name="template"
-      >
-      <Editor
-        v-model="content"
-        :api-key="tiny.apiKey"
-        :init="tiny.init"
-      />
+      <v-text-field v-model="description" name="description" label="Описание" />
+      <input v-model="content" type="hidden" name="template" />
+      <Editor v-model="content" :api-key="tiny.apiKey" :init="tiny.init" />
     </v-card-text>
   </v-card>
 </template>

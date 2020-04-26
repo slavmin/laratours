@@ -1,50 +1,20 @@
 <template>
   <div>
     {{ document.name }}
-    <form
-      action="/modules/get-pdf"
-      method="GET"
-    >
-      <input
-        name="document_id"
-        :value="document.id"
-        type="hidden"
-      >
+    <form action="/operator/modules/get-pdf" method="GET">
+      <input name="document_id" :value="document.id" type="hidden" />
       <div v-if="touristMode">
-        <input
-          name="tourist_mode"
-          :value="touristMode"
-          type="hidden"
-        >
-        <input 
-          name="order_id"
-          :value="orderId"
-          type="hidden"
-        >
-        <input 
-          name="tour_id"
-          :value="tourId"
-          type="hidden"
-        >
+        <input name="tourist_mode" :value="touristMode" type="hidden" />
+        <input name="order_id" :value="orderId" type="hidden" />
+        <input name="tour_id" :value="tourId" type="hidden" />
       </div>
       <div v-if="teamMode">
-        <input
-          name="team_mode"
-          :value="teamMode"
-          type="hidden"
-        >
-        <input
-          name="team_id"
-          :value="document.team_id"
-          type="hidden"
-        >
+        <input name="team_mode" :value="teamMode" type="hidden" />
+        <input name="team_id" :value="document.team_id" type="hidden" />
       </div>
-        
+
       <button type="submit">
-        <img 
-          src="/img/frontend/icons/pdf.png" 
-          width="32"
-        >
+        <img src="/img/frontend/icons/pdf.png" width="32" />
       </button>
     </form>
     <!-- <div
@@ -63,13 +33,13 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     document: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     teamMode: {
       type: Boolean,
@@ -86,7 +56,7 @@ export default {
     tourId: {
       type: Number,
       default: NaN,
-    }
+    },
   },
   data() {
     return {
@@ -98,9 +68,9 @@ export default {
     requestParameters: function() {
       let result = {}
       if (this.teamMode) {
-        result =  { 
+        result = {
           team_mode: true,
-          team_id: this.document.team_id, 
+          team_id: this.document.team_id,
         }
       }
       if (this.touristMode) {
@@ -111,7 +81,7 @@ export default {
         }
       }
       return result
-    }
+    },
   },
   mounted() {
     console.log(this.document)
@@ -159,6 +129,6 @@ export default {
     //     //  html2pdf().from(this.result).set(opt).save()
     //     })
     // }
-  }
+  },
 }
 </script>

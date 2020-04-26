@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Document;
+namespace App\Http\Controllers\Frontend\Tour\Document;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\Frontend\Document\DocumentUpdateRequest;
@@ -34,7 +34,7 @@ class DocumentController extends BaseController
     public function create()
     {
         $item = new Document();
-        
+
         return view('frontend.document.add', compact('item'));
     }
 
@@ -47,17 +47,17 @@ class DocumentController extends BaseController
     public function store(DocumentCreateRequest $request)
     {
         $data = $request->all();
-        
+
         $item = (new Document())->create($data);
 
         if ($item) {
             return redirect()
-                ->route('frontend.document.index')
+                ->route('frontend.tour.document.index')
                 ->withFlashSuccess(__('alerts.general.edited'));
         } else {
             return back()
-            ->withErrors(['msg' => 'Ошибка сохранения'])
-            ->withInput();
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
         }
     }
 
@@ -81,7 +81,7 @@ class DocumentController extends BaseController
     public function edit($id)
     {
         $item = Document::findOrFail($id);
-        
+
         return view('frontend.document.edit', compact('item'));
     }
 
@@ -96,7 +96,7 @@ class DocumentController extends BaseController
     {
 
         $item = Document::find($id);
-        
+
         if (empty($item)) {
             return back()
                 ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
@@ -110,7 +110,7 @@ class DocumentController extends BaseController
 
         if ($result) {
             return redirect()
-                ->route('frontend.document.index')
+                ->route('frontend.tour.document.index')
                 ->withFlashSuccess(__('alerts.general.edited'));
         } else {
             return back()
@@ -130,6 +130,6 @@ class DocumentController extends BaseController
         $item = Document::findOrFail($id);
         $item->delete();
 
-        return redirect()->route('frontend.document.index')->withFlashWarning(__('alerts.general.deleted'));
+        return redirect()->route('frontend.tour.document.index')->withFlashWarning(__('alerts.general.deleted'));
     }
 }

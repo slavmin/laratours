@@ -81,6 +81,16 @@
                             <v-text-field label="Комментарий" color="#aa282a" name="message" textarea></v-text-field>
                         </v-col>
                     </v-row>
+                    @if($item->status == 2)
+                    <v-row>
+                        @foreach($documents as $document)
+                        <v-col xs1>
+                            <document-render-pdf tourist-mode :document="{{ $document }}" :order-id="{{ $item->id }}"
+                                :tour-id="{{ $tour->id }}"></document-render-pdf>
+                        </v-col>
+                        @endforeach
+                    </v-row>
+                    @endif
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>

@@ -28,6 +28,7 @@ use App\Http\Controllers\Frontend\Tour\ObjectAttributeController;
 use App\Http\Controllers\Frontend\Tour\Agency\TourController as AgencyTourController;
 use App\Http\Controllers\Frontend\Tour\Agency\OrderController as AgencyOrderController;
 
+use App\Http\Controllers\Frontend\Tour\Document\DocumentController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -199,6 +200,8 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
             Route::group(['prefix' => 'modules'], function () {
                 // Document template engine
                 Route::group(['namespace' => 'Document'], function () {
+                    Route::resource('document', 'DocumentController');
+                    Route::get('get-pdf', 'PdfController@getPdf');
                     Route::get('gibdd-map', 'GibddNotifyController@getMap');
                 });
             });

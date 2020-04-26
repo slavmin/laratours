@@ -23,7 +23,7 @@ Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('documents-index', require('./components/documents/Index.vue').default);
 Vue.component('document-add', require('./components/documents/Add.vue').default);
 Vue.component('document-edit', require('./components/documents/Edit.vue').default);
-Vue.component('pdf', require('./components/documents/public/PDF.vue').default);
+Vue.component('document-render-pdf', require('./components/documents/public/PDF.vue').default);
 
 Vue.component('cities-autocomplete', require('./components/CitiesAutocomplete.vue').default);
 Vue.component('museum-objectable', require('./components/MuseumObjectable.vue').default);
