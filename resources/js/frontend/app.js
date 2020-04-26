@@ -34,6 +34,7 @@ Vue.component('transport-objectable', require('./components/TransportObjectable.
 Vue.component('object-attribute-price', require('./components/ObjectAttributePrice.vue').default);
 Vue.component('person-form', require('./tour/includes/PersonForm.vue').default);
 Vue.component('filter-for-objects', require('./components/FilterForObjects.vue').default);
+Vue.component('filter-for-orders', require('./components/FilterForOrders.vue').default);
 
 Vue.component('tour-create', require('./components/TourCreate.vue').default);
 Vue.component('tour-edit', require('./components/TourEdit.vue').default);

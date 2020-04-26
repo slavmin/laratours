@@ -6,6 +6,8 @@
     <h1 class="text-white text-center">
         @lang('labels.frontend.tours.order.management')
     </h1>
+    <filter-for-orders :req-params="{{ json_encode($req_params) }}" :cities="{{ json_encode($cities_names) }}">
+    </filter-for-orders>
     <v-expansion-panels>
         @foreach ($orders_by_tours as $tour)
         <v-expansion-panel>
@@ -34,7 +36,6 @@
                             @foreach($tour->dates as $date)
                             {{ $date->date }}
                             @endforeach
-                            {{ $tour->getOrderedQntAttribute() }}
                         </span>
                     </v-col>
                     <v-col cols="12">
