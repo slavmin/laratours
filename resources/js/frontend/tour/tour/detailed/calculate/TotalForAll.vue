@@ -172,7 +172,7 @@ export default {
             'driver',
             i,
             this.$parent.personalMargin,
-            this.$parent.personalCommissionn
+            this.$parent.personalCommission
           )
         )
       })
