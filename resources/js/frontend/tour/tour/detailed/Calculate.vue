@@ -24,35 +24,17 @@
           v-if="tourData.transport.length > 0"
           :items="tourData.transport"
         />
-        <Museum
-          v-if="tourData.museum.length > 0"
-          :items="tourData.museum"
-        />
-        <Hotel
-          v-if="tourData.hotel.length > 0"
-          :items="tourData.hotel"
-        />
-        <Meal
-          v-if="tourData.meal.length > 0"
-          :items="tourData.meal"
-        />
-        <Guide
-          v-if="tourData.guide.length > 0"
-          :items="tourData.guide"
-        />
+        <Museum v-if="tourData.museum.length > 0" :items="tourData.museum" />
+        <Hotel v-if="tourData.hotel.length > 0" :items="tourData.hotel" />
+        <Meal v-if="tourData.meal.length > 0" :items="tourData.meal" />
+        <Guide v-if="tourData.guide.length > 0" :items="tourData.guide" />
         <Attendant
           v-if="tourData.attendant.length > 0"
           :items="tourData.attendant"
         />
-        <Extra
-          v-if="tourData.extras.length > 0"
-          :items="tourData.extras"
-        />
+        <Extra v-if="tourData.extras.length > 0" :items="tourData.extras" />
         <v-divider />
-        <Drivers
-          :v-if="drivers.length > 0"
-          :drivers="drivers"
-        />
+        <Drivers :v-if="drivers.length > 0" :drivers="drivers" />
         <PersonalGuides
           :v-if="personalGuides.length > 0"
           :guides="personalGuides"
@@ -66,15 +48,8 @@
           :freeadls="personalFreeAdls"
         />
       </v-col>
-      <v-overlay
-        :value="
-          loader"
-        style="z-index: 10000;"
-      >
-        <v-progress-circular
-          indeterminate
-          size="64"
-        />
+      <v-overlay :value="loader" style="z-index: 10000;">
+        <v-progress-circular indeterminate size="64" />
       </v-overlay>
     </v-row>
     <v-divider />
@@ -110,11 +85,7 @@
         </h2>
       </v-col>
     </v-row>
-    <TotalForAll
-      v-if="!loader"
-      :tour-data="tourData"
-      :tour-id="tourId"
-    />
+    <TotalForAll v-if="!loader" :tour-data="tourData" :tour-id="tourId" />
   </div>
 </template>
 <script>
@@ -193,7 +164,6 @@ export default {
           this.tourData = r.data
         })
         .then(r => {
-          console.log(this.tourData)
           this.setDefaultCustomerTypeId()
           this.parseDrivers()
           this.parseGuides()
@@ -541,6 +511,7 @@ export default {
       axios
         .post('/api/update-detailed-tour-object-attribute-property', {
           object_attribute_id: item.id,
+          object_type: item.model_alias,
           tour_id: this.tourId,
           margin: !isExtra ? item.properties.margin : item.margin,
           commission: !isExtra ? item.properties.commission : item.commission,

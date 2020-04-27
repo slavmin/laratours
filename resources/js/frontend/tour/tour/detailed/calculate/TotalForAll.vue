@@ -205,7 +205,6 @@ export default {
         priceWithMargin += parseFloat(
           this.$parent.marginPersonalPrice('freeadl', i, freeadl.margin)
         )
-        let priceWithMargin = 0
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'freeadl',

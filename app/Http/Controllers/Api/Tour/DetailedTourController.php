@@ -429,7 +429,9 @@ class DetailedTourController extends Controller
         $is_extra = $request->is_extra;
         if (!$is_extra) {
             $property = TourObjectAttributeProperties::where('object_attribute_id', $request->object_attribute_id)
-                ->where('tour_id', $request->tour_id)->first();
+                ->where('tour_id', $request->tour_id)
+                ->where('object_type', $request->object_type)
+                ->first();
             $property['margin'] = $request->margin ?? 0;
             $property['commission'] = $request->commission ?? 0;
             $property->save();

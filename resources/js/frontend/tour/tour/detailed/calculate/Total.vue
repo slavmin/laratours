@@ -101,6 +101,7 @@ export default {
         'guide',
         'attendant',
         'extras',
+        'freeadls',
       ]
       parts.forEach(part => {
         this.tourData[part].forEach(part => {
