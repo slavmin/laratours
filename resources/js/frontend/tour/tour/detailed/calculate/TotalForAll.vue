@@ -16,10 +16,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="customer in tourData.customers"
-                :key="customer.id"
-              >
+              <tr v-for="customer in tourData.customers" :key="customer.id">
                 <td class="text-left tc-calculate-width__200">
                   {{ customer.name }}
                 </td>
@@ -28,13 +25,15 @@
                   style="line-height: 22px;"
                 >
                   Цена:
-                  <br>
+                  <br />
                   Цена с наценкой:
-                  <br>
+                  <br />
                   Итого:
-                  <br>
-                  <br>
+                  <br />
+                  <br />
                   Прибыль оператора:
+                  <br />
+                  Комиссия агентства:
                 </td>
                 <td
                   class="text-right"
@@ -45,14 +44,8 @@
           </template>
         </v-simple-table>
       </v-col>
-      <v-overlay
-        :value="loader"
-        style="z-index: 10000;"
-      >
-        <v-progress-circular
-          indeterminate
-          size="64"
-        />
+      <v-overlay :value="loader" style="z-index: 10000;">
+        <v-progress-circular indeterminate size="64" />
       </v-overlay>
     </v-row>
     <h2 class="grey--text">
@@ -60,89 +53,37 @@
     </h2>
     <v-row justify="center">
       <v-col>
-        <v-radio-group
-          v-model="roundPricesParameter"
-          row
-        >
-          <v-radio
-            label="до 100"
-            color="#aa282a"
-            value="100"
-          />
-          <v-radio
-            label="до 1000"
-            color="#aa282a"
-            value="1000"
-          />
+        <v-radio-group v-model="roundPricesParameter" row>
+          <v-radio label="до 100" color="#aa282a" value="100" />
+          <v-radio label="до 1000" color="#aa282a" value="1000" />
         </v-radio-group>
-        <v-radio-group
-          v-model="roundPricesMinusValue"
-          row
-        >
-          <v-radio
-            label="не вычитать"
-            color="#aa282a"
-            value="0"
-          />
-          <v-radio
-            label="минус 10"
-            color="#aa282a"
-            value="10"
-          />
-          <v-radio
-            label="минус 100"
-            color="#aa282a"
-            value="100"
-          />
+        <v-radio-group v-model="roundPricesMinusValue" row>
+          <v-radio label="не вычитать" color="#aa282a" value="0" />
+          <v-radio label="минус 10" color="#aa282a" value="10" />
+          <v-radio label="минус 100" color="#aa282a" value="100" />
         </v-radio-group>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-btn
-          dark
-          small
-          text
-          color="#aa282a"
-          @click="roundPrices"
-        >
+        <v-btn dark small text color="#aa282a" @click="roundPrices">
           Округлить
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn
-          dark
-          small
-          text
-          color="#aa282a"
-          @click="resetPrices"
-        >
+        <v-btn dark small text color="#aa282a" @click="resetPrices">
           Сбросить
         </v-btn>
       </v-col>
     </v-row>
-    <v-row
-      class="justify-end"
-      style="margin: 16px;"
-    >
-      <v-btn
-        v-if="!saved"
-        dark
-        color="#aa282a"
-        @click="savePrices"
-      >
+    <v-row class="justify-end" style="margin: 16px;">
+      <v-btn v-if="!saved" dark color="#aa282a" @click="savePrices">
         Сохранить
       </v-btn>
-      <v-icon
-        v-if="saved"
-        color="green"
-      >
+      <v-icon v-if="saved" color="green">
         check
       </v-icon>
-      <v-icon
-        v-if="error"
-        color="red"
-      >
+      <v-icon v-if="error" color="red">
         close
       </v-icon>
     </v-row>
@@ -282,7 +223,12 @@ export default {
         return `${result.price}<br>
                 ${result.priceWithMargin}<br>
                 ${result.priceWithCommission}<br><br>
-                ${parseFloat(result.priceWithMargin - result.price).toFixed(2)}`
+                ${parseFloat(result.priceWithMargin - result.price).toFixed(
+                  2
+                )}<br>
+                ${parseFloat(
+                  result.priceWithCommission - result.priceWithMargin
+                ).toFixed(2)}`
       }
     },
     savePrices() {
