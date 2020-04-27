@@ -261,6 +261,9 @@ class DetailedTourController extends Controller
                         ->first();
                 }
 
+                $tour_personal = TourObjectAttributeProperties::where('tour_id', $tour->id)
+                    ->where('object_type', 'tour-personal')->first();
+
                 $customers = TourCustomerType::select('id', 'name')
                     ->get()
                     ->toArray();
@@ -277,6 +280,7 @@ class DetailedTourController extends Controller
                     'meal'              => $meal,
                     'guide'             => $guide,
                     'attendant'         => $attendant,
+                    'tourPersonal'      => $tour_personal,
                     'customers'         => $customers,
                     'extras'            => $extras,
                     'tour_qnt'          => $tour->qnt,
@@ -427,15 +431,52 @@ class DetailedTourController extends Controller
     public function updateDetailedTourObjectAttributeProperty(Request $request)
     {
         $is_extra = $request->is_extra;
-        if (!$is_extra) {
+        $model_alias = $request->object_type;
+        // for guides & attendants
+        if (!$is_extra && ($model_alias == 'guide' || $model_alias == 'attendant')) {
             $property = TourObjectAttributeProperties::where('object_attribute_id', $request->object_attribute_id)
+                ->where('object_type', $model_alias)
                 ->where('tour_id', $request->tour_id)
-                ->where('object_type', $request->object_type)
                 ->first();
             $property['margin'] = $request->margin ?? 0;
             $property['commission'] = $request->commission ?? 0;
             $property->save();
-        } else {
+        }
+        // for freeadl
+        if (!$is_extra && $model_alias == 'freeadl') {
+            $property = TourObjectAttributeProperties::find($request->object_attribute_id);
+            $property['margin'] = $request->margin ?? 0;
+            $property['commission'] = $request->commission ?? 0;
+            $property->save();
+            return $property;
+        }
+        // for transport, museum, hotel, meal
+        if (!$is_extra && ($model_alias != 'tour-personal' && $model_alias != 'freeadl')) {
+            $property = TourObjectAttributeProperties::where('object_attribute_id', $request->object_attribute_id)
+                ->where('tour_id', $request->tour_id)
+                ->first();
+            $property['margin'] = $request->margin ?? 0;
+            $property['commission'] = $request->commission ?? 0;
+            $property->save();
+        }
+        //for tour-personal
+        if (!$is_extra && $model_alias == 'tour-personal') {
+            $property = TourObjectAttributeProperties::where('tour_id', $request->tour_id)
+                ->where('object_type', $model_alias)
+                ->first();
+            if ($property == null) {
+                $property = new TourObjectAttributeProperties;
+                $property['object_attribute_id'] = $request->tour_id;
+                $property['tour_id'] = $request->tour_id;
+                $property['object_type'] = $model_alias;
+            }
+            $property['margin'] = $request->margin ?? 0;
+            $property['commission'] = $request->commission ?? 0;
+            $property->save();
+            return response()->json($property);
+        }
+        // for extras
+        if ($is_extra) {
             $tour_extra = TourExtra::find($request->object_attribute_id);
             $tour_extra['margin'] = $request->margin ?? 0;
             $tour_extra['commission'] = $request->commission ?? 0;

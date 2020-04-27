@@ -34,7 +34,12 @@
         />
         <Extra v-if="tourData.extras.length > 0" :items="tourData.extras" />
         <v-divider />
-        <Drivers :v-if="drivers.length > 0" :drivers="drivers" />
+        <Personal
+          :drivers="drivers"
+          :guides="personalGuides"
+          :attendants="personalAttendants"
+        />
+        <!-- <Drivers :v-if="drivers.length > 0" :drivers="drivers" />
         <PersonalGuides
           :v-if="personalGuides.length > 0"
           :guides="personalGuides"
@@ -42,7 +47,7 @@
         <PersonalAttendants
           :v-if="personalAttendants.length > 0"
           :attendants="personalAttendants"
-        />
+        /> -->
         <PersonalFreeAdls
           :v-if="personalFreeAdls.length > 0"
           :freeadls="personalFreeAdls"
@@ -96,9 +101,7 @@ import Meal from './calculate/Meal'
 import Guide from './calculate/Guide'
 import Attendant from './calculate/Attendant'
 import Extra from './calculate/Extra'
-import Drivers from './calculate/Drivers'
-import PersonalGuides from './calculate/PersonalGuides'
-import PersonalAttendants from './calculate/PersonalAttendants'
+import Personal from './calculate/Personal'
 import PersonalFreeAdls from './calculate/PersonaFreeAdls'
 import Total from './calculate/Total'
 import TotalForAll from './calculate/TotalForAll'
@@ -112,9 +115,7 @@ export default {
     Guide,
     Attendant,
     Extra,
-    Drivers,
-    PersonalGuides,
-    PersonalAttendants,
+    Personal,
     PersonalFreeAdls,
     Total,
     TotalForAll,
@@ -144,6 +145,8 @@ export default {
       personalGuides: [],
       personalAttendants: [],
       personalFreeAdls: [],
+      personalMargin: null,
+      personalCommission: null,
     }
   },
   mounted() {
@@ -161,6 +164,7 @@ export default {
           },
         })
         .then(r => {
+          console.log(r)
           this.tourData = r.data
         })
         .then(r => {
@@ -168,6 +172,8 @@ export default {
           this.parseDrivers()
           this.parseGuides()
           this.parseAttendants()
+          this.personalMargin = this.tourData.tourPersonal.margin
+          this.personalCommission = this.tourData.tourPersonal.commission
         })
         .finally(() => (this.loader = false))
     },
@@ -507,6 +513,13 @@ export default {
       }, 1000)
     }, 1500),
     throttledSave: _.debounce(function(item, isExtra = false) {
+      if (item.object_type == 'freeadl') {
+        item.model_alias = item.object_type
+        item.properties = {
+          margin: item.margin,
+          commission: item.commission,
+        }
+      }
       this.loader = true
       axios
         .post('/api/update-detailed-tour-object-attribute-property', {
@@ -517,6 +530,7 @@ export default {
           commission: !isExtra ? item.properties.commission : item.commission,
           is_extra: isExtra,
         })
+        .then(r => console.log(r))
         .finally(() => (this.loader = false))
     }, 1500),
     calculatePricesForCustomerId(customerId) {
@@ -542,37 +556,42 @@ export default {
       this.drivers.forEach((driver, i) => {
         charge += parseFloat(this.getPersonalPrice('driver', i))
         priceWithMargin += parseFloat(
-          this.marginPersonalPrice('driver', i, driver.margin)
+          this.marginPersonalPrice('driver', i, this.personalMargin)
         )
         priceWithCommission += parseFloat(
           this.commissPersonalPrice(
             'driver',
             i,
-            driver.margin,
-            driver.commission
+            this.personalMargin,
+            this.personalCommission
           )
         )
       })
       this.personalGuides.forEach((guide, i) => {
         charge += parseFloat(this.getPersonalPrice('guide', i))
         priceWithMargin += parseFloat(
-          this.marginPersonalPrice('guide', i, guide.margin)
+          this.marginPersonalPrice('guide', i, this.personalMargin)
         )
         priceWithCommission += parseFloat(
-          this.commissPersonalPrice('guide', i, guide.margin, guide.commission)
+          this.commissPersonalPrice(
+            'guide',
+            i,
+            this.personalMargin,
+            this.personalCommission
+          )
         )
       })
       this.personalAttendants.forEach((attendant, i) => {
         charge += parseFloat(this.getPersonalPrice('attendant', i))
         priceWithMargin += parseFloat(
-          this.marginPersonalPrice('attendant', i, attendant.margin)
+          this.marginPersonalPrice('attendant', i, this.personalMargin)
         )
         priceWithCommission += parseFloat(
           this.commissPersonalPrice(
             'attendant',
             i,
-            attendant.margin,
-            attendant.commission
+            this.personalMargin,
+            this.personalCommission
           )
         )
       })

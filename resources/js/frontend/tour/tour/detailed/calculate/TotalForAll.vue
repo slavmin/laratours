@@ -161,42 +161,54 @@ export default {
       this.$parent.drivers.forEach((driver, i) => {
         price += parseFloat(this.$parent.getPersonalPrice('driver', i))
         priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('driver', i, driver.margin)
+          this.$parent.marginPersonalPrice(
+            'driver',
+            i,
+            this.$parent.personalMargin
+          )
         )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'driver',
             i,
-            driver.margin,
-            driver.commission
+            this.$parent.personalMargin,
+            this.$parent.personalCommissionn
           )
         )
       })
       this.$parent.personalGuides.forEach((guide, i) => {
         price += parseFloat(this.$parent.getPersonalPrice('guide', i))
         priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('guide', i, guide.margin)
+          this.$parent.marginPersonalPrice(
+            'guide',
+            i,
+            this.$parent.personalMargin
+          )
         )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'guide',
             i,
-            guide.margin,
-            guide.commission
+            this.$parent.personalMargin,
+            this.$parent.personalCommission
           )
         )
       })
       this.$parent.personalAttendants.forEach((attendant, i) => {
         price += parseFloat(this.$parent.getPersonalPrice('attendant', i))
         priceWithMargin += parseFloat(
-          this.$parent.marginPersonalPrice('attendant', i, attendant.margin)
+          this.$parent.marginPersonalPrice(
+            'attendant',
+            i,
+            this.$parent.personalMargin
+          )
         )
         priceWithCommission += parseFloat(
           this.$parent.commissPersonalPrice(
             'attendant',
             i,
-            attendant.margin,
-            attendant.commission
+            this.$parent.personalMargin,
+            this.$parent.personalCommission
           )
         )
       })

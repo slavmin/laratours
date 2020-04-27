@@ -31,10 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(freeadl, i) in freeadls"
-              :key="i"
-            >
+            <tr v-for="(freeadl, i) in freeadls" :key="i">
               <td class="tc-calculate-width__200">
                 <div class="body-1">
                   {{ freeadl.name }}
@@ -49,7 +46,7 @@
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
-                  @input="$parent.pseudoOverlay"
+                  @input="$parent.throttledSave(freeadl)"
                 />
               </td>
               <td>
@@ -61,11 +58,18 @@
                   type="number"
                   color="#aa282a"
                   class="tc-calculate__input"
-                  @input="$parent.pseudoOverlay"
+                  @input="$parent.throttledSave(freeadl)"
                 />
               </td>
               <td>
-                {{ $parent.commissPersonalPrice('freeadl', i, freeadl.margin, freeadl.commission) }}
+                {{
+                  $parent.commissPersonalPrice(
+                    'freeadl',
+                    i,
+                    freeadl.margin,
+                    freeadl.commission
+                  )
+                }}
               </td>
             </tr>
           </tbody>
