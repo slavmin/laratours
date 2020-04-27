@@ -1,13 +1,13 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-@if(count($items)>0)
 <v-container fluid grid-list-md text-xs-center>
     <h1 class="text-white text-center">
         @lang('labels.frontend.tours.order.management')
     </h1>
     <filter-for-orders :req-params="{{ json_encode($req_params) }}" :cities="{{ json_encode($cities_names) }}">
     </filter-for-orders>
+    @if(count($items)>0)
     <v-expansion-panels>
         @foreach ($orders_by_tours as $tour)
         <v-expansion-panel>
@@ -61,8 +61,15 @@
         </v-expansion-panel>
         @endforeach
     </v-expansion-panels>
+    @else
+    <v-row>
+        <div class="title white--text">
+            Заказы не найдены
+        </div>
+    </v-row>
+    @endif
 </v-container>
 
-@endif
+
 
 @endsection
