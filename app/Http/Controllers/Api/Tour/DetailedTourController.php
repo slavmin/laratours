@@ -575,6 +575,18 @@ class DetailedTourController extends Controller
         return $tour;
     }
 
+    public function copyTour(Request $request)
+    {
+        $reference_tour = Tour::find($request->tour_id);
+        $new_tour = [];
+        foreach ($request->dates as $date) {
+            $new_tour = $reference_tour->replicate();
+            $new_tour->save();
+            $tour_date = ['date' => $date];
+            $new_tour->dates()->create($tour_date);
+        }
+    }
+
     public static function formatOptions($arr)
     {
         $arr = $arr->map(function ($item) {

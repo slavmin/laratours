@@ -48,5 +48,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/save-detailed-tour-prices', [DetailedTourController::class, 'saveDetailedTourPrices'])->name('save-detailed-tour-prices');
     Route::get('/get-detailed-tour-data-for-editor', [DetailedTourController::class, 'getTourDataForEditor'])->name('get-detailed-tour-data-for-editor');
     Route::post('/save-detailed-tour-program', [DetailedTourController::class, 'saveDetailedTourProgram'])->name('save-detailed-tour-program');
+    Route::post('/copy-tour', [DetailedTourController::class, 'copyTour'])->name('copy-tour');
     Route::get('/label-options', [LabelsController::class, 'getInfo'])->name('api-label-options');
 });

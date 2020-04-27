@@ -102,6 +102,7 @@
                                 <td>
                                     <div class="float-right" role="toolbar"
                                         aria-label="@lang('labels.general.toolbar_btn_groups')">
+                                        <copy-tour :tour="{{ $item }}"></copy-tour>
                                         {!! $item->action_buttons !!}
                                     </div>
                                 </td>
