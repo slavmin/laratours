@@ -200,6 +200,9 @@ export default {
       customerTypeId = this.selectedCustomerTypeId,
       isSingle = false
     ) {
+      if (JSON.parse(item.extra).isCustomOrder) {
+        console.log(item)
+      }
       // For Tour Extras
       if (!item.hasOwnProperty('properties')) {
         return this.pricePerSeat(item.value)

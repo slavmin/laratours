@@ -3,8 +3,8 @@
     class="museum-card"
     pa-3
     :class="[
-      {'is-selected' : isSelected}, 
-      {'is-custom-order': isCustomOrder}
+      { 'is-selected': isSelected },
+      { 'is-custom-order': isCustomOrder },
     ]"
     max-width="250px"
     outlined
@@ -13,10 +13,7 @@
       {{ item.name }}
     </v-card-title>
     <v-card-text>
-      <v-form
-        ref="form"
-        v-model="valid"
-      >
+      <v-form ref="form" v-model="valid">
         <v-select
           v-model="selectedDay"
           :items="daysArray"
@@ -45,7 +42,7 @@
             {{ price.price }}
           </p>
         </div>
-        <br>
+        <br />
         <div class="mt-2">
           Длительность: {{ JSON.parse(item.extra).duration }}ч.
         </div>
@@ -58,9 +55,9 @@
               Цена:
             </span>
             <p style="display: inline-block;">
-              {{ JSON.parse(item.extra).price }}
+              {{ item.prices[0].price }}
             </p>
-            <br>
+            <br />
             <span class="grey--text text--darken-1">
               Кол-во человек:
             </span>
@@ -78,10 +75,7 @@
           </v-col>
         </v-row>
 
-        <div
-          v-if="customOrderCount"
-          class="body-2"
-        >
+        <div v-if="customOrderCount" class="body-2">
           <v-divider />
           <span class="grey--text text--darken-1">
             Итого:
@@ -103,24 +97,12 @@
         Убрать
       </v-btn>
       <v-spacer />
-      <v-btn
-        v-if="!isSelected"
-        color="#aa282a"
-        small
-        dark
-        @click="addToTour"
-      >
+      <v-btn v-if="!isSelected" color="#aa282a" small dark @click="addToTour">
         Выбрать
       </v-btn>
     </v-card-actions>
-    <v-overlay
-      :value="loader"
-      style="z-index: 10000;"
-    >
-      <v-progress-circular
-        indeterminate
-        size="64"
-      />
+    <v-overlay :value="loader" style="z-index: 10000;">
+      <v-progress-circular indeterminate size="64" />
     </v-overlay>
   </v-card>
 </template>
@@ -212,7 +194,9 @@ export default {
       this.fetchItemData()
     }
     if (this.isCustomOrder) {
-      this.customOrderPrice = JSON.parse(this.item.extra).price
+      if (this.item.prices.length > 0) {
+        this.customOrderPrice = this.item.prices[0].price
+      }
     }
   },
   methods: {
